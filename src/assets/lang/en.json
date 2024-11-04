@@ -1,0 +1,28 @@
+{
+  "translation": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "usersManagement": "Users Management",
+      "subscriberAccounts": "Subscriber accounts",
+      "instructorAccounts": "Instructor accounts",
+      "administrationAccounts": "Administration accounts",
+      "rolesAndPermissions": "Roles and permissions",
+      "dataDeletionRequests": "Data deletion requests",
+      "suspendedUsers": "Suspended users",
+      "courses": "Courses",
+      "iqv": "IQV",
+      "iti": "ITI",
+      "paymentSettings": "Payment Settings",
+      "policies": "Policies",
+      "chats": "Chats",
+      "bar": "Bar",
+      "aPIKeys": "API Keys",
+      "errorLogs": "Error Logs",
+      "announcements": "Announcements",
+      "quizSettings": "Quiz settings",
+      "systemRecovery": "System Recovery",
+      "systemBackup": "System Backup",
+      "systemUnderMaintenance": "System Under Maintenance"
+    }
+  }
+}

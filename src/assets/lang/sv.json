@@ -1,0 +1,28 @@
+{
+  "translation": {
+    "sidebar": {
+      "dashboard": "Instrumentbräda",
+      "usersManagement": "Användarhantering",
+      "subscriberAccounts": "Prenumerantkonton",
+      "instructorAccounts": "Instruktörskonton",
+      "administrationAccounts": "Administrationskonton",
+      "rolesAndPermissions": "Roller och Behörigheter",
+      "dataDeletionRequests": "Begäran om Radering av Data",
+      "suspendedUsers": "Avstängda Användare",
+      "courses": "Kurser",
+      "iqv": "IQV",
+      "iti": "ITI",
+      "paymentSettings": "Betalningsinställningar",
+      "policies": "Policyer",
+      "chats": "Chattar",
+      "bar": "Bar",
+      "aPIKeys": "API Nycklar",
+      "errorLogs": "Felloggar",
+      "announcements": "Meddelanden",
+      "quizSettings": "Quizinställningar",
+      "systemRecovery": "Systemåterställning",
+      "systemBackup": "Systemsäkerhetskopiering",
+      "systemUnderMaintenance": "Systemet under Underhåll"
+    }
+  }
+}

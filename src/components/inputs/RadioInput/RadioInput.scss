@@ -1,0 +1,47 @@
+#radioinput-container {
+  div {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    input {
+      height: 24px;
+      width: 24px;
+      margin-top: unset;
+      border: 1px solid #000;
+      &:focus {
+        box-shadow: unset;
+      }
+    }
+    .check-block {
+      position: absolute;
+      left: 4px;
+      top: 2px;
+      img {
+        height: 16px;
+        width: 16px;
+      }
+    }
+  }
+  .s-18 {
+    display: flex;
+    align-items: center;
+    input {
+      height: 18px !important;
+      width: 18px !important;
+      cursor: pointer;
+    }
+
+    .check-block {
+      left: 3px;
+      top: -1px;
+      img {
+        height: 12px;
+        width: 12px;
+      }
+    }
+  }
+  .custom-checkbox-label {
+    margin: 10px;
+    font-weight: 300;
+  }
+}

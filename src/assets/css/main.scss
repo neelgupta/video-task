@@ -1,0 +1,194 @@
+@import url("https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;300;400;500;700;900&display=swap");
+@import url("bootstrap/dist/css/bootstrap.min.css");
+@import url("./color.scss");
+
+* {
+  font-family: "Yantramanav", sans-serif !important;
+}
+
+// Font---------------------------------------
+@mixin text-font-style($f-size, $f-weight) {
+  font-weight: $f-weight !important;
+  font-size: #{$f-size} !important;
+  // @media (min-width: 1025px) {
+  //   font-size: #{$f-size} !important;
+  // }
+  // @media (max-width: 1024px) {
+  //   font-size: clamp(calc(#{$f-size} * 0.9), 1vw, #{$f-size}) !important;
+  // }
+  // @media (max-width: 768px) {
+  //   font-size: clamp(calc(#{$f-size} * 0.85), 1vw, #{$f-size}) !important;
+  // }
+  // @media (max-width: 480px) {
+  //   font-size: #{$f-size} !important;
+  // }
+}
+
+$fonthWeights: 400, 500, 600, 700, 800;
+@for $size from 8 through 50 {
+  @each $fWeight in $fonthWeights {
+    .text-#{$size}-#{$fWeight} {
+      @include text-font-style(#{$size}px, #{$fWeight});
+    }
+  }
+}
+
+// Margin || Padding---------------------------------------
+@for $size from 0 through 100 {
+  .p-#{$size} {
+    padding: #{$size}px !important;
+  }
+  .px-#{$size} {
+    padding-left: #{$size}px !important;
+    padding-right: #{$size}px !important;
+  }
+  .py-#{$size} {
+    padding-top: #{$size}px !important;
+    padding-bottom: #{$size}px !important;
+  }
+  .ps-#{$size} {
+    padding-left: #{$size}px !important;
+  }
+  .pe-#{$size} {
+    padding-right: #{$size}px !important;
+  }
+  .pt-#{$size} {
+    padding-top: #{$size}px !important;
+  }
+  .pb-#{$size} {
+    padding-bottom: #{$size}px !important;
+  }
+  .m-#{$size} {
+    padding: #{$size}px !important;
+  }
+  .mx-#{$size} {
+    margin-left: #{$size}px !important;
+    margin-right: #{$size}px !important;
+  }
+  .my-#{$size} {
+    margin-top: #{$size}px !important;
+    margin-bottom: #{$size}px !important;
+  }
+  .ms-#{$size} {
+    margin-left: #{$size}px !important;
+  }
+  .me-#{$size} {
+    margin-right: #{$size}px !important;
+  }
+  .mt-#{$size} {
+    margin-top: #{$size}px !important;
+  }
+  .mb-#{$size} {
+    margin-bottom: #{$size}px !important;
+  }
+}
+
+// Height || Width---------------------------------------
+@for $size from 0 through 500 {
+  .h-#{$size} {
+    height: #{$size}px !important;
+    min-height: #{$size}px !important;
+  }
+  .w-#{$size} {
+    width: #{$size}px !important;
+    min-width: #{$size}px !important;
+  }
+}
+
+// Border radius---------------------------------------
+@for $size from 0 through 100 {
+  .br-#{$size} {
+    border-radius: #{$size}px !important;
+  }
+}
+
+// Common classes ----------------------------------------
+.fa-center {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.fj-center {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.f-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.fb-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.pointer {
+  cursor: pointer;
+}
+.un {
+  user-select: none;
+}
+.fit-image {
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: cover;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.hover-effect {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+    color: var(--299f) !important;
+  }
+}
+.wp-100 {
+  width: 100%;
+}
+.wp-50 {
+  width: 50%;
+}
+.wp-30 {
+  width: 30% !important;
+}
+.hp-100 {
+  height: 100%;
+}
+.input-error {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--dc35);
+  margin-top: 2px;
+}
+.auri-scroll {
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px transparent;
+    background-color: transparent;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 5px;
+    background-color: transparent;
+    scrollbar-width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: #eaf5ef;
+  }
+}
+.text-elipses {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dropdown {
+  display: flex;
+}

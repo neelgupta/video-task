@@ -1,0 +1,93 @@
+#datatable-container {
+  .table-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: auto;
+    max-width: calc(100vw - 314px);
+  }
+
+  .table-header {
+    display: flex;
+    border-bottom: 1px solid var(--951a);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  .table-row {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid var(--951a);
+  }
+
+  .table-cell {
+    flex: 1;
+    padding: 18px 22px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 200px;
+  }
+
+  .header-cell {
+    background: var(--2b05);
+    z-index: 999;
+  }
+
+  .table-body {
+    max-height: calc(100vh - 420px);
+  }
+
+  // Pagination css
+  .pagination {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+  ul {
+    margin-bottom: 0px;
+  }
+  .pagination .previous a {
+    background-color: transparent;
+  }
+  .pagination .next a {
+    background-color: transparent;
+  }
+  .pagination li {
+    list-style-type: none;
+    margin: 0 0.25rem;
+  }
+  .pagination li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    width: 32px;
+    height: 32px;
+    background-color: var(--951a);
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--7f95);
+  }
+  .pagination li a:hover {
+    background-color: var(--f5ef);
+    color: var(--9f63);
+  }
+  .pagination li.active a {
+    background-color: var(--f5ef);
+    color: var(--9f63);
+  }
+  .pagination li.disabled a {
+    cursor: not-allowed;
+  }
+  .break-me {
+    cursor: default;
+  }
+  .pagination .prev-link {
+    padding: 1px;
+  }
+}

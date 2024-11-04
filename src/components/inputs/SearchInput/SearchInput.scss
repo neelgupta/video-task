@@ -1,0 +1,23 @@
+#searchinput-container {
+  width: 100%;
+  position: relative;
+  input {
+    width: 100%;
+    border: 1px solid #757f9533;
+    height: 44px;
+    outline: unset;
+    box-shadow: unset;
+    padding: 0px 40px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  ::placeholder {
+    color: var(--757f);
+  }
+  span {
+    position: absolute;
+    top: 13px;
+    left: 13px;
+  }
+}

@@ -1,0 +1,21 @@
+#chatinput-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #757f9533;
+  padding: 10px 12px;
+  border-radius: 8px;
+  .input-block {
+    flex-grow: 1;
+    input {
+      width: 100%;
+      border: unset;
+      outline: unset;
+      font-size: 14px;
+      font-weight: 400;
+      &::placeholder {
+        color: var(--757f);
+      }
+    }
+  }
+}

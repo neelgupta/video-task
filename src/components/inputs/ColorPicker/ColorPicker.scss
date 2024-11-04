@@ -1,0 +1,50 @@
+#colorpicker-container {
+  .color-input-container {
+    .color-input-block {
+      width: 100%;
+      border: 1px solid var(--9533);
+      color: var(--1923);
+      border-radius: 12px;
+      height: 57px;
+      padding: 14px 18px;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      display: flex;
+      align-items: center;
+      input {
+        outline: unset;
+        border: unset;
+        height: 18px;
+        width: 20px;
+        box-shadow: none;
+        // background-color: unset;
+        // inline-size: unset;
+        // display: inline-block;
+      }
+      input[type="color"]::-webkit-color-swatch {
+        border: none;
+        border-radius: 50%;
+        padding: 0;
+      }
+
+      input[type="color"]::-webkit-color-swatch-wrapper {
+        border: none;
+        border-radius: 50%;
+        padding: 0;
+      }
+      span {
+        margin-left: 5px;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      .rounded-c-input {
+        border: 1px solid #757f9533;
+        border-radius: 50%;
+        height: 22px;
+        width: 22px;
+        padding: 0;
+      }
+    }
+  }
+}

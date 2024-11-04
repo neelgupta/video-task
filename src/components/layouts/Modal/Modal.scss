@@ -1,0 +1,11 @@
+.modal-content {
+  width: fit-content !important;
+}
+.modal-dialog-centered {
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .modal-b {
+    width: 100% !important;
+  }
+}

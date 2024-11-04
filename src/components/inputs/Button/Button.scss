@@ -1,0 +1,82 @@
+#button-container {
+  display: flex;
+  height: fit-content;
+  .btn-block {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    border: unset;
+    outline: none;
+    border-radius: 8px;
+    padding: 0px 16px;
+    min-height: 44px;
+    &:disabled {
+      opacity: 0.7;
+    }
+  }
+  .PD {
+    background-color: var(--299f);
+    border: 1px solid var(--299f);
+    color: var(--ffff);
+  }
+  .SD {
+    background-color: var(--8754);
+    border: 1px solid var(--8754);
+    color: var(--ffff);
+  }
+  .RD {
+    background-color: var(--4639);
+    border: 1px solid var(--4639);
+    color: var(--ffff);
+  }
+  .WD {
+    background-color: var(--ffc1);
+    border: 1px solid var(--ffc1);
+    color: var(--0000);
+  }
+  .DD {
+    background-color: var(--0000);
+    border: 1px solid var(--0000);
+    color: var(--ffff);
+  }
+  .PO {
+    background-color: var(--ffff);
+    color: var(--0d6e);
+    border: 1px solid var(--0d6e);
+  }
+  .SO {
+    background-color: var(--ffff);
+    color: var(--8754);
+    border: 1px solid var(--8754);
+  }
+  .RO {
+    background-color: var(--ffff);
+    color: var(--dc35);
+    border: 1px solid var(--dc35);
+  }
+  .WO {
+    background-color: var(--ffff);
+    color: var(--ffc1);
+    border: 1px solid var(--ffc1);
+  }
+  .DO {
+    background-color: var(--ffff);
+    color: var(--0000);
+    border: 1px solid var(--0000);
+  }
+  .GD {
+    background-color: #757f951a;
+    color: var(--757f);
+    border: 1px solid transparent;
+  }
+  .RD {
+    background-color: #d64d3b;
+    color: var(--ffff);
+    border: 1px solid #d64d3b;
+  }
+  .RL {
+    background-color: #fbedeb;
+    color: #d64d3b;
+    border: 1px solid #fbedeb;
+  }
+}

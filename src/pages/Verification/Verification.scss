@@ -1,0 +1,30 @@
+#verification-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+
+  .verify-card {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .link {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .verify-card {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .verify-card {
+      padding: 15px;
+    }
+  }
+}

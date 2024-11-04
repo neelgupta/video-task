@@ -1,0 +1,81 @@
+:root {
+  --ffff: #ffffff;
+  --0000: #000000;
+  --1923: #19232b;
+  --757f: #757f95;
+  --299f: #299f63;
+  --dc35: #dc3545;
+  --4d3b: #d64d3b;
+  --7f95: #757f95;
+  --9f63: #299f63;
+  --f5ef: #eaf5ef;
+  --e9ea: #e8e9ea;
+  --edeb: #fbedeb;
+  --f0fc: #edf0fc;
+  --951a: #757f951a;
+  --9580: #757f9580;
+  --9533: #757f9533;
+  --2b05: #19232b05;
+  --2b0a: #19232b0a;
+  --2b0f: #19232b0f;
+  --6305: #299f6305;
+  --pColor: #8000ff;
+  --sColor: #e6ccff;
+}
+
+$colors: (
+  "1923": var(--1923),
+  "ffff": var(--ffff),
+  "0000": var(--0000),
+  "757f": var(--757f),
+  "9580": var(--9580),
+  "299f": var(--299f),
+  "9533": var(--9533),
+  "dc35": var(--dc35),
+  "7f95": var(--7f95),
+  "9f63": var(--9f63),
+  "f5ef": var(--f5ef),
+  "951a": var(--951a),
+  "e9ea": var(--e9ea),
+  "2b05": var(--2b05),
+  "4d3b": var(--4d3b),
+  "edeb": var(--edeb),
+  "f0fc": var(--f0fc),
+  "2b0a": var(--2b0a),
+  "2b0f": var(--2b0f),
+  "6305": var(--6305),
+  "pColor": var(--pColor),
+  "sColor": var(--sColor),
+);
+
+@each $name, $color in $colors {
+  .color-#{$name} {
+    color: $color !important;
+  }
+  .bg-#{$name} {
+    background-color: $color !important;
+  }
+  .b-#{$name} {
+    border: $color 1px solid !important;
+  }
+  .bs-#{$name} {
+    border-left: $color 1px solid !important;
+  }
+  .be-#{$name} {
+    border-right: $color 1px solid !important;
+  }
+  .bt-#{$name} {
+    border-top: $color 1px solid !important;
+  }
+  .bb-#{$name} {
+    border-bottom: $color 1px solid !important;
+  }
+}
+
+.img-9F63 {
+  filter: invert(50%) sepia(29%) saturate(957%) hue-rotate(97deg)
+    brightness(96%) contrast(89%);
+}
+.img-ffff {
+  filter: invert(1);
+}
