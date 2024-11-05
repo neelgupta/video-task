@@ -107,7 +107,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
   const displayOption =
     role === "admin" ? adminOptionsList : teacherOptionsList;
   return (
-    <>
+    <div style={{ backgroundColor: "white" }}>
       <Offcanvas
         show={show}
         onHide={() => {
@@ -244,7 +244,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
           </div>
         </Offcanvas.Body>
       </Offcanvas>
-    </>
+    </div>
   );
 };
 

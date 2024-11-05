@@ -3,10 +3,12 @@ import { Button, PasswordInput, TextInput } from "../../components";
 import * as Yup from "yup";
 import "./Login.scss";
 import { Formik } from "formik";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { encrypt } from "../../utils/helpers";
+import { setAuthData } from "../../store/globalSlice";
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
   const initialValues = {
@@ -21,12 +23,14 @@ const Login = () => {
 
   const handleSubmit = (values) => {
     console.log("✌️values --->", values);
-    let data = encrypt({
+    let data = {
       token: "123",
       email: values.email,
       role: values.email === "admin@mailinator.com" ? "admin" : "teacher",
-    });
-    localStorage.authData = data;
+    };
+    localStorage.authData = encrypt(data);
+    dispatch(setAuthData(encrypt(data)));
+    window.location.reload();
   };
   return (
     <div id="login-container">

@@ -1,0 +1,153 @@
+#Price-container {
+  background-color: var(--e9ea);
+  height: 100%;
+  .title-text {
+    line-height: 55px;
+    font-weight: 300;
+    font-size: 50px;
+  }
+  .btn-box {
+    padding: 10px;
+    border-radius: 60px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      outline: none;
+      background-color: transparent;
+      color: gray;
+      font-size: 20px;
+      font-weight: 600;
+      border-radius: 100px;
+      border: none;
+      padding: 5px 20px;
+      transition-duration: 0.5s;
+      margin: 0px 5px;
+    }
+    .active {
+      background-color: black;
+      color: white;
+    }
+  }
+
+  #PriceCard-container {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    padding: 20px;
+    margin: 0 auto;
+    div {
+      margin: 0;
+      padding: 0;
+    }
+    .card {
+      background-color: white;
+      border: none;
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 30%;
+      .title {
+        font-size: 55px;
+        font-weight: 300;
+        text-transform: capitalize;
+      }
+      .sub-title {
+        color: gray;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      .price-text {
+        span:nth-child(1) {
+          font-size: 70px;
+          font-weight: 400;
+          color: black;
+        }
+        span:nth-child(2) {
+          font-size: 18px;
+          font-weight: 300;
+          color: gray;
+          margin-left: 5px;
+        }
+        span:nth-child(3) {
+          font-size: 14px;
+          font-weight: 300;
+          color: gray;
+          margin-left: 5px;
+        }
+      }
+      .card-btn {
+        margin-top: 30px;
+        width: 100%;
+
+        border-radius: 150px;
+        padding: 10px 0px;
+        font-size: 26px;
+        font-weight: 600;
+        transition-duration: 0.2s;
+      }
+
+      .btn-start {
+        background-color: transparent;
+        border: 2px solid orange;
+        color: orange;
+        &:hover {
+          background-color: orange;
+          color: white;
+        }
+      }
+
+      .btn-grow {
+        background-color: transparent;
+        border: 2px solid purple;
+        color: purple;
+        &:hover {
+          background-color: purple;
+          color: white;
+        }
+      }
+
+      .btn-brand {
+        background-color: transparent;
+        border: 2px solid #299f63;
+        color: #299f63;
+        &:hover {
+          background-color: #299f63;
+          color: white;
+        }
+      }
+      .add-more {
+        background-color: #299f63;
+        color: white;
+        width: 100%;
+        border: none;
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .feature-list {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 30px;
+        position: relative;
+        .tooltip {
+          padding: 5px 10px;
+          font-size: 14px;
+        }
+      }
+
+      .feature-list li {
+        padding: 8px 0;
+        font-size: 16px;
+        border-bottom: 1px dashed #ccc;
+        cursor: pointer;
+        position: relative;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 #layout-container {
   display: flex;
+  background-color: var(--e9ea);
   .right-body-content {
     flex-grow: 1;
     // width: 100%;
@@ -25,5 +26,10 @@
         overflow: unset;
       }
     }
+  }
+  .auri-scroll {
+    overflow-y: auto;
+    // Prevent horizontal scrollbar
+    overflow-x: hidden;
   }
 }
