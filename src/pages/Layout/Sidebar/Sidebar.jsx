@@ -60,6 +60,11 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
       ],
     },
     {
+      title: "Subscription",
+      url: "/admin/subscription",
+      icon: icons.dashboard,
+    },
+    {
       title: "Pricing",
       url: "/admin/price",
       icon: icons.dashboard,

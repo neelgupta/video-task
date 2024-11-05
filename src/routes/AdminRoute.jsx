@@ -5,6 +5,7 @@ import Solutions from "../pages/Admin/Solutions";
 import Examples from "../pages/Admin/Examples";
 import Resources from "../pages/Admin/Resources";
 import Price from "../pages/Admin/Price";
+import Subscription from "../pages/Admin/Subscription";
 
 const AdminRoute = () => {
   const routeList = [
@@ -27,6 +28,10 @@ const AdminRoute = () => {
     {
       path: "/admin/price",
       component: <Price />,
+    },
+    {
+      path: "/admin/subscription",
+      component: <Subscription />,
     },
   ];
   return (
