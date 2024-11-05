@@ -153,6 +153,7 @@ import fileUpload from "../../assets/images/icons/fileUpload.png";
 import bookQuiz from "../../assets/images/icons/bookQuiz.svg";
 import avatar5 from "../../assets/images/avatar5.png";
 import avatar6 from "../../assets/images/avatar6.png";
+import noResponse from "../../assets/images/icons/no-responses.svg";
 
 export const icons = {
   logo,
@@ -310,4 +311,5 @@ export const icons = {
   downloadWithBg,
   fileUpload,
   bookQuiz,
+  noResponse
 };

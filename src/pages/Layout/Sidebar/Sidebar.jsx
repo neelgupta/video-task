@@ -8,6 +8,7 @@ import {
   getDataFromLocalStorage,
 } from "../../../utils/helpers";
 import "./Sidebar.scss";
+import NewVideoAsk from "./NewVideoAsk";
 
 const Sidebar = ({ isResponsive, show, setShow }) => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
   const role = getDataFromLocalStorage("role");
 
   useState(false);
+
   const [expand, setExpand] = useState("");
   const handleNavigate = (parentLink, subChildURL) => {
     navigate(`${parentLink}${subChildURL ? subChildURL : ""}`);
@@ -246,6 +248,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                 );
               })}
             </div>
+            <NewVideoAsk />
           </div>
         </Offcanvas.Body>
       </Offcanvas>

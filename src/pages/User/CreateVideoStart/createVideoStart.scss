@@ -1,0 +1,55 @@
+.create-video-start {
+  .modal-content {
+    background-color: var(--f0f0);
+  }
+  .form-content {
+    max-width: 450px;
+    margin: 20px auto;
+    .form-fields-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      -webkit-box-pack: justify;
+      justify-content: space-between;
+      width: 100%;
+      margin: 0px 16px 16px 0px;
+      padding: 8px 16px;
+    }
+    .box-text-input {
+      outline: none;
+      border: none;
+      background: white;
+      border-radius: 14px;
+      font-weight: 500;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      -webkit-box-pack: justify;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 5px;
+    }
+  }
+
+  .localization-list {
+    padding: unset;
+    margin: unset;
+    border: 1px solid hsla(210, 5%, 91%, 1);
+    border-radius: 4px;
+    position: absolute;
+    top: 45px;
+    right: 8px;
+    z-index: 999;
+    background-color: #fff;
+    li {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid hsla(207, 26%, 13%, 0.04);
+      &:hover {
+        background-color: #eaf5ef;
+      }
+    }
+  }
+}

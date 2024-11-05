@@ -3,7 +3,7 @@ import { icons } from "../../../utils/constants";
 import { titleCaseString } from "../../../utils/helpers";
 import { useTranslation } from "react-i18next";
 
-const Localization = ({ isResponsive }) => {
+const Localization = ({ isResponsive, onChange = () => {} }) => {
   const { i18n } = useTranslation();
   const [show, setShow] = useState(false);
   const themePickerRef = useRef(null);
@@ -75,6 +75,7 @@ const Localization = ({ isResponsive }) => {
                 className="px-12 py-8 pointer"
                 onClick={() => {
                   i18n.changeLanguage(elm?.language);
+                  onChange();
                 }}
               >
                 <span className="h-18 w-18 d-flex">

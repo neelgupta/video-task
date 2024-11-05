@@ -1,0 +1,13 @@
+.user-organization-block {
+  .org-card {
+    background: var(--ffff);
+    border-radius: 6px;
+    padding: 30px;
+    margin: 0 20px 20px 0;
+  }
+  @media screen and (max-width: 768px) {
+    .org-card {
+      margin: 0;
+    }
+  }
+}

@@ -85,3 +85,17 @@
     padding: unset;
   }
 }
+
+.new-video-menu {
+  position: absolute;
+  left: 15px;
+  top: 50px;
+  width: 120%;
+  max-width: 300px;
+  border: 1px solid #e8e9ea;
+  background: #ffffff;
+  z-index: 999;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 40px;
+}

@@ -6,6 +6,9 @@ import Examples from "../pages/Admin/Examples";
 import Resources from "../pages/Admin/Resources";
 import Price from "../pages/Admin/Price";
 import Subscription from "../pages/Admin/Subscription";
+import Organizations from "../pages/User/Organizations";
+import CreateVideoStart from "../pages/User/CreateVideoStart/CreateVideoStart";
+import MediaSelect from "../pages/User/MediaSelect";
 
 const AdminRoute = () => {
   const routeList = [
@@ -32,6 +35,18 @@ const AdminRoute = () => {
     {
       path: "/admin/subscription",
       component: <Subscription />,
+    },
+    {
+      path: "/user/organizations",
+      component: <Organizations />,
+    },
+    {
+      path: "/user/get-started",
+      component: <CreateVideoStart />,
+    },
+    {
+      path: "/user/media-type",
+      component: <MediaSelect />,
     },
   ];
   return (

@@ -196,6 +196,12 @@ $fonthWeights: 400, 500, 600, 700, 800;
 .wp-100 {
   width: 100%;
 }
+.hp-90 {
+  height: 90%;
+}
+.hp-95 {
+  height: 95%;
+}
 .hp-100 {
   height: 100%;
 }
@@ -204,6 +210,61 @@ $fonthWeights: 400, 500, 600, 700, 800;
   font-weight: 400;
   color: var(--dc35);
   margin-top: 2px;
+}
+
+@media screen and (min-width: 768px) {
+  .wp-md-5 {
+    width: 5%;
+  }
+
+  .wp-md-10 {
+    width: 10%;
+  }
+  .wp-md-12 {
+    width: 12%;
+  }
+  .wp-md-15 {
+    width: 15%;
+  }
+  .wp-md-20 {
+    width: 20%;
+  }
+  .wp-md-25 {
+    width: 25%;
+  }
+  .wp-md-30 {
+    width: 30%;
+  }
+  .wp-md-35 {
+    width: 35%;
+  }
+  .wp-md-40 {
+    width: 40%;
+  }
+  .wp-md-45 {
+    width: 45%;
+  }
+  .wp-md-50 {
+    width: 50%;
+  }
+  .wp-md-60 {
+    width: 60%;
+  }
+  .wp-md-70 {
+    width: 70%;
+  }
+  .wp-md-80 {
+    width: 80%;
+  }
+  .wp-md-90 {
+    width: 90%;
+  }
+  .wp-md-100 {
+    width: 100%;
+  }
+  .hp-md-100 {
+    height: 100%;
+  }
 }
 .auri-scroll {
   &::-webkit-scrollbar-track {
@@ -231,4 +292,8 @@ $fonthWeights: 400, 500, 600, 700, 800;
 }
 .dropdown {
   display: flex;
+}
+
+a {
+  text-decoration: none;
 }
