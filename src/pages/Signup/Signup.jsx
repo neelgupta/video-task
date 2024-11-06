@@ -6,10 +6,13 @@ import "./Signup.scss";
 import { icons } from "../../utils/constants";
 import { Accordion } from "react-bootstrap";
 import { api } from "../../services/api";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
+  const navigate = useNavigate();
   const initialValues = {
     user_name: "",
     email: "",
@@ -41,9 +44,29 @@ function Signup() {
   });
 
   const handleSubmit = async (values) => {
-    console.log("✌️values --->", values);
-    const res = await api.post("user/sign-up", values);
-    console.log("res", res);
+    try {
+      const res = await api.post("user/sign-up", values);
+      console.log("res", res);
+      if (res.status === 200) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: res.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      console.log("error", error);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
   };
   return (
     <div id="signUp-container">

@@ -3,14 +3,15 @@ import { Button, PasswordInput, TextInput } from "../../components";
 import * as Yup from "yup";
 import "./Login.scss";
 import { Formik } from "formik";
-import { useSelector } from "react-redux";
-// import { encrypt } from "../../utils/helpers";
-// import { setAuthData } from "../../store/globalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { encrypt } from "../../utils/helpers";
+import { setAuthData } from "../../store/globalSlice";
 import { icons } from "../../utils/constants";
 import { api } from "../../services/api";
+import Swal from "sweetalert2";
 const Login = () => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
   const initialValues = {
@@ -25,16 +26,32 @@ const Login = () => {
 
   const handleSubmit = async (values) => {
     console.log("✌️values --->", values);
-    const res = await api.post("user/sign-in", values);
-    console.log("res --->", res);
-    // let data = {
-    //   token: "123",
-    //   email: values.email,
-    //   role: values.email === "admin@mailinator.com" ? "admin" : "teacher",
-    // };
-    // localStorage.authData = encrypt(data);
-    // dispatch(setAuthData(encrypt(data)));
-    // window.location.reload();
+
+    try {
+      const res = await api.post("user/sign-in", values);
+      console.log("res", res);
+      const data = res.data;
+      if (data.status === 200) {
+        const { token, user } = data.response;
+        let authBody = {
+          token: token,
+          email: user.email,
+          role: user.role,
+          _id: user._id,
+        };
+        localStorage.authData = encrypt(authBody);
+        dispatch(setAuthData(encrypt(authBody)));
+      }
+    } catch (error) {
+      console.log("error", error);
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: error.response.data.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
   };
   return (
     <div id="login-container">
