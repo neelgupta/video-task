@@ -11,6 +11,7 @@ const TextArea = ({
   id,
   rows,
   value,
+  error,
 }) => {
   return (
     <div id="textarea-container">
@@ -33,6 +34,7 @@ const TextArea = ({
           }}
         />
       </div>
+      {error && <div className="input-error">{error}</div>}
     </div>
   );
 };

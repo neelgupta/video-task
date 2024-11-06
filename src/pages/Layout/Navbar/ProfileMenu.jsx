@@ -87,7 +87,6 @@ const ProfileMenu = ({ themeColor, role }) => {
               let data = encrypt({ time: new Date().toLocaleString() });
               localStorage.authData = data;
               dispatch(setAuthData(data));
-              window.location.reload();
             }}
           >
             <span className="d-flex h-16 w-16">

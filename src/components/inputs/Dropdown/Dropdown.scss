@@ -1,0 +1,25 @@
+#dropdown-container {
+  .dropdown-block__indicator-separator {
+    display: none;
+  }
+  .dropdown-block__placeholder {
+    font-size: 16px;
+    font-weight: 400;
+    color: #19232b;
+  }
+  .dropdown-block__control {
+    border: 1px solid #757f9533;
+    min-height: 50px;
+    border-radius: 12px;
+    box-shadow: unset;
+  }
+  .dropdown-block__value-container {
+    padding: 2px 12px;
+  }
+  .dropdown-block__indicator {
+    color: #19232b;
+  }
+  .dropdown-block__single-value {
+    font-weight: 500;
+  }
+}

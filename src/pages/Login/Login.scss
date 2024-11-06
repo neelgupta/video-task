@@ -8,6 +8,10 @@
   .login-card {
     width: 100%;
     max-width: 520px;
+    .video_ask_bg {
+      width: 35%;
+      margin-bottom: 30px;
+    }
     .forgot-password {
       cursor: pointer;
       display: block;

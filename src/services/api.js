@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getHeaderData } from "../utils/helpers";
-const baseURL = "http://34.171.189.84:8080/admin";
+const baseURL = "http://localhost:8000/api/v1/";
 export const api = {
   header: () => {
     const header = getHeaderData();
@@ -51,7 +51,7 @@ export const api = {
     headers = { ...headers, ...header };
     return new Promise((resolve, reject) => {
       axios
-        .delete("http://34.171.189.84:8080/admin" + url, {
+        .delete(baseURL + url, {
           headers,
           data,
         })
@@ -72,7 +72,7 @@ export const api = {
     headers = { ...headers, ...header };
     return new Promise((resolve, reject) => {
       axios
-        .put("http://34.171.189.84:8080/admin" + url, data, {
+        .put(baseURL + url, data, {
           headers,
         })
         .then((res) => {

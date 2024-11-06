@@ -1,4 +1,3 @@
-import logo from "../../assets/images/logo.png";
 import dashboard from "../../assets/images/icons/dashboard.png";
 import usersManagement from "../../assets/images/icons/usersManagement.png";
 import courses from "../../assets/images/icons/courses.png";
@@ -154,6 +153,8 @@ import bookQuiz from "../../assets/images/icons/bookQuiz.svg";
 import avatar5 from "../../assets/images/avatar5.png";
 import avatar6 from "../../assets/images/avatar6.png";
 import noResponse from "../../assets/images/icons/no-responses.svg";
+import videoAskLogo from "../../assets/images/videoAskLogo.svg";
+import logo from "../../assets/images/logo.svg";
 
 export const icons = {
   logo,
@@ -311,5 +312,6 @@ export const icons = {
   downloadWithBg,
   fileUpload,
   bookQuiz,
-  noResponse
+  noResponse,
+  videoAskLogo,
 };
