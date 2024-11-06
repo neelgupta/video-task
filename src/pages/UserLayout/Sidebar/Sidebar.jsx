@@ -8,6 +8,7 @@ import {
   getDataFromLocalStorage,
 } from "../../../utils/helpers";
 import "./Sidebar.scss";
+import NewVideoAsk from "./NewVideoAsk";
 
 const Sidebar = ({ isResponsive, show, setShow }) => {
   const navigate = useNavigate();
@@ -41,77 +42,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
       url: "/admin/product",
       icon: icons.dashboard,
     },
-    {
-      title: "Solutions",
-      url: "/admin/solutions",
-      icon: icons.dashboard,
-      childOptions: [
-        {
-          title: "Recruitment",
-          url: "/recruitment",
-        },
-        {
-          title: "Sales & Marketing",
-          url: "/sales-marketing",
-        },
-        {
-          title: "Other",
-          url: "/other",
-        },
-      ],
-    },
-    {
-      title: "Subscription",
-      url: "/admin/subscription",
-      icon: icons.dashboard,
-    },
-    {
-      title: "Pricing",
-      url: "/admin/price",
-      icon: icons.dashboard,
-    },
-    {
-      title: "Examples",
-      url: "/admin/examples",
-      icon: icons.dashboard,
-      childOptions: [
-        {
-          title: "templates",
-          url: "/templates",
-        },
-        {
-          title: "case-studies",
-          url: "/case-studies",
-        },
-        {
-          title: "inspiration examples",
-          url: "/inspiration-examples",
-        },
-      ],
-    },
-    {
-      title: "Resources",
-      url: "/admin/resources",
-      icon: icons.dashboard,
-      childOptions: [
-        {
-          title: "blog",
-          url: "/blog",
-        },
-        {
-          title: "Community",
-          url: "/community",
-        },
-        {
-          title: "help",
-          url: "/help",
-        },
-      ],
-    },
   ];
-  const teacherOptionsList = [];
-  const displayOption =
-    role === "admin" ? adminOptionsList : teacherOptionsList;
   return (
     <div style={{ backgroundColor: "white" }}>
       <Offcanvas
@@ -150,7 +81,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                     : "calc(100vh - 50px)",
               }}
             >
-              {displayOption?.map((elm, index) => {
+              {adminOptionsList?.map((elm, index) => {
                 const { title, icon, url, childOptions, isPending } = elm;
                 const isActive = window.location.pathname?.includes(url);
                 const isChild = childOptions?.length > 0;
@@ -247,6 +178,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                 );
               })}
             </div>
+            <NewVideoAsk />
           </div>
         </Offcanvas.Body>
       </Offcanvas>
