@@ -2,9 +2,10 @@
   .text-area-block {
     textarea {
       width: 100%;
+      border: none;
       border: 1px solid var(--9533);
       color: var(--1923);
-      border-radius: 12px;
+      // border-radius: 12px;
       padding: 14px 18px;
       font-size: 16px;
       font-weight: 400;
@@ -20,6 +21,9 @@
       &:disabled {
         background-color: var(--ffff);
         opacity: 0.5;
+      }
+      &:focus {
+        border-color: #8000ff;
       }
     }
     ::placeholder {

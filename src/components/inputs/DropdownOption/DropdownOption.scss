@@ -1,0 +1,57 @@
+#dropdownoption-container {
+  .css-1u9des2-indicatorSeparator {
+    display: none;
+  }
+  .css-t3ipsp-control {
+    box-shadow: unset;
+    min-height: 44px;
+    border-radius: 0px;
+    border: none;
+    border-bottom: 1px solid;
+    border-color: #8000ff;
+  }
+  .css-13cymwt-control {
+    min-height: 44px;
+    border-radius: 0px;
+    border: none;
+    border-bottom: 1px solid;
+    border-color: #757f9533;
+  }
+  .css-t3ipsp-control:hover {
+    border-color: #757f9533;
+  }
+  .css-1dimb5e-singleValue {
+    color: #757f95;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  #react-select-2-placeholder,
+  .do-block__placeholder {
+    color: #757f95;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .css-tr4s17-option {
+    color: #299f63 !important;
+    background-color: transparent;
+  }
+  .do-block__option {
+    background-color: transparent;
+    color: #757f95;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  .do-block__value-container {
+    padding: 2px 0px;
+  }
+  #react-select-2-listbox {
+    div {
+      background-color: transparent;
+      color: #757f95;
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+  }
+}

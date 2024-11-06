@@ -8,6 +8,53 @@
   .signUp-card {
     width: 100%;
     max-width: 520px;
+    .video_ask_bg {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      padding: 18px 0px 0px 20px;
+      .logo-img {
+        background-repeat: no-repeat;
+        background-position: bottom center;
+        background-size: cover;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+    }
+    .according-bg {
+      .custom-accordion {
+        margin: 20px 0px;
+      }
+      .custom-accordion .accordion-header,
+      .custom-accordion .accordion-button {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        color: #000;
+        font-weight: bold;
+      }
+      .custom-accordion .accordion-button {
+        padding: 0px;
+        color: var(--pColor);
+        font-weight: 400;
+        font-size: 14px;
+      }
+
+      .custom-accordion .accordion-body {
+        background-color: transparent;
+        border: none;
+        color: #000;
+        padding: 0px;
+      }
+
+      .custom-accordion .accordion-item {
+        border: none;
+        margin-bottom: 1rem;
+      }
+    }
     .forgot-password {
       cursor: pointer;
       display: block;

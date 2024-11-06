@@ -3,12 +3,14 @@ import { Button, PasswordInput, TextInput } from "../../components";
 import * as Yup from "yup";
 import "./Login.scss";
 import { Formik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import { encrypt } from "../../utils/helpers";
-import { setAuthData } from "../../store/globalSlice";
+import { useSelector } from "react-redux";
+// import { encrypt } from "../../utils/helpers";
+// import { setAuthData } from "../../store/globalSlice";
+import { icons } from "../../utils/constants";
+import { api } from "../../services/api";
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
   const initialValues = {
@@ -18,25 +20,34 @@ const Login = () => {
 
   const validationSchema = Yup.object({
     email: Yup.string().required("Email is required"),
-    // password: Yup.string().required("Password is required"),
+    password: Yup.string().required("Password is required"),
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     console.log("✌️values --->", values);
-    let data = {
-      token: "123",
-      email: values.email,
-      role: values.email === "admin@mailinator.com" ? "admin" : "teacher",
-    };
-    localStorage.authData = encrypt(data);
-    dispatch(setAuthData(encrypt(data)));
-    window.location.reload();
+    const res = await api.post("user/sign-in", values);
+    console.log("res --->", res);
+    // let data = {
+    //   token: "123",
+    //   email: values.email,
+    //   role: values.email === "admin@mailinator.com" ? "admin" : "teacher",
+    // };
+    // localStorage.authData = encrypt(data);
+    // dispatch(setAuthData(encrypt(data)));
+    // window.location.reload();
   };
   return (
     <div id="login-container">
       <div className="login-card">
         <div className="login-title">
-          <h3>Welcome back!</h3>
+          <div className="video_ask_bg">
+            <img
+              src={icons.videoAskLogo}
+              alt={"Video-ask Logo"}
+              className="fit-image"
+            />
+          </div>
+          <h3 className="text-24-400">Welcome back!</h3>
           <h4 style={{ color: themeColor.pColor }}>Please log in...</h4>
         </div>
         <Formik
@@ -66,7 +77,6 @@ const Login = () => {
                     onChange={handleChange}
                     error={touched.email && errors.email}
                     placeholder="Enter email address"
-                    type="email"
                   />
                 </div>
                 <div>

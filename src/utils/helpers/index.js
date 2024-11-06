@@ -108,6 +108,19 @@ export const creteImgFilter = (hex) => {
   return result?.filter;
 };
 
+export const generateUniqueString = () => {
+  const now = new Date();
+  return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}${String(now.getDate()).padStart(2, "0")}${String(now.getHours()).padStart(
+    2,
+    "0"
+  )}${String(now.getMinutes()).padStart(2, "0")}${String(
+    now.getSeconds()
+  ).padStart(2, "0")}${String(now.getMilliseconds()).padStart(3, "0")}`;
+};
+
 export const hexToRgb = (hex) => {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
