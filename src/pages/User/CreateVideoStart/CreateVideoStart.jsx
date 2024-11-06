@@ -99,7 +99,7 @@ const CreateVideoStart = () => {
             btnStyle={"PD"}
             className="wp-100 mx-auto text-16-500 py-15 mt-30"
             onClick={() => {
-              navigate("/user/media-type");
+              navigate("/media-type");
               localStorage.setItem("language", "En");
               localStorage.setItem("title", title);
             }}

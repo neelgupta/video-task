@@ -9,10 +9,14 @@ import { BiWebcam } from "react-icons/bi";
 import { LuScreenShare } from "react-icons/lu";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { IoLibrarySharp } from "react-icons/io5";
+import UploadVideo from "./UploadVideo/UploadVideo";
 
 const MediaSelect = () => {
   const navigate = useNavigate();
   const [isCameraOn, setIsCameraOn] = useState(false);
+  const [selectedType, setSelectedType] = useState(null);
+  const [tab, setTab] = useState(1);
+
   const videoRef = useRef(null);
 
   const onHide = () => {
@@ -77,50 +81,59 @@ const MediaSelect = () => {
           </div>
         </div>
         <div className="media-content">
-          <form className="media-form">
-            <p className="mb-30 text-22-500 color-19232b0a">
-              How would you like to create this step?
-            </p>
-            <div className="row gy-3 wp-100 overflow-y-auto">
-              <div className="col-12">
-                <div
-                  className="media-card"
-                  onClick={isCameraOn ? stopCamera : startCamera}
-                >
-                  <BiWebcam size={70} color="#8000ff" />
-                  <span className="text-16-500 mt-10">Webcam</span>
+          {tab === 1 && (
+            <form className="media-form">
+              <p className="mb-30 text-22-500 color-19232b0a">
+                How would you like to create this step?
+              </p>
+              <div className="row gy-3 wp-100 overflow-y-auto">
+                <div className="col-12">
+                  <div
+                    className="media-card"
+                    onClick={isCameraOn ? stopCamera : startCamera}
+                  >
+                    <BiWebcam size={70} color="#8000ff" />
+                    <span className="text-16-500 mt-10">Webcam</span>
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-4 ">
-                <div className="media-card">
-                  <LuScreenShare size={70} color="#8000ff" />
-                  <span className="text-16-500 mt-10">Screen Share</span>
+                <div className="col-md-4 ">
+                  <div className="media-card">
+                    <LuScreenShare size={70} color="#8000ff" />
+                    <span className="text-16-500 mt-10">Screen Share</span>
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-4">
-                <div className="media-card">
-                  <MdOutlineCloudUpload size={70} color="#8000ff" />
-                  <span className="text-16-500 mt-10">Upload</span>
+                <div className="col-md-4">
+                  <div
+                    className="media-card"
+                    onClick={() => {
+                      setSelectedType("upload");
+                      setTab(2);
+                    }}
+                  >
+                    <MdOutlineCloudUpload size={70} color="#8000ff" />
+                    <span className="text-16-500 mt-10">Upload</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="col-md-4">
-                <div className="media-card">
-                  <IoLibrarySharp size={70} color="#8000ff" />
-                  <span className="text-16-500 mt-10">Library</span>
+                <div className="col-md-4">
+                  <div className="media-card">
+                    <IoLibrarySharp size={70} color="#8000ff" />
+                    <span className="text-16-500 mt-10">Library</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
+          {tab === 2 && selectedType === "upload" ? (
+            <UploadVideo
+              onBack={() => {
+                setTab((prev) => prev - 1);
+                setSelectedType(null);
+              }}
+            />
+          ) : null}
         </div>
       </div>
-      {isCameraOn && (
-        <video
-          ref={videoRef}
-          autoPlay
-          style={{ width: "100%", maxWidth: "500px" }}
-        />
-      )}
     </Modal>
   );
 };

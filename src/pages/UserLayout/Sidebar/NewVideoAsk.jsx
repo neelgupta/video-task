@@ -29,7 +29,7 @@ const NewVideoAsk = () => {
       {isMenu && (
         <div className="new-video-menu" ref={menuRef}>
           <Link
-            to="/user/get-started"
+            to="/get-started"
             className="fa-center gap-4 p-3 my-4 pointer color-0000"
             onClick={() => setIsMenu(false)}
           >
