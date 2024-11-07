@@ -1,3 +1,4 @@
+import { creteImgFilter } from "../../../utils/helpers";
 import Roundedloader from "../../layouts/Roundedloader";
 import "./Button.scss";
 
@@ -13,6 +14,7 @@ const Button = ({
   loading,
   leftIconClass,
   style,
+  iconColor,
 }) => {
   return (
     <div id="button-container">
@@ -38,7 +40,12 @@ const Button = ({
           {btnText && <span>{btnText}</span>}
           {rightIcon && (
             <span className="h-18 f-center">
-              <img src={rightIcon} alt="right-icon" className="fit-image" />
+              <img
+                src={rightIcon}
+                alt="right-icon"
+                className="fit-image"
+                style={{ filter: creteImgFilter(iconColor) }}
+              />
             </span>
           )}
           {loading && (

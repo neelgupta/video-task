@@ -155,6 +155,15 @@ import avatar6 from "../../assets/images/avatar6.png";
 import noResponse from "../../assets/images/icons/no-responses.svg";
 import videoAskLogo from "../../assets/images/videoAskLogo.svg";
 import logo from "../../assets/images/logo.svg";
+import LogoText from "../../assets/images/Logo.png";
+import cricleAdd from "../../assets/images/cricleAdd.svg";
+import Trash from "../../assets/images/Trash.svg";
+import Folder from "../../assets/images/Folder.svg";
+import Interactions from "../../assets/images/Interactions.svg";
+import Contacts from "../../assets/images/Contacts.svg";
+import crown from "../../assets/images/crown.svg";
+import notificationSvg from "../../assets/images/notification.svg";
+import logoutSvg from "../../assets/images/logout.svg";
 
 export const icons = {
   logo,
@@ -314,4 +323,13 @@ export const icons = {
   bookQuiz,
   noResponse,
   videoAskLogo,
+  LogoText,
+  cricleAdd,
+  Trash,
+  Folder,
+  Contacts,
+  Interactions,
+  crown,
+  notificationSvg,
+  logoutSvg,
 };

@@ -214,11 +214,7 @@ function Subscription() {
               btnText="Add Subscription"
               className="text-14-500"
               onClick={() => setIsAdd(true)}
-              style={{
-                backgroundColor: themeColor.pColor,
-                color: "white",
-                border: "none",
-              }}
+              btnStyle="linear-gradient"
             />
           </div>
         </div>

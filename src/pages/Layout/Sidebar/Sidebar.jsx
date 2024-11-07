@@ -3,16 +3,17 @@ import { useNavigate } from "react-router-dom";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { icons } from "../../../utils/constants";
 import { useSelector } from "react-redux";
+import { Button } from "../../../components";
 import {
   creteImgFilter,
   getDataFromLocalStorage,
 } from "../../../utils/helpers";
 import "./Sidebar.scss";
 
-const Sidebar = ({ isResponsive, show, setShow }) => {
+const Sidebar = ({ show, setShow }) => {
   const navigate = useNavigate();
   const reduxData = useSelector((state) => state.global);
-  const { themeColor } = reduxData;
+  const { themeColor, isResponsive } = reduxData;
   const role = getDataFromLocalStorage("role");
 
   useState(false);
@@ -37,83 +38,41 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
 
   const adminOptionsList = [
     {
-      title: "Product",
-      url: "/admin/product",
+      title: "Dashboard",
+      url: "/admin/dashboard",
       icon: icons.dashboard,
     },
     {
-      title: "Solutions",
-      url: "/admin/solutions",
-      icon: icons.dashboard,
-      childOptions: [
-        {
-          title: "Recruitment",
-          url: "/recruitment",
-        },
-        {
-          title: "Sales & Marketing",
-          url: "/sales-marketing",
-        },
-        {
-          title: "Other",
-          url: "/other",
-        },
-      ],
+      title: "Interactions",
+      url: "/admin/interactions",
+      icon: icons.Interactions,
+    },
+    {
+      title: "Contacts",
+      url: "/admin/contacts",
+      icon: icons.Contacts,
+    },
+    {
+      title: "My Collection",
+      url: "/admin/collection",
+      icon: icons.Folder,
+    },
+    {
+      title: "Trash",
+      url: "/admin/trash",
+      icon: icons.Trash,
     },
     {
       title: "Subscription",
       url: "/admin/subscription",
-      icon: icons.dashboard,
-    },
-    {
-      title: "Pricing",
-      url: "/admin/price",
-      icon: icons.dashboard,
-    },
-    {
-      title: "Examples",
-      url: "/admin/examples",
-      icon: icons.dashboard,
-      childOptions: [
-        {
-          title: "templates",
-          url: "/templates",
-        },
-        {
-          title: "case-studies",
-          url: "/case-studies",
-        },
-        {
-          title: "inspiration examples",
-          url: "/inspiration-examples",
-        },
-      ],
-    },
-    {
-      title: "Resources",
-      url: "/admin/resources",
-      icon: icons.dashboard,
-      childOptions: [
-        {
-          title: "blog",
-          url: "/blog",
-        },
-        {
-          title: "Community",
-          url: "/community",
-        },
-        {
-          title: "help",
-          url: "/help",
-        },
-      ],
+      icon: icons.users,
     },
   ];
   const teacherOptionsList = [];
   const displayOption =
     role === "admin" ? adminOptionsList : teacherOptionsList;
   return (
-    <div style={{ backgroundColor: "white" }}>
+    <div style={{ backgroundColor: "transparent" }}>
       <Offcanvas
         show={show}
         onHide={() => {
@@ -124,15 +83,21 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Offcanvas</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
-          <div id="sidebar-container">
-            <div className="py-10 px-20 fb-center">
-              <div className="h-72 w-141">
-                <img src={""} alt="logo" className="fit-image" />
+        <Offcanvas.Body className="sidebar-card">
+          <div id="admin-sidebar-container" className="auri-scroll">
+            <div
+              className="py-10 px-20 f-center"
+              style={{
+                borderBottom: "1px solid rgba(0,0,0,0.1)",
+                position: "relative",
+              }}
+            >
+              <div className="h-72 w-141 ">
+                <img src={icons.LogoText} alt="logo" className="fit-image" />
               </div>
               {isResponsive && (
                 <div
-                  className="h-18 w-18 pointer"
+                  className="h-16 w-16 pointer close-icon"
                   onClick={() => {
                     setShow(false);
                   }}
@@ -140,6 +105,12 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                   <img src={icons.close} alt="close" className="fit-image" />
                 </div>
               )}
+            </div>
+            <div
+              className="py-10 px-20 f-center text-18-500"
+              style={{ borderBottom: "1px solid rgba(0,0,0,0.1)" }}
+            >
+              My Organization
             </div>
             <div
               className="side-option-container auri-scroll"
@@ -163,7 +134,9 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                         isActive ? "active" : ""
                       }`}
                       style={{
-                        backgroundColor: isActive ? themeColor.sColor : "",
+                        background: isActive
+                          ? `linear-gradient(to right , rgba(179, 161, 255, 0.3), transparent 40%)`
+                          : "",
                       }}
                       onClick={() => {
                         if (!isPending) {
@@ -179,7 +152,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                       {isActive && (
                         <span
                           className="v-active-line"
-                          style={{ backgroundColor: themeColor.pColor }}
+                          style={{ backgroundColor: themeColor.darkColor }}
                         />
                       )}
                       <span className="icon-block">
@@ -187,18 +160,18 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                           <img
                             src={icon}
                             alt={title}
-                            className="fit-image"
+                            className="fit-image w-16"
                             style={{
                               filter: creteImgFilter(
-                                isActive ? themeColor.pColor : "#757F95"
+                                isActive ? themeColor.darkColor : "#757F95"
                               ),
                             }}
                           />
                         )}
                       </span>
                       <span
-                        className="title-block text-16-400"
-                        style={{ color: isActive ? themeColor.pColor : "" }}
+                        className="title-block text-18-400"
+                        style={{ color: isActive ? themeColor.darkColor : "" }}
                       >
                         {title}
                       </span>
@@ -210,7 +183,7 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                             className="fit-image"
                             style={{
                               filter: creteImgFilter(
-                                isActive ? themeColor.pColor : "#757F95"
+                                isActive ? themeColor.darkColor : "#757F95"
                               ),
                             }}
                           />
@@ -246,6 +219,65 @@ const Sidebar = ({ isResponsive, show, setShow }) => {
                   </div>
                 );
               })}
+            </div>
+
+            <div
+              className="f-center p-20"
+              style={{ borderBottom: "1px solid rgba(0,0,0,0.1)" }}
+            >
+              <Button
+                onClick={() => {}}
+                btnText="New QnAFlow"
+                className="h-50 pe-20 ps-20 text-16-300 wp-100"
+                leftIcon={icons.cricleAdd}
+                iconColor="#ffffff"
+                style={{
+                  background: `linear-gradient(to right , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
+                  border: "none",
+                  color: "white",
+                  borderRadius: "50px",
+                }}
+              />
+            </div>
+
+            <div className="p-10">
+              <div
+                className="gradient-card"
+                style={{
+                  background: `linear-gradient(135deg, ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
+                }}
+              >
+                <div className="circle-container">
+                  <div className="icon-container">
+                    <div
+                      className="circle-box"
+                      style={{
+                        background: `linear-gradient(to top , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
+                      }}
+                    >
+                      <img
+                        src={icons.crown}
+                        alt="down"
+                        className="fit-image w-40"
+                        style={{
+                          filter: creteImgFilter("#FFFFFF"),
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <h2>Go Boundless with PRO!</h2>
+                <p>
+                  Level Up with QnAFlow PRO – Premium AI Video Questions for
+                  Next-Level Engagement!
+                </p>
+                <button
+                  className="try-now-button"
+                  style={{ color: themeColor.darkColor }}
+                >
+                  Try Now
+                </button>
+              </div>
             </div>
           </div>
         </Offcanvas.Body>
