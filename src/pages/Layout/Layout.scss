@@ -1,12 +1,14 @@
-#layout-container {
+#admin-layout-container {
   display: flex;
-  background-color: var(--e9ea);
+  background-color: rgb(245, 245, 245);
+  // background-color: gray;
+
   .right-body-content {
     flex-grow: 1;
     // width: 100%;
     width: calc(100% - 264px);
     .body-block {
-      padding: 24px;
+      padding: 18px;
       height: calc(100vh - 100px);
       overflow-y: auto;
     }
@@ -19,17 +21,16 @@
   @media (max-width: 660px) {
     .right-body-content {
       width: 100%;
-      padding: 14px;
+      padding: 0px;
       .body-block {
         padding: 10px;
-        height: unset;
+        max-height: unset;
         overflow: unset;
       }
     }
   }
-  .auri-scroll {
+  .video-ask-scroll {
     overflow-y: auto;
-    // Prevent horizontal scrollbar
     overflow-x: hidden;
   }
 }

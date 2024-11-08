@@ -24,6 +24,8 @@
   --6305: #299f6305;
   --pColor: #8000ff;
   --sColor: #e6ccff;
+  --darkColor: #4a25e1;
+  --lightColor: #b3a1ff;
 }
 
 $colors: (
@@ -52,6 +54,8 @@ $colors: (
   "6305": var(--6305),
   "pColor": var(--pColor),
   "sColor": var(--sColor),
+  "lightColor": var(--lightColor),
+  "darkColor": var(--darkColor),
 );
 
 @each $name, $color in $colors {

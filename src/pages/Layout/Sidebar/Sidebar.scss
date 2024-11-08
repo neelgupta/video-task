@@ -1,12 +1,15 @@
-#sidebar-container {
-  width: 264px;
-  border-right: 1px solid #757f9533;
-  height: 100vh;
+#admin-sidebar-container {
+  width: 254px;
+  height: calc(100vh - 20px);
+  margin: 10px 0px 10px 10px;
   user-select: none;
   position: relative;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: auto;
   .side-option-container {
     margin-top: 16px;
-    // max-height: calc(100vh - 300px);
     overflow: auto;
     .main-option-block {
       .option-item {
@@ -37,21 +40,6 @@
           width: 4px;
           height: 100%;
         }
-        // .icon-block {
-        //   img {
-        //     filter: invert(45%) sepia(84%) saturate(346%) hue-rotate(97deg)
-        //       brightness(96%) contrast(95%);
-        //   }
-        // }
-        // .title-block {
-        //   color: var(--9f63);
-        // }
-        // .down-block {
-        //   img {
-        //     filter: invert(45%) sepia(84%) saturate(346%) hue-rotate(97deg)
-        //       brightness(96%) contrast(95%);
-        //   }
-        // }
       }
       .child-option-block {
         padding-left: 48px;
@@ -60,9 +48,6 @@
           color: var(--7f95);
           margin-bottom: 8px;
         }
-      }
-      .active-child {
-        // color: var(--9f63) !important;
       }
     }
   }
@@ -74,6 +59,73 @@
     left: 0;
     width: 100%;
   }
+  .gradient-card {
+    margin-top: 50px;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .circle-container {
+      width: 100%;
+      margin-bottom: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .icon-container {
+        background-color: white;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        top: -50%;
+        transform: translateY(-70%);
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .circle-box {
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 10px 0;
+      margin-top: 30px;
+    }
+
+    p {
+      font-size: 14px;
+      margin: 10px 0 20px;
+    }
+
+    .try-now-button {
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      border-radius: 20px;
+      padding: 10px 50px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      transition-duration: 0.5s;
+      transition-property: padding, background-color;
+      &:hover {
+        background-color: #e0e0e0;
+        padding: 10px 60px;
+      }
+    }
+  }
+  .close-icon {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+  }
 }
 .offcanvas-lg {
   width: fit-content !important;
@@ -83,6 +135,7 @@
   }
   .offcanvas-body {
     padding: unset;
+    padding-right: 10px;
   }
 }
 

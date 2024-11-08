@@ -80,4 +80,14 @@
     color: #d64d3b;
     border: 1px solid #fbedeb;
   }
+
+  .linear-gradient {
+    background: linear-gradient(
+      to top right,
+      var(--darkColor),
+      var(--lightColor) 100%
+    );
+    border: none;
+    color: white;
+  }
 }

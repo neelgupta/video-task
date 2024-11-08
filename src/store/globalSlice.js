@@ -5,10 +5,14 @@ import { api } from "../services/api";
 const initialState = {
   authData: null,
   errorData: null,
+  isResponsive: false,
   themeColor: {
     pColor: "#8000ff",
     sColor: "#e6ccff",
+    darkColor: "#4A25E1",
+    lightColor: "#B3A1FF",
   },
+  breadCrumbTitle: "",
 };
 
 const globalSlice = createSlice({
@@ -24,9 +28,16 @@ const globalSlice = createSlice({
     setThemeColor(state, action) {
       state.themeColor = action.payload;
     },
+    setIsResponsive(state, action) {
+      state.isResponsive = action.payload;
+    },
+    setBreadCrumbTitle(state, action) {
+      state.breadCrumbTitle = action.payload;
+    },
     resetAllState(state) {
       state.authData = null;
       state.errorData = null;
+      state.isResponsive = false;
     },
   },
 });
@@ -118,7 +129,12 @@ export const throwError = (message) => async (dispatch) => {
   );
 };
 
-export const { setAuthData, setErrorData, resetAllState, setThemeColor } =
-  globalSlice.actions;
+export const {
+  setAuthData,
+  setErrorData,
+  resetAllState,
+  setThemeColor,
+  setIsResponsive,
+} = globalSlice.actions;
 
 export default globalSlice.reducer;

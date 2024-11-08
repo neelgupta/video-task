@@ -1,34 +1,24 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { icons } from "../../../utils/constants";
-import { DarkModeSwitch } from "react-toggle-dark-mode";
-import {
-  creteImgFilter,
-  getDataFromLocalStorage,
-} from "../../../utils/helpers";
-import ThemePicker from "./ThemePicker";
-import Localization from "./Localization";
-import { useNavigate } from "react-router-dom";
-import ProfileMenu from "./ProfileMenu";
 import "./Navbar.scss";
+import { encrypt } from "../../../utils/helpers";
+import { setAuthData } from "../../../store/globalSlice";
 
-const Navbar = ({ isResponsive, setShow }) => {
-  const navigate = useNavigate();
+const Navbar = ({ setShow, pageTitle }) => {
   const reduxData = useSelector((state) => state.global);
-  const { themeColor } = reduxData;
-  const [isDarkMode, setDarkMode] = useState(false);
-  const toggleDarkMode = (checked) => {
-    setDarkMode(checked);
-  };
-  const activeImageFilter = creteImgFilter(themeColor.pColor);
-  const role = getDataFromLocalStorage("role");
-  const isMode = ["admin"].includes(role);
-  const isTheme = ["admin"].includes(role);
-  const isInbox = ["admin"].includes(role);
-  const isLocalization = ["admin"].includes(role);
+  // eslint-disable-next-line no-unused-vars
+  const { themeColor, isResponsive } = reduxData;
+  const dispatch = useDispatch();
+
   return (
-    <div id="navbar-container">
-      {isResponsive && (
+    <div
+      id="admin-navbar-container"
+      style={{
+        background: "transparent",
+        justifyContent: "space-between",
+      }}
+    >
+      {isResponsive ? (
         <div
           className={`pointer ${isResponsive ? "h-30 w-30" : "h-37 w-37"}`}
           onClick={() => {
@@ -37,93 +27,60 @@ const Navbar = ({ isResponsive, setShow }) => {
         >
           <img src={icons.menuBar} alt="menuBar" className="fit-image" />
         </div>
+      ) : (
+        <div className="f-center">
+          <div className="h-30 w-30 me-10 pointer">
+            <img src={icons.arrow_left} alt="menuBar" className="fit-image" />
+          </div>
+          <div className="text-30-600">{pageTitle}</div>
+        </div>
       )}
-      <div className="search-container">
-        <span className="h-24 w-24 d-flex">
-          <img src={icons.search} alt="search" className="fit-image" />
-        </span>
-        <input type="text" placeholder="Search" />
-      </div>
-      <div className="right-end-block">
-        {isMode && (
-          <DarkModeSwitch
-            style={{
-              backgroundColor: themeColor.sColor,
-              height: isResponsive ? "30px" : "37px",
-              width: isResponsive ? "30px" : "37px",
-              padding: "6px",
-              borderRadius: "35px",
-            }}
-            checked={isDarkMode}
-            onChange={toggleDarkMode}
-            size={18}
-            moonColor={themeColor?.pColor}
-            sunColor={themeColor?.pColor}
-          />
-        )}
-        {isTheme && (
-          <ThemePicker
-            isResponsive={isResponsive}
-            themeColor={themeColor}
-            activeImageFilter={activeImageFilter}
-          />
-        )}
-        {isInbox && (
+      <div className={`profile-det ${isResponsive ? "w-350" : "w-400"}`}>
+        <div className="search-container wp-70">
+          <span className="d-flex">
+            <img src={icons.search} alt="search" className="fit-image" />
+          </span>
+          <input type="text" placeholder="Search" />
+        </div>
+        <div className="right-end-block wp-30">
           <div
             className={`pointer rounded-circle f-center ${
               isResponsive ? "h-30 w-30" : "h-37 w-37"
             }`}
-            style={{ backgroundColor: themeColor.sColor }}
+          >
+            <span className="h-18 w-18 d-flex">
+              <img
+                src={icons.notificationSvg}
+                alt="notification"
+                className="fit-image"
+              />
+            </span>
+          </div>
+          <div
+            className={`pointer rounded-circle f-center ${
+              isResponsive ? "h-30 w-30" : "h-37 w-37"
+            }`}
             onClick={() => {
-              navigate("/console/inbox");
+              let data = encrypt({ time: new Date().toLocaleString() });
+              localStorage.authData = data;
+              dispatch(setAuthData(data));
             }}
           >
             <span className="h-18 w-18 d-flex">
               <img
-                src={icons.message}
-                alt="message"
+                src={icons.logoutSvg}
+                alt="notification"
                 className="fit-image"
-                style={{
-                  filter: activeImageFilter,
-                }}
               />
             </span>
           </div>
-        )}
-        <div
-          className={`pointer rounded-circle f-center ${
-            isResponsive ? "h-30 w-30" : "h-37 w-37"
-          }`}
-          style={{ backgroundColor: themeColor.sColor }}
-          onClick={() => {
-            if (role === "admin") {
-              navigate("/console/notifications");
-            } else {
-              navigate("/teacher/notifications");
-            }
-          }}
-        >
-          <span className="h-18 w-18 d-flex">
-            <img
-              src={icons.notification}
-              alt="notification"
-              className="fit-image"
-              style={{
-                filter: activeImageFilter,
-              }}
-            />
-          </span>
+
+          <div
+            className={`pointer ${isResponsive ? "h-30 w-30" : "h-37 w-37"}`}
+          >
+            <img src={icons.avatar} alt="avatar" className="fit-image" />
+          </div>
         </div>
-        {isLocalization && <Localization isResponsive={isResponsive} />}
-        <div className="h-37 sp-border" />
-        <div className={`pointer ${isResponsive ? "h-30 w-30" : "h-37 w-37"}`}>
-          <img src={icons.avatar} alt="avatar" className="fit-image" />
-        </div>
-        <div className="profile-data">
-          <div className="text-16-500 color-1923">Jay Hargudson</div>
-          <div className="text-12-400 color-7f95">Admin</div>
-        </div>
-        <ProfileMenu themeColor={themeColor} role={role} />
       </div>
     </div>
   );

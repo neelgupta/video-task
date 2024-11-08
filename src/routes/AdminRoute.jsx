@@ -1,33 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "../pages/Layout";
-import Product from "../pages/Admin/Product";
-import Solutions from "../pages/Admin/Solutions";
-import Examples from "../pages/Admin/Examples";
-import Resources from "../pages/Admin/Resources";
 import Price from "../pages/Admin/Price";
 import Subscription from "../pages/Admin/Subscription";
-import Organizations from "../pages/User/Organizations";
-import CreateVideoStart from "../pages/User/CreateVideoStart/CreateVideoStart";
-import MediaSelect from "../pages/User/MediaSelect";
+import Dashboard from "../pages/Admin/Dashboard";
+import AssetAllocation from "../pages/Admin/AssetAllocation";
 
 const AdminRoute = () => {
   const routeList = [
-    {
-      path: "/admin/product",
-      component: <Product />,
-    },
-    {
-      path: "/admin/solutions/:type",
-      component: <Solutions />,
-    },
-    {
-      path: "/admin/examples/:type",
-      component: <Examples />,
-    },
-    {
-      path: "/admin/resources/:type",
-      component: <Resources />,
-    },
     {
       path: "/admin/price",
       component: <Price />,
@@ -37,16 +16,30 @@ const AdminRoute = () => {
       component: <Subscription />,
     },
     {
-      path: "/user/organizations",
-      component: <Organizations />,
+      path: "/admin/interactions",
+      component: <div>Interactions</div>,
     },
     {
-      path: "/user/get-started",
-      component: <CreateVideoStart />,
+      path: "/admin/contacts",
+      component: <div>Contacts</div>,
     },
     {
-      path: "/user/media-type",
-      component: <MediaSelect />,
+      path: "/admin/collection",
+      component: <div>My Collection</div>,
+    },
+    {
+      path: "/admin/trash",
+      component: <div>Trash</div>,
+    },
+    {
+      path: "/admin/dashboard",
+      component: <Dashboard />,
+      pageTitle: "Dashboard",
+    },
+    {
+      path: "/admin/asset-allocation",
+      component: <AssetAllocation />,
+      pageTitle: "Asset Allocation",
     },
   ];
   return (
@@ -56,11 +49,11 @@ const AdminRoute = () => {
           <Route
             key={index}
             path={elm.path}
-            element={<Layout>{elm.component}</Layout>}
+            element={<Layout pageTitle={elm.pageTitle}>{elm.component}</Layout>}
           />
         );
       })}
-      <Route path="*" element={<Navigate to="/admin/product" />} />
+      <Route path="*" element={<Navigate to="/admin/dashboard" />} />
     </Routes>
   );
 };

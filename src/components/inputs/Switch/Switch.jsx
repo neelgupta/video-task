@@ -15,7 +15,7 @@ const Switch = ({ isChecked, onChange }) => {
         <span
           className="slider"
           style={{
-            backgroundColor: isChecked ? themeColor.pColor : "#757f951a",
+            backgroundColor: isChecked ? themeColor.darkColor : "#757f951a",
           }}
         ></span>
       </label>

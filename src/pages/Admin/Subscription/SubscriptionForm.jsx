@@ -42,13 +42,7 @@ const subPlanList = [
   },
 ];
 
-function SubscriptionForm({
-  onHide,
-  themeColor,
-  getSubscriptionList,
-  isEdit,
-  editData,
-}) {
+function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
   const initialValues = {
     plan_name: editData?.plan_name || "",
     description: editData?.description || "",
@@ -253,10 +247,7 @@ function SubscriptionForm({
                     btnText={isEdit ? "Update" : "Add"}
                     className="w-120 h-53 text-18-500"
                     onClick={handleSubmit}
-                    style={{
-                      backgroundColor: themeColor?.pColor,
-                      borderColor: themeColor?.pColor,
-                    }}
+                    btnStyle="linear-gradient"
                   />
                 </div>
               </form>
