@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getHeaderData } from "../utils/helpers";
-const baseURL = "http://localhost:8000/api/v1/";
+const baseURL = "https://video-ask-api.vercel.app/api/v1/";
 export const api = {
   header: () => {
     const header = getHeaderData();
@@ -27,6 +27,7 @@ export const api = {
     });
   },
   post: (url, data, header = {}) => {
+    console.log("baseURL", baseURL);
     let headers = api.header();
     headers = { ...headers, ...header };
     return new Promise((resolve, reject) => {

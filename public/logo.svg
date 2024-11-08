@@ -1,0 +1,8 @@
+<svg class="logo" fill="none" height="30" width="33" xmlns="http://www.w3.org/2000/svg">
+    
+    <ellipse fill="#111" rx="4.472" ry="4.464" transform="matrix(-1 0 0 1 22.464 4.464)"></ellipse>
+    <ellipse fill="#111" rx="4.472" ry="4.464" transform="matrix(-1 0 0 1 8.972 4.464)"></ellipse>
+    <path
+        d="M1.709 14.486c-1.058 0-1.896.91-1.673 1.943C1.593 23.616 8 29 15.666 29c7.667 0 14.074-5.384 15.631-12.571.223-1.032-.615-1.943-1.672-1.943H1.709z"
+        fill="#111"></path>
+</svg>
