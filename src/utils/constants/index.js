@@ -47,6 +47,13 @@ import mobile from "../../assets/images/svgIcons/mobile.svg";
 import desktop from "../../assets/images/svgIcons/desktop.svg";
 import others from "../../assets/images/svgIcons/others.svg";
 import arrow_down from "../../assets/images/svgIcons/arrow_down.svg";
+import control_menu from "../../assets/images/svgIcons/control_menu.svg";
+import double_arrow from "../../assets/images/svgIcons/double_arrow.svg";
+import three_dots from "../../assets/images/svgIcons/three_dots.svg";
+import exportPng from "../../assets/images/svgIcons/export_svg.svg";
+import teg_svg from "../../assets/images/svgIcons/teg_svg.svg";
+import single_arrow from "../../assets/images/svgIcons/single_arrow.svg";
+import avatar8 from "../../assets/images/avatar8.png";
 
 export const icons = {
   logo,
@@ -98,4 +105,11 @@ export const icons = {
   allDevices,
   others,
   arrow_down,
+  double_arrow,
+  control_menu,
+  three_dots,
+  teg_svg,
+  exportPng,
+  single_arrow,
+  avatar8,
 };

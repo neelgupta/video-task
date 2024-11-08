@@ -1,7 +1,11 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
+import { useSelector } from "react-redux";
 
 const MetricsChart = () => {
+  const reduxData = useSelector((state) => state.global);
+  // eslint-disable-next-line no-unused-vars
+  const { isResponsive, themeColor } = reduxData;
   const data = {
     labels: [
       "11 AM",
@@ -92,39 +96,63 @@ const MetricsChart = () => {
 
   return (
     <div>
-      <div className="mb-10 p-10 chart-card-header">
-        <div className="w-300">
+      <div className="mb-10 p-10 chart-card-header container-fluid row">
+        <div className="chart-det-card col-lg-3 col-sm-6 col-6">
           <div className="text-16-500" style={{ color: "rgba(0,0,0,0.5)" }}>
             Landed
           </div>
-          <h3 className="p-0 m-0 text-50-600">1002</h3>
+          <h3
+            className={`p-0 m-0 ${
+              isResponsive ? "text-35-600" : "text-50-600"
+            }`}
+          >
+            1002
+          </h3>
           <div style={{ color: "rgba(34, 197, 94, 1)", fontSize: "16px" }}>
             +400
           </div>
         </div>
-        <div className="w-300">
+        <div className="chart-det-card col-lg-3 col-sm-6 col-6">
           <div className="text-16-500" style={{ color: "rgba(0,0,0,0.5)" }}>
             Interactions
           </div>
-          <h3 className="p-0 m-0 text-50-600">40</h3>
+          <h3
+            className={`p-0 m-0 ${
+              isResponsive ? "text-35-600" : "text-50-600"
+            }`}
+          >
+            40
+          </h3>
           <div style={{ color: "rgba(34, 197, 94, 1)", fontSize: "16px" }}>
             +400
           </div>
         </div>
-        <div className="w-300">
+        <div className="chart-det-card col-lg-3 col-sm-6 col-6">
           <div className="text-16-500" style={{ color: "rgba(0,0,0,0.5)" }}>
             Answers
           </div>
-          <h3 className="p-0 m-0 text-50-600">1002</h3>
+          <h3
+            className={`p-0 m-0 ${
+              isResponsive ? "text-35-600" : "text-50-600"
+            }`}
+          >
+            1002
+          </h3>
           <div style={{ color: "rgba(255, 56, 34, 1)", fontSize: "16px" }}>
             -20%
           </div>
         </div>
-        <div className="w-300">
+        <div className="chart-det-card col-lg-3 col-sm-6 col-6">
           <div className="text-16-500" style={{ color: "rgba(0,0,0,0.5)" }}>
             Completed
           </div>
-          <h3 className="p-0 m-0 text-50-600">1002</h3>
+          <h3
+            className={`p-0 m-0 ${
+              isResponsive ? "text-35-600" : "text-50-600"
+            }`}
+          >
+            1002
+          </h3>
           <div style={{ color: "rgba(34, 197, 94, 1)", fontSize: "16px" }}>
             +10s
           </div>

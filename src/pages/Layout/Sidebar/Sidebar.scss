@@ -116,7 +116,7 @@
     }
 
     .try-now-button {
-      background-color: rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.2);
       border: none;
       border-radius: 20px;
       padding: 10px 50px;
@@ -127,7 +127,7 @@
       transition-duration: 0.5s;
       transition-property: padding, background-color;
       &:hover {
-        background-color: #e0e0e0;
+        background-color: rgba(255, 255, 255, 0.4);
         padding: 10px 60px;
       }
     }

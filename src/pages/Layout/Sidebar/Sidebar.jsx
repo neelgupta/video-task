@@ -294,10 +294,7 @@ const Sidebar = ({ show, setShow }) => {
                   Level Up with QnAFlow PRO – Premium AI Video Questions for
                   Next-Level Engagement!
                 </p>
-                <button
-                  className="try-now-button"
-                  style={{ color: themeColor.darkColor }}
-                >
+                <button className="try-now-button" style={{ color: "white" }}>
                   Try Now
                 </button>
               </div>

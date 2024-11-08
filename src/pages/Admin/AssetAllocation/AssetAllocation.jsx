@@ -2,6 +2,9 @@ import { useState } from "react";
 import "./AssetAllocation.scss";
 import Metrics from "./Metrics";
 import { useSelector } from "react-redux";
+import Results from "./Results/Results";
+import Conversations from "./Conversations";
+// import Conversations from "./Conversations/Conversations";
 function AssetAllocation() {
   const [selectedTab, setSelectedTab] = useState(3);
   const reduxData = useSelector((state) => state.global);
@@ -36,8 +39,8 @@ function AssetAllocation() {
         </div>
       </div>
       <div className="mt-20 ">
-        {selectedTab === 1 && <div>Conversations</div>}
-        {selectedTab === 2 && <div>Results</div>}
+        {selectedTab === 1 && <Conversations />}
+        {selectedTab === 2 && <Results />}
         {selectedTab === 3 && <Metrics />}
       </div>
     </div>
