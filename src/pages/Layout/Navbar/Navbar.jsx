@@ -38,7 +38,11 @@ const Navbar = ({ setShow, pageTitle }) => {
       <div className={`profile-det ${isResponsive ? "w-350" : "w-400"}`}>
         <div className="search-container wp-70">
           <span className="d-flex">
-            <img src={icons.search} alt="search" className="fit-image" />
+            <img
+              src={icons.search}
+              alt="search"
+              className="fit-image icon-color-1B2559"
+            />
           </span>
           <input type="text" placeholder="Search" />
         </div>
@@ -52,7 +56,7 @@ const Navbar = ({ setShow, pageTitle }) => {
               <img
                 src={icons.notificationSvg}
                 alt="notification"
-                className="fit-image"
+                className="fit-image icon-color-1B2559 hover-icons-effect"
               />
             </span>
           </div>
@@ -70,7 +74,7 @@ const Navbar = ({ setShow, pageTitle }) => {
               <img
                 src={icons.logoutSvg}
                 alt="notification"
-                className="fit-image"
+                className="fit-image icon-color-1B2559 hover-icons-effect"
               />
             </span>
           </div>

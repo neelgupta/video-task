@@ -46,6 +46,7 @@ import tablet from "../../assets/images/svgIcons/tablet.svg";
 import mobile from "../../assets/images/svgIcons/mobile.svg";
 import desktop from "../../assets/images/svgIcons/desktop.svg";
 import others from "../../assets/images/svgIcons/others.svg";
+import arrow_down from "../../assets/images/svgIcons/arrow_down.svg";
 
 export const icons = {
   logo,
@@ -96,4 +97,5 @@ export const icons = {
   tablet,
   allDevices,
   others,
+  arrow_down,
 };

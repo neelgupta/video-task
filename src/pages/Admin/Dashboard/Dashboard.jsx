@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { icons } from "../../../utils/constants";
 import "./Dashboard.scss";
 import { Button, CheckBox, Table } from "../../../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { creteImgFilter } from "../../../utils/helpers";
 function Dashboard() {
   const reduxData = useSelector((state) => state.global);
@@ -12,42 +12,36 @@ function Dashboard() {
   const header = [
     {
       title: <CheckBox className="s-18" />,
-      className: "wp-5 justify-content-center",
+      className: "wp-5 justify-content-center color-darkText text-16-600",
     },
     {
       title: "Name",
-      className: "wp-15 ",
-      isSort: true,
+      className: "wp-15 color-darkText text-16-600",
     },
     {
       title: "Created",
-      className: "wp-15",
-      isSort: true,
+      className: "wp-15 color-darkText text-16-600",
     },
     {
       title: "Landed",
-      className: "wp-10 justify-content-center",
-      isSort: true,
+      className: "wp-10 justify-content-center color-darkText text-16-600",
     },
     {
       title: "Contacts collected",
-      className: "wp-15 justify-content-center",
-      isSort: true,
+      className: "wp-15 justify-content-center color-darkText text-16-600",
     },
 
     {
       title: "Total interactions",
-      className: "wp-15 justify-content-center",
-      isSort: true,
+      className: "wp-15 justify-content-center color-darkText text-16-600",
     },
     {
       title: "View All",
-      className: "wp-10 justify-content-center",
-      isSort: true,
+      className: "wp-10 justify-content-center color-darkText text-16-600",
     },
     {
       title: "Action",
-      className: "wp-15 justify-content-center",
+      className: "wp-15 justify-content-center color-darkText text-16-600",
     },
   ];
 
@@ -97,28 +91,30 @@ function Dashboard() {
         className: "wp-5 justify-content-center",
       },
       {
-        value: elem.name,
+        value: <div style={{ color: "#636363" }}>{elem.name}</div>,
         className: "wp-15 ",
       },
       {
         value: (
           <div>
-            <span>{elem.created}</span>
+            <span style={{ color: "#636363" }}>{elem.created}</span>
           </div>
         ),
         className: "wp-15",
       },
 
       {
-        value: elem.landed,
+        value: <div style={{ color: "#636363" }}> {elem.landed}</div>,
         className: "wp-10 color-757f justify-content-center",
       },
       {
-        value: elem.contacts_collected,
+        value: (
+          <div style={{ color: "#636363" }}>{elem.contacts_collected}</div>
+        ),
         className: "wp-15 color-757f justify-content-center",
       },
       {
-        value: elem.interactions,
+        value: <div style={{ color: "#636363" }}> {elem.interactions} </div>,
         className: "wp-15 color-757f justify-content-center",
       },
 
@@ -128,7 +124,7 @@ function Dashboard() {
             <img
               src={icons.top_right_arrow}
               alt="eyeView"
-              className="fit-image w-16"
+              className="fit-image w-16 hover-icons-effect"
               style={{ filter: creteImgFilter(themeColor.darkColor) }}
             />
           </div>
@@ -140,10 +136,18 @@ function Dashboard() {
         value: (
           <div className="f-center gap-3">
             <div className="pointer h-16 w-16" onClick={() => {}}>
-              <img src={icons.edit} alt="edit" className="fit-image" />
+              <img
+                src={icons.edit}
+                alt="edit"
+                className="fit-image hover-icons-effect"
+              />
             </div>
             <div className="pointer h-16 w-16">
-              <img src={icons.deleteSVG} alt="eyeView" className="fit-image" />
+              <img
+                src={icons.deleteSVG}
+                alt="eyeView"
+                className="fit-image hover-icons-effect"
+              />
             </div>
           </div>
         ),
@@ -241,7 +245,7 @@ function Dashboard() {
         </div>
       </div>
       <div className="pt-60">
-        <h6 className="text-24-700">Recent Contacts</h6>
+        <h6 className="text-24-700 mb-30">Recent Contacts</h6>
         <div className="user-card-body">
           <div className="card-body auri-scroll ">
             {[1, 2, 3, 4].map((_, index) => {
@@ -254,12 +258,20 @@ function Dashboard() {
                     <img
                       src={icons.avatar5}
                       alt="avatar"
-                      className="fit-image"
+                      className="fit-image "
                     />
                   </div>
                   <div className="card-det">
-                    <div className="p-0 m-0 text-16-600">Neil</div>
-                    <div>Added to contacts</div>
+                    <div className="p-0 m-0 text-14-400">Neil</div>
+                    <div
+                      style={{
+                        textWrap: "nowrap",
+                        color: "rgba(127, 127, 127, 1)",
+                      }}
+                      className="text-12-400"
+                    >
+                      Added to contacts
+                    </div>
                   </div>
                   <div className="f-center ms-10">
                     <Button
@@ -282,7 +294,7 @@ function Dashboard() {
         </div>
       </div>
       <div className="pt-60">
-        <h6 className="text-24-700">Your Recent QnAFlow</h6>
+        <h6 className="text-24-700 mb-30">Your Recent QnAFlow</h6>
         <div className="table-card">
           <div className="fb-center">
             <div className="table-header">
@@ -319,11 +331,19 @@ function Dashboard() {
                 </div>
               </div>
               <div className="w-24 h-24 f-center ms-20 pointer">
-                <img src={icons.search} alt="" className="w-20 fit-image" />
+                <img
+                  src={icons.search}
+                  alt=""
+                  className="w-20 fit-image hover-icons-effect"
+                />
               </div>
             </div>
             <div className="w-50 h-50 f-center pointer">
-              <img src={icons.deleteSVG} alt="" className="w-20 fit-image" />
+              <img
+                src={icons.deleteSVG}
+                alt=""
+                className="w-20 fit-image hover-icons-effect"
+              />
             </div>
           </div>
           <Table header={header} row={rowData} min="1000px" />

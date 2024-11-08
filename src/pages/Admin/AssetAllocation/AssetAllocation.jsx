@@ -14,7 +14,7 @@ function AssetAllocation() {
           onClick={() => {
             setSelectedTab(1);
           }}
-          className={`${selectedTab === 1 ? "active" : ""}`}
+          className={`${selectedTab === 1 ? "active" : ""} text-14-500`}
         >
           Conversations
         </div>
@@ -22,7 +22,7 @@ function AssetAllocation() {
           onClick={() => {
             setSelectedTab(2);
           }}
-          className={`${selectedTab === 2 ? "active" : ""}`}
+          className={`${selectedTab === 2 ? "active" : ""} text-14-500`}
         >
           Results
         </div>
@@ -30,7 +30,7 @@ function AssetAllocation() {
           onClick={() => {
             setSelectedTab(3);
           }}
-          className={`${selectedTab === 3 ? "active" : ""}`}
+          className={`${selectedTab === 3 ? "active" : ""} text-14-500`}
         >
           Metrics
         </div>

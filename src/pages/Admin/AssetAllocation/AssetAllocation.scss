@@ -14,11 +14,6 @@
     .active {
       color: var(--darkColor);
       border-color: var(--darkColor);
-      background: linear-gradient(
-        to top,
-        rgba(179, 161, 255, 0.3),
-        transparent 70%
-      );
     }
   }
 }
@@ -30,6 +25,7 @@
     border-radius: 10px;
     box-shadow: 0px 4px 18px 0px #00000012;
     display: flex;
+    gap: 30px;
     justify-content: space-between;
     .profile-det {
       display: flex;
@@ -41,7 +37,6 @@
       .det {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
       }
     }
     .header-menu {

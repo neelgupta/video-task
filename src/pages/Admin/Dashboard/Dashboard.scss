@@ -14,11 +14,12 @@
       box-shadow: 0px 0px 63.44px 3px #00000012;
 
       .card-icon {
-        background: linear-gradient(
-          to bottom,
-          var(--darkColor),
-          var(--lightColor) 100%
-        );
+        // background: linear-gradient(
+        //   to bottom,
+        //   var(--darkColor),
+        //   var(--lightColor) 100%
+        // );
+        background: linear-gradient(180deg, #8567ff 0%, #b3a1ff 100%);
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -41,14 +42,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 15px;
       cursor: pointer;
       color: var(--darkColor);
+      transition-duration: 1s;
+      transition-property: text-decoration;
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .card-body {
       width: calc(100% - 50px);
       display: flex;
-      gap: 0px 30px;
+      gap: 0px 60px;
       overflow: auto;
       .user-card {
         display: flex;
@@ -58,7 +65,7 @@
           justify-content: space-between;
           flex-direction: column;
           margin-left: 10px;
-          padding: 5px 0px;
+          padding: 5px 15px 5px 0px;
         }
       }
     }

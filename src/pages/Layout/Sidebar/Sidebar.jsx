@@ -16,7 +16,7 @@ const Sidebar = ({ show, setShow }) => {
   const { themeColor, isResponsive } = reduxData;
   const role = getDataFromLocalStorage("role");
 
-  useState(false);
+  const [organization, setOrganization] = useState(false);
 
   const [expand, setExpand] = useState("");
   const handleNavigate = (parentLink, subChildURL) => {
@@ -97,7 +97,7 @@ const Sidebar = ({ show, setShow }) => {
                 position: "relative",
               }}
             >
-              <div className="h-72 w-141 ">
+              <div className="h-72 w-130 ">
                 <img src={icons.LogoText} alt="logo" className="fit-image" />
               </div>
               {isResponsive && (
@@ -112,12 +112,25 @@ const Sidebar = ({ show, setShow }) => {
               )}
             </div>
             <div
-              className="py-10 px-20 f-center text-18-500 color-darkText"
               style={{
                 borderBottom: "1px solid rgba(0,0,0,0.1)",
               }}
+              className="Organization-btn"
             >
-              My Organization
+              <div
+                className="px-15 py-10 pointer f-center text-16-700 color-darkText custom-btn"
+                onClick={() => setOrganization((pre) => !pre)}
+              >
+                <div>My Organization</div>
+                <div className="w-12 ms-10">
+                  <img
+                    src={icons.arrow_down}
+                    alt="close"
+                    className="fit-image icon-color-1B2559"
+                    style={organization ? { transform: "rotate(180deg)" } : {}}
+                  />
+                </div>
+              </div>
             </div>
             <div
               className="side-option-container auri-scroll"

@@ -9,6 +9,7 @@ function Metrics() {
   // eslint-disable-next-line no-unused-vars
   const { isResponsive, themeColor } = reduxData;
   const [selectedTab, setSelectedTab] = useState(1);
+  const [days, setDays] = useState("daily");
 
   return (
     <div className="Metrics-container">
@@ -17,23 +18,39 @@ function Metrics() {
         style={isResponsive ? { flexDirection: "column" } : {}}
       >
         <div className="profile-det">
-          <div className="w-80 h-80 profile-img">
+          <div className="w-89 h-79 profile-img">
             <img src={icons.avatar7} alt="" className="fit-image" />
           </div>
-          <div className="det p-10 w-200 ms-10">
+          <div className="det p-5 w-200 ms-10">
             <div className="text-18-600">Asset Allocation</div>
-            <div className="fb-center">
+            <div className="fb-center mt-10">
               <div className="w-18">
-                <img src={icons.branch} alt="" className="fit-image" />
+                <img
+                  src={icons.branch}
+                  alt=""
+                  className="fit-image hover-icons-effect"
+                />
               </div>
               <div className="w-18">
-                <img src={icons.downloads_box} alt="" className="fit-image" />
+                <img
+                  src={icons.downloads_box}
+                  alt=""
+                  className="fit-image hover-icons-effect"
+                />
               </div>
               <div className="w-18">
-                <img src={icons.link} alt="" className="fit-image" />
+                <img
+                  src={icons.link}
+                  alt=""
+                  className="fit-image hover-icons-effect"
+                />
               </div>
               <div className="w-18">
-                <img src={icons.screen} alt="" className="fit-image" />
+                <img
+                  src={icons.screen}
+                  alt=""
+                  className="fit-image hover-icons-effect"
+                />
               </div>
             </div>
           </div>
@@ -48,7 +65,7 @@ function Metrics() {
             }`}
             onClick={() => setSelectedTab(1)}
           >
-            <div className="w-24 h-24">
+            <div className="w-18 h-18">
               <img
                 src={icons.allDevices}
                 alt=""
@@ -60,7 +77,7 @@ function Metrics() {
                 }}
               />
             </div>
-            <div className="ms-15 text-16-500">All Devices</div>
+            <div className="ms-15 text-14-500">All Devices</div>
           </div>
           <div
             className={`f-center menu ${selectedTab === 2 && "active"} ${
@@ -68,7 +85,7 @@ function Metrics() {
             }`}
             onClick={() => setSelectedTab(2)}
           >
-            <div className="w-24 h-24">
+            <div className="w-18 h-18">
               <img
                 src={icons.desktop}
                 alt=""
@@ -80,7 +97,7 @@ function Metrics() {
                 }}
               />
             </div>
-            <div className="ms-15 text-16-500">Desktop</div>
+            <div className="ms-15 text-14-500">Desktop</div>
           </div>
           <div
             className={`f-center menu ${selectedTab === 3 && "active"} ${
@@ -88,7 +105,7 @@ function Metrics() {
             }`}
             onClick={() => setSelectedTab(3)}
           >
-            <div className="w-24 h-24">
+            <div className="w-18 h-18">
               <img
                 src={icons.mobile}
                 alt=""
@@ -100,7 +117,7 @@ function Metrics() {
                 }}
               />
             </div>
-            <div className="ms-15 text-16-500">Mobile</div>
+            <div className="ms-15 text-14-500">Mobile</div>
           </div>
           <div
             className={`f-center menu ${selectedTab === 4 && "active"} ${
@@ -108,7 +125,7 @@ function Metrics() {
             }`}
             onClick={() => setSelectedTab(4)}
           >
-            <div className="w-24 h-24">
+            <div className="w-18 h-18">
               <img
                 src={icons.tablet}
                 alt=""
@@ -120,7 +137,7 @@ function Metrics() {
                 }}
               />
             </div>
-            <div className="ms-15 text-16-500">Tablet</div>
+            <div className="ms-15 text-14-500">Tablet</div>
           </div>
           <div
             className={`f-center menu ${selectedTab === 5 && "active"} ${
@@ -128,7 +145,7 @@ function Metrics() {
             }`}
             onClick={() => setSelectedTab(5)}
           >
-            <div className="w-24">
+            <div className="w-18 h-18">
               <img
                 src={icons.others}
                 alt=""
@@ -140,7 +157,7 @@ function Metrics() {
                 }}
               />
             </div>
-            <div className="ms-15 text-16-500">Others</div>
+            <div className="ms-15 text-14-500">Others</div>
           </div>
         </div>
       </div>
@@ -148,11 +165,28 @@ function Metrics() {
         <div className="fb-center chart-header">
           <h6 className="text-24-700">Report</h6>
           <div className="d-flex menu">
-            <div className="w-60 pb-5 text-14-500 pointer f-center active">
+            <div
+              className={`ps-10 pe-10 pb-5 text-14-500 color-darkText pointer f-center ${
+                days === "daily" ? "active" : ""
+              }`}
+              onClick={() => setDays("daily")}
+            >
               Daily
             </div>
-            <div className="w-60 pb-5 text-14-500 pointer f-center">Weekly</div>
-            <div className="w-60 pb-5 text-14-500 pointer f-center">
+            <div
+              className={`ps-10 pe-10 pb-5 text-14-500 color-darkText pointer f-center ${
+                days === "weekly" ? "active" : ""
+              }`}
+              onClick={() => setDays("weekly")}
+            >
+              Weekly
+            </div>
+            <div
+              className={`ps-10 pe-10 pb-5 text-14-500 color-darkText pointer f-center ${
+                days === "monthly" ? "active" : ""
+              }`}
+              onClick={() => setDays("monthly")}
+            >
               Monthly
             </div>
           </div>
