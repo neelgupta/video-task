@@ -155,9 +155,12 @@ function Dashboard() {
   return (
     <div className="Dashboards-container">
       <div className="">
-        <h5 className="text-26-500">Welcome Back Jack</h5>
-        <p className="text-20-400">
-          Here`s an overview of your stats for the last 30 days
+        <h5 className="text-30-500">
+          Welcome Back <strong>Jack</strong>
+        </h5>
+        <p className="text-19-400">
+          Here`s an overview of your stats for the last{" "}
+          <strong className="text-19-600">30</strong> days
         </p>
       </div>
       <div className="big-card-body">
@@ -171,7 +174,7 @@ function Dashboard() {
             >
               Total Landed
             </div>
-            <div className="w-45 h-45 card-icon">
+            <div className="w-47 h-47 card-icon">
               <img
                 src={icons.eyeVisible}
                 alt="eyeView"
@@ -196,7 +199,7 @@ function Dashboard() {
             >
               Total Completed
             </div>
-            <div className="w-45 h-45 card-icon">
+            <div className="w-47 h-47 card-icon">
               <img
                 src={icons.checkVerified}
                 alt="eyeView"
@@ -221,7 +224,7 @@ function Dashboard() {
             >
               Contacts collected
             </div>
-            <div className="w-45 h-45 card-icon">
+            <div className="w-47 h-47 card-icon">
               <img
                 src={icons.usersOutline}
                 alt="eyeView"

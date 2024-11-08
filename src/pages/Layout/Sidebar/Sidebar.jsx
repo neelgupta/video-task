@@ -142,7 +142,7 @@ const Sidebar = ({ show, setShow }) => {
                       }`}
                       style={{
                         background: isActive
-                          ? `linear-gradient(to right , rgba(179, 161, 255, 0.3), transparent 40%)`
+                          ? `linear-gradient(to right , rgba(67, 24, 255, 0.05), rgba(67, 24, 255, 0) 100%)`
                           : "",
                       }}
                       onClick={() => {
@@ -167,7 +167,7 @@ const Sidebar = ({ show, setShow }) => {
                           <img
                             src={icon}
                             alt={title}
-                            className="fit-image w-16"
+                            className="fit-image w-20"
                             style={{
                               filter: creteImgFilter(
                                 isActive ? themeColor.darkColor : "#757F95"
@@ -177,8 +177,10 @@ const Sidebar = ({ show, setShow }) => {
                         )}
                       </span>
                       <span
-                        className="title-block text-18-400"
-                        style={{ color: isActive ? themeColor.darkColor : "" }}
+                        className={`title-block ${
+                          isActive ? "text-18-700" : "text-18-600"
+                        }`}
+                        style={{ color: isActive ? "var(--darkText)" : "" }}
                       >
                         {title}
                       </span>

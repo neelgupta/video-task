@@ -157,19 +157,19 @@ function Subscription() {
           value: (
             <div className="f-center gap-2">
               <div
-                className="pointer d-flex h-24 w-24"
+                className="pointer d-flex h-20 w-20"
                 onClick={() => {
                   handleDelete(elem._id);
                 }}
               >
                 <img
-                  src={icons.deleteIcon}
+                  src={icons.deleteSVG}
                   alt="bookmark"
                   className="fit-image"
                 />
               </div>
               <div
-                className="pointer d-flex h-24 w-24"
+                className="pointer d-flex h-20 w-20"
                 onClick={() => {
                   setEditData(elem);
                   setIsEdit(true);
