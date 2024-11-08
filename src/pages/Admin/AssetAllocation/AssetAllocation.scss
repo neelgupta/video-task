@@ -28,7 +28,9 @@
     padding: 10px;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    // box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 18px 0px #00000012;
+
     display: flex;
     justify-content: space-between;
     .profile-det {
@@ -63,7 +65,7 @@
     padding: 10px;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 18px 0px #00000012;
     margin-top: 30px;
     .chart-header {
       padding: 15px;

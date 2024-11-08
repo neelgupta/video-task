@@ -29,10 +29,10 @@ const Navbar = ({ setShow, pageTitle }) => {
         </div>
       ) : (
         <div className="f-center">
-          <div className="h-30 w-30 me-10 pointer">
+          <div className="h-30 w-30 me-5 pointer">
             <img src={icons.arrow_left} alt="menuBar" className="fit-image" />
           </div>
-          <div className="text-30-600">{pageTitle}</div>
+          <div className="text-34-700 color-darkText">{pageTitle}</div>
         </div>
       )}
       <div className={`profile-det ${isResponsive ? "w-350" : "w-400"}`}>

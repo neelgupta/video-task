@@ -11,8 +11,12 @@
     border-radius: 8px;
     padding: 0px 16px;
     min-height: 44px;
+    // transition: transform 0.2s;
     &:disabled {
       opacity: 0.7;
+    }
+    &:active {
+      animation: pulse 2s infinite;
     }
   }
   .PD {
@@ -89,5 +93,17 @@
     );
     border: none;
     color: white;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 }

@@ -112,8 +112,10 @@ const Sidebar = ({ show, setShow }) => {
               )}
             </div>
             <div
-              className="py-10 px-20 f-center text-18-500"
-              style={{ borderBottom: "1px solid rgba(0,0,0,0.1)" }}
+              className="py-10 px-20 f-center text-18-500 color-darkText"
+              style={{
+                borderBottom: "1px solid rgba(0,0,0,0.1)",
+              }}
             >
               My Organization
             </div>
@@ -241,6 +243,7 @@ const Sidebar = ({ show, setShow }) => {
                   border: "none",
                   color: "white",
                   borderRadius: "50px",
+                  boxShadow: "0px 6px 24px 1px #7090B00A",
                 }}
               />
             </div>

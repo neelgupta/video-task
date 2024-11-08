@@ -9,7 +9,7 @@ const initialState = {
   themeColor: {
     pColor: "#8000ff",
     sColor: "#e6ccff",
-    darkColor: "#4A25E1",
+    darkColor: "#7C5BFF",
     lightColor: "#B3A1FF",
   },
   breadCrumbTitle: "",
