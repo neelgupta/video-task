@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "../pages/Layout";
 import Price from "../pages/Admin/Price";
 import Subscription from "../pages/Admin/Subscription";
+import Dashboard from "../pages/Admin/Dashboard";
+import AssetAllocation from "../pages/Admin/AssetAllocation";
 
 const AdminRoute = () => {
   const routeList = [
@@ -31,7 +33,13 @@ const AdminRoute = () => {
     },
     {
       path: "/admin/dashboard",
-      component: <div>dashboard</div>,
+      component: <Dashboard />,
+      pageTitle: "Dashboard",
+    },
+    {
+      path: "/admin/asset-allocation",
+      component: <AssetAllocation />,
+      pageTitle: "Asset Allocation",
     },
   ];
   return (
@@ -41,7 +49,7 @@ const AdminRoute = () => {
           <Route
             key={index}
             path={elm.path}
-            element={<Layout>{elm.component}</Layout>}
+            element={<Layout pageTitle={elm.pageTitle}>{elm.component}</Layout>}
           />
         );
       })}

@@ -5,7 +5,7 @@ import "./Layout.scss";
 import { useDispatch } from "react-redux";
 import { setIsResponsive } from "../../store/globalSlice";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, pageTitle }) => {
   const [show, setShow] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
@@ -33,8 +33,10 @@ const Layout = ({ children }) => {
         <Sidebar show={show} setShow={setShow} />
       </div>
       <div className="right-body-content">
-        <Navbar isResponsive={isResponsive} setShow={setShow} />
-        <div className="body-block video-ask-scroll">{children}</div>
+        <Navbar setShow={setShow} pageTitle={pageTitle} />
+        <div className="body-block video-ask-scroll auri-scroll">
+          {children}
+        </div>
       </div>
     </div>
   );

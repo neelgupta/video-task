@@ -4,7 +4,7 @@ import "./Navbar.scss";
 import { encrypt } from "../../../utils/helpers";
 import { setAuthData } from "../../../store/globalSlice";
 
-const Navbar = ({ setShow }) => {
+const Navbar = ({ setShow, pageTitle }) => {
   const reduxData = useSelector((state) => state.global);
   // eslint-disable-next-line no-unused-vars
   const { themeColor, isResponsive } = reduxData;
@@ -15,10 +15,10 @@ const Navbar = ({ setShow }) => {
       id="admin-navbar-container"
       style={{
         background: "transparent",
-        justifyContent: isResponsive ? "space-between" : "end",
+        justifyContent: "space-between",
       }}
     >
-      {isResponsive && (
+      {isResponsive ? (
         <div
           className={`pointer ${isResponsive ? "h-30 w-30" : "h-37 w-37"}`}
           onClick={() => {
@@ -26,6 +26,13 @@ const Navbar = ({ setShow }) => {
           }}
         >
           <img src={icons.menuBar} alt="menuBar" className="fit-image" />
+        </div>
+      ) : (
+        <div className="f-center">
+          <div className="h-30 w-30 me-10 pointer">
+            <img src={icons.arrow_left} alt="menuBar" className="fit-image" />
+          </div>
+          <div className="text-30-600">{pageTitle}</div>
         </div>
       )}
       <div className={`profile-det ${isResponsive ? "w-350" : "w-400"}`}>

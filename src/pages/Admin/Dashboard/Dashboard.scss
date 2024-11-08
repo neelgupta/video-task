@@ -1,0 +1,105 @@
+.Dashboards-container {
+  background-color: transparent;
+  padding: 10px;
+  .big-card-body {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .big-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px 20px;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+      .card-icon {
+        background: linear-gradient(
+          to bottom,
+          var(--darkColor),
+          var(--lightColor) 100%
+        );
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+  .user-card-body {
+    padding: 0px 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    .footer {
+      width: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--darkColor);
+    }
+
+    .card-body {
+      width: calc(100% - 50px);
+      display: flex;
+      gap: 0px 30px;
+      overflow: auto;
+      .user-card {
+        display: flex;
+        .card-det {
+          display: flex;
+          align-items: start;
+          justify-content: space-between;
+          flex-direction: column;
+          margin-left: 10px;
+          padding: 5px 0px;
+        }
+      }
+    }
+  }
+  .table-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  .table-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    padding-bottom: 15px;
+    .tab-btn {
+      display: flex;
+      border: 1px solid rgb(171, 171, 171);
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 500;
+      overflow: hidden;
+      div {
+        padding: 10px 20px;
+        border-right: 1px solid rgb(171, 171, 171);
+        cursor: pointer;
+        &:nth-last-child(1) {
+          border: none;
+        }
+      }
+      .active {
+        color: var(--darkColor);
+        background-color: rgba(179, 161, 255, 0.2);
+      }
+    }
+    .date-btn {
+      display: flex;
+      border: 1px solid rgb(171, 171, 171);
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 500;
+      overflow: hidden;
+      padding: 10px 20px;
+      margin-left: 20px;
+      cursor: pointer;
+    }
+  }
+}

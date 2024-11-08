@@ -40,7 +40,12 @@ const Sidebar = ({ show, setShow }) => {
     {
       title: "Dashboard",
       url: "/admin/dashboard",
-      icon: icons.dashboard,
+      icon: icons.logo,
+    },
+    {
+      title: "Asset Allocation",
+      url: "/admin/asset-allocation",
+      icon: icons.crown,
     },
     {
       title: "Interactions",
