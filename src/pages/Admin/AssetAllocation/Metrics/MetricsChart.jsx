@@ -56,6 +56,12 @@ const MetricsChart = () => {
       legend: {
         display: true,
         position: "bottom",
+        labels: {
+          usePointStyle: true, // This will change the legend markers to circles
+          pointStyle: "circle", // Ensure the point style is set to 'circle'
+          padding: 20, // Add padding between legend labels
+          boxWidth: 12, // Adjust the size of the legend marker boxes
+        },
       },
       tooltip: {
         mode: "index",
