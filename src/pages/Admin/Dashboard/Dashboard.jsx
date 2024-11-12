@@ -163,7 +163,7 @@ function Dashboard() {
           Welcome Back <strong>Jack</strong>
         </h5>
         <p className="text-19-400">
-          Here`s an overview of your stats for the last{" "}
+          {`Here's an overview of your stats for the last`}
           <strong className="text-19-600">30</strong> days
         </p>
       </div>

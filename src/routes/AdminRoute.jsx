@@ -4,8 +4,14 @@ import Price from "../pages/Admin/Price";
 import Subscription from "../pages/Admin/Subscription";
 import Dashboard from "../pages/Admin/Dashboard";
 import AssetAllocation from "../pages/Admin/AssetAllocation";
+import Interaction from "../pages/Admin/Interactions";
+import Trash from "../pages/Admin/Trash";
+import MyCollection from "../pages/Admin/MyCollection";
+import Profile from "../pages/Admin/Profile";
+import { useState } from "react";
 
 const AdminRoute = () => {
+  const [isResetPassword, setIsResetPassword] = useState(false);
   const routeList = [
     {
       path: "/admin/price",
@@ -17,7 +23,8 @@ const AdminRoute = () => {
     },
     {
       path: "/admin/interactions",
-      component: <div>Interactions</div>,
+      component: <Interaction />,
+      pageTitle: "Interactions",
     },
     {
       path: "/admin/contacts",
@@ -25,16 +32,29 @@ const AdminRoute = () => {
     },
     {
       path: "/admin/collection",
-      component: <div>My Collection</div>,
+      component: <MyCollection />,
+      pageTitle: "My Collection",
     },
     {
       path: "/admin/trash",
-      component: <div>Trash</div>,
+      component: <Trash />,
+      pageTitle: "Trash",
     },
     {
       path: "/admin/dashboard",
       component: <Dashboard />,
       pageTitle: "Dashboard",
+    },
+    {
+      path: "/admin/profile",
+      component: (
+        <Profile
+          isResetPassword={isResetPassword}
+          setIsResetPassword={setIsResetPassword}
+        />
+      ),
+      pageTitle: isResetPassword ? "Reset Password" : "My Account",
+      onBack: () => setIsResetPassword(false),
     },
     {
       path: "/admin/asset-allocation",
@@ -49,7 +69,11 @@ const AdminRoute = () => {
           <Route
             key={index}
             path={elm.path}
-            element={<Layout pageTitle={elm.pageTitle}>{elm.component}</Layout>}
+            element={
+              <Layout pageTitle={elm.pageTitle} onBack={elm.onBack}>
+                {elm.component}
+              </Layout>
+            }
           />
         );
       })}

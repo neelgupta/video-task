@@ -10,7 +10,7 @@ import {
 } from "../../../utils/helpers";
 import "./Sidebar.scss";
 
-const Sidebar = ({ show, setShow }) => {
+const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
   const navigate = useNavigate();
   const reduxData = useSelector((state) => state.global);
   const { themeColor, isResponsive } = reduxData;
@@ -71,6 +71,11 @@ const Sidebar = ({ show, setShow }) => {
       title: "Subscription",
       url: "/admin/subscription",
       icon: icons.users,
+    },
+    {
+      title: "My Account",
+      url: "/admin/profile",
+      icon: icons.logo,
     },
   ];
   const teacherOptionsList = [];
@@ -248,7 +253,7 @@ const Sidebar = ({ show, setShow }) => {
               style={{ borderBottom: "1px solid rgba(0,0,0,0.1)" }}
             >
               <Button
-                onClick={() => {}}
+                onClick={() => setShowCreateFlowModal(true)}
                 btnText="New QnAFlow"
                 className="h-50 pe-20 ps-20 text-16-300 wp-100"
                 leftIcon={icons.cricleAdd}

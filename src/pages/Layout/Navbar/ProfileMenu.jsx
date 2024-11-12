@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setAuthData } from "../../../store/globalSlice";
 import { useNavigate } from "react-router-dom";
 
-const ProfileMenu = ({ themeColor, role }) => {
+const ProfileMenu = ({ themeColor, isResponsive }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -23,83 +23,54 @@ const ProfileMenu = ({ themeColor, role }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [profileRef]);
-  const teacherOption = [
-    { title: "My Profile", icon: icons.user, link: "/teacher/my-profile" },
-    {
-      title: "Edit Profile",
-      icon: icons.editUser,
-      link: "/teacher/edit-profile",
-    },
-  ];
-  const displayOption = role === "admin" ? [] : teacherOption;
+
   return (
     <div className="position-relative">
       <div
-        className="h-24 w-24 pointer"
+        className={`pointer ${isResponsive ? "h-30 w-30" : "h-37 w-37"}`}
         onClick={() => {
-          setShow(!show);
+          setShow((prev) => !prev);
         }}
       >
-        <img
-          src={icons.downDark}
-          alt="more"
-          className="fit-image"
-          style={
-            show
-              ? {
-                  filter: creteImgFilter(themeColor.pColor),
-                  transform: "rotate(180deg)",
-                }
-              : {}
-          }
-        />
+        <img src={icons.avatar} alt="more" className="fit-image" />
       </div>
       {show && (
         <div className="profile-popover" ref={profileRef}>
-          {displayOption?.map((elm, index) => {
-            return (
-              <div
-                className="fa-center gap-2 px-16 py-13 bb-2b0a pointer"
-                key={index}
-                onClick={() => {
-                  navigate(elm.link);
-                  setShow(false);
-                }}
-              >
-                <span className="d-flex h-16 w-16">
-                  <img
-                    src={elm.icon}
-                    alt="user"
-                    className="fit-image"
-                    style={{
-                      filter: creteImgFilter(themeColor.pColor),
-                    }}
-                  />
-                </span>
-                <span className="text-14-400 color-757f">{elm.title}</span>
-              </div>
-            );
-          })}
+          <div className="d-flex flex-column gap-2 px-16 py-13 pointer">
+            <div className="text-14-400">
+              Hi, <span style={{ color: "#7B5AFF" }}>James</span>
+            </div>
 
-          <div
-            className="fa-center gap-2 px-16 py-13 pointer"
-            onClick={() => {
-              let data = encrypt({ time: new Date().toLocaleString() });
-              localStorage.authData = data;
-              dispatch(setAuthData(data));
-            }}
-          >
-            <span className="d-flex h-16 w-16">
-              <img
-                src={icons.logout}
-                alt="logout"
-                className="fit-image"
-                style={{
-                  filter: creteImgFilter(themeColor.pColor),
-                }}
-              />
-            </span>
-            <span className="text-14-400 color-757f">Logout</span>
+            <div className="text-14-400" style={{ color: "#8C8E90" }}>
+              account@gmail.com
+            </div>
+            {/* <hr /> */}
+            {/* <div className="d-flex gap-2 align-items-center">
+              <div>
+                <img
+                  src={icons.PrimiumIcon}
+                  alt="Avatar"
+                  className="custom-card-image"
+                />
+              </div>
+              <div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+            <hr /> */}
+
+            <div
+              className="text-14-400"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("/admin/profile");
+              }}
+            >
+              My Account
+            </div>
+
+            <div className="text-14-400">Sign out</div>
           </div>
         </div>
       )}

@@ -3,8 +3,9 @@ import { icons } from "../../../utils/constants";
 import "./Navbar.scss";
 import { encrypt } from "../../../utils/helpers";
 import { setAuthData } from "../../../store/globalSlice";
+import ProfileMenu from "./ProfileMenu";
 
-const Navbar = ({ setShow, pageTitle }) => {
+const Navbar = ({ setShow, pageTitle, onBack }) => {
   const reduxData = useSelector((state) => state.global);
   // eslint-disable-next-line no-unused-vars
   const { themeColor, isResponsive } = reduxData;
@@ -28,7 +29,7 @@ const Navbar = ({ setShow, pageTitle }) => {
           <img src={icons.menuBar} alt="menuBar" className="fit-image" />
         </div>
       ) : (
-        <div className="f-center">
+        <div className={`f-center ${onBack && "pointer"}`} onClick={onBack}>
           <div className="h-30 w-30 me-5 pointer">
             <img src={icons.arrow_left} alt="menuBar" className="fit-image" />
           </div>
@@ -78,12 +79,13 @@ const Navbar = ({ setShow, pageTitle }) => {
               />
             </span>
           </div>
+          <ProfileMenu themeColor={themeColor} isResponsive={isResponsive} />
 
-          <div
+          {/* <div
             className={`pointer ${isResponsive ? "h-30 w-30" : "h-37 w-37"}`}
           >
             <img src={icons.avatar} alt="avatar" className="fit-image" />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

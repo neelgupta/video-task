@@ -1,0 +1,19 @@
+.ProfileContainer {
+  .ProfileMenuTab {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    box-sizing: border-box;
+    div {
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+    }
+    .active {
+      color: var(--darkColor);
+      border-color: var(--darkColor);
+    }
+  }
+}

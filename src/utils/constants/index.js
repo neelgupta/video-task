@@ -54,6 +54,8 @@ import exportPng from "../../assets/images/svgIcons/export_svg.svg";
 import teg_svg from "../../assets/images/svgIcons/teg_svg.svg";
 import single_arrow from "../../assets/images/svgIcons/single_arrow.svg";
 import avatar8 from "../../assets/images/avatar8.png";
+import Folder2 from "../../assets/images/Folder2.svg";
+import Scratch from "../../assets/images/Scratch.svg";
 
 export const icons = {
   logo,
@@ -112,4 +114,6 @@ export const icons = {
   exportPng,
   single_arrow,
   avatar8,
+  Folder2,
+  Scratch,
 };

@@ -32,6 +32,7 @@ const ProfileMenu = ({ themeColor, role }) => {
     },
   ];
   const displayOption = role === "admin" ? [] : teacherOption;
+
   return (
     <div className="position-relative">
       <div
