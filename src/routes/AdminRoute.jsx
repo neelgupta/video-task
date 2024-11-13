@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Layout from "../pages/Layout";
 import Price from "../pages/Admin/Price";
 import Subscription from "../pages/Admin/Subscription";
@@ -9,9 +9,12 @@ import Trash from "../pages/Admin/Trash";
 import MyCollection from "../pages/Admin/MyCollection";
 import Profile from "../pages/Admin/Profile";
 import { useState } from "react";
+import Contacts from "../pages/Admin/Contacts";
+import VisitContacts from "../pages/Admin/Contacts/VisitContacts";
 
 const AdminRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
+  const navigate = useNavigate();
   const routeList = [
     {
       path: "/admin/price",
@@ -28,7 +31,8 @@ const AdminRoute = () => {
     },
     {
       path: "/admin/contacts",
-      component: <div>Contacts</div>,
+      component: <Contacts />,
+      pageTitle: "Contacts",
     },
     {
       path: "/admin/collection",
@@ -44,6 +48,12 @@ const AdminRoute = () => {
       path: "/admin/dashboard",
       component: <Dashboard />,
       pageTitle: "Dashboard",
+    },
+    {
+      path: "/admin/contacts/visit",
+      component: <VisitContacts />,
+      pageTitle: "Back to Contacts",
+      onBack: () => navigate("/admin/contacts"),
     },
     {
       path: "/admin/profile",

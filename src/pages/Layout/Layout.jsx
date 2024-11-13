@@ -5,10 +5,12 @@ import "./Layout.scss";
 import { useDispatch } from "react-redux";
 import { setIsResponsive } from "../../store/globalSlice";
 import NewQnAFlowModal from "../NewQnAFlowModal";
+import CreateWithAI from "../NewQnAFlowModal/CreateWithAI";
 
 const Layout = ({ children, pageTitle, onBack }) => {
   const [show, setShow] = useState(false);
   const [showCreateFlowModal, setShowCreateFlowModal] = useState(false);
+  const [showCreateFlowAIModal, setShowCreateFlowAIModal] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
 
@@ -45,6 +47,11 @@ const Layout = ({ children, pageTitle, onBack }) => {
           <NewQnAFlowModal
             show={showCreateFlowModal}
             handleClose={() => setShowCreateFlowModal(false)}
+            setShowCreateFlowAIModal={setShowCreateFlowAIModal}
+          />
+          <CreateWithAI
+            show={showCreateFlowAIModal}
+            handleClose={() => setShowCreateFlowAIModal(false)}
           />
         </div>
       </div>

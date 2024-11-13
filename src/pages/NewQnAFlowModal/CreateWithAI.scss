@@ -1,0 +1,46 @@
+.createWithAIContainer {
+  .modal-content {
+    background: linear-gradient(
+        180deg,
+        rgba(255, 198, 252, 0) 50.52%,
+        rgba(217, 197, 216, 0.4) 100%
+      ),
+      url("../../assets/images/qnabackground.png");
+    background-color: white;
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    padding: 25px;
+    padding-bottom: 35px;
+    width: 100% !important;
+    font-size: 14px;
+    .bodyContainer {
+      .form-items {
+        margin-bottom: 20px;
+        .customChecksYesNoContainer {
+          div {
+            border: 2px solid #d9d9d9;
+            padding: 5px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+          }
+          .active {
+            border: none;
+            background: linear-gradient(90deg, #7c5bff 0%, #b3a1ff 100%);
+          }
+        }
+      }
+    }
+    .buttonContainer {
+      button {
+        border: none;
+        width: 100%;
+        color: #ffffff;
+        background: linear-gradient(90deg, #7c5bff 0%, #b3a1ff 100%);
+        padding: 10px 0px;
+      }
+    }
+  }
+}

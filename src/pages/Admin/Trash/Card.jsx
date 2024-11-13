@@ -4,7 +4,7 @@ import "./Trash.scss";
 import { Dropdown } from "react-bootstrap";
 import { icons } from "../../../utils/constants";
 import { creteImgFilter } from "../../../utils/helpers";
-import DeleteModal from "../Interactions/Interactions/DeleteModal";
+import DeleteModal from "../../../components/layouts/DeleteModal";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a

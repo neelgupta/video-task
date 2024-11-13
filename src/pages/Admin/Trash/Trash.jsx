@@ -4,7 +4,7 @@ import Card from "./Card";
 
 const Trash = () => {
   return (
-    <div className="d-flex">
+    <div className="d-flex flex-wrap">
       {trashItemsData.map((item, idx) => {
         return <Card key={item.id} item={item} />;
       })}

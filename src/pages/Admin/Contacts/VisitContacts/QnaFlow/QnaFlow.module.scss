@@ -1,0 +1,104 @@
+.qnaContainer {
+  display: flex;
+  gap: 0px 10px;
+  .qnaSidebar {
+    padding: 5px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 18px 0px #00000012;
+    width: 400px;
+
+    .profileDet {
+      display: flex;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ececee;
+      .profileImg {
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .det {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    .recentChats {
+      .list {
+        overflow-y: auto;
+        height: calc(100vh - 370px);
+      }
+      .chatCard {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0px 4px 10px 0px #0000001a;
+        padding: 5px;
+        border-radius: 10px;
+        color: white;
+      }
+    }
+  }
+  .qnaBody {
+    // border: 1px solid black;
+    box-shadow: 0px 4px 10px 0px #0000001a;
+    width: 100%;
+    border-radius: 10px;
+
+    .qnaHeader {
+      border-bottom: 2px solid #ececee;
+      padding: 0px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      .iconGroup {
+        display: flex;
+        align-items: center;
+        gap: 0px 20px;
+      }
+    }
+    .qnaContent {
+      height: calc(100% - 90px - 150px);
+    }
+    .qnaFooter {
+      box-sizing: border-box;
+      height: 150px;
+      border-top: 2px solid #ececee;
+      display: flex;
+      justify-content: space-between;
+      .metingCardBody {
+        display: flex;
+        .metingCard {
+          height: 150px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          cursor: pointer;
+          margin: 0px 20px;
+          margin-bottom: 5px;
+          .imgBtn {
+            position: absolute;
+            // width: 100%;
+            bottom: 0px;
+            height: 40%;
+            background: linear-gradient(
+              0deg,
+              #000000 -43.48%,
+              rgba(0, 0, 0, 0) 76.09%
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            // background-color: gray;
+            div {
+              padding: 5px 10px;
+              border-radius: 20px;
+              background: #0000004d;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

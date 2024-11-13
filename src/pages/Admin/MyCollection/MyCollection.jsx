@@ -6,7 +6,7 @@ import CustomFolderMenu from "./CustomFolderMenu";
 import { Button } from "react-bootstrap";
 import CreateFolderModal from "./CreateFolderModal";
 import { useSelector } from "react-redux";
-import DeleteModal from "../Interactions/Interactions/DeleteModal";
+import DeleteModal from "../../../components/layouts/DeleteModal";
 import CustomFileMenu from "./CustomFileMeu";
 import { icons } from "../../../utils/constants";
 

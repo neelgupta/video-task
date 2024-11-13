@@ -4,7 +4,12 @@ import "./DeleteModal.scss";
 
 const DeleteModal = ({ show, handleClose, onDelete, title, text }) => {
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+      className="deleteModalContainer"
+    >
       <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
         <div className="modal-content-container">
@@ -43,6 +48,7 @@ const DeleteModal = ({ show, handleClose, onDelete, title, text }) => {
             style={{ width: "200px" }}
             variant="secondary"
             onClick={handleClose}
+            className="text-16-600"
           >
             Cancel
           </Button>
@@ -52,6 +58,7 @@ const DeleteModal = ({ show, handleClose, onDelete, title, text }) => {
             style={{ width: "200px" }}
             variant="danger"
             onClick={onDelete}
+            className="text-16-600"
           >
             Delete Now
           </Button>

@@ -56,7 +56,16 @@ import single_arrow from "../../assets/images/svgIcons/single_arrow.svg";
 import avatar8 from "../../assets/images/avatar8.png";
 import Folder2 from "../../assets/images/Folder2.svg";
 import Scratch from "../../assets/images/Scratch.svg";
-
+import QnaModalBackground from "../../assets/images/qnabackground.png";
+import addContactIcon from "../../assets/images/icons/addContactIcon.svg";
+import conversationIcon from "../../assets/images/icons/conversation.svg";
+import deleteIcon from "../../assets/images/icons/deleteIcon.svg";
+import editIcon from "../../assets/images/icons/editIcon.svg";
+import heartIcon from "../../assets/images/icons/heartIcon.svg";
+import profileIcon from "../../assets/images/icons/profileIcon.svg";
+import fillHeartIcon from "../../assets/images/icons/fillHeartIcon.svg";
+import copyIcon from "../../assets/images/icons/copyIcon.svg";
+import templateIcon from "../../assets/images/icons/templateIcon.svg";
 export const icons = {
   logo,
   add,
@@ -116,4 +125,14 @@ export const icons = {
   avatar8,
   Folder2,
   Scratch,
+  QnaModalBackground,
+  addContactIcon,
+  conversationIcon,
+  deleteIcon,
+  editIcon,
+  heartIcon,
+  profileIcon,
+  fillHeartIcon,
+  copyIcon,
+  templateIcon,
 };

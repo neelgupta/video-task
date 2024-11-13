@@ -24,7 +24,7 @@ const CreateFolderModal = ({
         </div>
       </Modal.Header>
       <Modal.Body>
-        <div style={{ padding: "20px" }}>
+        <div>
           <div className="text-11-600">Folder Name</div>
           <div>
             {renamingFolder ? (

@@ -1,19 +1,22 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import "./EditDetailsModal.scss";
 
 const EditDetailsModal = ({ show, handleClose }) => {
-  const reduxData = useSelector((state) => state.global);
-  const { themeColor } = reduxData;
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+      className="editDetailsModalContainer"
+    >
       <Modal.Header closeButton>
         <div className="text-20-600" style={{ color: "#1B2559" }}>
           Edit Personal Details
         </div>
       </Modal.Header>
       <Modal.Body>
-        <div style={{ padding: "20px" }}>
+        <div>
           <div className="form-group">
             <div className="text-11-600 mb-5">User Name</div>
             <div>

@@ -1,0 +1,18 @@
+.contactContainer {
+  padding: 0 15px;
+  .headerContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(180deg, #7b5bff 0%, #b3a1ff 100%);
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      padding: 10px 15px;
+    }
+  }
+}

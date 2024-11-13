@@ -5,9 +5,7 @@ import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 import { interactionsData } from "./constants";
 import { Dropdown } from "react-bootstrap";
-import Swal from "sweetalert2";
-import { DeleteConfirmation } from "../../../../components";
-import DeleteModal from "./DeleteModal";
+import DeleteModal from "../../../../components/layouts/DeleteModal";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -98,14 +96,7 @@ const InteractionMenu = ({
 
   return (
     <Dropdown>
-      <Dropdown.Toggle
-        as={CustomToggle}
-        // style={{
-        //   background: "transparent",
-        //   border: "none",
-        //   cursor: "pointer",
-        // }}
-      >
+      <Dropdown.Toggle as={CustomToggle}>
         <img
           src={icons.three_dots}
           alt=""
