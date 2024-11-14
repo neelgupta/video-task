@@ -8,16 +8,26 @@ import UpdateTagsModal from "./Modals/UpdateTagsModal";
 import TagListModal from "./Modals/TagListModal";
 import AddTagModal from "./Modals/AddTagModal";
 import ShareModal from "./Modals/ShareModal";
+import Tooltip from "../../../../../components/layouts/Tooltip";
+import { useQnaContext } from "../../../../../services/context/QnaContext/QnaFlowContext";
 
-function QnaFlow() {
+function QnaFlow({ isDirectMessageScreen }) {
   const [selectChat, setSelectChat] = useState(1);
   const [selectMetingCard, setSelectMetingCard] = useState(1);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showUpdateTagModal, setShowUpdateTagModal] = useState(false);
-  const [showTagList, setShowTagList] = useState(false);
-  const [showDeleteTagsModal, setShowDeleteTagsModal] = useState(false);
-  const [showNewTagAddModal, setShowNewTagAddModal] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
+  const {
+    showDeleteModal,
+    setShowDeleteModal,
+    showUpdateTagModal,
+    setShowUpdateTagModal,
+    showTagList,
+    setShowTagList,
+    showDeleteTagsModal,
+    setShowDeleteTagsModal,
+    showNewTagAddModal,
+    setShowNewTagAddModal,
+    showShareModal,
+    setShowShareModal,
+  } = useQnaContext();
 
   return (
     <>
@@ -28,65 +38,108 @@ function QnaFlow() {
               <img src={icons.avatar7} alt="" className="fit-image" />
             </div>
             <div className={`p-5 w-200 ms-10 ${styles.det}`}>
-              <div className="text-18-600">Asset Allocation</div>
-              <div className="fb-center mt-10">
+              <div>
+                <div className="text-20-600">Billy Bil</div>
+                <div className="text-12-500">billybil@gmail.com</div>
+                <div style={{ color: "#4D4AEA" }}>+919876378296</div>
+              </div>
+              <div className="d-flex gap-2 align-self-end align-items-center">
                 <div className="w-18">
                   <img
-                    src={icons.branch}
+                    src={icons.videoIcon}
                     alt=""
                     className="fit-image hover-icons-effect"
                   />
                 </div>
-                <div className="w-18">
+                <div className="w-17">
                   <img
-                    src={icons.downloads_box}
+                    src={icons.editIcon}
                     alt=""
                     className="fit-image hover-icons-effect"
                   />
                 </div>
-                <div className="w-18">
+                <div className="w-14">
                   <img
-                    src={icons.link}
-                    alt=""
-                    className="fit-image hover-icons-effect"
-                  />
-                </div>
-                <div className="w-18">
-                  <img
-                    src={icons.screen}
+                    src={icons.deleteIcon}
                     alt=""
                     className="fit-image hover-icons-effect"
                   />
                 </div>
               </div>
+              {/* <div className="fb-center mt-10">
+                <div className="w-18">
+                  <img
+                    src={icons.videoIcon}
+                    alt=""
+                    className="fit-image hover-icons-effect"
+                  />
+                </div>
+                <div className="w-18">
+                  <img
+                    src={icons.editIcon}
+                    alt=""
+                    className="fit-image hover-icons-effect"
+                  />
+                </div>
+                <div className="w-18">
+                  <img
+                    src={icons.deleteIcon}
+                    alt=""
+                    className="fit-image hover-icons-effect"
+                  />
+                </div>
+              </div> */}
             </div>
           </div>
           <div className={styles.recentChats}>
+            {isDirectMessageScreen && (
+              <>
+                <div
+                  className={styles.titleContainer}
+                  style={{
+                    padding: "5px",
+                    paddingTop: "15px",
+                  }}
+                >
+                  <div className="color-darkText text-14-600">
+                    Start New {isDirectMessageScreen && "Conversation"}
+                  </div>
+                </div>
+                <div className={`${styles.chatCard} mb-20 pointer mt-5`}>
+                  <div
+                    className="ps-20 d-flex align-items-center justify-content-evenly px-10 py-20"
+                    style={{ color: "#1B2559", width: "100%" }}
+                  >
+                    <div className="w-25 h-25" style={{ overflow: "hidden" }}>
+                      <img
+                        src={icons.videoIcon}
+                        alt="avatar"
+                        className="fit-image "
+                      />
+                    </div>
+                    <div>
+                      Send a video message to
+                      <span
+                        className="text-12-500"
+                        style={{ color: "#4D4AEA" }}
+                      >
+                        {" "}
+                        Billy Bil
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
             <div
+              className={styles.titleContainer}
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
                 padding: "5px",
                 paddingTop: "15px",
               }}
             >
-              <div className="color-darkText text-14-600">Recent Chats</div>
-              <div style={{ display: "flex", gap: "0px 10px" }}>
-                <div className="w-24 h-24 f-center">
-                  <img
-                    src={icons.double_arrow}
-                    alt=""
-                    className="fit-image hover-icons-effect w-18"
-                  />
-                </div>
-                <div className="w-24 h-24 f-center">
-                  <img
-                    src={icons.control_menu}
-                    alt=""
-                    className="fit-image hover-icons-effect w-18"
-                  />
-                </div>
+              <div className="color-darkText text-14-600">
+                Last Week {isDirectMessageScreen && "Conversation"}
               </div>
             </div>
             <div className={`p-5 pt-20 hp-100 auri-scroll ${styles.list}`}>
@@ -170,12 +223,24 @@ function QnaFlow() {
                   className="fit-image hover-icons-effect"
                 />
               </div>
-              <div className="w-20 h-20">
-                <img
-                  src={icons.teg_svg}
-                  alt=""
-                  className="fit-image hover-icons-effect"
-                />
+              <div className="w-20 h-20" onClick={() => setShowTagList(true)}>
+                <Tooltip
+                  content={
+                    <div className="d-flex gap-1 flex-column">
+                      <div style={{ color: "#FFFFFF" }}>Tagged as:</div>
+                      <div style={{ color: "#BEBEBF", fontSize: "10px" }}>
+                        CXXCX
+                      </div>
+                      <div style={{ color: "#E4C548" }}>Click to edit tags</div>
+                    </div>
+                  }
+                >
+                  <img
+                    src={icons.teg_svg}
+                    alt=""
+                    className="fit-image hover-icons-effect"
+                  />
+                </Tooltip>
               </div>
               <div className="w-20 h-20">
                 <img

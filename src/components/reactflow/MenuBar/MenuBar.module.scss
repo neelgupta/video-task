@@ -1,0 +1,30 @@
+.menuBarContainer {
+  padding: 10px 20px;
+  box-shadow: 0px 2px 10px 1px #00000033;
+  border-radius: 16px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  .divider {
+    margin-left: 5px;
+    width: 1px;
+    height: 40px;
+    background-color: #d9d9d9;
+  }
+  .menuBtn {
+    border: none;
+    background: transparent;
+  }
+  .previewBtn {
+    background: linear-gradient(180deg, #7f5fff 0%, #ae9aff 100%);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+}

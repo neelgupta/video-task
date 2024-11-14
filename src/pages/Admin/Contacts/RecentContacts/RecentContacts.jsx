@@ -19,11 +19,13 @@ const RecentContacts = () => {
             Add
           </Button>
         </div>
-        {contactsData.map((contact, idx) => (
-          <div key={contact.id}>
-            <ContactCard contact={contact} />
-          </div>
-        ))}
+        <div className={styles.tableWrapper}>
+          {contactsData.map((contact, idx) => (
+            <div key={contact.id} className={styles.tableRow}>
+              <ContactCard contact={contact} />
+            </div>
+          ))}
+        </div>
       </div>
       <AddEditContactModal
         show={isShowAddEditModal}

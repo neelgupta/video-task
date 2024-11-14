@@ -3,4 +3,14 @@
   .headerContainer {
     margin-bottom: 10px;
   }
+  .tableWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: auto;
+    .tableRow {
+      display: flex;
+      width: 100%;
+    }
+  }
 }

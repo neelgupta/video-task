@@ -1,4 +1,6 @@
 .contactItemContainer {
+  width: 100%;
+  min-width: 1000px;
   .contactItemCard {
     padding: 15px;
     box-shadow: 0px 4px 18px 0px #00000012;
@@ -6,5 +8,6 @@
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
+    white-space: nowrap;
   }
 }

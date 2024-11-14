@@ -12,8 +12,8 @@ const ContactCard = ({ contact, isFavourite }) => {
   const navigate = useNavigate();
   return (
     <>
-      <div className={styles.contactItemContainer}>
-        <div className={styles.contactItemCard}>
+      <div className={`${styles.contactItemContainer} `}>
+        <div className={`${styles.contactItemCard} ${styles.tableCell}`}>
           <div className="d-flex gap-4 ">
             <div className={`${styles.contactItems} d-flex align-items-center`}>
               <div>

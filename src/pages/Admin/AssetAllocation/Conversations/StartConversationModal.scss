@@ -1,26 +1,29 @@
-.qnaFlowModal {
+.startConversationModal {
   .modal-content {
+    padding: 20px;
+    padding-bottom: 40px !important;
     background: linear-gradient(
         180deg,
         rgba(255, 198, 252, 0) 50.52%,
         rgba(217, 197, 216, 0.4) 100%
       ),
-      url("../../assets/images/qnabackground.png");
+      url("../../../../assets//images/qnabackground.png");
     background-color: white;
 
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     width: 100% !important;
+
     .modal-header {
       div {
-        width: 85%;
+        width: 90%;
         text-align: end !important;
       }
     }
     .itemsContainer {
-      margin-bottom: 5rem;
-      margin-top: 3rem;
+      //   margin-bottom: 5rem;
+      //   margin-top: 3rem;
 
       .items {
         width: 160px;
@@ -31,6 +34,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 30px;
         cursor: pointer;
         .proTag {
           background: #f2efff;

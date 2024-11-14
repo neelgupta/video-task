@@ -10,7 +10,7 @@ const NewQnAFlowModal = ({ show, handleClose, setShowCreateFlowAIModal }) => {
       show={show}
       onHide={handleClose}
       centered
-      className="qnaFlorModal"
+      className="qnaFlowModal"
     >
       <Modal.Header closeButton>
         <Modal.Title>

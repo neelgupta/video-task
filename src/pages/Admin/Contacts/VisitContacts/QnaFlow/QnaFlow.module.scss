@@ -10,18 +10,22 @@
 
     .profileDet {
       display: flex;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #ececee;
+      padding: 10px;
+      box-shadow: 0px 4px 10px 0px #0000001a;
       .profileImg {
         border-radius: 10px;
         overflow: hidden;
       }
       .det {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
       }
     }
     .recentChats {
+      .titleContainer {
+        border-bottom: 2px solid #ececee;
+        color: #8c8e90;
+      }
       .list {
         overflow-y: auto;
         height: calc(100vh - 370px);

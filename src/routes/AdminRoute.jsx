@@ -11,6 +11,7 @@ import Profile from "../pages/Admin/Profile";
 import { useState } from "react";
 import Contacts from "../pages/Admin/Contacts";
 import VisitContacts from "../pages/Admin/Contacts/VisitContacts";
+import FlowCanvas from "../pages/FlowCanvas";
 
 const AdminRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -87,6 +88,7 @@ const AdminRoute = () => {
           />
         );
       })}
+      <Route path="/flow" element={<FlowCanvas />} />
       <Route path="*" element={<Navigate to="/admin/dashboard" />} />
     </Routes>
   );

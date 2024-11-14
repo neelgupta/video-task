@@ -3,10 +3,16 @@ import { Button, Modal } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { icons } from "../../../../../../utils/constants";
 import "./TagListModal.scss";
+import { useQnaContext } from "../../../../../../services/context/QnaContext/QnaFlowContext";
 
 const TagListModal = ({ show, handleClose }) => {
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
+  const {
+    setShowUpdateTagModal,
+    setShowDeleteTagsModal,
+    setShowNewTagAddModal,
+  } = useQnaContext();
   return (
     <Modal show={show} onHide={handleClose} centered className="tagListModal">
       <Modal.Header closeButton>
@@ -49,14 +55,26 @@ const TagListModal = ({ show, handleClose }) => {
               />
             </div>
             <div className="d-flex gap-2 mt-2">
-              <div>
+              <div
+                className="pointer"
+                onClick={() => {
+                  handleClose();
+                  setShowUpdateTagModal(true);
+                }}
+              >
                 <img
                   src={icons.editIcon}
                   alt="Edit icon"
                   style={{ height: "17px" }}
                 />
               </div>
-              <div>
+              <div
+                className="pointer"
+                onClick={() => {
+                  handleClose();
+                  setShowDeleteTagsModal(true);
+                }}
+              >
                 <img
                   src={icons.deleteIcon}
                   alt="Trash icon"
@@ -68,6 +86,10 @@ const TagListModal = ({ show, handleClose }) => {
           <div
             className="text-12-600 mt-2 text-end pointer"
             style={{ width: "85%", color: "#7B5AFF" }}
+            onClick={() => {
+              handleClose();
+              setShowNewTagAddModal(true);
+            }}
           >
             + New Tag
           </div>
@@ -114,7 +136,6 @@ const TagListModal = ({ show, handleClose }) => {
         <div>
           <Button
             onClick={() => {}}
-            iconColor="#ffffff"
             style={{
               background: `linear-gradient(180deg , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
               border: "none",
