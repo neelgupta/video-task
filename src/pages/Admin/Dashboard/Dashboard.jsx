@@ -168,7 +168,7 @@ function Dashboard() {
         </p>
       </div>
       <div className="big-card-body">
-        <div className={`${isResponsive ? "wp-100 mb-20" : "wp-30"} big-card`}>
+        <div className={`${isResponsive ? "wp-100 mb-20" : "w-400"} big-card`}>
           <div className="fb-center">
             <div
               className="text-25-400"
@@ -193,7 +193,7 @@ function Dashboard() {
             5000
           </div>
         </div>
-        <div className={`${isResponsive ? "wp-100 mb-20" : "wp-30"} big-card`}>
+        <div className={`${isResponsive ? "wp-100 mb-20" : "w-400"} big-card`}>
           <div className="fb-center">
             <div
               className="text-25-400"
@@ -218,7 +218,7 @@ function Dashboard() {
             50
           </div>
         </div>
-        <div className={`${isResponsive ? "wp-100 mb-20" : "wp-30"} big-card`}>
+        <div className={`${isResponsive ? "wp-100 mb-20" : "w-400"} big-card`}>
           <div className="fb-center">
             <div
               className="text-25-400"

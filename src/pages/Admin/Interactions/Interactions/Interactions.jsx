@@ -6,6 +6,7 @@ import { creteImgFilter } from "../../../../utils/helpers";
 import { interactionsData } from "./constants";
 import { Dropdown } from "react-bootstrap";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
+import { useSelector } from "react-redux";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -132,6 +133,9 @@ const InteractionMenu = ({
 };
 
 function Interactions() {
+  const reduxData = useSelector((state) => state.global);
+  // eslint-disable-next-line no-unused-vars
+  const { isResponsive, themeColor } = reduxData;
   const [interactions, setInteractions] = useState(interactionsData);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
@@ -150,8 +154,17 @@ function Interactions() {
 
   return (
     <>
-      <div className="Interactions-container">
-        <div className="Interactions-sidebar ">
+      <div
+        className="Interactions-container"
+        style={
+          isResponsive ? { flexDirection: "column" } : { flexDirection: "row" }
+        }
+      >
+        <div
+          className={`Interactions-sidebar ${
+            isResponsive ? "wp-100" : "w-300"
+          }`}
+        >
           <div className="recent-chats">
             <div
               style={{
@@ -173,7 +186,14 @@ function Interactions() {
             <div style={{ padding: "5px" }}>
               <div className="color-darkText text-14-600">This week</div>
             </div>
-            <div className="p-5 pt-20 hp-100 auri-scroll list">
+            <div
+              className="p-5 pt-20  auri-scroll list"
+              style={
+                isResponsive
+                  ? { height: "400px" }
+                  : { height: "calc(100vh - 250px)" }
+              }
+            >
               {interactions.map((ele, index) => {
                 const { isSelected, isCurrentWeek } = ele;
                 return (
@@ -303,7 +323,10 @@ function Interactions() {
             </div>
           </div>
         </div>
-        <div className="Interactions-body">
+        <div
+          className="Interactions-body"
+          style={isResponsive ? { marginTop: "20px" } : {}}
+        >
           <div className="h-90 Interactions-header">
             <div className="f-center">
               <div className="w-79 h-69 profile-img">
@@ -337,7 +360,10 @@ function Interactions() {
               </div>
             </div>
           </div>
-          <div className="Interactions-content"></div>
+          <div
+            className="Interactions-content"
+            style={isResponsive ? { height: "500px" } : {}}
+          ></div>
           <div className="Interactions-footer">
             <div className="meting-card-body">
               {[1, 2, 3].map((ele, index) => {

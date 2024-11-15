@@ -8,6 +8,7 @@ import DeleteModal from "../../../components/layouts/DeleteModal";
 const ContactCard = ({ contact, isFavourite }) => {
   const [isShowAddEditModal, setIsShowAddEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [favoriteClick, setFavoriteClick] = useState(false);
 
   const navigate = useNavigate();
   return (
@@ -66,9 +67,20 @@ const ContactCard = ({ contact, isFavourite }) => {
             </div>
             <div>Start new Interaction</div>
           </div>
-          <div className={` d-flex gap-2 align-items-center pointer`}>
+
+          <div
+            className={` d-flex gap-2 align-items-center pointer`}
+            onClick={() => setFavoriteClick((prev) => !prev)}
+          >
             <div>
               {isFavourite ? (
+                favoriteClick ? (
+                  <img src={icons.heartIcon} alt="Favorite icon" />
+                ) : (
+                  <img src={icons.fillHeartIcon} alt="Favorite icon" />
+                )
+              ) : // <img src={icons.heartIcon} alt="Favorite icon" />
+              favoriteClick ? (
                 <img src={icons.fillHeartIcon} alt="Favorite icon" />
               ) : (
                 <img src={icons.heartIcon} alt="Favorite icon" />

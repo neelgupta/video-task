@@ -12,42 +12,47 @@ const NewQnAFlowModal = ({ show, handleClose, setShowCreateFlowAIModal }) => {
       centered
       className="qnaFlowModal"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <div className="text-24-700 text-center" style={{ color: "#1B2559" }}>
-            How would you like to Start?
-          </div>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className={`d-flex itemsContainer gap-5 justify-content-center`}>
-          <div className="items">
-            <div>
-              <img src={icons.Scratch} alt="" />
+      <div className="p-10" style={{ zIndex: "100" }}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <div
+              className="text-24-700 text-center"
+              style={{ color: "#1B2559" }}
+            >
+              How would you like to Start?
             </div>
-            <div className="text-15-500">From Scratch</div>
-          </div>
-          <div className="items">
-            <div>
-              <img src={icons.templateIcon} alt="" />
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className={`d-flex itemsContainer gap-5 justify-content-center`}>
+            <div className="items">
+              <div>
+                <img src={icons.Scratch} alt="" />
+              </div>
+              <div className="text-15-500">From Scratch</div>
             </div>
-            <div className="text-15-500">Template</div>
-          </div>
-          <div
-            className="items"
-            onClick={() => {
-              setShowCreateFlowAIModal(true);
-              handleClose();
-            }}
-          >
-            <div className="proTag">pro</div>
-            <div>
-              <img src={icons.Scratch} alt="" />
+            <div className="items">
+              <div>
+                <img src={icons.templateIcon} alt="" />
+              </div>
+              <div className="text-15-500">Template</div>
             </div>
-            <div className="text-15-500">Create with Flōw AI</div>
+            <div
+              className="items"
+              onClick={() => {
+                setShowCreateFlowAIModal(true);
+                handleClose();
+              }}
+            >
+              <div className="proTag">pro</div>
+              <div>
+                <img src={icons.Scratch} alt="" />
+              </div>
+              <div className="text-15-500">Create with Flōw AI</div>
+            </div>
           </div>
-        </div>
-      </Modal.Body>
+        </Modal.Body>
+      </div>
     </Modal>
   );
 };

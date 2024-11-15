@@ -14,7 +14,7 @@ import MenuBar from "../../components/reactflow/MenuBar";
 import TitleUndoRedo from "../../components/reactflow/TitleUndoRedo/TitleUndoRedo";
 
 const FlowCanvas = () => {
-  const [showCreateFlowModal, setShowCreateFlowModal] = useState(false);
+  const [showCreateFlowModal, setShowCreateFlowModal] = useState(true);
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <ReactFlow>

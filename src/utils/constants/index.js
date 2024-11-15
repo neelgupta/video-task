@@ -67,6 +67,7 @@ import fillHeartIcon from "../../assets/images/icons/fillHeartIcon.svg";
 import copyIcon from "../../assets/images/icons/copyIcon.svg";
 import templateIcon from "../../assets/images/icons/templateIcon.svg";
 import videoIcon from "../../assets/images/icons/videoIcon.svg";
+import addIcon from "../../assets/images/svgIcons/add.svg";
 
 export const icons = {
   logo,
@@ -138,4 +139,5 @@ export const icons = {
   copyIcon,
   templateIcon,
   videoIcon,
+  addIcon,
 };

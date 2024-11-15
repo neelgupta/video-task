@@ -3,16 +3,31 @@ import "./Conversations.scss";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 import StartConversationModal from "./StartConversationModal";
+import { useSelector } from "react-redux";
 function Conversations() {
+  const reduxData = useSelector((state) => state.global);
+  // eslint-disable-next-line no-unused-vars
+  const { isResponsive, themeColor } = reduxData;
+
   const [selectChat, setSelectChat] = useState(1);
   const [selectMetingCard, setSelectMetingCard] = useState(1);
   const [showCreateConversationModal, setShowCreateConversationModal] =
     useState(false);
+  console.log("isResponsive", isResponsive);
 
   return (
     <>
-      <div className="Conversations-container">
-        <div className="Conversations-sidebar ">
+      <div
+        className="Conversations-container"
+        style={
+          isResponsive ? { flexDirection: "column" } : { flexDirection: "row" }
+        }
+      >
+        <div
+          className={`Conversations-sidebar ${
+            isResponsive ? "wp-100" : "wp-45"
+          }`}
+        >
           <div className="profile-det">
             <div className="w-89 h-79 profile-img">
               <img src={icons.avatar7} alt="" className="fit-image" />
@@ -79,7 +94,15 @@ function Conversations() {
                 </div>
               </div>
             </div>
-            <div className="p-5 pt-20 hp-100 auri-scroll list">
+
+            <div
+              className="p-5 pt-20  auri-scroll list"
+              style={
+                isResponsive
+                  ? { height: "400px" }
+                  : { height: "calc(100vh - 370px)" }
+              }
+            >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((ele, index) => {
                 const isActive = ele === selectChat;
                 return (
@@ -147,7 +170,10 @@ function Conversations() {
             </div>
           </div>
         </div>
-        <div className="Conversations-body">
+        <div
+          className="Conversations-body"
+          style={isResponsive ? { marginTop: "20px" } : {}}
+        >
           <div className="h-90 Conversations-header">
             <div className="f-center">
               <div className="w-79 h-69 profile-img">
@@ -181,7 +207,10 @@ function Conversations() {
               </div>
             </div>
           </div>
-          <div className="Conversations-content"></div>
+          <div
+            className="Conversations-content"
+            style={isResponsive ? { height: "500px" } : {}}
+          ></div>
           <div className="Conversations-footer">
             <div className="meting-card-body">
               {[1, 2, 3].map((ele, index) => {

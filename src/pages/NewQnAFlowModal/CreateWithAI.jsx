@@ -4,6 +4,7 @@ import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import "./CreateWithAI.scss";
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 
 const options = [
   { value: "english", label: "English" },
@@ -20,6 +21,7 @@ const validationSchema = Yup.object().shape({
 
 const CreateWithAI = ({ show, handleClose }) => {
   const [isContactDetailsChecked, setIsContactDetailsChecked] = useState(false);
+  const navigate = useNavigate();
   return (
     <Modal
       show={show}
@@ -27,64 +29,69 @@ const CreateWithAI = ({ show, handleClose }) => {
       centered
       className="createWithAIContainer"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <div className="text-24-700 text-center" style={{ color: "#1B2559" }}>
-            Create New Flōw AI
-          </div>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="bodyContainer">
-          <div className="form-items">
-            <div className="text-16-500 mb-5">Title</div>
-            <div>
-              <input
-                type="text"
-                className="form-control rounded-3"
-                placeholder="Name your QnAFlow"
-                style={{
-                  width: "100%",
-                  padding: "0.5rem",
-                  fontSize: "14px",
-                }}
-              />
+      <div className="p-20 " style={{ zIndex: "100" }}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <div
+              className="text-24-700 text-center"
+              style={{ color: "#1B2559" }}
+            >
+              Create New Flōw AI
             </div>
-          </div>
-          <div className="form-items">
-            <div className="text-16-500 mb-15">Collect Contact Details</div>
-            <div className="d-flex gap-3 customChecksYesNoContainer">
-              <div
-                onClick={() => setIsContactDetailsChecked(true)}
-                className={isContactDetailsChecked && "active"}
-              >
-                Yes
-              </div>
-              <div
-                onClick={() => setIsContactDetailsChecked(false)}
-                className={!isContactDetailsChecked && "active"}
-              >
-                No
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="bodyContainer">
+            <div className="form-items">
+              <div className="text-16-500 mb-5">Title</div>
+              <div>
+                <input
+                  type="text"
+                  className="form-control rounded-3"
+                  placeholder="Name your QnAFlow"
+                  style={{
+                    width: "100%",
+                    padding: "0.5rem",
+                    fontSize: "14px",
+                  }}
+                />
               </div>
             </div>
-          </div>
-          <div className="form-items">
-            <div className="text-16-500 mb-5">Language</div>
-            <div>
-              <Select options={options} />
+            <div className="form-items">
+              <div className="text-16-500 mb-15">Collect Contact Details</div>
+              <div className="d-flex gap-3 customChecksYesNoContainer">
+                <div
+                  onClick={() => setIsContactDetailsChecked(true)}
+                  className={isContactDetailsChecked && "active"}
+                >
+                  Yes
+                </div>
+                <div
+                  onClick={() => setIsContactDetailsChecked(false)}
+                  className={!isContactDetailsChecked && "active"}
+                >
+                  No
+                </div>
+              </div>
+            </div>
+            <div className="form-items">
+              <div className="text-16-500 mb-5">Language</div>
+              <div>
+                <Select options={options} />
+              </div>
+            </div>
+            <div className="form-items">
+              <div className="text-16-500 mb-5">Folder</div>
+              <div>
+                <Select options={options} />
+              </div>
             </div>
           </div>
-          <div className="form-items">
-            <div className="text-16-500 mb-5">Folder</div>
-            <div>
-              <Select options={options} />
-            </div>
+          <div className="buttonContainer" onClick={() => navigate("/flow")}>
+            <Button>Create QnAFlow</Button>
           </div>
-        </div>
-        <div className="buttonContainer">
-          <Button>Create QnAFlow</Button>
-        </div>
-      </Modal.Body>
+        </Modal.Body>
+      </div>
     </Modal>
   );
 };

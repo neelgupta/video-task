@@ -67,7 +67,7 @@ const AddEditContactModal = ({ show, handleClose, isEdit }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button className="px-40" variant="secondary">
+        <Button onClick={handleClose} className="px-40" variant="secondary">
           Cancel
         </Button>
         {isEdit ? (

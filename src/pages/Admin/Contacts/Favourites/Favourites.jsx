@@ -11,11 +11,13 @@ const RecentContacts = () => {
       <div className={styles.headerContainer}>
         <div>{contactsData.length} Contacts</div>
       </div>
-      {contactsData.map((contact, idx) => (
-        <div key={contact.id}>
-          <ContactCard contact={contact} isFavourite />
-        </div>
-      ))}
+      <div className={styles.tableWrapper}>
+        {contactsData.map((contact, idx) => (
+          <div key={contact.id}>
+            <ContactCard contact={contact} isFavourite />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

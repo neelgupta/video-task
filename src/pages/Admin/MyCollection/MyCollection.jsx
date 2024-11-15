@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import DeleteModal from "../../../components/layouts/DeleteModal";
 import CustomFileMenu from "./CustomFileMeu";
 import { icons } from "../../../utils/constants";
+import { creteImgFilter } from "../../../utils/helpers";
 
 const FolderCard = ({
   item,
@@ -150,11 +151,18 @@ const MyCollection = () => {
         className="floating-button rounded-circle"
         onClick={() => setIsCreateFolderModalShow(true)}
         style={{
-          background: `linear-gradient(to right , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
+          background: `linear-gradient(to top , #4A25E1, #7B5AFF 100%)`,
           border: "none",
         }}
       >
-        +
+        <img
+          src={icons.addIcon}
+          alt=""
+          className="fit-image"
+          style={{
+            filter: creteImgFilter("#ffffff"),
+          }}
+        />
       </Button>
       <CreateFolderModal
         show={isCreateFolderModalShow}
