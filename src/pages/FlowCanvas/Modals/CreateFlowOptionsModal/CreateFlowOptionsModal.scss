@@ -1,12 +1,10 @@
 .createFlowOptionsModal {
   .modal-content {
     background-color: white;
-
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     width: 100% !important;
-
     &::before {
       content: "";
       background: linear-gradient(
@@ -14,7 +12,7 @@
           rgba(255, 198, 252, 0) 50.52%,
           rgba(217, 197, 216, 0.4) 100%
         ),
-        url("../../../assets/images/qnabackground.png");
+        url("../../../../assets/images/qnabackground.png");
       filter: opacity(0.45);
       position: absolute;
       width: 100%;
@@ -25,48 +23,45 @@
       margin-top: 1rem;
 
       .items {
-        width: 170px;
-        height: 450px;
+        width: 200px;
         background-color: #ffffff;
         border-radius: 12px;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        flex-direction: column;
         padding: 0px 10px;
         cursor: pointer;
+        position: relative;
         .proTag {
           background: #f2efff;
+          position: absolute;
+          top: 15px;
+          right: 15px;
           color: #603cff;
           padding: 2px 15px;
           border-radius: 20px;
           font-weight: 700;
           font-size: 12px;
-          align-self: flex-end;
-          margin-top: 10px;
-          margin-bottom: 68px;
-          margin-right: 10px;
         }
-
-        div {
-          &:first-child {
-            height: 50%;
-            align-self: flex-end;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            svg {
-              width: 100px;
-            }
-          }
+      }
+    }
+    .Upload_btn {
+      display: flex;
+      align-items: center;
+      transform: scale(1);
+      transition-duration: 0.3s;
+      transition-property: transform;
+      .btn_img {
+        margin-left: 0px;
+        transition-duration: 0.3s;
+        transition-property: margin-left;
+      }
+      &:hover {
+        .btn_img {
+          margin-left: 5px;
         }
-        &:nth-child(5) {
-          div {
-            &:first-child {
-              height: 100%;
-            }
-          }
-        }
+        transform: scale(1.1);
       }
     }
   }

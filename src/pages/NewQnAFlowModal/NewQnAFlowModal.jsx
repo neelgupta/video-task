@@ -4,6 +4,38 @@ import "./NewQnAFlowModal.scss";
 import { icons } from "../../utils/constants";
 
 const NewQnAFlowModal = ({ show, handleClose, setShowCreateFlowAIModal }) => {
+  const cardArray = [
+    {
+      icons: icons.Scratch,
+      title: "From Scratch",
+      isPro: false,
+      className: "w-50",
+      onClick: () => {
+        setShowCreateFlowAIModal(true);
+        handleClose();
+      },
+    },
+    {
+      icons: icons.templateIcon,
+      title: "Template",
+      isPro: false,
+      className: "w-50",
+      onClick: () => {
+        setShowCreateFlowAIModal(true);
+        handleClose();
+      },
+    },
+    {
+      icons: icons.doubleStar,
+      title: "Create with Flōw AI",
+      isPro: true,
+      className: "w-70",
+      onClick: () => {
+        setShowCreateFlowAIModal(true);
+        handleClose();
+      },
+    },
+  ];
   return (
     <Modal
       size="lg"
@@ -25,31 +57,21 @@ const NewQnAFlowModal = ({ show, handleClose, setShowCreateFlowAIModal }) => {
         </Modal.Header>
         <Modal.Body>
           <div className={`d-flex itemsContainer gap-5 justify-content-center`}>
-            <div className="items">
-              <div>
-                <img src={icons.Scratch} alt="" />
-              </div>
-              <div className="text-15-500">From Scratch</div>
-            </div>
-            <div className="items">
-              <div>
-                <img src={icons.templateIcon} alt="" />
-              </div>
-              <div className="text-15-500">Template</div>
-            </div>
-            <div
-              className="items"
-              onClick={() => {
-                setShowCreateFlowAIModal(true);
-                handleClose();
-              }}
-            >
-              <div className="proTag">pro</div>
-              <div>
-                <img src={icons.Scratch} alt="" />
-              </div>
-              <div className="text-15-500">Create with Flōw AI</div>
-            </div>
+            {cardArray.map((elem, index) => {
+              return (
+                <div key={index} className="items" onClick={elem.onClick}>
+                  {elem.isPro && <div className="proTag">pro</div>}
+                  <div className="fa-center h-100">
+                    <img
+                      src={elem.icons}
+                      alt=""
+                      className={`fit-image ${elem.className}`}
+                    />
+                  </div>
+                  <div className="text-15-500">{elem.title}</div>
+                </div>
+              );
+            })}
           </div>
         </Modal.Body>
       </div>

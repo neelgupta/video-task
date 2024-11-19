@@ -12,6 +12,7 @@ const TextArea = ({
   rows,
   value,
   error,
+  style,
 }) => {
   return (
     <div id="textarea-container">
@@ -24,6 +25,7 @@ const TextArea = ({
           rows={rows || "3"}
           placeholder={placeholder}
           value={value}
+          style={style}
           onChange={(e) => {
             onChange({
               target: {

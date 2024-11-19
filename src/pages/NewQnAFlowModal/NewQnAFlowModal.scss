@@ -39,6 +39,7 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        position: relative;
         .proTag {
           background: #f2efff;
           color: #603cff;
@@ -47,8 +48,9 @@
           font-weight: 700;
           font-size: 12px;
           align-self: flex-end;
-          margin-top: -20px;
-          margin-right: 10px;
+          position: absolute;
+          top: 10px;
+          right: 10px;
         }
       }
     }

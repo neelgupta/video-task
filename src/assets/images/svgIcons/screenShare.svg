@@ -1,0 +1,25 @@
+<svg
+                  width="116"
+                  height="76"
+                  viewBox="0 0 116 76"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="1"
+                    y="1"
+                    width="113.281"
+                    height="74"
+                    rx="7"
+                    stroke="#D9D9D9"
+                    strokeWidth="2"
+                  />
+                  <rect
+                    x="12.8091"
+                    y="12.8086"
+                    width="89.6629"
+                    height="52.0899"
+                    rx="5"
+                    fill="#8C8E90"
+                  />
+                </svg>

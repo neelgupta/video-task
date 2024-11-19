@@ -18,12 +18,12 @@ const TitleUndoRedo = React.forwardRef(({ className, ...props }) => {
         </div>
         <div className={styles.undoContainer}>
           <Button className={styles.undoBtn} onClick={() => {}}>
-            <UndoIcon className="hover-icons-effect" />
+            <UndoIcon className={styles.icon} />
           </Button>
         </div>
         <div className={styles.redoContainer}>
           <Button className={styles.redoBtn} onClick={() => {}}>
-            <RedoIcon className="hover-icons-effect" />
+            <RedoIcon className={styles.icon} />
           </Button>
         </div>
       </div>

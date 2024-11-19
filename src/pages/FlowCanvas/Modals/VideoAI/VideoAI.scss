@@ -1,0 +1,70 @@
+.VideoAIFooter {
+  .footer_card_box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0px 20px;
+    margin: 20px 0px;
+    .footer_card {
+      width: min(300px, 22%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 10px;
+      border-radius: 15px;
+      position: relative;
+      .proTeg {
+        background: #f2efff;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: #603cff;
+        padding: 2px 15px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+.VideoAIBody {
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 80vh;
+    .footer_card_box {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0px;
+      .footer_card {
+        width: min(300px, 25%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 10px;
+        border-radius: 15px;
+        position: relative;
+        .proTeg {
+          background: #f2efff;
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          color: #603cff;
+          padding: 2px 15px;
+          border-radius: 20px;
+          font-weight: 700;
+          font-size: 12px;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}

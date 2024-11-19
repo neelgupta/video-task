@@ -17,7 +17,7 @@
       white-space: normal;
       overflow-wrap: break-word;
       word-wrap: break-word; /* For older browsers */
-      resize: vertical;
+      resize: none;
       &:disabled {
         background-color: var(--ffff);
         opacity: 0.5;

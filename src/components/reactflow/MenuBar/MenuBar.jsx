@@ -13,7 +13,9 @@ const MenuBar = React.forwardRef(({ className, ...props }) => {
   return (
     <Panel position="top-right" {...props} className="p-20 pt-35">
       <div className={styles.menuBarContainer}>
-        <div className={`d-flex align-items-center gap-2 pointer h-50 w-50`}>
+        <div
+          className={`d-flex align-items-center gap-2 pointer h-50 w-50 me-10`}
+        >
           <img src={icons.avatar} alt="avatar" className="fit-image" />
           <svg
             width="10"
@@ -28,19 +30,19 @@ const MenuBar = React.forwardRef(({ className, ...props }) => {
             />
           </svg>
         </div>
-        <div className={styles.divider} />
+        <div className={styles.divider + " me-10"} />
 
         <Button className={styles.menuBtn} onClick={() => {}}>
-          <ProfileWithArrowIcon className="hover-icons-effect" />
+          <ProfileWithArrowIcon className="" />
         </Button>
         <Button className={styles.menuBtn} onClick={() => {}}>
-          <DocsIcon className="hover-icons-effect" />
+          <DocsIcon className="" />
         </Button>
         <Button className={styles.menuBtn} onClick={() => {}}>
-          <ShareIcon className="hover-icons-effect" />
+          <ShareIcon className="" />
         </Button>
         <Button className={styles.menuBtn} onClick={() => {}}>
-          <ChatIcon className="hover-icons-effect" />
+          <ChatIcon className="" />
         </Button>
         <Button
           className={`${styles.previewBtn} ${styles.menuBtn}`}

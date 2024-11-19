@@ -68,6 +68,17 @@ import copyIcon from "../../assets/images/icons/copyIcon.svg";
 import templateIcon from "../../assets/images/icons/templateIcon.svg";
 import videoIcon from "../../assets/images/icons/videoIcon.svg";
 import addIcon from "../../assets/images/svgIcons/add.svg";
+import webCam from "../../assets/images/svgIcons/webCam.svg";
+import Upload from "../../assets/images/svgIcons/Upload.svg";
+import screenShare from "../../assets/images/svgIcons/screenShare.svg";
+import library from "../../assets/images/svgIcons/Library.svg";
+import doubleStar from "../../assets/images/svgIcons/doubleStar.svg";
+import arrowRight from "../../assets/images/svgIcons/arrow-right.svg";
+import videoAvatar from "../../assets/images/videoAvatar.png";
+import video from "../../assets/images/svgIcons/videoIcon.svg";
+import audioIcon from "../../assets/images/svgIcons/audioIcon.svg";
+import fitView from "../../assets/images/svgIcons/fitViewIcon.svg";
+import textLine from "../../assets/images/svgIcons/textLine.svg";
 
 export const icons = {
   logo,
@@ -140,4 +151,15 @@ export const icons = {
   templateIcon,
   videoIcon,
   addIcon,
+  webCam,
+  Upload,
+  screenShare,
+  library,
+  doubleStar,
+  arrowRight,
+  videoAvatar,
+  video,
+  audioIcon,
+  fitView,
+  textLine,
 };

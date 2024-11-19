@@ -1,0 +1,28 @@
+.VideoGenBody {
+  .content {
+    .stock-voice {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      flex-wrap: wrap;
+      gap: 20px;
+      .stock-btn {
+        width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50px;
+        border: 1px solid #d9d9d9;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #8c8e90;
+        cursor: pointer;
+      }
+      .active-btn {
+        border-color: #7b5aff;
+        color: #7b5aff;
+      }
+    }
+  }
+}
