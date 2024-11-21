@@ -124,16 +124,39 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
             >
               <div
                 className="px-15 py-10 pointer f-center text-16-700 color-darkText custom-btn"
-                onClick={() => setOrganization((pre) => !pre)}
+                onClick={() => {
+                  setOrganization((pre) => !pre);
+                }}
+                onMouseEnter={(e) => console.log("e", e)}
               >
                 <div>My Organization</div>
                 <div className="w-12 ms-10">
                   <img
                     src={icons.arrow_down}
                     alt="close"
-                    className="fit-image icon-color-1B2559"
-                    style={organization ? { transform: "rotate(180deg)" } : {}}
+                    className="fit-image icon-color-1B2559 arrow_icon"
                   />
+                </div>
+
+                <div className="organizationMenu">
+                  <div
+                    className="text-14-500 mb-10"
+                    style={{ color: "#989BA1" }}
+                  >
+                    Setup Organization
+                  </div>
+                  <div
+                    onClick={() => navigate("/admin/my-organization/overview")}
+                    className="text-14-500 mt-10 link"
+                  >
+                    Explore Your Organization
+                  </div>
+                  <div
+                    onClick={() => navigate("/admin/my-organization/team")}
+                    className="text-14-500 mt-10 link"
+                  >
+                    Invite Your Team
+                  </div>
                 </div>
               </div>
             </div>

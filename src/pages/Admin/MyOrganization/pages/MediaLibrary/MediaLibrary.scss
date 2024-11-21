@@ -1,0 +1,88 @@
+.MediaLibrary {
+  width: 80%;
+  .search-container {
+    display: flex;
+    position: relative;
+    span {
+      position: absolute;
+      top: 12px;
+      left: 23px;
+      height: 20px;
+      width: 20px;
+    }
+    input {
+      padding: 10px 0px 10px 60px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--0000);
+      border-color: transparent;
+      background-color: rgb(244, 247, 254);
+      border-radius: 50px;
+      outline: unset;
+      width: 100%;
+      &::placeholder {
+        color: var(--757f);
+      }
+    }
+  }
+  .btn-group {
+    display: flex;
+    align-items: center;
+  }
+  .Media-gallery {
+    margin-top: 30px;
+    display: flex;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 20px;
+    .Media_card {
+      width: 170px;
+      height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      .media_img {
+        position: absolute;
+        z-index: 999;
+      }
+      .hover_card {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1000;
+        opacity: 0;
+        transition-duration: 0.5s;
+        transition-property: opacity;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        cursor: pointer;
+        .icon_img_double_arrow {
+          width: 20px;
+          transform: rotateY(180deg);
+        }
+      }
+      &:hover {
+        .hover_card {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.UploadMedia-Model {
+  .modal-content {
+    width: 100%;
+    border-radius: 10px !important;
+  }
+  .input {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    outline: none;
+  }
+}

@@ -1,23 +1,24 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
-import styles from "./SuccessModal.module.scss";
+import "./SuccessModal.scss";
 
-const SuccessModal = ({ show, handleClose }) => {
+const SuccessModal = ({ show, handleClose, title, message }) => {
   return (
     <Modal
       show={show}
       onHide={handleClose}
       centered
-      className={styles.successModal}
+      className="successModal"
+      style={{ borderRadius: "30px" }}
     >
-      <Modal.Body className={`${styles.modalBody} text-center`}>
+      <Modal.Body className={`modalBody text-center`}>
         <div
-          className={styles.checkmarkCircle}
-          style={{ width: "100px", height: "100px", background: "#27AE60" }}
+          className="checkmarkCircle"
+          style={{ width: "80px", height: "80px", background: "#27AE60" }}
         >
           <svg
-            width="44"
-            height="36"
+            width="40"
+            height="30"
             viewBox="0 0 44 36"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,16 +34,22 @@ const SuccessModal = ({ show, handleClose }) => {
         </div>
 
         <div>
-          <div className="text-23-700" style={{ color: "#27AE60" }}>
-            SUCCESS
+          <div className="text-23-700 mb-20" style={{ color: "#27AE60" }}>
+            {title || "SUCCESS"}
           </div>
-          <div className="text-15-600">Your password has been updated.</div>
-          <div className="text-15-400">
-            Login again to continue to the portal.
-          </div>
+          {!message ? (
+            <>
+              <div className="text-15-600">Your password has been updated.</div>
+              <div className="text-15-400">
+                Login again to continue to the portal.
+              </div>
+            </>
+          ) : (
+            <div className="text-15-400">{message}</div>
+          )}
         </div>
 
-        <Button className={styles.continueButton} onClick={handleClose}>
+        <Button className="continueButton" onClick={handleClose}>
           Continue
         </Button>
       </Modal.Body>

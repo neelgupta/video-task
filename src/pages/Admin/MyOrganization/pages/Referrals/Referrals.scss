@@ -1,0 +1,30 @@
+.Referrals {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  .Referrals-box {
+    width: 95%;
+    padding: 15px;
+    padding-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #d9d9d9;
+  }
+  .Invite_text {
+    outline: none;
+    border: 1px solid #e6e6e6;
+    background: transparent;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: 400;
+    width: 70%;
+    border-radius: 5px;
+  }
+  .social-icon {
+    transform: scale(1);
+    transition-duration: 0.5s;
+    transition-property: transform;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}

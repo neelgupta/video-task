@@ -12,6 +12,7 @@ import { useState } from "react";
 import Contacts from "../pages/Admin/Contacts";
 import VisitContacts from "../pages/Admin/Contacts/VisitContacts";
 import FlowCanvas from "../pages/FlowCanvas";
+import MyOrganization from "../pages/Admin/MyOrganization";
 
 const AdminRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -71,6 +72,11 @@ const AdminRoute = () => {
       path: "/admin/asset-allocation",
       component: <AssetAllocation />,
       pageTitle: "Asset Allocation",
+    },
+    {
+      path: "/admin/my-organization/:type",
+      component: <MyOrganization />,
+      pageTitle: "Explore Your Organization",
     },
   ];
   return (

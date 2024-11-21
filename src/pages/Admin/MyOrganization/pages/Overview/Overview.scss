@@ -1,0 +1,15 @@
+.Overview {
+  .link {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .overview-box {
+    width: 70%;
+    padding: 15px;
+    padding-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #d9d9d9;
+  }
+}

@@ -79,6 +79,18 @@ import video from "../../assets/images/svgIcons/videoIcon.svg";
 import audioIcon from "../../assets/images/svgIcons/audioIcon.svg";
 import fitView from "../../assets/images/svgIcons/fitViewIcon.svg";
 import textLine from "../../assets/images/svgIcons/textLine.svg";
+import facebook from "../../assets/images/svgIcons/facebook.svg";
+import instagram from "../../assets/images/svgIcons/instagram.svg";
+import socialLink from "../../assets/images/svgIcons/socialLink.svg";
+import telegram from "../../assets/images/svgIcons/telegram.svg";
+import twitter from "../../assets/images/svgIcons/twitter.svg";
+import whatsapp from "../../assets/images/svgIcons/whatsapp.svg";
+import addUser from "../../assets/images/svgIcons/addUser.svg";
+import avatar9 from "../../assets/images/avatar9.png";
+import imgUpload from "../../assets/images/svgIcons/imgUpload.svg";
+import check from "../../assets/images/svgIcons/right.svg";
+import email from "../../assets/images/svgIcons/email.svg";
+import master from "../../assets/images/svgIcons/master.svg";
 
 export const icons = {
   logo,
@@ -162,4 +174,16 @@ export const icons = {
   audioIcon,
   fitView,
   textLine,
+  facebook,
+  instagram,
+  socialLink,
+  telegram,
+  twitter,
+  whatsapp,
+  addUser,
+  avatar9,
+  imgUpload,
+  check,
+  email,
+  master,
 };

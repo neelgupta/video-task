@@ -1,0 +1,29 @@
+// SuccessModal.module.scss
+
+.successModal {
+  .modal-content {
+    border-radius: 20px !important;
+  }
+  .modalBody {
+    .checkmarkCircle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 10px 10px 17px 0px #27ae6070;
+      top: -50px;
+    }
+    .continueButton {
+      background: linear-gradient(90deg, #7c5bff 0%, #b3a1ff 100%);
+      border: none;
+      padding: 17px 100px;
+      border-radius: 30px;
+      margin: 25px 0;
+    }
+  }
+}
