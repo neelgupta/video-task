@@ -64,7 +64,7 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
               className="text-14-400"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate("/admin/profile");
+                navigate("/user/profile");
               }}
             >
               My Account

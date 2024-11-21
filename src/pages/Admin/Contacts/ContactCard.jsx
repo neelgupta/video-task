@@ -33,7 +33,7 @@ const ContactCard = ({ contact, isFavourite }) => {
           </div>
           <div
             className={` d-flex gap-2 align-items-center  pointer`}
-            onClick={() => navigate("/admin/contacts/visit")}
+            onClick={() => navigate("/user/contacts/visit")}
           >
             <div>
               <img src={icons.profileIcon} alt="Profile icon" />

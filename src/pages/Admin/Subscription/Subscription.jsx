@@ -58,7 +58,7 @@ function Subscription() {
     },
   ];
   const getSubscriptionList = async () => {
-    const res = await api.get("admin/subscription-plan");
+    const res = await api.get("user/subscription-plan");
     if (res.status === 200) {
       setSubscriptionList(res.data.response.subscriptions);
     }
@@ -67,7 +67,7 @@ function Subscription() {
     const body = {
       isActive: value,
     };
-    const res = await api.put(`admin/subscription-plan/${id}`, body);
+    const res = await api.put(`user/subscription-plan/${id}`, body);
     if (res.status === 200) {
       Swal.fire("Active status changed successfully", "success");
       getSubscriptionList();
@@ -93,7 +93,7 @@ function Subscription() {
     });
   };
   const deleteItem = async (itemId) => {
-    const res = await api.delete(`admin/subscription-plan/${itemId}`, {});
+    const res = await api.delete(`user/subscription-plan/${itemId}`, {});
     console.log("res", res);
     if (res.status === 200) {
       getSubscriptionList();

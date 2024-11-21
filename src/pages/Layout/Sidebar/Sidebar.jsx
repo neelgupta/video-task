@@ -24,63 +24,62 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
   };
 
   useEffect(() => {
-    if (window?.location?.pathname?.includes("admin/solutions")) {
+    if (window?.location?.pathname?.includes("user/solutions")) {
       setExpand(1);
     }
-    if (window?.location?.pathname?.includes("admin/examples")) {
+    if (window?.location?.pathname?.includes("user/examples")) {
       setExpand(3);
     }
 
-    if (window?.location?.pathname?.includes("admin/resources")) {
+    if (window?.location?.pathname?.includes("user/resources")) {
       setExpand(4);
     }
   }, []);
 
-  const adminOptionsList = [
+  const userOptionsList = [
     {
       title: "Dashboard",
-      url: "/admin/dashboard",
+      url: "/user/dashboard",
       icon: icons.logo,
     },
     {
       title: "Asset Allocation",
-      url: "/admin/asset-allocation",
+      url: "/user/asset-allocation",
       icon: icons.crown,
     },
     {
       title: "Interactions",
-      url: "/admin/interactions",
+      url: "/user/interactions",
       icon: icons.Interactions,
     },
     {
       title: "Contacts",
-      url: "/admin/contacts",
+      url: "/user/contacts",
       icon: icons.Contacts,
     },
     {
       title: "My Collection",
-      url: "/admin/collection",
+      url: "/user/collection",
       icon: icons.Folder,
     },
     {
       title: "Trash",
-      url: "/admin/trash",
+      url: "/user/trash",
       icon: icons.Trash,
     },
     {
       title: "Subscription",
-      url: "/admin/subscription",
+      url: "/user/subscription",
       icon: icons.users,
     },
     {
       title: "My Account",
-      url: "/admin/profile",
+      url: "/user/profile",
       icon: icons.logo,
     },
   ];
   const teacherOptionsList = [];
-  const displayOption =
-    role === "admin" ? adminOptionsList : teacherOptionsList;
+  const displayOption = role === "admin" ? teacherOptionsList : userOptionsList;
   return (
     <div style={{ backgroundColor: "transparent" }}>
       <Offcanvas
@@ -146,13 +145,13 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                     Setup Organization
                   </div>
                   <div
-                    onClick={() => navigate("/admin/my-organization/overview")}
+                    onClick={() => navigate("/user/my-organization/overview")}
                     className="text-14-500 mt-10 link"
                   >
                     Explore Your Organization
                   </div>
                   <div
-                    onClick={() => navigate("/admin/my-organization/team")}
+                    onClick={() => navigate("/user/my-organization/team")}
                     className="text-14-500 mt-10 link"
                   >
                     Invite Your Team

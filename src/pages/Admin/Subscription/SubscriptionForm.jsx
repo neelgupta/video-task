@@ -101,8 +101,8 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
     };
     const res = await api[isEdit ? "put" : "post"](
       isEdit
-        ? `admin/subscription-plan/${editData._id}`
-        : "admin/subscription-plan",
+        ? `user/subscription-plan/${editData._id}`
+        : "user/subscription-plan",
       body
     );
     console.log("res", res);

@@ -1,22 +1,82 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import UserLayout from "../pages/UserLayout";
-import Organizations from "../pages/User/Organizations";
-import CreateVideoStart from "../pages/User/CreateVideoStart/CreateVideoStart";
-import MediaSelect from "../pages/User/MediaSelect";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import Layout from "../pages/Layout";
+import Price from "../pages/Admin/Price";
+import Subscription from "../pages/Admin/Subscription";
+import Dashboard from "../pages/Admin/Dashboard";
+import AssetAllocation from "../pages/Admin/AssetAllocation";
+import Interaction from "../pages/Admin/Interactions";
+import Trash from "../pages/Admin/Trash";
+import MyCollection from "../pages/Admin/MyCollection";
+import Profile from "../pages/Admin/Profile";
+import { useState } from "react";
+import Contacts from "../pages/Admin/Contacts";
+import VisitContacts from "../pages/Admin/Contacts/VisitContacts";
+import FlowCanvas from "../pages/FlowCanvas";
+import MyOrganization from "../pages/Admin/MyOrganization";
 
 const UserRoute = () => {
+  const [isResetPassword, setIsResetPassword] = useState(false);
+  const navigate = useNavigate();
   const routeList = [
     {
-      path: "/organizations",
-      component: <Organizations />,
+      path: "/user/price",
+      component: <Price />,
     },
     {
-      path: "/get-started",
-      component: <CreateVideoStart />,
+      path: "/user/subscription",
+      component: <Subscription />,
     },
     {
-      path: "/media-type",
-      component: <MediaSelect />,
+      path: "/user/interactions",
+      component: <Interaction />,
+      pageTitle: "Interactions",
+    },
+    {
+      path: "/user/contacts",
+      component: <Contacts />,
+      pageTitle: "Contacts",
+    },
+    {
+      path: "/user/collection",
+      component: <MyCollection />,
+      pageTitle: "My Collection",
+    },
+    {
+      path: "/user/trash",
+      component: <Trash />,
+      pageTitle: "Trash",
+    },
+    {
+      path: "/user/dashboard",
+      component: <Dashboard />,
+      pageTitle: "Dashboard",
+    },
+    {
+      path: "/user/contacts/visit",
+      component: <VisitContacts />,
+      pageTitle: "Back to Contacts",
+      onBack: () => navigate("/user/contacts"),
+    },
+    {
+      path: "/user/profile",
+      component: (
+        <Profile
+          isResetPassword={isResetPassword}
+          setIsResetPassword={setIsResetPassword}
+        />
+      ),
+      pageTitle: isResetPassword ? "Reset Password" : "My Account",
+      onBack: () => setIsResetPassword(false),
+    },
+    {
+      path: "/user/asset-allocation",
+      component: <AssetAllocation />,
+      pageTitle: "Asset Allocation",
+    },
+    {
+      path: "/user/my-organization/:type",
+      component: <MyOrganization />,
+      pageTitle: "Explore Your Organization",
     },
   ];
   return (
@@ -26,11 +86,16 @@ const UserRoute = () => {
           <Route
             key={index}
             path={elm.path}
-            element={<UserLayout>{elm.component}</UserLayout>}
+            element={
+              <Layout pageTitle={elm.pageTitle} onBack={elm.onBack}>
+                {elm.component}
+              </Layout>
+            }
           />
         );
       })}
-      <Route path="*" element={<Navigate to="/organizations" />} />
+      <Route path="/flow" element={<FlowCanvas />} />
+      <Route path="*" element={<Navigate to="/user/dashboard" />} />
     </Routes>
   );
 };

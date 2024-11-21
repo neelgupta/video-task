@@ -43,7 +43,7 @@ function OrganizationHeader({ type }) {
         {menuList.map((ele, index) => {
           return (
             <div
-              onClick={() => navigate("/admin/my-organization/" + ele.type)}
+              onClick={() => navigate("/user/my-organization/" + ele.type)}
               className={`${type === ele.type && "active"}`}
               key={index}
             >

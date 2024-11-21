@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import "./App.css";
 import { Promptalert } from "./components";
-import AdminRoute from "./routes/AdminRoute";
 import AuthRoute from "./routes/AuthRoute";
 import { getDataFromLocalStorage } from "./utils/helpers";
 import UserRoute from "./routes/UserRoute";
@@ -17,7 +16,7 @@ function App() {
       <Promptalert />
       {isAuth ? (
         localData?.role === "admin" ? (
-          <AdminRoute />
+          <div>Admin</div>
         ) : (
           <UserRoute />
         )
