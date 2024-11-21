@@ -1,7 +1,6 @@
 import React from "react";
 import Select from "react-select";
 import "./Overview.scss";
-import TextInput from "../../../../../components/inputs/TextInput/TextInput";
 function Overview() {
   const emailOptions = [
     { value: "text@gmail.com", label: "text@gmail.com" },

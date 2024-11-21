@@ -1,16 +1,18 @@
 .MyOrganization-container {
   padding: 0;
   margin: 0;
-
   .OrganizationHeader {
     width: 100%;
     height: 50px;
     margin: 0;
     padding: 0;
+    overflow: auto;
+
     .menu {
       display: flex;
       align-items: center;
       height: 100%;
+      width: 1000px;
       border-bottom: 1px solid #ececee;
       div {
         padding: 0px 10px;
@@ -31,7 +33,6 @@
   }
   .organization-content {
     width: 100%;
-    height: calc(80vh - 5px);
     padding: 10px;
     padding-top: 20px;
     overflow: auto;

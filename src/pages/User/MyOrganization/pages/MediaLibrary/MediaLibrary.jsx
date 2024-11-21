@@ -4,7 +4,10 @@ import { icons } from "../../../../../utils/constants";
 import { creteImgFilter } from "../../../../../utils/helpers";
 import { Button } from "react-bootstrap";
 import UploadMedia from "./UploadMedia";
+import { useSelector } from "react-redux";
 function MediaLibrary() {
+  const reduxData = useSelector((state) => state.global);
+  const { isResponsive, themeColor } = reduxData;
   const [isUpload, setIsUpload] = useState(false);
   return (
     <>
@@ -19,9 +22,16 @@ function MediaLibrary() {
           </div>
           <div
             className="mt-20"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{
+              display: "flex",
+              alignItems: isResponsive ? "start" : "center",
+              justifyContent: "start",
+              ...(isResponsive
+                ? { flexDirection: "column-reverse", gap: "30px 0px" }
+                : {}),
+            }}
           >
-            <div className="search-container wp-70">
+            <div className={`search-container wp-100`}>
               <span className="d-flex">
                 <img
                   src={icons.search}
@@ -31,7 +41,10 @@ function MediaLibrary() {
               </span>
               <input type="text" placeholder="Search" />
             </div>
-            <div className="btn-group">
+            <div
+              className="btn-group wp-100"
+              style={isResponsive ? { justifyContent: "space-between" } : {}}
+            >
               <div className="ms-20 w-40 h-30">
                 <img
                   src={icons.control_menu}
@@ -40,28 +53,28 @@ function MediaLibrary() {
                   className="fit-image"
                 />
               </div>
-              <Button
-                className="ms-20"
-                style={{
-                  border: "none",
-                  background:
-                    "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  padding: "15px",
-                }}
-                onClick={() => setIsUpload(true)}
-              >
-                <img
-                  src={icons.imgUpload}
-                  alt=""
-                  style={{ filter: creteImgFilter("#ffffff") }}
-                  className="fit-image w-15"
-                />
-                <span className="text-14-600">Upload Media</span>
-              </Button>
+              <div>
+                <Button
+                  className="ms-20 "
+                  style={{
+                    border: "none",
+                    background:
+                      "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
+                    borderRadius: "10px",
+                    padding: "15px",
+                    width: "200px !important",
+                  }}
+                  onClick={() => setIsUpload(true)}
+                >
+                  <img
+                    src={icons.imgUpload}
+                    alt=""
+                    style={{ filter: creteImgFilter("#ffffff") }}
+                    className="fit-image w-15 me-10"
+                  />
+                  <span className="text-14-600 w-100">Upload Media</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

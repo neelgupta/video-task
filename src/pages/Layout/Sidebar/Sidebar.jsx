@@ -67,16 +67,16 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
       url: "/user/trash",
       icon: icons.Trash,
     },
-    {
-      title: "Subscription",
-      url: "/user/subscription",
-      icon: icons.users,
-    },
-    {
-      title: "My Account",
-      url: "/user/profile",
-      icon: icons.logo,
-    },
+    // {
+    //   title: "Subscription",
+    //   url: "/user/subscription",
+    //   icon: icons.users,
+    // },
+    // {
+    //   title: "My Account",
+    //   url: "/user/profile",
+    //   icon: icons.logo,
+    // },
   ];
   const teacherOptionsList = [];
   const displayOption = role === "admin" ? teacherOptionsList : userOptionsList;
@@ -318,7 +318,7 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                 </div>
                 <h2>Go Boundless with PRO!</h2>
                 <p>
-                  Level Up with QnAFlow PRO – Premium AI Video Questions for
+                  Level Up with QnAFlow PRO–Premium AI Video Questions for
                   Next-Level Engagement!
                 </p>
                 <button className="try-now-button" style={{ color: "white" }}>

@@ -79,8 +79,7 @@ const ContactCard = ({ contact, isFavourite }) => {
                 ) : (
                   <img src={icons.fillHeartIcon} alt="Favorite icon" />
                 )
-              ) : // <img src={icons.heartIcon} alt="Favorite icon" />
-              favoriteClick ? (
+              ) : favoriteClick ? (
                 <img src={icons.fillHeartIcon} alt="Favorite icon" />
               ) : (
                 <img src={icons.heartIcon} alt="Favorite icon" />

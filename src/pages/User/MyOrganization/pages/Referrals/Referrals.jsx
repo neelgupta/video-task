@@ -5,7 +5,10 @@ import { icons } from "../../../../../utils/constants";
 import { creteImgFilter } from "../../../../../utils/helpers";
 import FailedModel from "../../../../../components/layouts/FailedModel";
 import SuccessModal from "../../../Profile/ResetPassword/SuccessModal";
+import { useSelector } from "react-redux";
 function Referrals() {
+  const reduxData = useSelector((state) => state.global);
+  const { isResponsive, themeColor } = reduxData;
   const [isSent, setIsSent] = useState(false);
   const [isReject, setIsReject] = useState(false);
 
@@ -58,7 +61,10 @@ function Referrals() {
     },
   ];
   return (
-    <div className="Referrals">
+    <div
+      className="Referrals"
+      style={isResponsive ? { flexDirection: "column" } : {}}
+    >
       {isSent && (
         <SuccessModal
           show={isSent}
@@ -75,13 +81,13 @@ function Referrals() {
 If the issue persists, contact support.`}
         />
       )}
-      <div className="wp-70">
+      <div className={isResponsive ? "wp-100" : "wp-70"}>
         <div className="Referrals-box">
           <div className="text-16-600" style={{ color: "#000000" }}>
             Rewards
           </div>
           <div
-            className="wp-100 mt-30 mb-20"
+            className="wp-100  mb-20"
             style={{
               display: "flex",
               alignItems: "center",
@@ -91,7 +97,7 @@ If the issue persists, contact support.`}
           >
             {RewardsCard.map((ele, index) => {
               return (
-                <div className="w-200" key={index}>
+                <div className="w-200 mt-30" key={index}>
                   <div className="text-18-500" style={{ color: "#777777" }}>
                     {ele.title}
                   </div>
@@ -170,8 +176,11 @@ If the issue persists, contact support.`}
         </div>
       </div>
       <div
-        className="wp-30 p-20"
-        style={{ border: "1px solid #D9D9D9", borderRadius: "10px" }}
+        className="p-20 invited"
+        style={{
+          ...{ border: "1px solid #D9D9D9", borderRadius: "10px" },
+          ...(isResponsive ? { marginTop: "20px" } : {}),
+        }}
       >
         <div
           className="text-16-600 pb-10"

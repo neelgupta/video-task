@@ -38,7 +38,7 @@ function OrganizationHeader({ type }) {
     },
   ];
   return (
-    <div className="OrganizationHeader">
+    <div className="OrganizationHeader auri-scroll">
       <div className="menu">
         {menuList.map((ele, index) => {
           return (
