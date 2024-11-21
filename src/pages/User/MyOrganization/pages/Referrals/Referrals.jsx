@@ -3,8 +3,8 @@ import "./Referrals.scss";
 import { Button } from "react-bootstrap";
 import { icons } from "../../../../../utils/constants";
 import { creteImgFilter } from "../../../../../utils/helpers";
-import SuccessModal from "../../../Profile/ResetPassword/SuccessModal";
 import FailedModel from "../../../../../components/layouts/FailedModel";
+import SuccessModal from "../../../Profile/ResetPassword/SuccessModal";
 function Referrals() {
   const [isSent, setIsSent] = useState(false);
   const [isReject, setIsReject] = useState(false);

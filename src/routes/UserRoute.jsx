@@ -1,18 +1,18 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Layout from "../pages/Layout";
-import Price from "../pages/Admin/Price";
-import Subscription from "../pages/Admin/Subscription";
-import Dashboard from "../pages/Admin/Dashboard";
-import AssetAllocation from "../pages/Admin/AssetAllocation";
-import Interaction from "../pages/Admin/Interactions";
-import Trash from "../pages/Admin/Trash";
-import MyCollection from "../pages/Admin/MyCollection";
-import Profile from "../pages/Admin/Profile";
+import Price from "../pages/User/Price";
+import Subscription from "../pages/User/Subscription";
+import Dashboard from "../pages/User/Dashboard";
+import AssetAllocation from "../pages/User/AssetAllocation";
+import Interaction from "../pages/User/Interactions";
+import Trash from "../pages/User/Trash";
+import MyCollection from "../pages/User/MyCollection";
+import Profile from "../pages/User/Profile";
 import { useState } from "react";
-import Contacts from "../pages/Admin/Contacts";
-import VisitContacts from "../pages/Admin/Contacts/VisitContacts";
+import Contacts from "../pages/User/Contacts";
+import VisitContacts from "../pages/User/Contacts/VisitContacts";
 import FlowCanvas from "../pages/FlowCanvas";
-import MyOrganization from "../pages/Admin/MyOrganization";
+import MyOrganization from "../pages/User/MyOrganization";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
