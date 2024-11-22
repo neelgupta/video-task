@@ -27,7 +27,6 @@ export const api = {
     });
   },
   post: (url, data, header = {}) => {
-    console.log("baseURL", baseURL);
     let headers = api.header();
     headers = { ...headers, ...header };
     return new Promise((resolve, reject) => {

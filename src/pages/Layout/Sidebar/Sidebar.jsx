@@ -12,13 +12,33 @@ import "./Sidebar.scss";
 
 const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
   const navigate = useNavigate();
-  const reduxData = useSelector((state) => state.global);
-  const { themeColor, isResponsive } = reduxData;
   const role = getDataFromLocalStorage("role");
-
-  const [organization, setOrganization] = useState(false);
-
+  const reduxData = useSelector((state) => state.global);
+  const { themeColor, isResponsive, profileData } = reduxData;
+  const [organization, setOrganization] = useState({});
   const [expand, setExpand] = useState("");
+  // const [myOrganization, setMyOrganization] = useState({});
+  // const fetchOrganization = async () => {
+  //   try {
+  //     const res = await api.get("user/get-my-organizations");
+  //     console.log("🚀 ~ fetchOrganization ~ res:", res);
+  //     if (res.status === 200) {
+  //       setMyOrganization(res.data.response?.[0] || {});
+  //     }
+  //   } catch (error) {
+  //     console.log("🚀 ~ fetchOrganization ~ error:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchOrganization();
+  // }, []);
+  useEffect(() => {
+    console.log("profileData", profileData);
+    if (profileData && profileData.organizations?.length !== 0) {
+      setOrganization(profileData.organizations?.[0]);
+    }
+  }, [profileData]);
+
   const handleNavigate = (parentLink, subChildURL) => {
     navigate(`${parentLink}${subChildURL ? subChildURL : ""}`);
   };
@@ -30,7 +50,6 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
     if (window?.location?.pathname?.includes("user/examples")) {
       setExpand(3);
     }
-
     if (window?.location?.pathname?.includes("user/resources")) {
       setExpand(4);
     }
@@ -67,16 +86,6 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
       url: "/user/trash",
       icon: icons.Trash,
     },
-    // {
-    //   title: "Subscription",
-    //   url: "/user/subscription",
-    //   icon: icons.users,
-    // },
-    // {
-    //   title: "My Account",
-    //   url: "/user/profile",
-    //   icon: icons.logo,
-    // },
   ];
   const teacherOptionsList = [];
   const displayOption = role === "admin" ? teacherOptionsList : userOptionsList;
@@ -121,14 +130,10 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
               }}
               className="Organization-btn"
             >
-              <div
-                className="px-15 py-10 pointer f-center text-16-700 color-darkText custom-btn"
-                onClick={() => {
-                  setOrganization((pre) => !pre);
-                }}
-                onMouseEnter={(e) => console.log("e", e)}
-              >
-                <div>My Organization</div>
+              <div className="px-15 py-10 pointer f-center text-16-700 color-darkText custom-btn">
+                <div style={{ textTransform: "capitalize" }}>
+                  {organization?.organization_name || ""}
+                </div>
                 <div className="w-12 ms-10">
                   <img
                     src={icons.arrow_down}
@@ -145,13 +150,21 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                     Setup Organization
                   </div>
                   <div
-                    onClick={() => navigate("/user/my-organization/overview")}
+                    onClick={() => {
+                      navigate("/user/my-organization/overview", {
+                        state: { organizationId: organization._id },
+                      });
+                    }}
                     className="text-14-500 mt-10 link"
                   >
                     Explore Your Organization
                   </div>
                   <div
-                    onClick={() => navigate("/user/my-organization/team")}
+                    onClick={() =>
+                      navigate("/user/my-organization/team", {
+                        state: { organizationId: organization._id },
+                      })
+                    }
                     className="text-14-500 mt-10 link"
                   >
                     Invite Your Team

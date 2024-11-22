@@ -13,6 +13,8 @@ const initialState = {
     lightColor: "#B3A1FF",
   },
   breadCrumbTitle: "",
+  profileData: null,
+  selectedOrganization: "",
 };
 
 const globalSlice = createSlice({
@@ -34,10 +36,16 @@ const globalSlice = createSlice({
     setBreadCrumbTitle(state, action) {
       state.breadCrumbTitle = action.payload;
     },
+    setProfileData(state, action) {
+      state.profileData = action.payload;
+    },
     resetAllState(state) {
       state.authData = null;
       state.errorData = null;
       state.isResponsive = false;
+    },
+    setSelectedOrganization(state, action) {
+      state.selectedOrganization = action.payload;
     },
   },
 });
@@ -71,7 +79,11 @@ export const handelResponse = (res) => async () => {
       };
       break;
     case 400:
-      console.log(res);
+      throwError({ message: "Something went wrong!" });
+      returnValue = {
+        status: status,
+        message: "Something went wrong!",
+      };
       break;
     default:
       throwError({ message: "Something went wrong!" });
@@ -129,12 +141,44 @@ export const throwError = (message) => async (dispatch) => {
   );
 };
 
+export const handleAdminLogin = (payload) => async (dispatch) => {
+  try {
+    const res = await api.post("/admin/login", payload, {});
+    dispatch(showSuccess(res?.data?.message));
+    return res;
+  } catch (error) {
+    return dispatch(handelCatch(error));
+  }
+};
+
+export const handleUserLogin = (payload) => async (dispatch) => {
+  try {
+    const res = await api.post("/providers/sign-in", payload, {});
+    dispatch(showSuccess(res?.data?.message));
+    return res;
+  } catch (error) {
+    return dispatch(handelCatch(error));
+  }
+};
+
+export const handleUSerSignup = (payload) => async (dispatch) => {
+  try {
+    const res = await api.post("/providers/sign-up", payload, {});
+    dispatch(showSuccess(res?.data?.message));
+    return res;
+  } catch (error) {
+    return dispatch(handelCatch(error));
+  }
+};
+
 export const {
   setAuthData,
   setErrorData,
   resetAllState,
   setThemeColor,
   setIsResponsive,
+  setProfileData,
+  setSelectedOrganization,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

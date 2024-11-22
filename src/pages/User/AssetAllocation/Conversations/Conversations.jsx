@@ -13,7 +13,6 @@ function Conversations() {
   const [selectMetingCard, setSelectMetingCard] = useState(1);
   const [showCreateConversationModal, setShowCreateConversationModal] =
     useState(false);
-  console.log("isResponsive", isResponsive);
 
   return (
     <>

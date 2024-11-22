@@ -62,13 +62,11 @@ export function getHeaderData() {
 
   const localStorageData = getDataFromLocalStorage();
 
-  if (localStorageData?.username) {
-    const { username, password } = localStorageData;
-    const authString = `${username}:${password}`;
-
+  if (localStorageData?.token) {
+    const { token } = localStorageData;
     header = {
       ...header,
-      Authorization: `Basic ${btoa(authString)}`,
+      Authorization: `Bearer ${token}`,
     };
   }
 

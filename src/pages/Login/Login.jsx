@@ -25,19 +25,14 @@ const Login = () => {
   });
 
   const handleSubmit = async (values) => {
-    console.log("✌️values --->", values);
-
     try {
       const res = await api.post("user/sign-in", values);
-      console.log("res", res);
       const data = res.data;
       if (data.status === 200) {
-        const { token, user } = data.response;
+        const { token, role } = data.response;
         let authBody = {
           token: token,
-          email: user.email,
-          role: user.role,
-          _id: user._id,
+          role: role,
         };
         localStorage.authData = encrypt(authBody);
         dispatch(setAuthData(encrypt(authBody)));

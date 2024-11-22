@@ -1,15 +1,25 @@
 import { icons } from "../../../utils/constants";
 import { creteImgFilter, encrypt } from "../../../utils/helpers";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuthData } from "../../../store/globalSlice";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = ({ themeColor, isResponsive }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const reduxData = useSelector((state) => state.global);
+  const { profileData } = reduxData;
   const [show, setShow] = useState(false);
   const profileRef = useRef(null);
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    if (profileData) {
+      const { profile } = profileData;
+      if (profile) setUserData(profile);
+    }
+  }, [profileData]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -38,28 +48,12 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
         <div className="profile-popover" ref={profileRef}>
           <div className="d-flex flex-column gap-2 px-16 py-13 pointer">
             <div className="text-14-400">
-              Hi, <span style={{ color: "#7B5AFF" }}>James</span>
+              Hi, <span style={{ color: "#7B5AFF" }}>{userData.user_name}</span>
             </div>
 
             <div className="text-14-400" style={{ color: "#8C8E90" }}>
-              account@gmail.com
+              {userData.email}
             </div>
-            {/* <hr /> */}
-            {/* <div className="d-flex gap-2 align-items-center">
-              <div>
-                <img
-                  src={icons.PrimiumIcon}
-                  alt="Avatar"
-                  className="custom-card-image"
-                />
-              </div>
-              <div>
-                <div></div>
-                <div></div>
-              </div>
-            </div>
-            <hr /> */}
-
             <div
               className="text-14-400"
               onClick={(e) => {

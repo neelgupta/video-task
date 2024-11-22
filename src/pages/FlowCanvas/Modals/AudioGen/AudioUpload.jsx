@@ -10,7 +10,6 @@ function AudioUpload() {
   const { getRootProps, getInputProps } = useDropzone({
     accept: "video/mp4, video/avchd, video/mpc, audio/aac",
     onDrop: (acceptedFiles) => {
-      console.log("acceptedFiles", acceptedFiles);
       if (!file) {
         setFile(acceptedFiles[0]);
         uploadFile(acceptedFiles[0]);

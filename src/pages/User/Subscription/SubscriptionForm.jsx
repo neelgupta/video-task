@@ -105,7 +105,6 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
         : "user/subscription-plan",
       body
     );
-    console.log("res", res);
     Swal.fire(res.data.message);
     onHide();
     getSubscriptionList();

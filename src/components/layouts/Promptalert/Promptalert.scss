@@ -1,12 +1,21 @@
 #promptalert-container {
   position: fixed;
-  bottom: 0%;
+  bottom: 0px;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1111;
 
   .alert-dismissible {
     // padding-right: 5rem !important;
+  }
+  .custom-alert-button {
+    .btn-close {
+      box-shadow: none !important;
+      border-radius: 50%;
+      width: 10px;
+      height: 2px;
+      margin: 8px;
+    }
   }
   .alert {
     position: relative;
@@ -33,6 +42,10 @@
     transform: translate(-50%, -50%);
     background: none !important;
     border: none !important;
+    box-shadow: none !important;
+    &:active {
+      box-shadow: none !important;
+    }
     .bi-x-lg::before {
       line-height: 0%;
       font-weight: 700 !important;

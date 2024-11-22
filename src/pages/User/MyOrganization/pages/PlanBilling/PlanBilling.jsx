@@ -1,142 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PlanBilling.scss";
 import { icons } from "../../../../../utils/constants";
 import { creteImgFilter } from "../../../../../utils/helpers";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import PlanCard from "./PlanCard";
 import BillingCard from "./BillingCard";
 import PaymentForm from "./PaymentForm";
 import AddressForm from "./AddressForm";
+import { api } from "../../../../../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { showSuccess, throwError } from "../../../../../store/globalSlice";
 function PlanBilling() {
+  const dispatch = useDispatch();
+  const { selectedOrganization } = useSelector((state) => state.global);
   const [isAddAddress, setIsAddAddress] = useState(false);
   const [isAddPayment, setIsAddPayment] = useState(false);
-  const [apartmentType, setApartmentType] = useState("");
-  const cardList = [
-    {
-      type: "free",
-      title: "Free Plan",
-      subTitle: "for individuals and small businesses",
-      price: "Free",
-      planDes: [
-        "50 Page Unlock",
-        "10 GB Storage",
-        "6 Team Members",
-        "Unlimited basic feature",
-      ],
-      bestDealBtn: {
-        is: false,
-        text: "Best Deal",
-      },
-      moreBtn: {
-        is: false,
-        text: "Learn More",
-      },
-      upgradeBtn: {
-        is: true,
-        isSelect: true,
-        text: "Current Plan",
-      },
-    },
-    {
-      type: "basic",
-      title: "Basic Plan",
-      subTitle: "for individuals and small businesses",
-      price: "10",
-      planDes: [
-        "50 Page Unlock",
-        "10 GB Storage",
-        "6 Team Members",
-        "Unlimited basic feature",
-      ],
-      bestDealBtn: {
-        is: true,
-        text: "Best Deal",
-      },
-      moreBtn: {
-        is: true,
-        text: "Learn More",
-      },
-      upgradeBtn: {
-        is: false,
-        isSelect: false,
-        text: "Current Plan",
-      },
-    },
-    {
-      type: "pro",
-      title: "Pro Plan",
-      subTitle: "for growing businesses.",
-      price: "20",
-      planDes: [
-        "100 Page Unlock",
-        "23 GB Storage",
-        "7 Team Members",
-        "Unlimited basic feature",
-      ],
-      bestDealBtn: {
-        is: false,
-        text: "Best Deal",
-      },
-      moreBtn: {
-        is: true,
-        text: "Learn More",
-      },
-      upgradeBtn: {
-        is: true,
-        isSelect: false,
-        text: "Upgrade Plan",
-      },
-    },
-    {
-      type: "enterprise",
-      title: "Enterprise Plan",
-      subTitle: " for large organizations.",
-      price: "Custom",
-      planDes: [
-        "Custom Page Unlock",
-        "Custom GB Storage",
-        "Custom Team Members",
-        "Unlimited basic feature",
-      ],
-      bestDealBtn: {
-        is: false,
-        text: "Best Deal",
-      },
-      moreBtn: {
-        is: true,
-        text: "Contact Us",
-      },
-      upgradeBtn: {
-        is: true,
-        isSelect: false,
-        text: "Contact Us",
-      },
-    },
-  ];
+  const [type, setType] = useState("");
+  const [planCardList, setPlanCardList] = useState([]);
+  const [addressList, setAddressList] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [editData, setEditData] = useState({});
+
+  useEffect(() => {
+    fetchPlanCard();
+    fetchAddressCard();
+  }, []);
+
+  const fetchPlanCard = async () => {
+    try {
+      const res = await api.get("user/get-plans");
+      console.log("fetchPlanCard", res);
+      if (res.status === 200) {
+        setPlanCardList(res.data.response);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const fetchAddressCard = async () => {
+    try {
+      const res = await api.get("user/get-address-list");
+      console.log("fetchAddressCard", res);
+      if (res.status === 200) {
+        setAddressList(res.data.response);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <>
       <PaymentForm
         show={isAddPayment}
+        selectedOrganization={selectedOrganization}
+        isEdit={isEdit}
         onHide={() => {
           setIsAddPayment(false);
+          setIsEdit(false);
         }}
+        editData={editData}
       />
       <AddressForm
-        ApartmentType={apartmentType}
+        selectedOrganization={selectedOrganization}
+        type={type}
         show={isAddAddress}
-        onHide={() => {
+        isEdit={isEdit}
+        onHide={(isCreate) => {
           setIsAddAddress(false);
+          setIsEdit(false);
+          if (isCreate) {
+            fetchAddressCard();
+          }
         }}
+        editData={editData}
       />
       <div className="PlanBilling">
         <div className="Plans">
-          <div className="text-24-700" style={{ color: "#1B2559" }}>
+          <div
+            className="text-24-700"
+            style={{ color: "#1B2559", display: "flex", alignItems: "center" }}
+          >
             Plans
           </div>
           <div className="plans-card-box mt-20">
-            {cardList.map((ele, index) => {
-              return <PlanCard ele={ele} key={index} />;
-            })}
+            {planCardList.length > 0 &&
+              planCardList.map((ele, index) => {
+                return <PlanCard ele={ele} key={index} />;
+              })}
+            {planCardList.length === 0 && (
+              <Spinner animation="border" size="xs" className="ms-20" />
+            )}
           </div>
         </div>
         <div className="Billing">
@@ -144,15 +98,21 @@ function PlanBilling() {
             Billing
           </div>
           <div className="Billing-card-box mt-20">
-            {["Billing Address", "Shipping  Address"].map((ele, index) => {
+            {["Billing", "Shipping"].map((ele, index) => {
               return (
                 <BillingCard
                   key={index}
-                  ele={ele}
+                  addressType={ele}
                   type="billing"
-                  onAddEdit={() => {
+                  onAddEdit={(isEdit, isEditData) => {
                     setIsAddAddress(true);
-                    setApartmentType(ele);
+                    setType(ele);
+                    setIsEdit(isEdit);
+                    setEditData(isEditData || {});
+                  }}
+                  addressList={addressList}
+                  onFetch={() => {
+                    fetchAddressCard();
                   }}
                 />
               );
@@ -168,10 +128,15 @@ function PlanBilling() {
               return (
                 <BillingCard
                   key={index}
-                  ele={ele}
+                  addressType={ele}
                   type="Payment"
-                  onAddEdit={() => {
+                  onAddEdit={(isEdit, isEditData) => {
                     setIsAddPayment(true);
+                    setIsEdit(isEdit);
+                    setEditData(isEditData || {});
+                  }}
+                  onFetch={() => {
+                    fetchAddressCard();
                   }}
                 />
               );

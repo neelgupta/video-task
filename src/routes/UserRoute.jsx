@@ -8,15 +8,34 @@ import Interaction from "../pages/User/Interactions";
 import Trash from "../pages/User/Trash";
 import MyCollection from "../pages/User/MyCollection";
 import Profile from "../pages/User/Profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Contacts from "../pages/User/Contacts";
 import VisitContacts from "../pages/User/Contacts/VisitContacts";
 import FlowCanvas from "../pages/FlowCanvas";
 import MyOrganization from "../pages/User/MyOrganization";
+import { api } from "../services/api";
+import { useDispatch } from "react-redux";
+import { setProfileData, setSelectedOrganization } from "../store/globalSlice";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const getProfile = async () => {
+    const res = await api.get("user/profile");
+    console.log("🚀 ~ getProfile ~ res:", res.data);
+    if (res.status && res.status === 200) {
+      dispatch(setProfileData(res.data.response));
+      dispatch(
+        setSelectedOrganization(res.data.response.organizations?.[0]._id)
+      );
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const routeList = [
     {
       path: "/user/price",

@@ -1,22 +1,116 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import "./Overview.scss";
+import { api } from "../../../../../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { showSuccess, throwError } from "../../../../../store/globalSlice";
+
+const brandingOption = [
+  { value: "QnaFlow", label: "QnaFlow" },
+  { value: "no-branding", label: "No branding" },
+];
+const languageOptions = [
+  { value: "english", label: "English" },
+  { value: "dutch", label: "Dutch" },
+  { value: "spanish", label: "Spanish" },
+];
+const fontFamilyList = [
+  { value: "Arial, sans-serif", label: "Arial" },
+  { value: '"Helvetica Neue", Helvetica, sans-serif', label: "Helvetica" },
+  { value: "Georgia, serif", label: "Georgia" },
+  { value: '"Times New Roman", Times, serif', label: "Times New Roman" },
+  { value: "Courier, monospace", label: "Courier" },
+  { value: '"Courier New", Courier, monospace', label: "Courier New" },
+  { value: "Verdana, sans-serif", label: "Verdana" },
+  { value: "Tahoma, sans-serif", label: "Tahoma" },
+  { value: "Trebuchet MS, sans-serif", label: "Trebuchet MS" },
+  { value: '"Lucida Sans", sans-serif', label: "Lucida Sans" },
+];
+
 function Overview() {
-  const emailOptions = [
-    { value: "text@gmail.com", label: "text@gmail.com" },
-    { value: "admin@gmail.com", label: "admin@gmail.com" },
-    { value: "user@gmail.com", label: "user@gmail.com" },
-  ];
-  const languageOptions = [
-    { value: "english", label: "English" },
-    { value: "dutch", label: "Dutch" },
-    { value: "spanish", label: "Spanish" },
-  ];
-  const fontOptions = [
-    { value: "12", label: "12 px" },
-    { value: "14", label: "14 px" },
-    { value: "16", label: "16 px" },
-  ];
+  const dispatch = useDispatch();
+  const reduxData = useSelector((state) => state.global);
+  const { selectedOrganization } = reduxData;
+  const [organization, setOrganization] = useState({});
+  const [isChange, setIsChange] = useState("");
+  const [replayEmailOption, setReplayEmailOption] = useState([]);
+  const [form, setForm] = useState({
+    replay_to_email: "",
+    branding: "",
+    language: "",
+    font: "",
+    border_radius: "",
+  });
+
+  const updateOverview = async (valueObj, keyName) => {
+    try {
+      setIsChange(keyName);
+      const req = {
+        organization_id: selectedOrganization,
+        ...valueObj,
+      };
+      const res = await api.put("user/update-organization", req);
+      if (res.status === 200) {
+        dispatch(showSuccess(`${keyName} ${res.data.message}`));
+      } else {
+        dispatch(throwError(`${keyName} ${res.data.message}`));
+      }
+      fetchOverview();
+      return;
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+      setIsChange("");
+      return;
+    }
+  };
+
+  const fetchOverview = async () => {
+    try {
+      const res = await api.get(`user/organization/${selectedOrganization}`);
+      if (res.status === 200) {
+        setOrganization(res.data.response);
+        setIsChange("");
+      }
+    } catch (error) {
+      console.log("error", error);
+      setIsChange("");
+    }
+  };
+
+  useEffect(() => {
+    if (selectedOrganization) fetchOverview();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrganization]);
+
+  useEffect(() => {
+    if (organization?.members?.length > 0) {
+      const option = organization.members.map((ele) => {
+        return {
+          value: ele.userId._id,
+          label: ele.userId.email,
+        };
+      });
+      setReplayEmailOption(option);
+    }
+  }, [organization]);
+
+  useEffect(() => {
+    if (organization) {
+      setForm({
+        replay_to_email: replayEmailOption.find(
+          (o) => o.label === organization.replay_to_email
+        ),
+        branding: brandingOption.find((o) => o.value === organization.branding),
+        language: languageOptions.find(
+          (o) => o.value === organization.language
+        ),
+        font: fontFamilyList.find((o) => o.value === organization.font),
+        border_radius: parseInt(organization.border_radius),
+      });
+    }
+  }, [organization, replayEmailOption]);
+
   return (
     <div className="Overview">
       <div className="overview-box">
@@ -53,8 +147,20 @@ function Overview() {
           <div className="w-300">
             <Select
               className="p-10"
-              options={emailOptions}
+              options={replayEmailOption}
+              name="replay_to_email"
+              value={form.replay_to_email}
               placeholder={"Select Email"}
+              isDisabled={isChange === "default email for replies"}
+              onChange={(select) => {
+                if (select.label !== organization.replay_to_email) {
+                  updateOverview(
+                    { replay_to_email: select.label },
+                    "default email for replies"
+                  );
+                }
+                return {};
+              }}
             />
           </div>
         </div>
@@ -79,9 +185,18 @@ function Overview() {
             </div>
             <div className="w-300">
               <Select
+                name="branding"
+                value={form.branding}
                 className="p-10"
-                options={emailOptions}
+                options={brandingOption}
                 placeholder={"Select Email"}
+                isDisabled={isChange === "Branding"}
+                onChange={(select) => {
+                  if (select.value !== organization.branding) {
+                    updateOverview({ branding: select.value }, "Branding");
+                  }
+                  return {};
+                }}
               />
             </div>
           </div>
@@ -100,6 +215,15 @@ function Overview() {
                 className="p-10"
                 options={languageOptions}
                 placeholder={"Select Language"}
+                isDisabled={isChange === "Language"}
+                name="language"
+                value={form.language}
+                onChange={(select) => {
+                  if (select.value !== organization.language) {
+                    updateOverview({ language: select.value }, "Language");
+                  }
+                  return {};
+                }}
               />
             </div>
           </div>
@@ -131,8 +255,17 @@ function Overview() {
             <div className="w-300">
               <Select
                 className="p-10"
-                options={fontOptions}
+                options={fontFamilyList}
                 placeholder={"Font"}
+                name="font"
+                value={form.font}
+                isDisabled={isChange === "Font"}
+                onChange={(select) => {
+                  if (select.value !== organization.font) {
+                    updateOverview({ font: select.value }, "Font");
+                  }
+                  return {};
+                }}
               />
             </div>
           </div>
@@ -166,6 +299,20 @@ function Overview() {
                   borderRadius: "4px",
                   border: "1px solid #cccccc",
                   outline: "none",
+                }}
+                disabled={isChange === "Border radius"}
+                value={form.border_radius}
+                name="border_radius"
+                onBlur={(e) => {
+                  if (parseInt(e.target.value) !== organization.border_radius) {
+                    updateOverview(
+                      { border_radius: parseInt(e.target.value) },
+                      "Border radius"
+                    );
+                  }
+                }}
+                onChange={(e) => {
+                  setForm({ ...form, border_radius: parseInt(e.target.value) });
                 }}
                 placeholder="Border Radius"
                 type="number"

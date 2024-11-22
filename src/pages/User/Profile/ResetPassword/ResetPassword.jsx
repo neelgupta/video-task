@@ -22,12 +22,12 @@ const PasswordField = ({ label, ...props }) => {
           {...field}
           {...props}
         />
-        <Button
+        <div
           className={styles["toggle-password"]}
           onClick={() => setShowPassword(!showPassword)}
         >
           <img src={showPassword ? icons.eyeClose : icons.eye} alt="eye" />
-        </Button>
+        </div>
       </div>
       {meta.touched && meta.error ? (
         <div className="text-danger">{meta.error}</div>
@@ -36,7 +36,7 @@ const PasswordField = ({ label, ...props }) => {
   );
 };
 
-const ResetPassword = () => {
+const ResetPassword = ({ setIsResetPassword }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   return (
     <>
@@ -71,7 +71,6 @@ const ResetPassword = () => {
                   .required("Confirm new password is required"),
               })}
               onSubmit={(values) => {
-                console.log(values);
                 // Handle form submission
               }}
             >
@@ -96,7 +95,7 @@ const ResetPassword = () => {
                   </div>
                   <Button
                     type="submit"
-                    className={`${styles.resetButton} text-14-500 mt-30`}
+                    className={`${styles.resetButton} text-14-500 mt-30 me-5`}
                     style={{
                       background: `#7B5AFF`,
                       border: "none",
@@ -105,16 +104,31 @@ const ResetPassword = () => {
                   >
                     Reset Now
                   </Button>
+                  <Button
+                    type="button"
+                    className={`${styles.resetButton} text-14-500 mt-30 ms-5`}
+                    style={{
+                      background: `#F6F6F6`,
+                      border: "none",
+                      color: "black",
+                    }}
+                    onClick={() => setIsResetPassword(false)}
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </Form>
             </Formik>
           </div>
         </div>
       </div>
-      <SuccessModal
-        show={showSuccessModal}
-        setShowSuccessModal={setShowSuccessModal}
-      />
+
+      {showSuccessModal && (
+        <SuccessModal
+          show={showSuccessModal}
+          setShowSuccessModal={setShowSuccessModal}
+        />
+      )}
     </>
   );
 };

@@ -46,7 +46,6 @@ function Signup() {
   const handleSubmit = async (values) => {
     try {
       const res = await api.post("user/sign-up", values);
-      console.log("res", res);
       if (res.status === 200) {
         Swal.fire({
           position: "top-end",

@@ -38,8 +38,9 @@ const Promptalert = () => {
           onClose={resetError}
           closeVariant={type === "success" ? "white" : "dark"}
           dismissible
+          className="custom-alert-button"
         >
-          <span className="text-16-500">{message}</span>
+          <span className="text-16-500 m-10">{message}</span>
         </Alert>
       )}
     </div>

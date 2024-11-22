@@ -9,7 +9,6 @@ const AudioUpload = () => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: "audio/mp3",
     onDrop: (acceptedFiles) => {
-      console.log("acceptedFiles", acceptedFiles);
       setFile(acceptedFiles[0]);
     },
   });

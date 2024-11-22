@@ -74,7 +74,6 @@ function Subscription() {
     }
   };
   const handleDelete = (itemId) => {
-    console.log("itemId", itemId);
     Swal.fire({
       title: "Are you sure?",
       text: "Do you really want to delete this item? This process cannot be undone.",
@@ -94,7 +93,6 @@ function Subscription() {
   };
   const deleteItem = async (itemId) => {
     const res = await api.delete(`user/subscription-plan/${itemId}`, {});
-    console.log("res", res);
     if (res.status === 200) {
       getSubscriptionList();
       Swal.fire("Deleted!", "Your item has been deleted.", "success");

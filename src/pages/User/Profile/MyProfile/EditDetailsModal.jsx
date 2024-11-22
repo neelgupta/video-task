@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import "./EditDetailsModal.scss";
 
-const EditDetailsModal = ({ show, handleClose }) => {
+const EditDetailsModal = ({ show, handleClose, userData }) => {
+  const [form, setForm] = useState({
+    user_name: "",
+    email: "",
+  });
+  useEffect(() => {
+    setForm({
+      user_name: userData.user_name,
+      email: userData.email,
+    });
+  }, [userData]);
   return (
     <Modal
       show={show}
@@ -24,10 +34,14 @@ const EditDetailsModal = ({ show, handleClose }) => {
                 type="text"
                 className="form-control rounded-3"
                 placeholder="Enter Your User Name"
+                value={form.user_name}
                 style={{
                   width: "100%",
                   padding: "0.5rem",
                   fontSize: "12px",
+                }}
+                onChange={(e) => {
+                  setForm({ ...form, user_name: e.target.value });
                 }}
               />
             </div>
@@ -39,10 +53,14 @@ const EditDetailsModal = ({ show, handleClose }) => {
                 type="text"
                 className="form-control rounded-3"
                 placeholder="Enter Your Registered Mail"
+                value={form.email}
                 style={{
                   width: "100%",
                   padding: "0.5rem",
                   fontSize: "12px",
+                }}
+                onChange={(e) => {
+                  setForm({ ...form, email: e.target.value });
                 }}
               />
             </div>
@@ -54,7 +72,13 @@ const EditDetailsModal = ({ show, handleClose }) => {
           <Button
             style={{ width: "150px" }}
             variant="secondary"
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              setForm({
+                user_name: "",
+                email: "",
+              });
+            }}
             className="text-14-500"
           >
             Cancel

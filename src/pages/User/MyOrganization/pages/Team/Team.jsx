@@ -12,7 +12,7 @@ function Team() {
   const header = [
     {
       title: "Username",
-      className: "wp-30 ",
+      className: "wp-30 ps-20",
       isSort: true,
     },
     {
@@ -75,7 +75,7 @@ function Team() {
             <div className="ms-10">{elem.name}</div>
           </div>
         ),
-        className: "wp-30 ",
+        className: "wp-30 ps-20",
       },
       {
         value: elem.number,

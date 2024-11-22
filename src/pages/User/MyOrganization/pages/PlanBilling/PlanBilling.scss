@@ -91,6 +91,11 @@
     border: 1px solid #cccccc;
     outline: none;
   }
+  .error-message {
+    color: red;
+    font-size: 12px; /* Adjust size as needed */
+    margin-top: 5px; /* Adjust spacing as needed */
+  }
 }
 
 .AddressForm-form {
@@ -104,5 +109,11 @@
     border-radius: 10px;
     border: 1px solid #cccccc;
     outline: none;
+  }
+  .error-message {
+    color: var(--dc35);
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 10px;
   }
 }

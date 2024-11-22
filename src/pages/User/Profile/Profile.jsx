@@ -44,7 +44,7 @@ const Profile = ({ isResetPassword, setIsResetPassword }) => {
       <div className="mt-20 ">
         {selectedTab === 1 &&
           (isResetPassword ? (
-            <ResetPassword />
+            <ResetPassword setIsResetPassword={setIsResetPassword} />
           ) : (
             <MyProfile
               isResetPassword={isResetPassword}

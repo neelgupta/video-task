@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./MyProfile.module.scss";
 import EditDetailsModal from "./EditDetailsModal";
 import DeleteAccountModal from "./DeleteAccountModal";
 import { encrypt } from "../../../../utils/helpers";
 import { setAuthData } from "../../../../store/globalSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
   const [isEditModalShow, setIsEditModalShow] = useState(false);
   const [isDeleteModalShow, setIsDeleteModalShow] = useState(false);
   const dispatch = useDispatch();
+  const reduxData = useSelector((state) => state.global);
+  const { profileData } = reduxData;
+  const [userData, setUserData] = useState({});
 
+  useEffect(() => {
+    if (profileData) {
+      const { profile } = profileData;
+      if (profile) setUserData(profile);
+    }
+  }, [profileData]);
   return (
     <>
       <div className={styles.profileContainer}>
@@ -62,7 +71,7 @@ const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
               User Name
             </div>
             <div className="text-16-600" style={{ color: "#1B2559" }}>
-              James Anderson
+              {userData.user_name || ""}
             </div>
           </div>
           <div className="mt-10">
@@ -70,7 +79,7 @@ const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
               Registered Mail
             </div>
             <div className="text-16-600" style={{ color: "#1B2559" }}>
-              Mail@gmail.com
+              {userData.email || ""}
             </div>
           </div>
         </div>
@@ -109,10 +118,14 @@ const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
           </div>
         </div>
       </div>
-      <EditDetailsModal
-        show={isEditModalShow}
-        handleClose={() => setIsEditModalShow(false)}
-      />
+      {isEditModalShow && (
+        <EditDetailsModal
+          show={isEditModalShow}
+          handleClose={() => setIsEditModalShow(false)}
+          userData={userData}
+        />
+      )}
+
       <DeleteAccountModal
         show={isDeleteModalShow}
         handleClose={() => setIsDeleteModalShow(false)}

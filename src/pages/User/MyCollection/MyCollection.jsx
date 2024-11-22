@@ -112,7 +112,6 @@ const MyCollection = () => {
 
   const handleCreateNewFolder = (folderName) => {
     // TODO: Implement functionality to create new folder
-    console.log({ folderName });
     setFolders((prev) => [
       ...prev,
       {

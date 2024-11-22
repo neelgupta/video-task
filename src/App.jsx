@@ -1,15 +1,17 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import { Promptalert } from "./components";
 import AuthRoute from "./routes/AuthRoute";
 import { getDataFromLocalStorage } from "./utils/helpers";
 import UserRoute from "./routes/UserRoute";
+import { useEffect } from "react";
+import { api } from "./services/api";
+import { setProfileData } from "./store/globalSlice";
 
 function App() {
   // eslint-disable-next-line no-unused-vars
   const reduxData = useSelector((state) => state.global);
   const localData = getDataFromLocalStorage();
-  console.log("🚀 ~ App ~ localData:", localData);
   const isAuth = localData?.token ? true : false;
   return (
     <div className="text-12-500">

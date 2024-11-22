@@ -10,30 +10,30 @@ function PlanCard({ ele }) {
         <div className="text-32-400" style={{ color: "#1B2559" }}>
           {ele.title}
         </div>
-        {ele.bestDealBtn && ele.bestDealBtn.is && (
-          <Button className="Best_Deal_btn">{ele.bestDealBtn.text}</Button>
+        {ele.is_best_deal && (
+          <Button className="Best_Deal_btn">Best Deal</Button>
         )}
       </div>
       <div
         className="text-16-400"
         style={{ color: "#536174", textTransform: "capitalize" }}
       >
-        {ele.subTitle}
+        {ele.sub_title}
       </div>
       <div
         className="text-48-600 mt-10 mb-30"
         style={{
-          color: ele.type === "free" ? "#7B5AFF" : "black",
+          color: ele.plan_type === "free" ? "#7B5AFF" : "black",
           textTransform: "capitalize",
         }}
       >
-        {ele.type === "free" ? (
+        {ele.plan_type === "free" ? (
           "Free"
         ) : (
           <>
-            <sup className="text-32-600">$</sup>
+            <sup className="text-32-600">{ele.currency}</sup>
             {ele.price}
-            {ele.type !== "" && (
+            {ele.plan_type !== "" && (
               <sub className="text-14-400" style={{ color: "#98A2B2" }}>
                 / month
               </sub>
@@ -42,20 +42,23 @@ function PlanCard({ ele }) {
         )}
       </div>
 
-      {ele?.upgradeBtn && ele.upgradeBtn.is && (
+      {(ele?.is_upgrade || ele?.is_custom) && (
         <div
           className="text-14-500"
           style={{
-            color: ele.upgradeBtn.isSelect ? "#7E8B9E" : "white",
-            background: ele.upgradeBtn.isSelect
-              ? "#F6F6F6"
-              : "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
+            color: ele.plan_type === "free" ? "#7E8B9E" : "white",
+            background:
+              ele.plan_type === "free"
+                ? "#F6F6F6"
+                : "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
             display: "inline",
             padding: "10px 20px",
             borderRadius: "8px",
           }}
         >
-          {ele.upgradeBtn.text}
+          {ele?.is_upgrade &&
+            (ele.plan_type === "free" ? "Current Plan" : "Upgrade Plan")}
+          {ele?.is_custom && "Contact Us"}
         </div>
       )}
 
@@ -73,7 +76,7 @@ function PlanCard({ ele }) {
           Everything you get in this plan
         </div>
         <div className="mt-40">
-          {(ele.planDes || []).map((ele, index) => {
+          {(ele.description || []).map((ele, index) => {
             return (
               <div
                 key={index}
@@ -105,7 +108,7 @@ function PlanCard({ ele }) {
           })}
         </div>
 
-        {ele.moreBtn && ele.moreBtn.is && (
+        {ele.button_text && ele.plan_type !== "free" && (
           <div className="mt-30">
             <Button
               className="wp-100 text-16-500"
@@ -115,7 +118,7 @@ function PlanCard({ ele }) {
                 border: "none",
               }}
             >
-              {ele.moreBtn.text}
+              {ele.button_text}
             </Button>
           </div>
         )}
