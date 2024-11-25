@@ -126,10 +126,12 @@ const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
         />
       )}
 
-      <DeleteAccountModal
-        show={isDeleteModalShow}
-        handleClose={() => setIsDeleteModalShow(false)}
-      />
+      {isDeleteModalShow && (
+        <DeleteAccountModal
+          show={isDeleteModalShow}
+          handleClose={() => setIsDeleteModalShow(false)}
+        />
+      )}
     </>
   );
 };

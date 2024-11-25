@@ -1,8 +1,34 @@
-import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import styles from "./DeleteAccountModal.module.scss";
+import { icons } from "../../../../utils/constants";
+import { api } from "../../../../services/api";
+import { useDispatch } from "react-redux";
+import { encrypt } from "../../../../utils/helpers";
+import { setAuthData, throwError } from "../../../../store/globalSlice";
 
 const DeleteAccountModal = ({ show, handleClose, onDelete }) => {
+  const dispatch = useDispatch();
+  const [password, setPassword] = useState("");
+  const [isPasswordShow, setIsPasswordShow] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+
+  const deleteAccount = async () => {
+    setIsDelete(true);
+    try {
+      const res = await api.post("user/delete-account", { password });
+      console.log("res", res);
+      if (res.status === 200) {
+        let data = encrypt({ time: new Date().toLocaleString() });
+        localStorage.authData = data;
+        dispatch(setAuthData(data));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+    setIsDelete(false);
+  };
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
@@ -38,17 +64,37 @@ const DeleteAccountModal = ({ show, handleClose, onDelete }) => {
               To delete your account please type the password below
             </div>
           </div>
-          <div style={{ width: "100%" }} className="px-25 mt-20">
+          <div
+            style={{ width: "100%", position: "relative" }}
+            className="mt-20"
+          >
             <input
-              type="password"
-              className="form-control rounded-3"
+              type={isPasswordShow ? "text" : "password"}
+              className="rounded-3"
               placeholder="Enter Your Account Password"
               style={{
                 width: "100%",
                 padding: "0.5rem",
                 fontSize: "12px",
+                outline: "1px solid gray",
+                border: "1px solid #d3d3d3",
+              }}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
               }}
             />
+            <div
+              className="w-20 h-20 pointer"
+              style={{ position: "absolute", top: "5px", right: "15px" }}
+              onClick={() => setIsPasswordShow((pre) => !pre)}
+            >
+              <img
+                src={icons[isPasswordShow ? "eyeClose" : "eye"]}
+                alt="password eye"
+                className="fit-image"
+              />
+            </div>
           </div>
         </div>
       </Modal.Body>
@@ -68,16 +114,20 @@ const DeleteAccountModal = ({ show, handleClose, onDelete }) => {
         </div>
         <div>
           <Button
-            onClick={() => {}}
-            className="text-14-500"
+            onClick={() => {
+              deleteAccount();
+            }}
+            className="text-14-500 f-center"
             style={{
               background: `#7B5AFF`,
               border: "none",
               color: "white",
               width: "150px",
             }}
+            disabled={isDelete}
           >
             Delete Now
+            {isDelete && <Spinner size="sm" className="ms-10" />}
           </Button>
         </div>
       </Modal.Footer>

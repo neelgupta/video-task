@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { icons } from "../../../../../utils/constants";
 import { creteImgFilter } from "../../../../../utils/helpers";
-function OutlineCheck({ className, isCheck, onChange }) {
-  const [checked, setChecked] = useState(isCheck);
-  useEffect(() => {
-    onChange && onChange(checked);
-  }, [checked, onChange]);
+function OutlineCheck({ className, isCheck, onChange, isDisabled }) {
   return (
     <div className="OutlineCheck">
       <Form.Check
@@ -17,15 +13,16 @@ function OutlineCheck({ className, isCheck, onChange }) {
           cursor: "pointer",
           userSelect: "none",
           borderRadius: "3px",
-          border: checked ? `2px solid #B3A1FF` : `1px solid #757F95`,
+          border: isCheck ? `2px solid #B3A1FF` : `1px solid #757F95`,
+          ...(isDisabled ? { border: `2px solid #D3D3D3` } : {}),
         }}
         type="checkbox"
-        checked={checked}
+        checked={isCheck}
         className={className}
       >
         <span
           onClick={() => {
-            setChecked((pre) => !pre);
+            onChange && !isDisabled && onChange(!isCheck);
           }}
           style={{
             position: "absolute",
@@ -39,13 +36,13 @@ function OutlineCheck({ className, isCheck, onChange }) {
             justifyContent: "center",
           }}
         >
-          {checked && (
+          {isCheck && (
             <img
               src={icons.check}
               alt=""
               className="fit-image wp-80"
               style={{
-                filter: creteImgFilter("#B3A1FF"),
+                filter: creteImgFilter(isDisabled ? "#D3D3D3" : "#B3A1FF"),
               }}
             />
           )}

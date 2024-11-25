@@ -12,7 +12,7 @@ const AddressForm = ({
   show,
   isEdit,
   type,
-  selectedOrganization,
+  selectedOrganizationId,
   editData,
 }) => {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const AddressForm = ({
         email: values.Email,
         ...(isEdit
           ? { address_id: editData._id }
-          : { address_type: type, organization_id: selectedOrganization }),
+          : { address_type: type, organization_id: selectedOrganizationId }),
       };
       console.log("req", req);
       const res = await api[isEdit ? "put" : "post"](

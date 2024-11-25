@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 
-function OutlineRadio({ className, isCheck, onChange }) {
+function OutlineRadio({ className, isCheck, onChange, isDisabled }) {
   return (
     <div>
       <div className="OutlineCheck">
@@ -13,6 +13,7 @@ function OutlineRadio({ className, isCheck, onChange }) {
             userSelect: "none",
             borderRadius: "50%",
             border: isCheck ? `1px solid #B3A1FF` : `1px solid #757F95`,
+            ...(isDisabled ? { border: `1px solid #d3d3d3` } : {}),
           }}
           type="checkbox"
           checked={isCheck}
@@ -33,7 +34,7 @@ function OutlineRadio({ className, isCheck, onChange }) {
                 width: isCheck ? "80%" : "0%",
                 height: isCheck ? "80%" : "0%",
                 borderRadius: "50%",
-                background: "#B3A1FF",
+                background: isDisabled ? "#d3d3d3" : "#B3A1FF",
                 transitionDuration: "0.3s",
               }}
             ></span>

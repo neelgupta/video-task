@@ -25,7 +25,7 @@ const Promptalert = () => {
     if (show) {
       setTimeout(() => {
         resetError();
-      }, 30000);
+      }, 5000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);

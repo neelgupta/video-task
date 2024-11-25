@@ -315,3 +315,10 @@ $fonthWeights: 400, 500, 600, 700, 800;
 a {
   text-decoration: none;
 }
+
+.error-message {
+  color: red;
+  font-size: 12px; /* Adjust size as needed */
+  margin-top: 5px; /* Adjust spacing as needed */
+  padding-left: 10px;
+}

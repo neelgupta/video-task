@@ -3,6 +3,7 @@
 .successModal {
   .modal-content {
     border-radius: 20px !important;
+    width: min(400px, 100%) !important;
   }
   .modalBody {
     .checkmarkCircle {
@@ -21,7 +22,7 @@
     .continueButton {
       background: linear-gradient(90deg, #7c5bff 0%, #b3a1ff 100%);
       border: none;
-      padding: 17px 100px;
+      padding: 10px 50px;
       border-radius: 30px;
       margin: 25px 0;
     }

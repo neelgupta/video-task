@@ -45,7 +45,7 @@ const globalSlice = createSlice({
       state.isResponsive = false;
     },
     setSelectedOrganization(state, action) {
-      state.selectedOrganization = action.payload;
+      state.selectedOrganizationId = action.payload;
     },
   },
 });

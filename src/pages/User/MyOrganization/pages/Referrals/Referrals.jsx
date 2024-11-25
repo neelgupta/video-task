@@ -1,185 +1,248 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Referrals.scss";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { icons } from "../../../../../utils/constants";
 import { creteImgFilter } from "../../../../../utils/helpers";
 import FailedModel from "../../../../../components/layouts/FailedModel";
 import SuccessModal from "../../../Profile/ResetPassword/SuccessModal";
 import { useSelector } from "react-redux";
+import { api } from "../../../../../services/api";
+
+const RewardsCard = [
+  {
+    title: "Total Minutes Earned",
+    count: "0",
+    profit: "+0",
+  },
+  {
+    title: "Referrals Sent",
+    count: "0",
+    profit: "+0",
+  },
+  {
+    title: "Referrals Accepted",
+    count: "0",
+    profit: "+0",
+  },
+  {
+    title: "Referrals Pending",
+    count: "0",
+    profit: "+0",
+  },
+];
+const iconList = [
+  {
+    name: "facebook",
+    iconName: icons.facebook,
+  },
+  {
+    name: "whatsapp",
+    iconName: icons.whatsapp,
+  },
+  {
+    name: "telegram",
+    iconName: icons.telegram,
+  },
+  {
+    name: "twitter",
+    iconName: icons.twitter,
+  },
+  {
+    name: "instagram",
+    iconName: icons.instagram,
+  },
+  {
+    name: "socialLink",
+    iconName: icons.socialLink,
+  },
+];
+
 function Referrals() {
   const reduxData = useSelector((state) => state.global);
-  const { isResponsive, themeColor } = reduxData;
+  const { isResponsive, themeColor, selectedOrganizationId } = reduxData;
   const [isSent, setIsSent] = useState(false);
-  const [isReject, setIsReject] = useState(false);
+  const [isReject, setIsReject] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [email, setEmail] = useState("");
+  const [referralsList, setReferralsList] = useState([]);
+  const emailSentHandler = async () => {
+    try {
+      setIsSent(true);
+      const sentReq = {
+        organization_id: selectedOrganizationId,
+        referral_email: email,
+      };
+      console.log("sentReq", sentReq);
+      const res = await api.post("user/add-referrals", sentReq);
+      console.log("res", res);
+      if (res.status === 201) {
+        setIsSuccess(true);
+        fetchEmailSent();
+      } else {
+        setIsReject(res.data.response.message);
+      }
+    } catch (error) {
+      console.log("error", error);
+      setIsReject(error.response.data.message);
+    }
+    setIsSent(false);
+  };
 
-  const RewardsCard = [
-    {
-      title: "Total Minutes Earned",
-      count: "1002",
-      profit: "+400",
-    },
-    {
-      title: "Referrals Sent",
-      count: "40",
-      profit: "+1",
-    },
-    {
-      title: "Referrals Accepted",
-      count: "40",
-      profit: "+2",
-    },
-    {
-      title: "Referrals Pending",
-      count: "40",
-      profit: "+2",
-    },
-  ];
-  const iconList = [
-    {
-      name: "facebook",
-      iconName: icons.facebook,
-    },
-    {
-      name: "whatsapp",
-      iconName: icons.whatsapp,
-    },
-    {
-      name: "telegram",
-      iconName: icons.telegram,
-    },
-    {
-      name: "twitter",
-      iconName: icons.twitter,
-    },
-    {
-      name: "instagram",
-      iconName: icons.instagram,
-    },
-    {
-      name: "socialLink",
-      iconName: icons.socialLink,
-    },
-  ];
+  const fetchEmailSent = async () => {
+    try {
+      setReferralsList([]);
+      const res = await api.get(`user/get-referrals/${selectedOrganizationId}`);
+      console.log("res", res);
+      if (res.status === 200) {
+        if (res?.data?.response?.length > 0)
+          setReferralsList(res.data.response);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  useEffect(() => {
+    if (selectedOrganizationId) {
+      fetchEmailSent();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrganizationId]);
   return (
     <div
       className="Referrals"
       style={isResponsive ? { flexDirection: "column" } : {}}
     >
-      {isSent && (
+      {isSuccess && (
         <SuccessModal
-          show={isSent}
-          handleClose={() => setIsSent(false)}
+          show={isSuccess}
+          handleClose={() => setIsSuccess(false)}
           title="Mail Sent Successful!"
-          message="Invitation mail sent to friend@gmail.com"
+          message={`Invitation mail sent to ${email}`}
         />
       )}
-      {isReject && (
+      {isReject !== "" && (
         <FailedModel
-          show={isReject}
-          handleClose={() => setIsReject(false)}
-          message={`There was an error while trying to send your message. Please check your internet connection and try again. 
-If the issue persists, contact support.`}
+          show={isReject !== ""}
+          handleClose={() => setIsReject("")}
+          message={isReject}
         />
       )}
       <div className={isResponsive ? "wp-100" : "wp-70"}>
-        <div className="Referrals-box">
-          <div className="text-16-600" style={{ color: "#000000" }}>
-            Rewards
-          </div>
-          <div
-            className="wp-100  mb-20"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-            }}
-          >
-            {RewardsCard.map((ele, index) => {
-              return (
-                <div className="w-200 mt-30" key={index}>
-                  <div className="text-18-500" style={{ color: "#777777" }}>
-                    {ele.title}
-                  </div>
-                  <div className="text-48-500" style={{ color: "#121212" }}>
-                    {ele.count}
-                  </div>
-                  <div className="text-16-400" style={{ color: "#22C55E" }}>
-                    {ele.profit}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="Referrals-box mt-46">
-          <div className="text-16-600" style={{ color: "#000000" }}>
-            Invite friends through mail
-          </div>
-          <div
-            className="mt-30 mb-30"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-start",
-            }}
-          >
-            <input
-              className="Invite_text"
-              type="text"
-              placeholder="Enter Email Address"
-            />
-            <Button
-              onClick={() => setIsSent(true)}
-              className="text-14-600 p-12 ms-30 ps-20 pe-20"
+        <div style={{ width: isResponsive ? "100%" : "95%" }}>
+          <div className="Referrals-box">
+            <div className="text-16-600" style={{ color: "#000000" }}>
+              Rewards
+            </div>
+            <div
+              className="wp-100  mb-20"
               style={{
-                background: "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
-                border: "none",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
               }}
             >
-              Invite
-            </Button>
+              {RewardsCard.map((ele, index) => {
+                return (
+                  <div className="w-200 mt-30" key={index}>
+                    <div className="text-18-500" style={{ color: "#777777" }}>
+                      {ele.title}
+                    </div>
+                    <div className="text-48-500" style={{ color: "#121212" }}>
+                      {ele.count}
+                    </div>
+                    <div className="text-16-400" style={{ color: "#22C55E" }}>
+                      {ele.profit}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <div className="Referrals-box mt-46">
-          <div className="text-16-600" style={{ color: "#000000" }}>
-            Invite friends through social media
+          <div className="Referrals-box mt-46">
+            <div className="text-16-600" style={{ color: "#000000" }}>
+              Invite friends through mail
+            </div>
+            <div
+              className="mt-30 mb-30"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <input
+                className="Invite_text"
+                type="text"
+                placeholder="Enter Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button
+                onClick={() => emailSentHandler()}
+                className="text-14-600 p-12 ms-30 ps-20 pe-20"
+                style={{
+                  background:
+                    "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
+                  border: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                disabled={isSent}
+              >
+                Invite
+                {isSent && (
+                  <Spinner animation="border" size="sm" className="ms-10" />
+                )}
+              </Button>
+            </div>
           </div>
+          <div className="Referrals-box mt-46">
+            <div className="text-16-600" style={{ color: "#000000" }}>
+              Invite friends through social media
+            </div>
 
-          <div
-            className="wp-100 mt-20 mb-20 p-20"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "50px",
-            }}
-          >
-            {iconList.map((ele, index) => {
-              return (
-                <div className="w-30 h-30 pointer" key={index}>
-                  <img
-                    src={ele.iconName}
-                    alt=""
-                    className="fit-image social-icon"
-                    style={{
-                      filter: creteImgFilter("#1B2559"),
-                    }}
-                  />
-                </div>
-              );
-            })}
+            <div
+              className="wp-100 mt-20 mb-20 p-20"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "50px",
+              }}
+            >
+              {iconList.map((ele, index) => {
+                return (
+                  <div className="w-30 h-30 pointer" key={index}>
+                    <img
+                      src={ele.iconName}
+                      alt=""
+                      className="fit-image social-icon"
+                      style={{
+                        filter: creteImgFilter("#1B2559"),
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
       <div
-        className="p-20 invited"
+        className="p-20 invited auri-scroll"
         style={{
-          ...{ border: "1px solid #D9D9D9", borderRadius: "10px" },
-          ...(isResponsive ? { marginTop: "20px" } : {}),
+          ...{
+            border: "1px solid #D9D9D9",
+            borderRadius: "10px",
+          },
+          ...(isResponsive
+            ? { marginTop: "20px", width: "100%" }
+            : {
+                maxHeight: "700px",
+                overflow: "auto",
+              }),
         }}
       >
         <div
@@ -188,84 +251,55 @@ If the issue persists, contact support.`}
         >
           Friends you invited
         </div>
-        <div
-          className="p-10"
-          style={{
-            borderBottom: "1px solid #D8D8D8",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div className="ms-50">
-            <div className="text-16-600 ">Prashant Kumar singh</div>
-            <div className="text-14-400" style={{ color: "#5F5F5F" }}>
-              software Developer
-            </div>
-          </div>
-          <span
-            className="text-10-500 p-3 ps-10 pe-10 "
+
+        {referralsList.length > 0 ? (
+          referralsList.map((referral, index) => {
+            return (
+              <div
+                key={index}
+                className="p-10"
+                style={{
+                  borderBottom: "1px solid #D8D8D8",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div className="ms-10">
+                  <div className="text-16-600 my-10">
+                    {referral.referral_email}
+                  </div>
+                </div>
+                <span
+                  className="text-10-500 p-3 ps-10 pe-10 "
+                  style={{
+                    background:
+                      referral.referral_status === "pending"
+                        ? "#702DFF"
+                        : "#33A36D",
+                    color: "white",
+                    borderRadius: "50px",
+                    userSelect: "none",
+                  }}
+                >
+                  {referral.referral_status}
+                </span>
+              </div>
+            );
+          })
+        ) : (
+          <div
             style={{
-              background: "#702DFF",
-              color: "white",
-              borderRadius: "50px",
+              width: "100%",
+              height: "500px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            Pending
-          </span>
-        </div>
-        <div
-          className="p-10"
-          style={{
-            borderBottom: "1px solid #D8D8D8",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div className="ms-50">
-            <div className="text-16-600 ">Prashant Kumar singh</div>
-            <div className="text-14-400" style={{ color: "#5F5F5F" }}>
-              software Developer
-            </div>
+            <Spinner animation="border" size="xl" />
           </div>
-          <span
-            className="text-10-500 p-3 ps-10 pe-10 "
-            style={{
-              background: "#33A36D",
-              color: "white",
-              borderRadius: "50px",
-            }}
-          >
-            Accepted
-          </span>
-        </div>
-        <div
-          className="p-10"
-          style={{
-            borderBottom: "1px solid #D8D8D8",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div className="ms-50">
-            <div className="text-16-600 ">Prashant Kumar singh</div>
-            <div className="text-14-400" style={{ color: "#5F5F5F" }}>
-              software Developer
-            </div>
-          </div>
-          <span
-            className="text-10-500 p-3 ps-10 pe-10 "
-            style={{
-              background: "#33A36D",
-              color: "white",
-              borderRadius: "50px",
-            }}
-          >
-            Accepted
-          </span>
-        </div>
+        )}
       </div>
     </div>
   );

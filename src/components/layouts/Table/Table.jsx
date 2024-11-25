@@ -1,22 +1,22 @@
 import { icons } from "../../../utils/constants";
 import ReactPaginate from "react-paginate";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import "./Table.scss";
+import { Spinner } from "react-bootstrap";
 
-const Table = ({ header, row, min, hidePagination }) => {
-  const reduxData = useSelector((state) => state.global);
-  const { themeColor } = reduxData;
-  useEffect(() => {
-    if (themeColor) {
-      let elem = document.getElementsByClassName("selected");
-      if (elem[0]) {
-        elem[0].style.backgroundColor = themeColor.sColor;
-        elem[0].style.color = themeColor.pColor;
-      }
-    }
-  }, [themeColor]);
-
+const Table = ({
+  header,
+  row,
+  min,
+  hidePagination,
+  paginationOption,
+  onPaginationChange,
+  loader,
+}) => {
+  const handlePageChange = (selectedObject) => {
+    onPaginationChange && onPaginationChange(selectedObject.selected);
+    // Add your logic here to fetch new data based on the selected page.
+  };
   return (
     <div id="table-container">
       <div className="table-body auri-scroll">
@@ -42,34 +42,53 @@ const Table = ({ header, row, min, hidePagination }) => {
           className="body-container auri-scroll"
           style={{ minWidth: min || "1000px" }}
         >
-          {row?.map((elm, index) => {
-            return (
-              <div className="body-row" key={index}>
-                {elm?.data?.map((cElem, cIndex) => {
-                  return (
-                    <div
-                      className={`body-cell ${cElem?.className || ""}`}
-                      key={cIndex}
-                    >
-                      {cElem?.value}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+          {!loader ? (
+            row?.map((elm, index) => {
+              return (
+                <div className="body-row" key={index}>
+                  {elm?.data?.map((cElem, cIndex) => {
+                    return (
+                      <div
+                        className={`body-cell ${cElem?.className || ""}`}
+                        key={cIndex}
+                      >
+                        {cElem?.value}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })
+          ) : (
+            <div className="f-center py-50">
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
       {!hidePagination && (
         <div className="pagination-container">
-          <div className="text-14-500 color-757f">Showing 1-5 from 100</div>
+          <div className="text-14-500 color-757f">{`Showing ${
+            paginationOption?.currentPage * paginationOption?.pageSize + 1
+          }-${
+            paginationOption?.count <
+            (paginationOption?.currentPage + 1) * paginationOption?.pageSize
+              ? paginationOption?.count
+              : (paginationOption?.currentPage + 1) * paginationOption?.pageSize
+          } from ${paginationOption?.count}`}</div>
           <ReactPaginate
-            pageCount={5}
+            pageCount={
+              Math.ceil(paginationOption?.count / paginationOption?.pageSize) ||
+              5
+            }
             marginPagesDisplayed={1}
             pageRangeDisplayed={1}
-            previousLabel={<img src={icons.left} alt="left" className="h-18" />}
-            nextLabel={<img src={icons.right} alt="right" className="h-18" />}
+            previousLabel={<div className="prev-btn">Prev</div>}
+            nextLabel={<div className="next-btn">Next</div>}
             breakLabel="..."
+            activeClassName={"selected"}
+            onPageChange={handlePageChange}
+            forcePage={paginationOption?.currentPage || 0}
           />
         </div>
       )}

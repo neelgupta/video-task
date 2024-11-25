@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import styles from "./ResetPassword.module.scss";
 import { Formik, Field, Form, ErrorMessage, useField } from "formik";
 import * as Yup from "yup";
-import { Button, FormControl, InputGroup } from "react-bootstrap";
+import { Button, FormControl, InputGroup, Spinner } from "react-bootstrap";
 import { icons } from "../../../../utils/constants";
 import SuccessModal from "./SuccessModal";
+import { api } from "../../../../services/api";
+import { useDispatch } from "react-redux";
+import { setAuthData, throwError } from "../../../../store/globalSlice";
+import { encrypt } from "../../../../utils/helpers";
 
 const PasswordField = ({ label, ...props }) => {
   const [field, meta] = useField(props);
+
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -37,7 +42,34 @@ const PasswordField = ({ label, ...props }) => {
 };
 
 const ResetPassword = ({ setIsResetPassword }) => {
+  const dispatch = useDispatch();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isReset, setIsReset] = useState(false);
+  const onSubmit = async (values) => {
+    setIsReset(true);
+    try {
+      if (values.confirmNewPassword === values.newPassword) {
+        const req = {
+          old_password: values.currentPassword,
+          new_password: values.confirmNewPassword,
+        };
+        console.log("req", req);
+        const res = await api.put("user/change-password", req);
+        console.log("res", res);
+        if (res.status === 200) {
+          setShowSuccessModal(true);
+        } else {
+          dispatch(throwError(res.data.message));
+        }
+      } else {
+        dispatch(throwError("Conform Password must be same"));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+    setIsReset(false);
+  };
   return (
     <>
       <div className={styles.resetPasswordContainer}>
@@ -70,9 +102,7 @@ const ResetPassword = ({ setIsResetPassword }) => {
                   .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
                   .required("Confirm new password is required"),
               })}
-              onSubmit={(values) => {
-                // Handle form submission
-              }}
+              onSubmit={onSubmit}
             >
               <Form>
                 <div className={styles.formContainer}>
@@ -101,8 +131,10 @@ const ResetPassword = ({ setIsResetPassword }) => {
                       border: "none",
                       color: "white",
                     }}
+                    disabled={isReset}
                   >
                     Reset Now
+                    {isReset && <Spinner size="sm" className="ms-10" />}
                   </Button>
                   <Button
                     type="button"
@@ -126,7 +158,12 @@ const ResetPassword = ({ setIsResetPassword }) => {
       {showSuccessModal && (
         <SuccessModal
           show={showSuccessModal}
-          setShowSuccessModal={setShowSuccessModal}
+          handleClose={() => {
+            setShowSuccessModal(false);
+            let data = encrypt({ time: new Date().toLocaleString() });
+            localStorage.authData = data;
+            dispatch(setAuthData(data));
+          }}
         />
       )}
     </>

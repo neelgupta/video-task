@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./PlanBilling.scss";
-import { icons } from "../../../../../utils/constants";
-import { creteImgFilter } from "../../../../../utils/helpers";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import PlanCard from "./PlanCard";
 import BillingCard from "./BillingCard";
 import PaymentForm from "./PaymentForm";
 import AddressForm from "./AddressForm";
 import { api } from "../../../../../services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { showSuccess, throwError } from "../../../../../store/globalSlice";
+import { useSelector } from "react-redux";
 function PlanBilling() {
-  const dispatch = useDispatch();
-  const { selectedOrganization } = useSelector((state) => state.global);
+  const { selectedOrganizationId } = useSelector((state) => state.global);
   const [isAddAddress, setIsAddAddress] = useState(false);
   const [isAddPayment, setIsAddPayment] = useState(false);
   const [type, setType] = useState("");
@@ -53,7 +49,7 @@ function PlanBilling() {
     <>
       <PaymentForm
         show={isAddPayment}
-        selectedOrganization={selectedOrganization}
+        selectedOrganizationId={selectedOrganizationId}
         isEdit={isEdit}
         onHide={() => {
           setIsAddPayment(false);
@@ -62,7 +58,7 @@ function PlanBilling() {
         editData={editData}
       />
       <AddressForm
-        selectedOrganization={selectedOrganization}
+        selectedOrganizationId={selectedOrganizationId}
         type={type}
         show={isAddAddress}
         isEdit={isEdit}

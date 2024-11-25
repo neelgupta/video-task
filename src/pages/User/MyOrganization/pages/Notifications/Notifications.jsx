@@ -1,10 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Notifications.scss";
 import OutlineCheck from "./OutlineCheck";
 import OutlineRadio from "./OutlineRadio";
+import { api } from "../../../../../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { showSuccess, throwError } from "../../../../../store/globalSlice";
 
 function Notifications() {
+  const dispatch = useDispatch();
+  const reduxData = useSelector((state) => state.global);
+  const { selectedOrganizationId } = reduxData;
+  const [isChange, setIsChange] = useState("");
   const [radio, setRadio] = useState("");
+  const [checkBox, setCheckBox] = useState({});
+
+  useEffect(() => {
+    if (selectedOrganizationId) {
+      fetchNotifications();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrganizationId]);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await api.get(`user/organization/${selectedOrganizationId}`);
+      if (res.status === 200) {
+        const data = res.data.response;
+        if (data) {
+          const notification_settings = data?.notification_settings;
+          setCheckBox({
+            new_user_contacts:
+              notification_settings?.new_user_contacts || false,
+            tips_and_tutorials:
+              notification_settings?.tips_and_tutorials || false,
+            user_research: notification_settings?.user_research || false,
+          });
+          setRadio(data?.replies || "");
+        }
+        setIsChange("");
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+  };
+
+  const updateNotifications = async (valueObj, type, message) => {
+    try {
+      setIsChange(Object.keys(valueObj)?.[0] || "");
+      const req = {
+        organization_id: selectedOrganizationId,
+        ...(type === "checkBox"
+          ? {
+              notification_settings: {
+                ...checkBox,
+                ...valueObj,
+              },
+            }
+          : { ...valueObj }),
+      };
+      const res = await api.put("user/update-organization", req);
+      if (res.status === 200) {
+        dispatch(showSuccess(`${message} ${res.data.message}`));
+      } else {
+        dispatch(throwError(`${message} ${res.data.message}`));
+      }
+      fetchNotifications();
+      return;
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+      setIsChange("");
+      return;
+    }
+  };
   return (
     <div className="Notifications">
       <div className="" style={{ borderBottom: "1px solid #DCDEE4" }}>
@@ -31,7 +100,18 @@ function Notifications() {
           style={{ display: "flex", alignItems: "center" }}
         >
           <div className="me-20">
-            <OutlineCheck className="w-24 h-24" />
+            <OutlineCheck
+              className="w-24 h-24"
+              isCheck={checkBox.new_user_contacts}
+              onChange={(val) => {
+                updateNotifications(
+                  { new_user_contacts: val },
+                  "checkBox",
+                  "New User Contacts"
+                );
+              }}
+              isDisabled={isChange === "new_user_contacts"}
+            />
           </div>
           <div className="m-0 p-0">
             <div className="text-14-600" style={{ color: "#292929" }}>
@@ -47,7 +127,18 @@ function Notifications() {
           style={{ display: "flex", alignItems: "center" }}
         >
           <div className="me-20">
-            <OutlineCheck className="w-24 h-24" />
+            <OutlineCheck
+              className="w-24 h-24"
+              isCheck={checkBox.tips_and_tutorials}
+              onChange={(val) => {
+                updateNotifications(
+                  { tips_and_tutorials: val },
+                  "checkBox",
+                  "Tips and tutorials"
+                );
+              }}
+              isDisabled={isChange === "tips_and_tutorials"}
+            />
           </div>
           <div className="m-0 p-0">
             <div className="text-14-600" style={{ color: "#292929" }}>
@@ -63,7 +154,18 @@ function Notifications() {
           style={{ display: "flex", alignItems: "center" }}
         >
           <div className="me-20">
-            <OutlineCheck className="w-24 h-24" />
+            <OutlineCheck
+              className="w-24 h-24"
+              isCheck={checkBox.user_research}
+              onChange={(val) => {
+                updateNotifications(
+                  { user_research: val },
+                  "checkBox",
+                  "User Research"
+                );
+              }}
+              isDisabled={isChange === "user_research"}
+            />
           </div>
           <div className="m-0 p-0">
             <div className="text-14-600" style={{ color: "#292929" }}>
@@ -92,10 +194,15 @@ function Notifications() {
           <div className="me-20">
             <OutlineRadio
               className="w-24 h-24"
-              isCheck={radio === "1"}
+              isCheck={radio === "DoNotNotify"}
               onChange={() => {
-                setRadio("1");
+                updateNotifications(
+                  { replies: "DoNotNotify" },
+                  "radio",
+                  "Replies"
+                );
               }}
+              isDisabled={isChange === "replies"}
             />
           </div>
           <div className="text-14-600 " style={{ color: "#292929" }}>
@@ -110,10 +217,15 @@ function Notifications() {
           <div className="me-20">
             <OutlineRadio
               className="w-24 h-24"
-              isCheck={radio === "2"}
+              isCheck={radio === "MentionsOnly"}
               onChange={() => {
-                setRadio("2");
+                updateNotifications(
+                  { replies: "MentionsOnly" },
+                  "radio",
+                  "Replies"
+                );
               }}
+              isDisabled={isChange === "replies"}
             />
           </div>
           <div className="m-0 p-0">
@@ -132,10 +244,15 @@ function Notifications() {
           <div className="me-20">
             <OutlineRadio
               className="w-24 h-24"
-              isCheck={radio === "3"}
+              isCheck={radio === "AllComments"}
               onChange={() => {
-                setRadio("3");
+                updateNotifications(
+                  { replies: "AllComments" },
+                  "radio",
+                  "Replies"
+                );
               }}
+              isDisabled={isChange === "replies"}
             />
           </div>
           <div className="m-0 p-0">

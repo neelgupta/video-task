@@ -30,7 +30,7 @@ const fontFamilyList = [
 function Overview() {
   const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
-  const { selectedOrganization } = reduxData;
+  const { selectedOrganizationId } = reduxData;
   const [organization, setOrganization] = useState({});
   const [isChange, setIsChange] = useState("");
   const [replayEmailOption, setReplayEmailOption] = useState([]);
@@ -46,7 +46,7 @@ function Overview() {
     try {
       setIsChange(keyName);
       const req = {
-        organization_id: selectedOrganization,
+        organization_id: selectedOrganizationId,
         ...valueObj,
       };
       const res = await api.put("user/update-organization", req);
@@ -67,7 +67,7 @@ function Overview() {
 
   const fetchOverview = async () => {
     try {
-      const res = await api.get(`user/organization/${selectedOrganization}`);
+      const res = await api.get(`user/organization/${selectedOrganizationId}`);
       if (res.status === 200) {
         setOrganization(res.data.response);
         setIsChange("");
@@ -79,9 +79,9 @@ function Overview() {
   };
 
   useEffect(() => {
-    if (selectedOrganization) fetchOverview();
+    if (selectedOrganizationId) fetchOverview();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOrganization]);
+  }, [selectedOrganizationId]);
 
   useEffect(() => {
     if (organization?.members?.length > 0) {

@@ -1,6 +1,7 @@
 .failedModal {
   .modal-content {
     border-radius: 30px !important;
+    width: min(400px, 100%) !important;
   }
   .modalBody {
     .checkmarkCircle {

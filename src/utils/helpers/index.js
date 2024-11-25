@@ -64,6 +64,7 @@ export function getHeaderData() {
 
   if (localStorageData?.token) {
     const { token } = localStorageData;
+    console.log("token", token);
     header = {
       ...header,
       Authorization: `Bearer ${token}`,
