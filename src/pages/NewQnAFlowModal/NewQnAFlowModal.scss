@@ -53,6 +53,29 @@
           right: 10px;
         }
       }
+      .active-card {
+        // background: #7c5bff;
+        background: linear-gradient(45deg, #7c5bff 0%, #b3a1ff 100%);
+        color: white;
+        .proTag {
+          z-index: 1000;
+          box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+  }
+  .Connect-Continue-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 30px;
+    button {
+      border: none;
+      width: 60%;
+      color: #ffffff;
+      background: linear-gradient(90deg, #7c5bff 0%, #b3a1ff 100%);
+      padding: 10px 0px;
     }
   }
 }

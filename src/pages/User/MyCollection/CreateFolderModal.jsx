@@ -1,21 +1,69 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 import React, { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { Button, Modal, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { api } from "../../../services/api";
+import { showSuccess, throwError } from "../../../store/globalSlice";
 
 const CreateFolderModal = ({
   show,
   handleClose,
-  onCreate,
   renamingFolder,
-  onRename,
+  fetchFolder,
 }) => {
+  const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
-  const { themeColor } = reduxData;
+  const { themeColor, selectedOrganizationId } = reduxData;
   const [folderName, setFolderName] = useState("");
+  const [isPost, setIsPost] = useState(false);
   useEffect(() => {
-    if (renamingFolder) setFolderName(renamingFolder.title);
+    if (renamingFolder) setFolderName(renamingFolder.folder_name);
   }, [renamingFolder]);
+
+  const handleCreateNewFolder = async (folderName) => {
+    setIsPost(true);
+    try {
+      const req = {
+        organization_id: selectedOrganizationId,
+        folder_name: folderName,
+      };
+      const res = await api.post("interactions/add-folder", req);
+      console.log("res", res);
+      if (res.status === 201) {
+        dispatch(showSuccess(res.data.message));
+        fetchFolder();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+    setIsPost(false);
+    handleClose();
+  };
+
+  const handleRenameFolder = async (id, folderName) => {
+    setIsPost(true);
+    try {
+      const req = {
+        folder_id: id,
+        folder_name: folderName,
+      };
+      const res = await api.put("interactions/update-folder", req);
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        fetchFolder();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+    setIsPost(false);
+    handleClose();
+  };
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
@@ -70,19 +118,21 @@ const CreateFolderModal = ({
           <Button
             onClick={() => {
               renamingFolder
-                ? onRename(renamingFolder.id, folderName)
-                : onCreate(folderName);
-              handleClose();
+                ? handleRenameFolder(renamingFolder._id, folderName)
+                : handleCreateNewFolder(folderName);
             }}
             iconColor="#ffffff"
+            className="f-center"
             style={{
               background: `linear-gradient(to right , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
               border: "none",
               color: "white",
               width: "150px",
             }}
+            disabled={isPost}
           >
             {renamingFolder ? "Save" : "Create"}
+            {isPost && <Spinner size="sm" className="ms-10" />}
           </Button>
         </div>
       </Modal.Footer>

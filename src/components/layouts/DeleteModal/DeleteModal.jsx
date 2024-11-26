@@ -1,8 +1,15 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import "./DeleteModal.scss";
 
-const DeleteModal = ({ show, handleClose, onDelete, title, text }) => {
+const DeleteModal = ({
+  show,
+  handleClose,
+  onDelete,
+  title,
+  text,
+  isDelete,
+}) => {
   return (
     <Modal
       show={show}
@@ -59,8 +66,9 @@ const DeleteModal = ({ show, handleClose, onDelete, title, text }) => {
             variant="danger"
             onClick={onDelete}
             className="text-16-600"
+            disabled={isDelete}
           >
-            Delete Now
+            Delete Now {isDelete && <Spinner size="sm" className="ms-10" />}
           </Button>
         </div>
       </Modal.Footer>

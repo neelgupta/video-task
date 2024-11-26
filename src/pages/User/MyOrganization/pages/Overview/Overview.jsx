@@ -3,7 +3,12 @@ import Select from "react-select";
 import "./Overview.scss";
 import { api } from "../../../../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { showSuccess, throwError } from "../../../../../store/globalSlice";
+import {
+  setSelectedOrganization,
+  showSuccess,
+  throwError,
+} from "../../../../../store/globalSlice";
+import EditOrganizationName from "./EditOrganizationName";
 
 const brandingOption = [
   { value: "QnaFlow", label: "QnaFlow" },
@@ -34,6 +39,7 @@ function Overview() {
   const [organization, setOrganization] = useState({});
   const [isChange, setIsChange] = useState("");
   const [replayEmailOption, setReplayEmailOption] = useState([]);
+  const [isSetName, setIsSetName] = useState(false);
   const [form, setForm] = useState({
     replay_to_email: "",
     branding: "",
@@ -55,7 +61,7 @@ function Overview() {
       } else {
         dispatch(throwError(`${keyName} ${res.data.message}`));
       }
-      fetchOverview();
+      fetchOverview(false);
       return;
     } catch (error) {
       console.log("error", error);
@@ -65,12 +71,15 @@ function Overview() {
     }
   };
 
-  const fetchOverview = async () => {
+  const fetchOverview = async (isSetOrg) => {
     try {
       const res = await api.get(`user/organization/${selectedOrganizationId}`);
       if (res.status === 200) {
         setOrganization(res.data.response);
         setIsChange("");
+        if (isSetOrg) {
+          dispatch(setSelectedOrganization(res.data.response));
+        }
       }
     } catch (error) {
       console.log("error", error);
@@ -79,7 +88,7 @@ function Overview() {
   };
 
   useEffect(() => {
-    if (selectedOrganizationId) fetchOverview();
+    if (selectedOrganizationId) fetchOverview(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrganizationId]);
 
@@ -113,13 +122,27 @@ function Overview() {
 
   return (
     <div className="Overview">
+      {isSetName && (
+        <EditOrganizationName
+          show={isSetName}
+          handleClose={() => {
+            setIsSetName(false);
+          }}
+          fetchOverview={fetchOverview}
+        />
+      )}
+
       <div className="overview-box">
         <div className="text-16-600" style={{ color: "#000000" }}>
           Set Organization Name
         </div>
         <div className="text-14-400 mt-10" style={{ color: "#8C8E90" }}>
           You haven`t named your organization yet.{" "}
-          <span className="text-14-600 mt-10 link" style={{ color: "#B19EFF" }}>
+          <span
+            className="text-14-600 mt-10 link"
+            style={{ color: "#B19EFF" }}
+            onClick={() => setIsSetName(true)}
+          >
             Set Now
           </span>
         </div>
@@ -144,9 +167,8 @@ function Overview() {
           <div className="text-16-600" style={{ color: "#000000" }}>
             Select default email for replies
           </div>
-          <div className="w-300">
+          <div className="w-300 p-10">
             <Select
-              className="p-10"
               options={replayEmailOption}
               name="replay_to_email"
               value={form.replay_to_email}
@@ -183,11 +205,10 @@ function Overview() {
             <div className="text-16-600" style={{ color: "#000000" }}>
               Branding
             </div>
-            <div className="w-300">
+            <div className="w-300 p-10">
               <Select
                 name="branding"
                 value={form.branding}
-                className="p-10"
                 options={brandingOption}
                 placeholder={"Select Email"}
                 isDisabled={isChange === "Branding"}
@@ -210,9 +231,9 @@ function Overview() {
             <div className="text-16-600" style={{ color: "#000000" }}>
               Language
             </div>
-            <div className="w-300">
+            <div className="w-300 p-10">
               <Select
-                className="p-10"
+                className=""
                 options={languageOptions}
                 placeholder={"Select Language"}
                 isDisabled={isChange === "Language"}
@@ -252,9 +273,9 @@ function Overview() {
             <div className="text-16-600" style={{ color: "#000000" }}>
               Font
             </div>
-            <div className="w-300">
+            <div className="w-300 p-10">
               <Select
-                className="p-10"
+                className=""
                 options={fontFamilyList}
                 placeholder={"Font"}
                 name="font"

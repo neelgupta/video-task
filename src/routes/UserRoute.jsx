@@ -16,6 +16,7 @@ import MyOrganization from "../pages/User/MyOrganization";
 import { api } from "../services/api";
 import { useDispatch } from "react-redux";
 import { setProfileData, setSelectedOrganization } from "../store/globalSlice";
+import MyFolder from "../pages/User/MyCollection/MyFolder";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -59,6 +60,12 @@ const UserRoute = () => {
       path: "/user/collection",
       component: <MyCollection />,
       pageTitle: "My Collection",
+    },
+    {
+      path: "/user/collection/:id",
+      component: <MyFolder />,
+      pageTitle: "My Collection",
+      onBack: () => navigate("/user/collection"),
     },
     {
       path: "/user/trash",
@@ -113,7 +120,7 @@ const UserRoute = () => {
           />
         );
       })}
-      <Route path="/flow" element={<FlowCanvas />} />
+      <Route path="/user/flow/:id" element={<FlowCanvas />} />
       <Route path="*" element={<Navigate to="/user/dashboard" />} />
     </Routes>
   );

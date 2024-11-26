@@ -1,18 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import "./EditDetailsModal.scss";
+import { api } from "../../../../services/api";
+import { showSuccess, throwError } from "../../../../store/globalSlice";
+import { useDispatch } from "react-redux";
 
-const EditDetailsModal = ({ show, handleClose, userData }) => {
+const EditDetailsModal = ({ show, handleClose, userData, getProfile }) => {
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     user_name: "",
     email: "",
   });
+  const [isPost, setIsPost] = useState(false);
+
   useEffect(() => {
     setForm({
       user_name: userData.user_name,
       email: userData.email,
     });
   }, [userData]);
+
+  const handleSubmit = async () => {
+    setIsPost(true);
+    try {
+      const res = await api.put("user/update-profile", form);
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        getProfile();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+    setIsPost(false);
+    handleClose();
+  };
   return (
     <Modal
       show={show}
@@ -86,16 +110,18 @@ const EditDetailsModal = ({ show, handleClose, userData }) => {
         </div>
         <div>
           <Button
-            onClick={() => {}}
-            className="text-14-500"
+            onClick={handleSubmit}
+            className="text-14-500 f-center"
             style={{
               background: `#7B5AFF`,
               border: "none",
               color: "white",
               width: "150px",
             }}
+            disabled={isPost}
           >
             Update
+            {isPost && <Spinner size="sm" className="ms-10" />}
           </Button>
         </div>
       </Modal.Footer>

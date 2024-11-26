@@ -3,8 +3,9 @@ import styles from "./MyProfile.module.scss";
 import EditDetailsModal from "./EditDetailsModal";
 import DeleteAccountModal from "./DeleteAccountModal";
 import { encrypt } from "../../../../utils/helpers";
-import { setAuthData } from "../../../../store/globalSlice";
+import { setAuthData, setProfileData } from "../../../../store/globalSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { api } from "../../../../services/api";
 
 const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
   const [isEditModalShow, setIsEditModalShow] = useState(false);
@@ -20,6 +21,13 @@ const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
       if (profile) setUserData(profile);
     }
   }, [profileData]);
+
+  const getProfile = async () => {
+    const res = await api.get("user/profile");
+    if (res.status && res.status === 200) {
+      dispatch(setProfileData(res.data.response));
+    }
+  };
   return (
     <>
       <div className={styles.profileContainer}>
@@ -123,6 +131,7 @@ const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
           show={isEditModalShow}
           handleClose={() => setIsEditModalShow(false)}
           userData={userData}
+          getProfile={getProfile}
         />
       )}
 

@@ -1,151 +1,136 @@
 /* eslint-disable react/display-name */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { folderData } from "./constants";
 import "./Mycollection.scss";
 import CustomFolderMenu from "./CustomFolderMenu";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import CreateFolderModal from "./CreateFolderModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteModal from "../../../components/layouts/DeleteModal";
 import CustomFileMenu from "./CustomFileMeu";
 import { icons } from "../../../utils/constants";
 import { creteImgFilter } from "../../../utils/helpers";
-
-const FolderCard = ({
-  item,
-  onDeleteFolder,
-  setRenamingFolder,
-  setIsCreateFolderModalShow,
-}) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [isRenaming, setIsRenaming] = useState(false);
-  return (
-    <>
-      <div className="Folder-card">
-        <div className="Folder-menu">
-          <CustomFolderMenu
-            item={item}
-            setShowDeleteModal={setShowDeleteModal}
-            setRenamingFolder={setRenamingFolder}
-            setIsCreateFolderModalShow={setIsCreateFolderModalShow}
-          />
-        </div>
-        <img src={item.avatar} alt="Avatar" className="Folder-image mt-5" />
-
-        <div className="Folder-title text-14-700 mt-12">{item.title}</div>
-        <div className="text-10-500" style={{ color: "#636363" }}>
-          {item.items.length} items
-        </div>
-      </div>
-      <DeleteModal
-        show={showDeleteModal}
-        handleClose={() => setShowDeleteModal(false)}
-        onDelete={() => {
-          onDeleteFolder();
-          setShowDeleteModal(false);
-          // TODO: Implement delete functionality here
-        }}
-        title="Are you sure you want to proceed?"
-        text="Once deleted, they cannot be recovered."
-      />
-    </>
-  );
-};
-
-const FileCard = ({ item, onDeleteFile }) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  return (
-    <>
-      <div className="file-custom-card">
-        <img
-          src={item.avatar}
-          alt="Avatar"
-          className="file-custom-card-image"
-        />
-        <div className="file-custom-card-title">{item.title}</div>
-        <div className="file-custom-card-menu">
-          <CustomFileMenu
-            showDeleteModal={showDeleteModal}
-            setShowDeleteModal={setShowDeleteModal}
-          />
-        </div>
-      </div>
-      <DeleteModal
-        show={showDeleteModal}
-        handleClose={() => setShowDeleteModal(false)}
-        onDelete={() => {
-          onDeleteFile();
-          setShowDeleteModal(false);
-          // TODO: Implement delete functionality here
-        }}
-        title="Are you sure you want to proceed?"
-        text="Once deleted, they cannot be recovered."
-      />
-    </>
-  );
-};
+import { api } from "../../../services/api";
+import { showSuccess, throwError } from "../../../store/globalSlice";
+import { useNavigate } from "react-router-dom";
 
 const MyCollection = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const reduxData = useSelector((state) => state.global);
+  const { themeColor, selectedOrganizationId } = reduxData;
+
+  // create state
   const [isCreateFolderModalShow, setIsCreateFolderModalShow] = useState(false);
   const [renamingFolder, setRenamingFolder] = useState(null);
-  const [folders, setFolders] = useState(folderData);
-  const [files, setFiles] = useState(folderData[0].items);
-  const reduxData = useSelector((state) => state.global);
-  const { themeColor } = reduxData;
+  const [folders, setFolders] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
+  const [isDelete, setIsDelete] = useState(false);
 
-  const handleDeleteFolder = (id) => {
-    setFolders((prev) => prev.filter((folder) => folder.id !== id));
-  };
-  const handleRenameFolder = (id, value) => {
-    setFolders((prev) =>
-      prev.map((folder) => ({
-        ...folder,
-        title: id !== folder.id ? folder.title : value,
-      }))
-    );
-    setRenamingFolder(null);
+  useEffect(() => {
+    if (selectedOrganizationId) {
+      fetchFolder();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrganizationId]);
+
+  const fetchFolder = async () => {
+    setFolders([]);
+    try {
+      const res = await api.get(
+        `interactions/get-folders/${selectedOrganizationId}`
+      );
+      console.log("res", res);
+      if (res.status === 200 && res.data?.response) {
+        setFolders(res.data.response);
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
   };
 
-  const handleDeleteFile = (id) => {
-    setFiles((prev) => prev.filter((file) => file.id !== id));
+  const handleDeleteFolder = async (id) => {
+    setDeleteId("");
+    setIsDelete(true);
+    try {
+      const res = await api.delete(`interactions/delete-folder/${id}`);
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        fetchFolder();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+    setIsDelete(false);
+    setShowDeleteModal(false);
   };
 
-  const handleCreateNewFolder = (folderName) => {
-    // TODO: Implement functionality to create new folder
-    setFolders((prev) => [
-      ...prev,
-      {
-        id: folders.length + 1,
-        avatar: icons.Folder2,
-        title: folderName,
-        items: [],
-      },
-    ]);
-  };
   return (
     <div className="d-flex flex-wrap folder-container">
-      {folders &&
+      <DeleteModal
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        onDelete={() => {
+          handleDeleteFolder(deleteId);
+        }}
+        isDelete={isDelete}
+        title="Are you sure you want to proceed?"
+        text="Once deleted, they cannot be recovered."
+      />
+      {folders.length > 0 ? (
         folders.map((item, idx) => {
           return (
-            <FolderCard
-              key={item.id}
-              item={item}
-              onDeleteFolder={() => handleDeleteFolder(item.id)}
-              setRenamingFolder={setRenamingFolder}
-              setIsCreateFolderModalShow={setIsCreateFolderModalShow}
-            />
+            <div className="Folder-card " key={idx}>
+              <div className="Folder-menu">
+                {!item.is_default && (
+                  <CustomFolderMenu
+                    item={item}
+                    setShowDeleteModal={(id) => {
+                      setShowDeleteModal(true);
+                      setDeleteId(id);
+                    }}
+                    setRenamingFolder={setRenamingFolder}
+                    setIsCreateFolderModalShow={setIsCreateFolderModalShow}
+                  />
+                )}
+              </div>
+              <div
+                className="pointer"
+                onClick={() => {
+                  navigate(`/user/collection/${item._id}`);
+                }}
+              >
+                <img
+                  src={icons.Folder2}
+                  alt="Avatar"
+                  className="Folder-image mt-5"
+                />
+
+                <div className="Folder-title text-14-700 mt-12 text-center">
+                  {item.folder_name}
+                </div>
+                <div
+                  className="text-10-500 text-center"
+                  style={{ color: "#636363" }}
+                >
+                  {item?.count || 0} items
+                </div>
+              </div>
+            </div>
           );
-        })}
-      {/* {files &&
-        files.map((item, idx) => {
-          return (
-            <FileCard
-              key={item.id}
-              item={item}
-              onDeleteFile={() => handleDeleteFile(item.id)}
-            />
-          );
-        })} */}
+        })
+      ) : (
+        <div className="f-center wp-100">
+          <Spinner size="xl" className="mt-50" />
+        </div>
+      )}
       <Button
         className="floating-button rounded-circle"
         onClick={() => setIsCreateFolderModalShow(true)}
@@ -169,9 +154,8 @@ const MyCollection = () => {
           setRenamingFolder(null);
           setIsCreateFolderModalShow(false);
         }}
-        onCreate={handleCreateNewFolder}
         renamingFolder={renamingFolder}
-        onRename={handleRenameFolder}
+        fetchFolder={fetchFolder}
       />
     </div>
   );

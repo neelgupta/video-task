@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
-import { Formik, Field } from "formik";
-import * as Yup from "yup";
+import React, { useEffect, useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 import "./CreateWithAI.scss";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { showSuccess, throwError } from "../../store/globalSlice";
+import { api } from "../../services/api";
 
 const options = [
   { value: "english", label: "English" },
@@ -12,16 +13,86 @@ const options = [
   { value: "spanish", label: "Spanish" },
 ];
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required("Title is required"),
-  collectContactDetails: Yup.string().required("Please select an option"),
-  language: Yup.string().required("Please select a language"),
-  folder: Yup.string().required("Please select a folder"),
-});
-
-const CreateWithAI = ({ show, handleClose }) => {
-  const [isContactDetailsChecked, setIsContactDetailsChecked] = useState(false);
+const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const reduxData = useSelector((state) => state.global);
+  const { themeColor, selectedOrganizationId } = reduxData;
+
+  const [folderList, setFolderList] = useState([]);
+  const [form, setForm] = useState({
+    title: "",
+    is_collect_contact: true,
+    folder: "",
+    language: { value: "english", label: "English" },
+  });
+
+  useEffect(() => {
+    if (!createFlowModalSubmitData) navigate("/user/dashboard");
+    console.log("createFlowModalSubmitData", createFlowModalSubmitData);
+  }, [createFlowModalSubmitData, navigate]);
+
+  useEffect(() => {
+    if (selectedOrganizationId) fetchFolderList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrganizationId]);
+
+  const fetchFolderList = async () => {
+    try {
+      const res = await api.get(
+        `interactions/get-folders/${selectedOrganizationId}`
+      );
+      if (res.status === 200 && res?.data?.response?.length > 0) {
+        const folders = res.data.response.map((ele) => ({
+          value: ele._id,
+          label: ele.folder_name,
+          is_default: ele.is_default,
+        }));
+        setFolderList(folders);
+        setForm({
+          ...form,
+          folder: folders.find((o) => o.is_default),
+        });
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (form.title === "") {
+      return;
+    }
+    try {
+      const req = {
+        title: form.title,
+        is_collect_contact: form.is_collect_contact,
+        folder_id: form.folder?.value || "",
+        language: form.language?.value,
+        interaction_type: createFlowModalSubmitData.type, // accept only Template, Scratch, FlowAI
+        is_lead_crm: createFlowModalSubmitData.leadCRM === "yes",
+        organization_id: selectedOrganizationId,
+      };
+      console.log("req", req);
+      const res = await api.post("interactions/add-interactions", req);
+      if (res.status === 201) {
+        const { _id } = res.data.response;
+        if (_id) {
+          navigate(`/user/flow/${_id}`);
+          dispatch(showSuccess(res.data.message));
+        }
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+      console.log("res", res);
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+  };
   return (
     <Modal
       show={show}
@@ -54,6 +125,8 @@ const CreateWithAI = ({ show, handleClose }) => {
                     padding: "0.5rem",
                     fontSize: "14px",
                   }}
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
                 />
               </div>
             </div>
@@ -61,14 +134,16 @@ const CreateWithAI = ({ show, handleClose }) => {
               <div className="text-16-500 mb-15">Collect Contact Details</div>
               <div className="d-flex gap-3 customChecksYesNoContainer">
                 <div
-                  onClick={() => setIsContactDetailsChecked(true)}
-                  className={isContactDetailsChecked && "active"}
+                  onClick={() => setForm({ ...form, is_collect_contact: true })}
+                  className={form.is_collect_contact && "active"}
                 >
                   Yes
                 </div>
                 <div
-                  onClick={() => setIsContactDetailsChecked(false)}
-                  className={!isContactDetailsChecked && "active"}
+                  onClick={() =>
+                    setForm({ ...form, is_collect_contact: false })
+                  }
+                  className={!form.is_collect_contact && "active"}
                 >
                   No
                 </div>
@@ -77,17 +152,30 @@ const CreateWithAI = ({ show, handleClose }) => {
             <div className="form-items">
               <div className="text-16-500 mb-5">Language</div>
               <div>
-                <Select options={options} />
+                <Select
+                  options={options}
+                  value={form.language}
+                  name="language"
+                  onChange={(option) => {
+                    setForm({ ...form, language: option });
+                  }}
+                />
               </div>
             </div>
             <div className="form-items">
               <div className="text-16-500 mb-5">Folder</div>
               <div>
-                <Select options={options} />
+                <Select
+                  options={folderList}
+                  value={form.folder}
+                  onChange={(option) => {
+                    setForm({ ...form, folder: option });
+                  }}
+                />
               </div>
             </div>
           </div>
-          <div className="buttonContainer" onClick={() => navigate("/flow")}>
+          <div className="buttonContainer" onClick={handleSubmit}>
             <Button>Create QnAFlow</Button>
           </div>
         </Modal.Body>

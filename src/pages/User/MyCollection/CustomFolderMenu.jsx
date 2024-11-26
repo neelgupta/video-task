@@ -62,7 +62,7 @@ const CustomFolderMenu = ({
           }}
         />
         <Dropdown.Item
-          onClick={() => setShowDeleteModal(true)}
+          onClick={() => setShowDeleteModal(item._id)}
           className="text-14-500 text-danger"
         >
           Delete

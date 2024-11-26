@@ -10,6 +10,10 @@ import CreateWithAI from "../NewQnAFlowModal/CreateWithAI";
 const Layout = ({ children, pageTitle, onBack }) => {
   const [show, setShow] = useState(false);
   const [showCreateFlowModal, setShowCreateFlowModal] = useState(false);
+  const [createFlowModalSubmitData, setCreateFlowModalSubmitData] = useState(
+    {}
+  );
+
   const [showCreateFlowAIModal, setShowCreateFlowAIModal] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
@@ -44,15 +48,21 @@ const Layout = ({ children, pageTitle, onBack }) => {
         <Navbar setShow={setShow} pageTitle={pageTitle} onBack={onBack} />
         <div className="body-block video-ask-scroll auri-scroll">
           {children}
-          <NewQnAFlowModal
-            show={showCreateFlowModal}
-            handleClose={() => setShowCreateFlowModal(false)}
-            setShowCreateFlowAIModal={setShowCreateFlowAIModal}
-          />
-          <CreateWithAI
-            show={showCreateFlowAIModal}
-            handleClose={() => setShowCreateFlowAIModal(false)}
-          />
+          {showCreateFlowModal && (
+            <NewQnAFlowModal
+              show={showCreateFlowModal}
+              handleClose={() => setShowCreateFlowModal(false)}
+              setShowCreateFlowAIModal={setShowCreateFlowAIModal}
+              setCreateFlowModalSubmitData={setCreateFlowModalSubmitData}
+            />
+          )}
+          {showCreateFlowAIModal && (
+            <CreateWithAI
+              show={showCreateFlowAIModal}
+              createFlowModalSubmitData={createFlowModalSubmitData}
+              handleClose={() => setShowCreateFlowAIModal(false)}
+            />
+          )}
         </div>
       </div>
     </div>
