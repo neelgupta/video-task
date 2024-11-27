@@ -1,17 +1,17 @@
 import React from "react";
 import styles from "./TitleUndoRedo.module.scss";
 import { Panel } from "@xyflow/react";
-import { icons } from "../../../utils/constants";
+import { icons } from "../../../../utils/constants";
 import { Button } from "react-bootstrap";
-import UndoIcon from "../../../assets/images/icons/UndoIcon";
-import RedoIcon from "../../../assets/images/icons/RedoIcon";
+import UndoIcon from "../../../../assets/images/icons/UndoIcon";
+import RedoIcon from "../../../../assets/images/icons/RedoIcon";
 
 const TitleUndoRedo = React.forwardRef(({ className, ...props }) => {
   return (
     <Panel position="top-left" {...props} className="p-20 pt-35">
       <div className={styles.mainContentContainer}>
         <div className={styles.titleContentContainer}>
-          <div>Title of FlōwAI</div>
+          <div className="text-16-500">Title of FlōwAI</div>
           <div>
             <img src={icons.editIcon} alt="edit icon" />
           </div>

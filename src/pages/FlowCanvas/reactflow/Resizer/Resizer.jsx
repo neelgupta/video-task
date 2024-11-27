@@ -2,8 +2,8 @@ import React from "react";
 import { Panel, useReactFlow } from "@xyflow/react";
 import { Button } from "react-bootstrap";
 import styles from "./Resizer.module.scss";
-import MinusIcon from "../../../assets/images/icons/MinusIcon";
-import PlusIcon from "../../../assets/images/icons/PlusIcon";
+import MinusIcon from "../../../../assets/images/icons/MinusIcon";
+import PlusIcon from "../../../../assets/images/icons/PlusIcon";
 
 const Resizer = React.forwardRef(({ className, ...props }) => {
   const { zoomIn, zoomOut } = useReactFlow();

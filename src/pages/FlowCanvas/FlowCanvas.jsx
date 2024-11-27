@@ -7,10 +7,10 @@ import {
   NodeResizeControl,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import Resizer from "../../components/reactflow/Resizer";
-import QuestionMark from "../../components/reactflow/QuestionMark";
-import MenuBar from "../../components/reactflow/MenuBar";
-import TitleUndoRedo from "../../components/reactflow/TitleUndoRedo/TitleUndoRedo";
+import Resizer from "./reactflow/Resizer";
+import QuestionMark from "./reactflow/QuestionMark";
+import MenuBar from "./reactflow/MenuBar";
+import TitleUndoRedo from "./reactflow/TitleUndoRedo/TitleUndoRedo";
 import CreateFlowOptionsModal from "./Modals/CreateFlowOptionsModal";
 import VideoModal from "./Modals/VideoModal";
 import { useParams } from "react-router-dom";

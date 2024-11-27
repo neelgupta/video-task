@@ -16,9 +16,8 @@
     border: none;
     background: transparent;
     transform: scale(1);
-    transition-duration: 0.3s;
+    transition-duration: 0.1s;
     transition-property: transform;
-    margin: 0px 5px;
     &:hover {
       background: white;
       transform: scale(1.2);
@@ -29,6 +28,7 @@
   }
   .previewBtn {
     background: linear-gradient(180deg, #7f5fff 0%, #ae9aff 100%);
+    border: none;
     color: #ffffff;
     font-size: 16px;
     font-weight: 600;
