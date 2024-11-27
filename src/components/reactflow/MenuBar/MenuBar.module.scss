@@ -20,11 +20,11 @@
     transition-property: transform;
     margin: 0px 5px;
     &:hover {
-      background-color: white;
+      background: white;
       transform: scale(1.2);
     }
     &:active {
-      background-color: white;
+      background: white;
     }
   }
   .previewBtn {

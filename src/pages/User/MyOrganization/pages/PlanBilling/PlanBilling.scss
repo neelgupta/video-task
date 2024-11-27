@@ -8,15 +8,15 @@
       gap: 15px;
       .plans-card {
         padding: 15px 30px;
-        width: 325px;
+        width: max(300px, 24%);
         border: 1px solid #e0e3e8;
         border-radius: 8px;
         .Best_Deal_btn {
           position: absolute;
           top: 0;
-          right: 0;
-          font-size: 12px;
-          font-weight: 600;
+          right: -15px;
+          font-size: 10px;
+          font-weight: 400;
           color: white;
           background: linear-gradient(180deg, #7b5bff 0%, #b3a1ff 100%);
           border: none;

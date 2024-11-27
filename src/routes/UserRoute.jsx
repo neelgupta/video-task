@@ -15,22 +15,21 @@ import FlowCanvas from "../pages/FlowCanvas";
 import MyOrganization from "../pages/User/MyOrganization";
 import { api } from "../services/api";
 import { useDispatch } from "react-redux";
-import { setProfileData, setSelectedOrganization } from "../store/globalSlice";
+import {
+  handleProfileStore,
+  setProfileData,
+  setSelectedOrganization,
+} from "../store/globalSlice";
 import MyFolder from "../pages/User/MyCollection/MyFolder";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Fetch profile
   const getProfile = async () => {
-    const res = await api.get("user/profile");
-    console.log("🚀 ~ getProfile ~ res:", res.data);
-    if (res.status && res.status === 200) {
-      dispatch(setProfileData(res.data.response));
-      dispatch(
-        setSelectedOrganization(res.data.response.organizations?.[0]._id)
-      );
-    }
+    dispatch(handleProfileStore());
   };
 
   useEffect(() => {
@@ -103,6 +102,7 @@ const UserRoute = () => {
       path: "/user/my-organization/:type",
       component: <MyOrganization />,
       pageTitle: "Explore Your Organization",
+      onSetProfile: () => getProfile(),
     },
   ];
   return (

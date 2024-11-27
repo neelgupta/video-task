@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { creteImgFilter } from "../../../utils/helpers";
 function Dashboard() {
   const reduxData = useSelector((state) => state.global);
-  const { isResponsive, themeColor } = reduxData;
+  const { isResponsive, themeColor, profileData } = reduxData;
+  console.log("profileData", profileData);
   const [tabIndex, setTabIndex] = useState(1);
 
   const header = [
@@ -80,6 +81,27 @@ function Dashboard() {
       landed: "1",
       contacts_collected: "1",
       interactions: "2",
+    },
+  ];
+
+  const userUsesCard = [
+    {
+      title: "Total Landed",
+      count: 5000,
+      icon: icons.eyeVisible,
+      minWidth: "300",
+    },
+    {
+      title: "Total Completed",
+      count: 50,
+      icon: icons.checkVerified,
+      minWidth: "300",
+    },
+    {
+      title: "Contacts collected",
+      count: 50,
+      icon: icons.usersOutline,
+      minWidth: "330",
     },
   ];
 
@@ -160,89 +182,49 @@ function Dashboard() {
     <div className="Dashboards-container">
       <div className="">
         <h5 className="text-30-500">
-          Welcome Back <strong>Jack</strong>
+          Welcome Back{" "}
+          <strong style={{ textTransform: "capitalize" }}>{` ${
+            profileData.profile?.user_name || ""
+          }`}</strong>
         </h5>
         <p className="text-19-400">
           {`Here's an overview of your stats for the last`}
           <strong className="text-19-600">30</strong> days
         </p>
       </div>
-      <div className="big-card-body">
-        <div className={`${isResponsive ? "wp-100 mb-20" : "w-400"} big-card`}>
-          <div className="fb-center">
+      <div className="big-card-body container-fluid row">
+        {userUsesCard.map((ele, index) => {
+          const { title, icon, count, minWidth } = ele;
+          return (
             <div
-              className="text-25-400"
+              className={`${isResponsive ? "mb-20" : ""} big-card col-4`}
               style={{
-                color: "rgba(28, 29, 29, 1)",
+                width: isResponsive ? "100%" : `max(${minWidth}px,31%)`,
               }}
+              key={index}
             >
-              Total Landed
+              <div className="fb-center">
+                <div
+                  className="text-25-400"
+                  style={{
+                    color: "rgba(28, 29, 29, 1)",
+                  }}
+                >
+                  {title}
+                </div>
+                <div className="w-47 h-47 card-icon">
+                  <img src={icon} alt="eyeView" className="fit-image w-35" />
+                </div>
+              </div>
+              <div
+                className="text-36-700 pt-10"
+                style={{ color: "rgba(28, 29, 29, 1)" }}
+              >
+                {count}
+              </div>
             </div>
-            <div className="w-47 h-47 card-icon">
-              <img
-                src={icons.eyeVisible}
-                alt="eyeView"
-                className="fit-image w-35"
-              />
-            </div>
-          </div>
-          <div
-            className="text-36-700 pt-10"
-            style={{ color: "rgba(28, 29, 29, 1)" }}
-          >
-            5000
-          </div>
-        </div>
-        <div className={`${isResponsive ? "wp-100 mb-20" : "w-400"} big-card`}>
-          <div className="fb-center">
-            <div
-              className="text-25-400"
-              style={{
-                color: "rgba(28, 29, 29, 1)",
-              }}
-            >
-              Total Completed
-            </div>
-            <div className="w-47 h-47 card-icon">
-              <img
-                src={icons.checkVerified}
-                alt="eyeView"
-                className="fit-image w-35"
-              />
-            </div>
-          </div>
-          <div
-            className="text-36-700 pt-10"
-            style={{ color: "rgba(28, 29, 29, 1)" }}
-          >
-            50
-          </div>
-        </div>
-        <div className={`${isResponsive ? "wp-100 mb-20" : "w-400"} big-card`}>
-          <div className="fb-center">
-            <div
-              className="text-25-400"
-              style={{
-                color: "rgba(28, 29, 29, 1)",
-              }}
-            >
-              Contacts collected
-            </div>
-            <div className="w-47 h-47 card-icon">
-              <img
-                src={icons.usersOutline}
-                alt="eyeView"
-                className="fit-image w-30"
-              />
-            </div>
-          </div>
-          <div
-            className="text-36-700 pt-10"
-            style={{ color: "rgba(28, 29, 29, 1)" }}
-          >
-            50
-          </div>
-        </div>
+          );
+        })}
       </div>
       <div className="pt-60">
         <h6 className="text-24-700 mb-30">Recent Contacts</h6>

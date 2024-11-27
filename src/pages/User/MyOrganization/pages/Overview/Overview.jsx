@@ -71,15 +71,13 @@ function Overview() {
     }
   };
 
-  const fetchOverview = async (isSetOrg) => {
+  const fetchOverview = async () => {
     try {
+      console.log("selectedOrganizationId;", selectedOrganizationId);
       const res = await api.get(`user/organization/${selectedOrganizationId}`);
       if (res.status === 200) {
         setOrganization(res.data.response);
         setIsChange("");
-        if (isSetOrg) {
-          dispatch(setSelectedOrganization(res.data.response));
-        }
       }
     } catch (error) {
       console.log("error", error);
@@ -88,7 +86,7 @@ function Overview() {
   };
 
   useEffect(() => {
-    if (selectedOrganizationId) fetchOverview(false);
+    if (selectedOrganizationId) fetchOverview();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrganizationId]);
 
@@ -128,7 +126,6 @@ function Overview() {
           handleClose={() => {
             setIsSetName(false);
           }}
-          fetchOverview={fetchOverview}
         />
       )}
 

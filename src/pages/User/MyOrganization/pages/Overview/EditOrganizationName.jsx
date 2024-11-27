@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { api } from "../../../../../services/api";
-import { showSuccess, throwError } from "../../../../../store/globalSlice";
+import {
+  handleProfileStore,
+  showSuccess,
+  throwError,
+} from "../../../../../store/globalSlice";
 
-function EditOrganizationName({
-  show,
-  handleClose,
-  OrganizationData,
-  fetchOverview,
-}) {
+function EditOrganizationName({ show, handleClose }) {
   const [name, setName] = useState("");
   const [organization, setOrganization] = useState({});
   const [isPost, setIsPost] = useState(false);
@@ -51,8 +50,8 @@ function EditOrganizationName({
       const res = await api.put("user/update-organization", req);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
+        dispatch(handleProfileStore());
         handleClose();
-        fetchOverview(true);
       } else {
         dispatch(throwError(res.data.message));
       }

@@ -14,7 +14,7 @@ const initialState = {
   },
   breadCrumbTitle: "",
   profileData: null,
-  selectedOrganization: "",
+  selectedOrganizationId: "",
 };
 
 const globalSlice = createSlice({
@@ -167,6 +167,22 @@ export const handleUSerSignup = (payload) => async (dispatch) => {
     dispatch(showSuccess(res?.data?.message));
     return res;
   } catch (error) {
+    return dispatch(handelCatch(error));
+  }
+};
+
+export const handleProfileStore = () => async (dispatch) => {
+  try {
+    const res = await api.get("user/profile");
+    if (res.status && res.status === 200) {
+      dispatch(setProfileData(res.data.response));
+      dispatch(
+        setSelectedOrganization(res.data.response.organizations?.[0]._id)
+      );
+    }
+    return;
+  } catch (error) {
+    console.log("error", error);
     return dispatch(handelCatch(error));
   }
 };
