@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { icons } from "../../../../utils/constants";
-import FileUpload from "./FileUpload";
 import "./VideoGen.scss";
 import AudioUpload from "./AudioUpload";
 import { Button } from "react-bootstrap";
+import { VideoUpload } from "../../../../components";
 
-function VideoGenBody({ setModalType }) {
+function VideoGenBody({ setNextPage, onBack }) {
   const [stockVoice, setStockVoice] = useState([]);
   return (
     <div className="VideoGenBody">
       <div style={{ display: "flex", alignItems: "center" }}>
-        <div className="w-30 pointer" onClick={() => setModalType("video-ai")}>
+        <div className="w-30 pointer" onClick={onBack}>
           <img src={icons.arrow_left} alt="" className="fit-image" />
         </div>
         <div className="text-22-600">
-          Generate With{" "}
+          Upload With{" "}
           <span className="text-22-400" style={{ color: "#7B5AFF" }}>
             FlōwAI
           </span>
@@ -25,7 +25,7 @@ function VideoGenBody({ setModalType }) {
           <div className="text-20-500 mb-20 mt-20" style={{ color: "#7D8185" }}>
             Upload Video
           </div>
-          <FileUpload />
+          <VideoUpload />
         </div>
         <div>
           <div className="text-20-500 mb-20 mt-20" style={{ color: "#7D8185" }}>
@@ -71,7 +71,7 @@ function VideoGenBody({ setModalType }) {
             justifyContent: "center",
           }}
           onClick={() => {
-            setModalType("video-gen-getting-ready");
+            setNextPage();
           }}
         >
           <span>Generate</span>

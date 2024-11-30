@@ -28,7 +28,6 @@ const CreateFolderModal = ({
         folder_name: folderName,
       };
       const res = await api.post("interactions/add-folder", req);
-      console.log("res", res);
       if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
         fetchFolder();

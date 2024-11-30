@@ -15,6 +15,14 @@ const initialState = {
   breadCrumbTitle: "",
   profileData: null,
   selectedOrganizationId: "",
+  queModelData: {
+    isShow: false,
+    nodeId: null,
+    isEdit: true,
+    selectedHeaderTab: "video",
+    isHeaderDisabled: false,
+    modalType: "video-edit",
+  },
 };
 
 const globalSlice = createSlice({
@@ -47,6 +55,10 @@ const globalSlice = createSlice({
     setSelectedOrganization(state, action) {
       state.selectedOrganizationId = action.payload;
     },
+    setQueModelData(state, action) {
+      const res = { ...state.queModelData, ...action.payload };
+      state.queModelData = res;
+    },
   },
 });
 
@@ -62,6 +74,26 @@ export const handleLogin = (payload) => async (dispatch) => {
     return dispatch(handelCatch(error));
   }
 };
+
+export const handleSetQueModelData = {
+  setData: (payload) => async (dispatch) => {
+    dispatch(setQueModelData(payload));
+  },
+  openModel: (payload) => async (dispatch) => {
+    const { nodeId, isEdit } = payload;
+    dispatch(
+      setQueModelData({
+        isShow: true,
+        nodeId: nodeId || null,
+        isEdit: isEdit || false,
+      })
+    );
+  },
+  closeModel: () => async (dispatch) => {
+    dispatch(setQueModelData({ isShow: false, nodeId: null, isEdit: false }));
+  },
+};
+
 export const handelResponse = (res) => async () => {
   let returnValue = null;
   const status = res?.status;
@@ -195,6 +227,7 @@ export const {
   setIsResponsive,
   setProfileData,
   setSelectedOrganization,
+  setQueModelData,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

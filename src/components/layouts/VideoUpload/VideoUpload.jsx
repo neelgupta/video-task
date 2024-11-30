@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import "./FileUpload.scss"; // Make sure to create the CSS file for styling
-import { icons } from "../../../../utils/constants";
-import { creteImgFilter } from "../../../../utils/helpers";
+import "./VideoUpload.scss"; // Make sure to create the CSS file for styling
+import { creteImgFilter } from "../../../utils/helpers";
+import { icons } from "../../../utils/constants";
 
-const FileUpload = () => {
+const VideoUpload = () => {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -34,7 +34,7 @@ const FileUpload = () => {
   };
 
   return (
-    <div className="upload-container">
+    <div className="video-upload-container">
       <div
         {...getRootProps({ className: "upload-box" })}
         style={file ? { cursor: "not-allowed" } : {}}
@@ -88,4 +88,4 @@ const FileUpload = () => {
   );
 };
 
-export default FileUpload;
+export default VideoUpload;

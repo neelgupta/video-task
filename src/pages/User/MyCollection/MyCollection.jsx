@@ -41,7 +41,6 @@ const MyCollection = () => {
       const res = await api.get(
         `interactions/get-folders/${selectedOrganizationId}`
       );
-      console.log("res", res);
       if (res.status === 200 && res.data?.response) {
         setFolders(res.data.response);
       } else {

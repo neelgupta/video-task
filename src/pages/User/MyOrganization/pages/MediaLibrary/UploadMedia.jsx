@@ -2,7 +2,7 @@ import React from "react";
 import "./MediaLibrary.scss";
 import { Button, Modal } from "react-bootstrap";
 import { icons } from "../../../../../utils/constants";
-import FileUpload from "../../../../FlowCanvas/Modals/VideoGen/FileUpload";
+import { VideoUpload } from "../../../../../components";
 
 function UploadMedia({ onHide, show, isEdit }) {
   return (
@@ -31,7 +31,7 @@ function UploadMedia({ onHide, show, isEdit }) {
             Add new team members to collaborate and achieve your goals together.
           </div>
           <div className="mt-30">
-            <FileUpload />
+            <VideoUpload />
             <div className="mt-20">
               <div
                 className="text-12-500 ps-5 pb-5"

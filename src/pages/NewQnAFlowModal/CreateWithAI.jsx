@@ -5,7 +5,7 @@ import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { showSuccess, throwError } from "../../store/globalSlice";
-import { api } from "../../services/api";
+import { api, TestApi } from "../../services/api";
 
 const options = [
   { value: "english", label: "English" },
@@ -13,6 +13,22 @@ const options = [
   { value: "spanish", label: "Spanish" },
 ];
 
+const startNode = {
+  type: "Start",
+  position: {
+    x: 200,
+    y: window.innerHeight / 2 - 200,
+  },
+  title: "Start",
+};
+const endNode = {
+  type: "End",
+  position: {
+    x: window.innerWidth - 300,
+    y: window.innerHeight / 2 + 200,
+  },
+  title: "End",
+};
 const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,7 +45,6 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
 
   useEffect(() => {
     if (!createFlowModalSubmitData) navigate("/user/dashboard");
-    console.log("createFlowModalSubmitData", createFlowModalSubmitData);
   }, [createFlowModalSubmitData, navigate]);
 
   useEffect(() => {
@@ -75,8 +90,25 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
         interaction_type: createFlowModalSubmitData.type, // accept only Template, Scratch, FlowAI
         is_lead_crm: createFlowModalSubmitData.leadCRM === "yes",
         organization_id: selectedOrganizationId,
+        flows: [
+          {
+            type: "Start",
+            position: {
+              x: 200,
+              y: window.innerHeight / 2 - 200,
+            },
+            title: "Start",
+          },
+          {
+            type: "End",
+            position: {
+              x: window.innerWidth - 300,
+              y: window.innerHeight / 2 + 200,
+            },
+            title: "End",
+          },
+        ],
       };
-      console.log("req", req);
       const res = await api.post("interactions/add-interactions", req);
       if (res.status === 201) {
         const { _id } = res.data.response;
@@ -87,12 +119,12 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
       } else {
         dispatch(throwError(res.data.message));
       }
-      console.log("res", res);
     } catch (error) {
       console.log("error", error);
       dispatch(throwError(error.response.data.message));
     }
   };
+
   return (
     <Modal
       show={show}

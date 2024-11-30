@@ -1,0 +1,51 @@
+.VideoCard-container {
+  .question {
+    width: 200px;
+    height: 250px;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px; /* Adjust the radius value as needed */
+    padding: 3px;
+    &:hover {
+      background: linear-gradient(180deg, #fb82c1 0%, #68c7e8 100%);
+    }
+    .title {
+      font-size: 10px;
+      font-weight: bold;
+      color: #333;
+      background-color: rgb(224, 224, 224);
+      padding: 5px;
+    }
+    .img-box-content {
+      width: 100%;
+      height: 113px;
+      overflow: hidden;
+      background-color: black;
+      img {
+        background-repeat: no-repeat;
+        background-position: top center;
+        background-size: auto;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+      }
+    }
+    .content-body-container {
+      width: 100%;
+      height: 55%;
+      padding: 5px;
+      color: #000000;
+    }
+  }
+  .VideoCard-dote-Left,
+  .VideoCard-dote-Right {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #1b2559;
+    border: 3px solid white;
+  }
+}

@@ -3,14 +3,25 @@ import "./CreateFlowOptionsModal.scss";
 import { Button, Modal } from "react-bootstrap";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
+import { useDispatch } from "react-redux";
+import { handleSetQueModelData } from "../../../../store/globalSlice";
 
 const CreateFlowOptionsModal = ({ show, handleClose }) => {
+  const dispatch = useDispatch();
   const cardArray = [
     {
       icon: icons.webCam,
       title: "WebCam",
       isPro: false,
       onclick: () => {
+        dispatch(
+          handleSetQueModelData.setData({
+            modalType: "web-cam",
+            isHeaderDisabled: true,
+          })
+        );
+        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
+
         handleClose();
       },
     },
@@ -18,26 +29,66 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       icon: icons.Upload,
       title: "Upload",
       isPro: false,
-      onclick: () => {},
+      onclick: () => {
+        dispatch(
+          handleSetQueModelData.setData({
+            modalType: "upload",
+            isHeaderDisabled: false,
+          })
+        );
+        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
+
+        handleClose();
+      },
       style: { filter: creteImgFilter("#8C8E90") },
     },
     {
       icon: icons.screenShare,
       title: "ScreenShare",
       isPro: false,
-      onclick: () => {},
+      onclick: () => {
+        dispatch(
+          handleSetQueModelData.setData({
+            modalType: "screen-share",
+            isHeaderDisabled: true,
+          })
+        );
+        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
+
+        handleClose();
+      },
     },
     {
       icon: icons.library,
       title: "Library",
       isPro: false,
-      onclick: () => {},
+      onclick: () => {
+        dispatch(
+          handleSetQueModelData.setData({
+            modalType: "library",
+            isHeaderDisabled: true,
+          })
+        );
+        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
+
+        handleClose();
+      },
     },
     {
       icon: icons.doubleStar,
       title: "Flōw AI",
       isPro: true,
-      onclick: () => {},
+      onclick: () => {
+        dispatch(
+          handleSetQueModelData.setData({
+            modalType: "flow-ai",
+            isHeaderDisabled: true,
+          })
+        );
+        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
+
+        handleClose();
+      },
     },
   ];
 

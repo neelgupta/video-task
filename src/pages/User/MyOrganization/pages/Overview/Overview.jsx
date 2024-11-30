@@ -73,7 +73,6 @@ function Overview() {
 
   const fetchOverview = async () => {
     try {
-      console.log("selectedOrganizationId;", selectedOrganizationId);
       const res = await api.get(`user/organization/${selectedOrganizationId}`);
       if (res.status === 200) {
         setOrganization(res.data.response);

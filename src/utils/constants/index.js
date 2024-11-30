@@ -91,6 +91,8 @@ import imgUpload from "../../assets/images/svgIcons/imgUpload.svg";
 import check from "../../assets/images/svgIcons/right.svg";
 import email from "../../assets/images/svgIcons/email.svg";
 import master from "../../assets/images/svgIcons/master.svg";
+import avatar10 from "../../assets/images/avatar10.png";
+import avatar11 from "../../assets/images/avatar11.png";
 
 export const icons = {
   logo,
@@ -186,4 +188,6 @@ export const icons = {
   check,
   email,
   master,
+  avatar11,
+  avatar10,
 };

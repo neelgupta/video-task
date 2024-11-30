@@ -17,23 +17,8 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
   const { themeColor, isResponsive, profileData } = reduxData;
   const [organization, setOrganization] = useState({});
   const [expand, setExpand] = useState("");
-  // const [myOrganization, setMyOrganization] = useState({});
-  // const fetchOrganization = async () => {
-  //   try {
-  //     const res = await api.get("user/get-my-organizations");
-  //     console.log("🚀 ~ fetchOrganization ~ res:", res);
-  //     if (res.status === 200) {
-  //       setMyOrganization(res.data.response?.[0] || {});
-  //     }
-  //   } catch (error) {
-  //     console.log("🚀 ~ fetchOrganization ~ error:", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchOrganization();
-  // }, []);
+
   useEffect(() => {
-    console.log("profileData", profileData);
     if (profileData && profileData.organizations?.length !== 0) {
       setOrganization(profileData.organizations?.[0]);
     }

@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { icons } from "../../../utils/constants";
+import { icons } from "../../../../utils/constants";
 import "./ModalsHeader.scss";
-function ModalsHeader({ handleClose }) {
-  const [selectHeaderTab, setSelectHeaderTab] = useState(1);
-  const headerTabArray = ["video", "Answer", "Logic"];
+const modalTitle = {
+  upload: "Upload QnA Flow",
+};
+function ModalsHeader({
+  handleClose,
+  selectedHeaderTab,
+  onChangeHeaderTab,
+  isHeaderDisabled,
+  queModelData,
+}) {
+  const { modalType } = queModelData;
+  const headerTabArray = ["video", "answer", "logic"];
   return (
     <div className="Video_header">
       <div
         className="wp-55 header_item text-18-600 ps-15"
         style={{ borderRight: "1px solid #D9D9D9" }}
       >
-        QnA Flow-Flow 2
+        {modalTitle[modalType]}
       </div>
       <div
         className="wp-45 header_item"
@@ -21,8 +30,14 @@ function ModalsHeader({ handleClose }) {
             return (
               <div
                 key={index}
-                onClick={() => setSelectHeaderTab(index + 1)}
-                className={selectHeaderTab === index + 1 ? "active" : ""}
+                onClick={() => !isHeaderDisabled && onChangeHeaderTab(ele)}
+                className={
+                  selectedHeaderTab === ele
+                    ? "active"
+                    : isHeaderDisabled
+                    ? "disabled"
+                    : ""
+                }
               >
                 {ele}
               </div>

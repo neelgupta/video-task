@@ -7,7 +7,6 @@ import { creteImgFilter } from "../../../utils/helpers";
 function Dashboard() {
   const reduxData = useSelector((state) => state.global);
   const { isResponsive, themeColor, profileData } = reduxData;
-  console.log("profileData", profileData);
   const [tabIndex, setTabIndex] = useState(1);
 
   const header = [
@@ -183,9 +182,9 @@ function Dashboard() {
       <div className="">
         <h5 className="text-30-500">
           Welcome Back{" "}
-          <strong style={{ textTransform: "capitalize" }}>{` ${
-            profileData.profile?.user_name || ""
-          }`}</strong>
+          <strong style={{ textTransform: "capitalize" }}>
+            {profileData?.profile?.user_name || ""}
+          </strong>
         </h5>
         <p className="text-19-400">
           {`Here's an overview of your stats for the last`}

@@ -1,0 +1,19 @@
+.startNode-container {
+  .startNode-text {
+    width: 100px;
+    height: 100px;
+    background: white;
+    display: grid;
+    place-items: center;
+    border-radius: 5px;
+    box-shadow: 0px 4px 20px 0px #00000026;
+  }
+  .dote-Left,
+  .dote-Right {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #1b2559;
+    border: 3px solid white;
+  }
+}
