@@ -5,12 +5,19 @@ import {
   getBezierPath,
   useReactFlow,
 } from "@xyflow/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { icons } from "../../../../utils/constants";
 import "./ButtonEdge.scss";
 import { creteImgFilter } from "../../../../utils/helpers";
 import { useDispatch } from "react-redux";
-import { showSuccess, throwError } from "../../../../store/globalSlice";
+import {
+  handelCreateQuestion,
+  setCreateQusModalData,
+  setNewQueModalData,
+  setShowCreateFlowModal,
+  showSuccess,
+  throwError,
+} from "../../../../store/globalSlice";
 import { api } from "../../../../services/api";
 function ButtonEdge({
   id,
@@ -38,70 +45,25 @@ function ButtonEdge({
     targetY,
     targetPosition,
   });
-
   const dispatch = useDispatch();
-  // const onEdgeClick = async () => {
-  //   try {
-  //     const question = {
-  //       type: "question",
-  //       data: {
-  //         label: "this is question",
-  //       },
-  //     };
-  //     const {
-  //       data: {
-  //         data: { nodes, edges },
-  //         message,
-  //       },
-  //     } = await createQuestion(flowId, source, target, question);
-  //     setNodes(nodes.map((node) => ({ ...node, id: node._id })));
-  //     setEdges(
-  //       edges.map((edge) => ({ ...edge, id: edge._id, type: "button" }))
-  //     );
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
+  const navigate = useNavigate();
+  const createQuestion = async () => {
+    const req = {
+      targetId: target,
+      sourceId: source,
+      interaction_id: flowId,
+      type: "Question",
+      title: "untitled",
+      positionX: (sourceX + targetX) / 2 - 100,
+      positionY: (sourceY + targetY) / 2 - 125,
+    };
+    dispatch(setNewQueModalData(req));
+    dispatch(setShowCreateFlowModal(true));
 
-  // const createQuestion = async (flowId, sourceId, targetId, question) => {
-  //   return await TestApi.post("/flow/add-question", {
-  //     flowId,
-  //     sourceId,
-  //     targetId,
-  //     question,
-  //   });
-  // };
-
-  const createQuestion = async (event) => {
-    try {
-      const req = new FormData();
-      req.append("targetId", target);
-      req.append("sourceId", source);
-      req.append("interaction_id", flowId);
-      req.append("type", "Question");
-      req.append("title", "dev-test");
-      req.append("flow_type", "Upload");
-      req.append("positionX", event.clientX - 100);
-      req.append("positionY", event.clientY - 125);
-      const res = await api.post("interactions/create-node", req, {
-        "Content-Type": "multipart/form-data",
-      });
-      // console.log("res", res);
-      if (res.status === 201) {
-        dispatch(showSuccess(res.data.message));
-      } else {
-        dispatch(throwError(res.data.message));
-      }
-    } catch (error) {
-      console.log("error", error);
-      dispatch(
-        throwError(
-          throwError(error?.response?.data?.message || "Flow not created!")
-        )
-      );
-    }
+    // dispatch(
+    //   handelCreateQuestion({ req, id: flowId, setEdges, setNodes, navigate })
+    // );
   };
-
   return (
     <>
       <defs>
@@ -160,9 +122,8 @@ function ButtonEdge({
           <button
             className="edgebutton"
             onClick={(e) => {
-              console.log("e", e);
               e.preventDefault();
-              createQuestion(e);
+              createQuestion();
             }}
           >
             <img

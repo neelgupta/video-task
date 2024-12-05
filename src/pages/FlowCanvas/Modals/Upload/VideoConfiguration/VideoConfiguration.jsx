@@ -1,74 +1,54 @@
 import React, { useState } from "react";
-import { icons } from "../../../../utils/constants";
 import { getTrackBackground, Range } from "react-range";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
-import TextArea from "../../../../components/inputs/TextArea/TextArea";
-import "./VideoEdit.scss";
+import "./VideoConfiguration.scss";
+import { TextArea } from "../../../../../components";
+import { icons } from "../../../../../utils/constants";
 
-function VideoEditBody({ setModalType, isThumbnail }) {
-  const [alignVideo, setAlignVideo] = useState(true);
-  const [values, setValues] = useState([4]);
+function VideoConfiguration({
+  isThumbnail,
+  onSubmit,
+  videoConfigForm,
+  setVideoConfigForm,
+  MAX,
+  isCreate,
+}) {
   const MIN = 0;
-  const MAX = 12;
   const positionOption = [
-    {
-      value: "Center Left",
-      label: "Center Left",
-    },
-    {
-      value: "Center Right",
-      label: "Center Right",
-    },
-    {
-      value: "Center Top",
-      label: "Center Top",
-    },
-    {
-      value: "Center Bottom",
-      label: "Center Bottom",
-    },
-    {
-      value: "Top Left",
-      label: "Top Left",
-    },
-    {
-      value: "Top Right",
-      label: "Top Right",
-    },
-    {
-      value: "Bottom Left",
-      label: "Bottom Left",
-    },
-    {
-      value: "Bottom Left",
-      label: "Bottom Left",
-    },
+    { value: "center start", label: "Center Left" },
+    { value: "center end", label: "Center Right" },
+    { value: "flex-start center", label: "Top Center" },
+    { value: "flex-end center", label: "Bottom Center" },
+    { value: "flex-start flex-start", label: "Top Left" },
+    { value: "flex-start flex-end", label: "Top Right" },
+    { value: "flex-end flex-start", label: "Bottom Left" },
+    { value: "flex-end flex-end", label: "Bottom Right" },
   ];
   const sizeOption = [
     {
-      value: "Extra Small",
       label: "Extra Small",
+      value: "20px",
     },
     {
-      value: "Small",
       label: "Small",
+      value: "22px",
     },
     {
-      value: "Medium",
       label: "Medium",
+      value: "34px",
     },
     {
-      value: "Large",
       label: "Large",
+      value: "46px",
     },
     {
-      value: "Extra Large",
       label: "Extra Large",
+      value: "58px",
     },
   ];
   return (
-    <div className="VideoEditBody">
+    <div className="VideoConfiguration-container">
       <h3 className="text-22-600 mb-20">Video</h3>
       {isThumbnail && (
         <div className="img-title mb-20" style={{}}>
@@ -85,14 +65,22 @@ function VideoEditBody({ setModalType, isThumbnail }) {
         </div>
         <div style={{ display: "flex" }}>
           <div
-            onClick={() => setAlignVideo(true)}
-            className={`align-btn ${alignVideo && "active"}`}
+            onClick={() =>
+              setVideoConfigForm((pre) => {
+                return { ...pre, alignVideo: true };
+              })
+            }
+            className={`align-btn ${videoConfigForm.alignVideo && "active"}`}
           >
             Yes
           </div>
           <div
-            onClick={() => setAlignVideo(false)}
-            className={`align-btn ${!alignVideo && "active"}`}
+            onClick={() =>
+              setVideoConfigForm((pre) => {
+                return { ...pre, alignVideo: false };
+              })
+            }
+            className={`align-btn ${!videoConfigForm.alignVideo && "active"}`}
           >
             No
           </div>
@@ -110,7 +98,17 @@ function VideoEditBody({ setModalType, isThumbnail }) {
           Select video position Manually
         </div>
         <div className="w-200">
-          <Select style={{}} options={positionOption} />
+          <Select
+            style={{}}
+            isDisabled={videoConfigForm.alignVideo}
+            options={positionOption}
+            value={videoConfigForm.videoPosition}
+            onChange={(select) => {
+              setVideoConfigForm((pre) => {
+                return { ...pre, videoPosition: select };
+              });
+            }}
+          />
         </div>
       </div>
       <div className="Overlay-content">
@@ -120,9 +118,15 @@ function VideoEditBody({ setModalType, isThumbnail }) {
             Overlay Text
           </div>
           <TextArea
+            id="overlayText"
             placeholder="Enter Overlay Text ..."
             style={{ borderRadius: "10px" }}
-            onChange={() => {}}
+            value={videoConfigForm.overlayText}
+            onChange={(e) => {
+              setVideoConfigForm((pre) => {
+                return { ...pre, overlayText: e.target.value };
+              });
+            }}
           />
         </div>
         <div
@@ -138,7 +142,13 @@ function VideoEditBody({ setModalType, isThumbnail }) {
           </div>
           <div className="w-220">
             <Select
-              onChange={() => {}}
+              value={videoConfigForm.textSize}
+              isDisabled={!videoConfigForm.overlayText}
+              onChange={(select) => {
+                setVideoConfigForm((pre) => {
+                  return { ...pre, textSize: select };
+                });
+              }}
               options={sizeOption}
               menuPlacement="top"
             />
@@ -157,11 +167,16 @@ function VideoEditBody({ setModalType, isThumbnail }) {
           </div>
           <div className="slider-container">
             <Range
-              values={values}
+              values={videoConfigForm.textReveal}
               step={1}
               min={MIN}
               max={MAX}
-              onChange={(values) => setValues(values)}
+              disabled={!videoConfigForm.overlayText}
+              onChange={(values) => {
+                setVideoConfigForm((pre) => {
+                  return { ...pre, textReveal: values };
+                });
+              }}
               renderTrack={({ props, children }) => (
                 <div
                   onMouseDown={props.onMouseDown}
@@ -179,8 +194,13 @@ function VideoEditBody({ setModalType, isThumbnail }) {
                       width: "100%",
                       borderRadius: "4px",
                       background: getTrackBackground({
-                        values,
-                        colors: ["#7b5aff", "rgba(0,0,0,0.1)"],
+                        values: videoConfigForm.textReveal,
+                        colors: [
+                          videoConfigForm.overlayText
+                            ? "#7b5aff"
+                            : "rgba(0,0,0,0.3)",
+                          "rgba(0,0,0,0.1)",
+                        ],
                         min: MIN,
                         max: MAX,
                       }),
@@ -210,7 +230,7 @@ function VideoEditBody({ setModalType, isThumbnail }) {
                 0 sec
               </span>
               <span style={{ color: "#7D8185" }} className="text-14-600">
-                12 sec
+                {MAX} sec
               </span>
             </div>
           </div>
@@ -223,11 +243,11 @@ function VideoEditBody({ setModalType, isThumbnail }) {
               border: "none",
               padding: "10px 0px",
             }}
-            onClick={() => {
-              setModalType("video-ai");
-            }}
+            onClick={onSubmit}
+            disabled={isCreate}
           >
             Done
+            {isCreate && <Spinner className="ms-10" size="sm" />}
           </Button>
         </div>
       </div>
@@ -235,4 +255,4 @@ function VideoEditBody({ setModalType, isThumbnail }) {
   );
 }
 
-export default VideoEditBody;
+export default VideoConfiguration;

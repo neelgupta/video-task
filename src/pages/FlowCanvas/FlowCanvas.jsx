@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./FlowCanvas.scss";
 import {
   Background,
@@ -21,9 +21,15 @@ import StartNode from "./reactflow/StartNode/StartNode";
 import EndNode from "./reactflow/EndNode/EndNode";
 import VideoCard from "./reactflow/VideoCard/VideoCard";
 import ButtonEdge from "./reactflow/ButtonEdge/ButtonEdge";
-import VideoModal from "./VideoModal";
 import { useDispatch, useSelector } from "react-redux";
-import { handleSetQueModelData, throwError } from "../../store/globalSlice";
+import {
+  handelNodePosition,
+  handleFetchFlowData,
+  setQueModelConfig,
+  setShowCreateFlowModal,
+  throwError,
+} from "../../store/globalSlice";
+import Upload from "./Modals/Upload/Upload";
 // import { showVideoModel } from "../../utils/helpers";
 
 const nodeClassName = (node) => node.type;
@@ -39,80 +45,30 @@ const edgeTypes = {
 };
 
 const FlowCanvas = () => {
-  const { queModelData } = useSelector((state) => state.global);
+  const { id } = useParams();
+  const { queModelConfig, showCreateFlowModal, newQueModalData } = useSelector(
+    (state) => state.global
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showCreateFlowModal, setShowCreateFlowModal] = useState(true);
   const [isCanvasLock, seyIsCanvasLock] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { id } = useParams();
-  // const fetchFlow = async () => {
-  //   try {
-  //     const res = await getFlow(id);
-  //     if (res.status !== 200) {
-  //       dispatch(throwError(res.data.message || "Flow not found"));
-  //     }
-  //     const {
-  //       data: {
-  //         data: { nodes, edges },
-  //         message,
-  //       },
-  //     } = res;
-  //     if (nodes && edges && nodes.length > 1 && edges.length > 0) {
-  //       setNodes(nodes.map((node) => ({ ...node, id: node._id })));
-  //       setEdges(
-  //         edges.map((edge) => ({ ...edge, id: edge._id, type: "button" }))
-  //       );
-  //     } else {
-  //       dispatch(throwError(res.data.message || "Nodes & edges are empty"));
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     dispatch(throwError(error.data.response.message || "Flow not found"));
-  //     // navigate("/user/dashboard");
-  //   }
-  // };
+
+  useEffect(() => {
+    if (nodes.length === 2) dispatch(setShowCreateFlowModal(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodes.length]);
 
   const fetchFlowData = async () => {
-    try {
-      const res = await api.get(`interactions/get-nodes/${id}`);
-      console.log("res", res);
-      if (res.status === 200) {
-        const {
-          data: {
-            response: { edges, nodes },
-          },
-        } = res;
-        if (nodes && edges && nodes.length > 1 && edges.length > 0) {
-          setNodes(
-            nodes.map((node, index) => ({
-              ...node,
-              id: node._id,
-              index: index + 1,
-              intId: id,
-            }))
-          );
-          setEdges(
-            edges.map((edge, index) => ({
-              ...edge,
-              id: edge._id,
-              type: "button",
-              index: index + 1,
-              intId: id,
-            }))
-          );
-        } else {
-          dispatch(throwError("Nodes & edges are empty"));
-        }
-      } else {
-        dispatch(throwError(res.data.message));
-      }
-    } catch (error) {
-      console.log("error", error);
-      dispatch(throwError(error?.data?.response?.message || "Flow not found"));
-      navigate("/user/dashboard");
-    }
+    dispatch(
+      handleFetchFlowData({
+        id,
+        setEdges,
+        setNodes,
+        navigate,
+      })
+    );
   };
 
   useEffect(() => {
@@ -124,26 +80,57 @@ const FlowCanvas = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // const getFlow = async (id) => {
-  //   try {
-  //     return await TestApi.get(`/flow/get-flow/${id}`);
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
+  const setPosition = async (change) => {
+    seyIsCanvasLock(true);
+    try {
+      if (change) {
+        const { id: node_id, position } = change;
+        const req = {
+          nodes: [
+            {
+              node_id,
+              position,
+            },
+          ],
+        };
+        const res = await api.put("interactions/update-cordinates", req);
+        console.log("res", res);
+        if (res.status !== 200) {
+          console.log("field");
+          fetchFlowData();
+        }
+      }
+    } catch (error) {
+      console.log("error", error);
+      fetchFlowData();
+    }
+    seyIsCanvasLock(false);
+  };
 
   return (
     <>
       <CreateFlowOptionsModal
         show={showCreateFlowModal}
         handleClose={() => {
-          setShowCreateFlowModal(false);
+          dispatch(setShowCreateFlowModal(false));
         }}
       />
-      {queModelData.isShow && (
+      {/* {queModelConfig.isShow && (
         <VideoModal
-          show={queModelData.isShow}
-          handleClose={() => dispatch(handleSetQueModelData.closeModel())}
+          show={queModelConfig.isShow}
+          handleClose={() => {}}
+        />
+      )} */}
+
+      {queModelConfig.modalType === "upload" && (
+        <Upload
+          show={queModelConfig.modalType === "upload"}
+          handleClose={() => {
+            dispatch(
+              setQueModelConfig({ modalType: "", nodeId: null, isEdit: true })
+            );
+            fetchFlowData();
+          }}
         />
       )}
 
@@ -154,8 +141,18 @@ const FlowCanvas = () => {
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
+          onNodesChange={(change) => {
+            onNodesChange(change);
+            change.forEach((nodeChange) => {
+              if (nodeChange.type === "position" && !nodeChange?.dragging) {
+                setPosition(nodeChange);
+              }
+            });
+          }}
+          onEdgesChange={(change) => {
+            console.log("onEdgesChange", change);
+            onEdgesChange(change);
+          }}
           className="react_flow_canvas"
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
@@ -168,7 +165,6 @@ const FlowCanvas = () => {
         >
           <Background />
           <MiniMap zoomable pannable nodeClassName={nodeClassName} />
-          {/* <Controls /> */}
           <Background style={{ background: "#F1F1F1" }} />
           <Resizer />
           <QuestionMark />

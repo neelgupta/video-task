@@ -20,6 +20,7 @@ import DataTable from "./layouts/DataTable";
 import Table from "./layouts/Table";
 import Breadcrumb from "./layouts/Breadcrumb";
 import VideoUpload from "./layouts/VideoUpload";
+import VideoPlayer from "./layouts/VideoPlayer";
 
 export {
   TextInput,
@@ -41,4 +42,5 @@ export {
   ColorPicker,
   RadioInput,
   VideoUpload,
+  VideoPlayer,
 };

@@ -12,23 +12,6 @@ const options = [
   { value: "dutch", label: "Dutch" },
   { value: "spanish", label: "Spanish" },
 ];
-
-const startNode = {
-  type: "Start",
-  position: {
-    x: 200,
-    y: window.innerHeight / 2 - 200,
-  },
-  title: "Start",
-};
-const endNode = {
-  type: "End",
-  position: {
-    x: window.innerWidth - 300,
-    y: window.innerHeight / 2 + 200,
-  },
-  title: "End",
-};
 const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

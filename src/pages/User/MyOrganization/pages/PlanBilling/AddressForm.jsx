@@ -27,12 +27,16 @@ const AddressForm = ({
   };
 
   const validationSchema = Yup.object({
-    apartment_number: Yup.string().required("Required"),
-    Street: Yup.string().required("Required"),
-    State: Yup.string().required("Required"),
-    PINCode: Yup.number().required("Required").typeError("Must be a number"),
-    Country: Yup.string().required("Required"),
-    Email: Yup.string().email("Invalid email format").required("Required"),
+    apartment_number: Yup.string().required("Apartment number required"),
+    Street: Yup.string().required("Street required"),
+    State: Yup.string().required("State required"),
+    PINCode: Yup.number()
+      .required("PIN code required")
+      .typeError("Must be a number"),
+    Country: Yup.string().required("Country required"),
+    Email: Yup.string()
+      .email("Invalid email format")
+      .required("Email required"),
   });
 
   const onSubmit = async (values) => {

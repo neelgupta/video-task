@@ -3,26 +3,41 @@ import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 import { Button } from "react-bootstrap";
 
-function VideoAIBody({ setModalType }) {
-  const [selectFooterTab, setSelectFooterTab] = useState(1);
+function VideoOptionBody({ setModalType }) {
+  const [selectVideoOption, setSelectVideoOption] = useState([
+    "video",
+    "audio",
+    "text",
+  ]);
 
   const footerTabArray = [
     {
       icon: icons.video,
       text: "Video",
+      value: "video",
       isPro: false,
     },
     {
       icon: icons.audioIcon,
       text: "Audio",
+      value: "audio",
       isPro: false,
     },
     {
       icon: icons.textLine,
       text: "Text",
+      value: "text",
       isPro: false,
     },
   ];
+
+  const clickOption = (ele) => {
+    if (selectVideoOption.includes(ele.value)) {
+      setSelectVideoOption((array) => array.filter((o) => o !== ele.value));
+    } else {
+      setSelectVideoOption([...selectVideoOption, ele.value]);
+    }
+  };
   return (
     <div className="VideoAIBody">
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -50,11 +65,11 @@ function VideoAIBody({ setModalType }) {
           {footerTabArray.map((ele, index) => {
             return (
               <div
-                onClick={() => setSelectFooterTab(index + 1)}
+                onClick={() => clickOption(ele)}
                 className="footer_card pointer"
                 key={index}
                 style={
-                  selectFooterTab === index + 1
+                  selectVideoOption.includes(ele.value)
                     ? { background: "#7B5AFF", color: "white" }
                     : {}
                 }
@@ -66,7 +81,7 @@ function VideoAIBody({ setModalType }) {
                     alt=""
                     className="fit-image wp-40"
                     style={
-                      selectFooterTab === index + 1
+                      selectVideoOption.includes(ele.value)
                         ? {
                             filter: creteImgFilter("#FFFFFF"),
                           }
@@ -104,4 +119,4 @@ function VideoAIBody({ setModalType }) {
   );
 }
 
-export default VideoAIBody;
+export default VideoOptionBody;

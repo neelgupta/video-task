@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import "./VideoUpload.scss"; // Make sure to create the CSS file for styling
 import { creteImgFilter } from "../../../utils/helpers";
 import { icons } from "../../../utils/constants";
 
-const VideoUpload = () => {
-  const [file, setFile] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
+const VideoUpload = ({ setFileValue, videoFile }) => {
+  const [file, setFile] = useState(videoFile ? videoFile : null);
+  const [uploadProgress, setUploadProgress] = useState(videoFile ? 100 : 0);
+
+  useEffect(() => {
+    setFileValue && setFileValue(file);
+    // eslint-disable-next-line
+  }, [file]);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: "video/mp4, video/avchd, video/mpc, audio/aac",
@@ -30,7 +35,7 @@ const VideoUpload = () => {
         }
         return prevProgress + 10;
       });
-    }, 200);
+    }, 10);
   };
 
   return (
@@ -39,7 +44,7 @@ const VideoUpload = () => {
         {...getRootProps({ className: "upload-box" })}
         style={file ? { cursor: "not-allowed" } : {}}
       >
-        {!file && <input {...getInputProps()} />}
+        {!file && <input {...getInputProps()} accept="video/*" />}
         <img
           src={icons.Upload}
           alt="Upload Icon"

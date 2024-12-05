@@ -95,8 +95,12 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                 position: "relative",
               }}
             >
-              <div className="h-72 w-130 ">
-                <img src={icons.LogoText} alt="logo" className="fit-image" />
+              <div
+                className="h-72 w-130 text-26-700 f-center"
+                style={{ color: "#1B2559" }}
+              >
+                {/* <img src={icons.LogoText} alt="logo" className="fit-image" /> */}
+                {"Flōw AI"}
               </div>
               {isResponsive && (
                 <div
@@ -274,7 +278,7 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
             >
               <Button
                 onClick={() => setShowCreateFlowModal(true)}
-                btnText="New QnAFlow"
+                btnText="New Flōw AI"
                 className="h-50 pe-20 ps-20 text-16-300 wp-100"
                 leftIcon={icons.cricleAdd}
                 iconColor="#ffffff"

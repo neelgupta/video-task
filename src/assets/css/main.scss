@@ -86,7 +86,7 @@ $fonthWeights: 400, 500, 600, 700, 800;
 }
 
 // Height || Width---------------------------------------
-@for $size from 0 through 500 {
+@for $size from 0 through 1000 {
   .h-#{$size} {
     height: #{$size}px !important;
     min-height: #{$size}px !important;

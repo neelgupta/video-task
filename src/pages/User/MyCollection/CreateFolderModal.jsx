@@ -17,6 +17,7 @@ const CreateFolderModal = ({
   const [folderName, setFolderName] = useState("");
   const [isPost, setIsPost] = useState(false);
   useEffect(() => {
+    setFolderName("");
     if (renamingFolder) setFolderName(renamingFolder.folder_name);
   }, [renamingFolder]);
 
@@ -31,6 +32,7 @@ const CreateFolderModal = ({
       if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
         fetchFolder();
+        handleClose();
       } else {
         dispatch(throwError(res.data.message));
       }
@@ -39,7 +41,6 @@ const CreateFolderModal = ({
       dispatch(throwError(error.response.data.message));
     }
     setIsPost(false);
-    handleClose();
   };
 
   const handleRenameFolder = async (id, folderName) => {
@@ -52,6 +53,7 @@ const CreateFolderModal = ({
       const res = await api.put("interactions/update-folder", req);
       if (res.status === 200) {
         dispatch(showSuccess(res.data.message));
+        handleClose();
         fetchFolder();
       } else {
         dispatch(throwError(res.data.message));
@@ -61,20 +63,36 @@ const CreateFolderModal = ({
       dispatch(throwError(error.response.data.message));
     }
     setIsPost(false);
-    handleClose();
+  };
+
+  const validateFolderName = (name) => {
+    // Check if name is empty
+    if (!name.trim()) {
+      return "Folder name cannot be empty.";
+    }
+
+    // Check for invalid characters
+    const invalidChars = /[^a-zA-Z0-9-_]/;
+    if (invalidChars.test(name)) {
+      return "Folder name can only contain letters, numbers, '-', and '_'.";
+    }
+
+    return "";
   };
   return (
     <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <div className="text-20-600" style={{ color: "#1B2559" }}>
-          {renamingFolder ? "Rename Folder" : "Create New Folder"}
-        </div>
-      </Modal.Header>
-      <Modal.Body>
-        <div>
-          <div className="text-11-600">Folder Name</div>
+      <div className="p-20 w-500">
+        <Modal.Header closeButton className="p-0">
+          <div className="text-20-600" style={{ color: "#1B2559" }}>
+            {renamingFolder ? "Rename Folder" : "Create New Folder"}
+          </div>
+        </Modal.Header>
+        <Modal.Body>
           <div>
-            {renamingFolder ? (
+            <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
+              Folder Name
+            </div>
+            <div>
               <input
                 type="text"
                 value={folderName}
@@ -83,58 +101,52 @@ const CreateFolderModal = ({
                 placeholder="Enter Folder Name"
                 style={{
                   width: "100%",
-                  padding: "0.5rem",
-                  fontSize: "12px",
+                  padding: "13px",
+                  fontSize: "14px",
+                  border: "1px solid #CCCCCC",
                 }}
               />
-            ) : (
-              <input
-                type="text"
-                className="form-control rounded-3"
-                placeholder="Enter Folder Name"
-                onChange={(e) => setFolderName(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "0.5rem",
-                  fontSize: "12px",
-                }}
-              />
-            )}
+            </div>
           </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <div>
-          <Button
-            style={{ width: "150px" }}
-            variant="secondary"
-            onClick={handleClose}
-          >
-            Cancel
-          </Button>
-        </div>
-        <div>
-          <Button
-            onClick={() => {
-              renamingFolder
-                ? handleRenameFolder(renamingFolder._id, folderName)
-                : handleCreateNewFolder(folderName);
-            }}
-            iconColor="#ffffff"
-            className="f-center"
-            style={{
-              background: `linear-gradient(to right , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
-              border: "none",
-              color: "white",
-              width: "150px",
-            }}
-            disabled={isPost}
-          >
-            {renamingFolder ? "Save" : "Create"}
-            {isPost && <Spinner size="sm" className="ms-10" />}
-          </Button>
-        </div>
-      </Modal.Footer>
+        </Modal.Body>
+        <Modal.Footer>
+          <div>
+            <Button
+              style={{ width: "150px" }}
+              variant="secondary"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={() => {
+                const valid = validateFolderName(folderName);
+                if (valid) {
+                  dispatch(throwError(valid));
+                  return;
+                }
+                renamingFolder
+                  ? handleRenameFolder(renamingFolder._id, folderName.trim())
+                  : handleCreateNewFolder(folderName.trim());
+              }}
+              iconColor="#ffffff"
+              className="f-center"
+              style={{
+                background: `linear-gradient(to right , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
+                border: "none",
+                color: "white",
+                width: "150px",
+              }}
+              disabled={isPost}
+            >
+              {renamingFolder ? "Save" : "Create"}
+              {isPost && <Spinner size="sm" className="ms-10" />}
+            </Button>
+          </div>
+        </Modal.Footer>
+      </div>
     </Modal>
   );
 };

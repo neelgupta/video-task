@@ -65,18 +65,24 @@ function Referrals() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [email, setEmail] = useState("");
   const [referralsList, setReferralsList] = useState([]);
+  const [isFetch, setIsFetch] = useState(false);
   const emailSentHandler = async () => {
     try {
       setIsSent(true);
+      if (!validateEmail(email) || !email || email === "") {
+        setIsReject("Enter valid email!");
+        setIsSent(false);
+        return;
+      }
       const sentReq = {
         organization_id: selectedOrganizationId,
         referral_email: email,
       };
-      console.log("sentReq", sentReq);
       const res = await api.post("user/add-referrals", sentReq);
       console.log("res", res);
       if (res.status === 201) {
         setIsSuccess(true);
+        setEmail("");
         fetchEmailSent();
       } else {
         setIsReject(res.data.response.message);
@@ -89,6 +95,7 @@ function Referrals() {
   };
 
   const fetchEmailSent = async () => {
+    setIsFetch(true);
     try {
       setReferralsList([]);
       const res = await api.get(`user/get-referrals/${selectedOrganizationId}`);
@@ -100,6 +107,7 @@ function Referrals() {
     } catch (error) {
       console.log("error", error);
     }
+    setIsFetch(false);
   };
   useEffect(() => {
     if (selectedOrganizationId) {
@@ -107,6 +115,12 @@ function Referrals() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrganizationId]);
+
+  const validateEmail = (email) => {
+    // Regex for validating email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   return (
     <div
       className="Referrals"
@@ -176,8 +190,11 @@ function Referrals() {
                 type="text"
                 placeholder="Enter Email Address"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
+
               <Button
                 onClick={() => emailSentHandler()}
                 className="text-14-600 p-12 ms-30 ps-20 pe-20"
@@ -287,7 +304,7 @@ function Referrals() {
               </div>
             );
           })
-        ) : (
+        ) : isFetch ? (
           <div
             style={{
               width: "100%",
@@ -298,6 +315,12 @@ function Referrals() {
             }}
           >
             <Spinner animation="border" size="xl" />
+          </div>
+        ) : (
+          <div className="f-center wp-100 hp-100 py-30">
+            <p className="text-16-600" style={{ color: "black" }}>
+              Invited data not found...!
+            </p>
           </div>
         )}
       </div>

@@ -43,6 +43,11 @@ function EditOrganizationName({ show, handleClose }) {
   const handleSubmit = async () => {
     setIsPost(true);
     try {
+      if (!name || name === "") {
+        dispatch(throwError("Organization name is not allowed to be empty"));
+        setIsPost(false);
+        return;
+      }
       const req = {
         organization_id: selectedOrganizationId,
         organization_name: name,
@@ -64,61 +69,65 @@ function EditOrganizationName({ show, handleClose }) {
 
   return (
     <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <div className="text-20-600" style={{ color: "#1B2559" }}>
-          Rename Organization
-        </div>
-      </Modal.Header>
-      <Modal.Body>
-        <div>
-          <div className="text-11-600">Organization Name</div>
-          <div>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              className="form-control rounded-3"
-              placeholder="Enter Folder Name"
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                fontSize: "12px",
-              }}
-            />
+      <div className="p-20 w-500">
+        <Modal.Header closeButton style={{ margin: "0px", padding: "0px" }}>
+          <div className="text-20-600" style={{ color: "#1B2559" }}>
+            Rename Organization
           </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <div>
-          <Button
-            style={{ width: "150px" }}
-            variant="secondary"
-            onClick={handleClose}
-          >
-            Cancel
-          </Button>
-        </div>
-        <div>
-          <Button
-            onClick={handleSubmit}
-            iconColor="#ffffff"
-            className="f-center"
-            style={{
-              background:
-                "linear-gradient(91.9deg, #7B5BFF -2.22%, #B3A1FF 101.51%)",
-              border: "none",
-              color: "white",
-              width: "150px",
-            }}
-            disabled={isPost}
-          >
-            Save
-            {isPost && <Spinner size="sm" className="ms-10" />}
-          </Button>
-        </div>
-      </Modal.Footer>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <div className="text-11-600 mb-5">Organization Name</div>
+            <div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                className="form-control rounded-3"
+                placeholder="Enter Folder Name"
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  fontSize: "12px",
+                  outline: "none",
+                  border: "1px solid gray",
+                }}
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div>
+            <Button
+              style={{ width: "150px" }}
+              variant="secondary"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={handleSubmit}
+              iconColor="#ffffff"
+              className="f-center"
+              style={{
+                background:
+                  "linear-gradient(91.9deg, #7B5BFF -2.22%, #B3A1FF 101.51%)",
+                border: "none",
+                color: "white",
+                width: "150px",
+              }}
+              disabled={isPost}
+            >
+              Save
+              {isPost && <Spinner size="sm" className="ms-10" />}
+            </Button>
+          </div>
+        </Modal.Footer>
+      </div>
     </Modal>
   );
 }

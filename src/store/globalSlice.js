@@ -15,14 +15,14 @@ const initialState = {
   breadCrumbTitle: "",
   profileData: null,
   selectedOrganizationId: "",
-  queModelData: {
-    isShow: false,
+  showCreateFlowModal: false,
+  queModelConfig: {
     nodeId: null,
     isEdit: true,
-    selectedHeaderTab: "video",
-    isHeaderDisabled: false,
-    modalType: "video-edit",
+    modalType: "",
   },
+  queModalData: {},
+  newQueModalData: {},
 };
 
 const globalSlice = createSlice({
@@ -55,9 +55,17 @@ const globalSlice = createSlice({
     setSelectedOrganization(state, action) {
       state.selectedOrganizationId = action.payload;
     },
-    setQueModelData(state, action) {
-      const res = { ...state.queModelData, ...action.payload };
-      state.queModelData = res;
+    setQueModelConfig(state, action) {
+      state.queModelConfig = { ...state.queModelConfig, ...action.payload };
+    },
+    setQueModalData(state, action) {
+      state.queModalData = { ...action.payload };
+    },
+    setShowCreateFlowModal(state, action) {
+      state.showCreateFlowModal = action.payload;
+    },
+    setNewQueModalData(state, action) {
+      state.newQueModalData = action.payload;
     },
   },
 });
@@ -73,25 +81,6 @@ export const handleLogin = (payload) => async (dispatch) => {
   } catch (error) {
     return dispatch(handelCatch(error));
   }
-};
-
-export const handleSetQueModelData = {
-  setData: (payload) => async (dispatch) => {
-    dispatch(setQueModelData(payload));
-  },
-  openModel: (payload) => async (dispatch) => {
-    const { nodeId, isEdit } = payload;
-    dispatch(
-      setQueModelData({
-        isShow: true,
-        nodeId: nodeId || null,
-        isEdit: isEdit || false,
-      })
-    );
-  },
-  closeModel: () => async (dispatch) => {
-    dispatch(setQueModelData({ isShow: false, nodeId: null, isEdit: false }));
-  },
 };
 
 export const handelResponse = (res) => async () => {
@@ -219,6 +208,96 @@ export const handleProfileStore = () => async (dispatch) => {
   }
 };
 
+export const handleFetchFlowData = (payload) => async (dispatch) => {
+  const { id, setEdges, setNodes, navigate } = payload;
+  try {
+    const res = await api.get(`interactions/get-nodes/${id}`);
+    console.log("res", res);
+    if (res.status === 200) {
+      const {
+        data: {
+          response: { edges, nodes },
+        },
+      } = res;
+      console.log("edges, nodes", { edges, nodes });
+      if (nodes && edges && nodes.length > 1 && edges.length > 0) {
+        setNodes(
+          nodes.map((node, index) => ({
+            ...node,
+            id: node._id,
+            index: index + 1,
+            intId: id,
+          }))
+        );
+        setEdges(
+          edges.map((edge, index) => ({
+            ...edge,
+            id: edge._id,
+            type: "button",
+            index: index + 1,
+            intId: id,
+          }))
+        );
+      } else {
+        dispatch(throwError("Nodes & edges are empty"));
+      }
+    } else {
+      dispatch(throwError(res.data.message));
+    }
+  } catch (error) {
+    console.log("error", error);
+    dispatch(throwError(error?.data?.response?.message || "Flow not found"));
+    navigate("/user/dashboard");
+  }
+};
+
+export const handelCreateQuestion = (payload) => async (dispatch) => {
+  try {
+    const { req, id, setEdges, setNodes, navigate } = payload;
+    const res = await api.post("interactions/create-node", req, {
+      "Content-Type": "multipart/form-data",
+    });
+    if (res.status === 201) {
+      dispatch(showSuccess(res.data.message));
+      dispatch(handleFetchFlowData({ id, setEdges, setNodes, navigate }));
+    } else {
+      dispatch(throwError(res.data.message));
+    }
+  } catch (error) {
+    console.log("error", error);
+    dispatch(
+      throwError(
+        throwError(error?.response?.data?.message || "Flow not created!")
+      )
+    );
+  }
+};
+
+export const handelNodePosition = (payload) => async (dispatch) => {
+  try {
+    const { req } = payload;
+    const res = await api.put("interactions/update-cordinates", req);
+    console.log("res", res);
+    if (res.status === 200) {
+      // Dispatch success action
+      dispatch(showSuccess(res.data.message));
+      return true; // Return true for success
+    } else {
+      // Dispatch error action
+      dispatch(throwError(res.data.message));
+      return false; // Return false for failure
+    }
+  } catch (error) {
+    console.log("error", error);
+    dispatch(
+      throwError(
+        throwError(error?.response?.data?.message || "Flow not created!")
+      )
+    );
+    return false;
+  }
+};
+
 export const {
   setAuthData,
   setErrorData,
@@ -228,6 +307,9 @@ export const {
   setProfileData,
   setSelectedOrganization,
   setQueModelData,
+  setQueModelConfig,
+  setShowCreateFlowModal,
+  setNewQueModalData,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

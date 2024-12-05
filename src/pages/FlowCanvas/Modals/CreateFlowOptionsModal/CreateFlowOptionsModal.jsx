@@ -4,7 +4,7 @@ import { Button, Modal } from "react-bootstrap";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 import { useDispatch } from "react-redux";
-import { handleSetQueModelData } from "../../../../store/globalSlice";
+import { setQueModelConfig } from "../../../../store/globalSlice";
 
 const CreateFlowOptionsModal = ({ show, handleClose }) => {
   const dispatch = useDispatch();
@@ -13,82 +13,32 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       icon: icons.webCam,
       title: "WebCam",
       isPro: false,
-      onclick: () => {
-        dispatch(
-          handleSetQueModelData.setData({
-            modalType: "web-cam",
-            isHeaderDisabled: true,
-          })
-        );
-        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
-
-        handleClose();
-      },
+      value: "web-cam",
     },
     {
       icon: icons.Upload,
       title: "Upload",
       isPro: false,
-      onclick: () => {
-        dispatch(
-          handleSetQueModelData.setData({
-            modalType: "upload",
-            isHeaderDisabled: false,
-          })
-        );
-        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
-
-        handleClose();
-      },
+      value: "upload",
       style: { filter: creteImgFilter("#8C8E90") },
     },
     {
       icon: icons.screenShare,
       title: "ScreenShare",
       isPro: false,
-      onclick: () => {
-        dispatch(
-          handleSetQueModelData.setData({
-            modalType: "screen-share",
-            isHeaderDisabled: true,
-          })
-        );
-        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
-
-        handleClose();
-      },
+      value: "screen-share",
     },
     {
       icon: icons.library,
       title: "Library",
       isPro: false,
-      onclick: () => {
-        dispatch(
-          handleSetQueModelData.setData({
-            modalType: "library",
-            isHeaderDisabled: true,
-          })
-        );
-        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
-
-        handleClose();
-      },
+      value: "library",
     },
     {
       icon: icons.doubleStar,
       title: "Flōw AI",
       isPro: true,
-      onclick: () => {
-        dispatch(
-          handleSetQueModelData.setData({
-            modalType: "flow-ai",
-            isHeaderDisabled: true,
-          })
-        );
-        // dispatch(handleSetQueModelData.openModel({ isEdit: false }));
-
-        handleClose();
-      },
+      value: "flow-AI",
     },
   ];
 
@@ -99,6 +49,7 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       centered
       className="createFlowOptionsModal"
       size="xl"
+      backdrop="static"
     >
       <div className="p-10" style={{ zIndex: "100" }}>
         <Modal.Header closeButton>
@@ -118,7 +69,20 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
           >
             {cardArray.map((ele, index) => {
               return (
-                <div className="items" key={index} onClick={ele.onclick}>
+                <div
+                  className="items"
+                  key={index}
+                  onClick={() => {
+                    dispatch(
+                      setQueModelConfig({
+                        nodeId: null,
+                        isEdit: false,
+                        modalType: ele.value,
+                      })
+                    );
+                    handleClose();
+                  }}
+                >
                   {ele.isPro && <span className="proTag">PRO</span>}
                   <div className="h-150 mt-100 mb-50 p-30">
                     <img

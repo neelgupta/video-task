@@ -43,7 +43,6 @@ const IconRenderer = ({ icon, label, onClick, style }) => {
   );
 };
 function VideoCard(props) {
-  console.log("VideoInput", props);
   const { data, id, title, index } = props;
   const [isToolbarVisible, setToolbarVisible] = useState(false);
 

@@ -5,7 +5,7 @@ import AudioUpload from "./AudioUpload";
 import { Button } from "react-bootstrap";
 import { VideoUpload } from "../../../../components";
 
-function VideoGenBody({ setNextPage, onBack }) {
+function VideoGenBody({ onNextPage, onBack, isVoice, setFile }) {
   const [stockVoice, setStockVoice] = useState([]);
   return (
     <div className="VideoGenBody">
@@ -14,8 +14,8 @@ function VideoGenBody({ setNextPage, onBack }) {
           <img src={icons.arrow_left} alt="" className="fit-image" />
         </div>
         <div className="text-22-600">
-          Upload With{" "}
-          <span className="text-22-400" style={{ color: "#7B5AFF" }}>
+          Upload With
+          <span className="text-22-400 ms-5" style={{ color: "#7B5AFF" }}>
             FlōwAI
           </span>
         </div>
@@ -25,40 +25,51 @@ function VideoGenBody({ setNextPage, onBack }) {
           <div className="text-20-500 mb-20 mt-20" style={{ color: "#7D8185" }}>
             Upload Video
           </div>
-          <VideoUpload />
+          <VideoUpload setFileValue={setFile} />
         </div>
-        <div>
-          <div className="text-20-500 mb-20 mt-20" style={{ color: "#7D8185" }}>
-            Stock Voice (Optional)
-          </div>
-          <div className="stock-voice">
-            {[1, 2, 3, 4, 5, 6].map((ele, index) => {
-              return (
-                <div
-                  onClick={() => {
-                    if (stockVoice.includes(ele)) {
-                      setStockVoice((pre) => pre.filter((x) => x !== ele));
-                      return;
-                    }
-                    setStockVoice((pre) => [...pre, ele]);
-                  }}
-                  key={index}
-                  className={`${
-                    stockVoice.includes(ele) && "active-btn"
-                  } stock-btn `}
-                >
-                  Voice-{ele}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div>
-          <div className="text-20-500 mb-20 mt-20" style={{ color: "#7D8185" }}>
-            Add voice over (Optional)
-          </div>
-          <AudioUpload />
-        </div>
+
+        {isVoice && (
+          <>
+            <div>
+              <div
+                className="text-20-500 mb-20 mt-20"
+                style={{ color: "#7D8185" }}
+              >
+                Stock Voice (Optional)
+              </div>
+              <div className="stock-voice">
+                {[1, 2, 3, 4, 5, 6].map((ele, index) => {
+                  return (
+                    <div
+                      onClick={() => {
+                        if (stockVoice.includes(ele)) {
+                          setStockVoice((pre) => pre.filter((x) => x !== ele));
+                          return;
+                        }
+                        setStockVoice((pre) => [...pre, ele]);
+                      }}
+                      key={index}
+                      className={`${
+                        stockVoice.includes(ele) && "active-btn"
+                      } stock-btn `}
+                    >
+                      Voice-{ele}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div>
+              <div
+                className="text-20-500 mb-20 mt-20"
+                style={{ color: "#7D8185" }}
+              >
+                Add voice over (Optional)
+              </div>
+              <AudioUpload />
+            </div>
+          </>
+        )}
       </div>
       <div className="p-10 pt-20 wp-100">
         <Button
@@ -71,7 +82,7 @@ function VideoGenBody({ setNextPage, onBack }) {
             justifyContent: "center",
           }}
           onClick={() => {
-            setNextPage();
+            onNextPage();
           }}
         >
           <span>Generate</span>

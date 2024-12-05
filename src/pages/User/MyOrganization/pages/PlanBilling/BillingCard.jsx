@@ -5,15 +5,20 @@ import { useDispatch } from "react-redux";
 import { api } from "../../../../../services/api";
 import { showSuccess, throwError } from "../../../../../store/globalSlice";
 import { Spinner } from "react-bootstrap";
+import DeleteModal from "../../../../../components/layouts/DeleteModal";
 
 function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
   const dispatch = useDispatch();
   const [billingData, setBillingData] = useState([]);
   const [shippingData, setShippingData] = useState([]);
-  const [iseDelete, setIsDelete] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const [deletedId, setDeletedId] = useState("");
 
   useEffect(() => {
+    setBillingData([]);
+    setShippingData([]);
     if (addressList?.length > 0) {
       console.log("addressList", addressList);
       setBillingData(
@@ -36,11 +41,10 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
     }
   };
 
-  const deleteAddress = async (ele) => {
+  const deleteAddress = async (id) => {
     setIsDelete(true);
-
     try {
-      const res = await api.delete(`user/delete-address/${ele?._id}`);
+      const res = await api.delete(`user/delete-address/${id}`);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         onFetch();
@@ -51,10 +55,21 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
       console.log("error", error);
       dispatch(throwError(error.response.data.message));
     }
+    setShowDeleteModal(false);
     setIsDelete(false);
   };
   return (
     <div className="Billing_card">
+      <DeleteModal
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        onDelete={() => {
+          deleteAddress(deletedId);
+        }}
+        isDelete={isDelete}
+        title="Are you sure you want to proceed?"
+        text="Once deleted, they cannot be recovered."
+      />
       <div className="Billing_header">
         {addressType} {type === "billing" && "Address"}
       </div>
@@ -70,7 +85,7 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
                   style={{ filter: creteImgFilter("#1B2559") }}
                   onClick={() => onAddEdit(true, ele)}
                 />
-                {iseDelete && deletedId === ele._id ? (
+                {isDelete && deletedId === ele._id ? (
                   <div className="w-18 h-18 fa-center">
                     <Spinner
                       animation="border"
@@ -85,8 +100,8 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
                     className="fit-image w-18 h-18 pointer"
                     style={{ filter: creteImgFilter("#FF0000") }}
                     onClick={() => {
-                      deleteAddress(ele);
                       setDeletedId(ele._id);
+                      setShowDeleteModal(true);
                     }}
                   />
                 )}
