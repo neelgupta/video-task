@@ -8,6 +8,7 @@ import AddEditTeam from "./AddEditTeam";
 import { api } from "../../../../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { showSuccess, throwError } from "../../../../../store/globalSlice";
+import DeleteModal from "../../../../../components/layouts/DeleteModal";
 
 const header = [
   {
@@ -57,11 +58,14 @@ function Team() {
   const { selectedOrganizationId } = reduxData;
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+
   const [memberList, setMemberList] = useState([]);
   const [selectedPage, setSelectedPage] = useState(0);
   const [editMemberData, setEditMemberData] = useState("");
   const [isLoad, setIsLoad] = useState(false);
-
+  const [deletedId, setDeletedId] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [paginationOption, setPaginationOption] = useState({
     currentPage: 0,
     count: 0,
@@ -105,6 +109,7 @@ function Team() {
   };
 
   const deleteMember = async (id) => {
+    setIsDelete(true);
     try {
       const res = await api.delete(`user/delete-member/${id}`);
       console.log("res", res);
@@ -118,6 +123,9 @@ function Team() {
       console.log("error", error);
       dispatch(throwError(error.response.data.message));
     }
+    setDeletedId("");
+    setShowDeleteModal(false);
+    setIsDelete(false);
   };
 
   const setTableData = (data) => {
@@ -170,7 +178,8 @@ function Team() {
                 className={" h-20 w-20 f-center " + "pointer"}
                 onClick={() => {
                   if (!elem.is_parent) {
-                    deleteMember(elem._id);
+                    setDeletedId(elem._id);
+                    setShowDeleteModal(true);
                   }
                 }}
               >
@@ -205,6 +214,16 @@ function Team() {
 
   return (
     <div className="Team">
+      <DeleteModal
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        onDelete={() => {
+          deleteMember(deletedId);
+        }}
+        isDelete={isDelete}
+        title="Are you sure you want to proceed?"
+        text="Once deleted, they cannot be recovered."
+      />
       {isAdd && (
         <AddEditTeam
           isEdit={isEdit}

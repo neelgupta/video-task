@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, PasswordInput, TextInput } from "../../components";
+import { PasswordInput, TextInput } from "../../components";
 import * as Yup from "yup";
 import "./Login.scss";
 import { Formik } from "formik";
@@ -9,6 +9,8 @@ import { setAuthData } from "../../store/globalSlice";
 import { icons } from "../../utils/constants";
 import { api } from "../../services/api";
 import Swal from "sweetalert2";
+import { useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,13 +20,15 @@ const Login = () => {
     email: "",
     password: "",
   };
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
   const validationSchema = Yup.object({
-    email: Yup.string().required("Email is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
   const handleSubmit = async (values) => {
+    setIsLogin(true);
     try {
       const res = await api.post("user/sign-in", values);
       const data = res.data;
@@ -36,17 +40,14 @@ const Login = () => {
         };
         localStorage.authData = encrypt(authBody);
         dispatch(setAuthData(encrypt(authBody)));
+      } else {
+        setErrorMessage(data.message);
       }
     } catch (error) {
       console.log("error", error);
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: error.response.data.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      setErrorMessage(error.response.data.message);
     }
+    setIsLogin(false);
   };
   return (
     <div id="login-container">
@@ -109,15 +110,25 @@ const Login = () => {
                   Forgot Password?
                 </div>
                 <div>
+                  <p className="text-14-500" style={{ color: "var(--dc35)" }}>
+                    {errorMessage}
+                  </p>
+                </div>
+                <div>
                   <Button
-                    btnText="Login"
+                    // disabled={isLogin}
                     className="wp-100 h-53 text-18-500 scale-btn"
                     style={{
                       backgroundColor: themeColor.pColor,
                       border: "none",
                     }}
-                    onClick={handleSubmit}
-                  />
+                    onClick={() => {
+                      !isLogin && handleSubmit();
+                    }}
+                  >
+                    Login
+                    {isLogin && <Spinner size="sm" className="ms-10" />}
+                  </Button>
                 </div>
               </form>
             );

@@ -53,6 +53,7 @@ function EditOrganizationName({ show, handleClose }) {
         organization_name: name,
       };
       const res = await api.put("user/update-organization", req);
+      console.log("res", res);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         dispatch(handleProfileStore());
@@ -77,7 +78,9 @@ function EditOrganizationName({ show, handleClose }) {
         </Modal.Header>
         <Modal.Body>
           <div>
-            <div className="text-11-600 mb-5">Organization Name</div>
+            <div className="text-11-600 mb-5" style={{ color: "#666666" }}>
+              Organization Name
+            </div>
             <div>
               <input
                 type="text"
@@ -89,7 +92,7 @@ function EditOrganizationName({ show, handleClose }) {
                 placeholder="Enter Folder Name"
                 style={{
                   width: "100%",
-                  padding: "0.5rem",
+                  padding: "13px",
                   fontSize: "12px",
                   outline: "none",
                   border: "1px solid gray",

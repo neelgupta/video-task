@@ -1,18 +1,22 @@
 import { Formik } from "formik";
-import { useSelector } from "react-redux";
-import { Button, PasswordInput, Switch, TextInput } from "../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { PasswordInput, Switch, TextInput } from "../../components";
 import * as Yup from "yup";
 import "./Signup.scss";
 import { icons } from "../../utils/constants";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Button, Spinner } from "react-bootstrap";
 import { api } from "../../services/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { showSuccess, throwError } from "../../store/globalSlice";
+import { useState } from "react";
 
 function Signup() {
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isSignup, setIsSignup] = useState(false);
   const initialValues = {
     user_name: "",
     email: "",
@@ -44,28 +48,18 @@ function Signup() {
   });
 
   const handleSubmit = async (values) => {
+    setIsSignup(true);
     try {
       const res = await api.post("user/sign-up", values);
       if (res.status === 200) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: res.data.message,
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        dispatch(showSuccess(res.data.message));
         navigate("/");
       }
     } catch (error) {
       console.log("error", error);
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: error.response.data.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      dispatch(throwError(error.response.data.message));
     }
+    setIsSignup(false);
   };
   return (
     <div id="signUp-container">
@@ -290,14 +284,18 @@ function Signup() {
                 </div>
                 <div>
                   <Button
-                    btnText="Sign Up"
                     className="wp-100 h-53 text-18-500 scale-btn"
                     style={{
                       backgroundColor: themeColor.pColor,
                       border: "none",
                     }}
-                    onClick={handleSubmit}
-                  />
+                    onClick={() => {
+                      !isSignup && handleSubmit();
+                    }}
+                  >
+                    Sign Up
+                    {isSignup && <Spinner size="sm" className="ms-10" />}
+                  </Button>
                 </div>
               </form>
             );

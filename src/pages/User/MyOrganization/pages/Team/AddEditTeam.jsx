@@ -29,7 +29,8 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
   number: Yup.string()
     .matches(/^\d+$/, "Must be a number")
-    .required("Phone Number is required"),
+    .length(10, "Phone number must be 10 digits")
+    .required("Phone number is required"),
   role: Yup.object().required("Role is required"),
 });
 function AddEditTeam({
