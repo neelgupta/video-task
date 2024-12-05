@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Spinner } from "react-bootstrap";
 import "./CreateWithAI.scss";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +17,9 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
   const navigate = useNavigate();
   const reduxData = useSelector((state) => state.global);
   const { themeColor, selectedOrganizationId } = reduxData;
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [folderList, setFolderList] = useState([]);
+  const [isCreate, setIsCreate] = useState(false);
   const [form, setForm] = useState({
     title: "",
     is_collect_contact: true,
@@ -61,7 +62,10 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
   };
 
   const handleSubmit = async () => {
+    setIsCreate(true);
     if (form.title === "") {
+      setErrorMessage("Title is required");
+      setIsCreate(false);
       return;
     }
     try {
@@ -106,6 +110,7 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
       console.log("error", error);
       dispatch(throwError(error.response.data.message));
     }
+    setIsCreate(false);
   };
 
   return (
@@ -140,9 +145,21 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
                     padding: "0.5rem",
                     fontSize: "14px",
                   }}
+                  required
+                  name="title"
                   value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  onChange={(e) => {
+                    setForm({ ...form, title: e.target.value });
+                  }}
                 />
+                {errorMessage && !form.title && (
+                  <div
+                    className="text-12-500 mt-5"
+                    style={{ color: "var(--dc35)" }}
+                  >
+                    {errorMessage}
+                  </div>
+                )}
               </div>
             </div>
             <div className="form-items">
@@ -191,7 +208,10 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
             </div>
           </div>
           <div className="buttonContainer" onClick={handleSubmit}>
-            <Button>Create QnAFlow</Button>
+            <Button disabled={isCreate}>
+              Create QnAFlow
+              {isCreate && <Spinner size="sm" className="ms-10" />}
+            </Button>
           </div>
         </Modal.Body>
       </div>

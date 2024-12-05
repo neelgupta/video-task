@@ -3,11 +3,13 @@ import { useDropzone } from "react-dropzone";
 import "./VideoUpload.scss"; // Make sure to create the CSS file for styling
 import { creteImgFilter } from "../../../utils/helpers";
 import { icons } from "../../../utils/constants";
-
+import { useDispatch } from "react-redux";
+import { throwError } from "../../../store/globalSlice";
+const acceptVideoType = ["mp4", "avchd", "mpc", "aac"];
 const VideoUpload = ({ setFileValue, videoFile }) => {
   const [file, setFile] = useState(videoFile ? videoFile : null);
   const [uploadProgress, setUploadProgress] = useState(videoFile ? 100 : 0);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     setFileValue && setFileValue(file);
     // eslint-disable-next-line
@@ -17,8 +19,24 @@ const VideoUpload = ({ setFileValue, videoFile }) => {
     accept: "video/mp4, video/avchd, video/mpc, audio/aac",
     onDrop: (acceptedFiles) => {
       if (!file) {
-        setFile(acceptedFiles[0]);
-        uploadFile(acceptedFiles[0]);
+        const selectedFile = acceptedFiles[0];
+        const { size, type } = selectedFile;
+        if (parseInt(size / 1024 / 1024) > 8) {
+          dispatch(throwError("File size must be less than 8 MB."));
+          return;
+        }
+        if (
+          !acceptVideoType.includes(type.split("/")?.[1].toLocaleLowerCase())
+        ) {
+          dispatch(
+            throwError(
+              "Invalid file type. Please upload a file in one of the following formats: video/mp4, video/avchd, video/mpc, or audio/aac."
+            )
+          );
+          return;
+        }
+        setFile(selectedFile);
+        uploadFile(selectedFile);
       }
     },
   });

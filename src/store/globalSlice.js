@@ -227,6 +227,7 @@ export const handleFetchFlowData = (payload) => async (dispatch) => {
             id: node._id,
             index: index + 1,
             intId: id,
+            data: node,
           }))
         );
         setEdges(
@@ -236,6 +237,7 @@ export const handleFetchFlowData = (payload) => async (dispatch) => {
             type: "button",
             index: index + 1,
             intId: id,
+            data: edge,
           }))
         );
       } else {

@@ -22,7 +22,7 @@ function Upload({ show, handleClose }) {
   const [videoFile, setVideoFile] = useState(null);
   const [isCreate, setIsCreate] = useState(false);
   const [videoConfigForm, setVideoConfigForm] = useState({
-    alignVideo: false,
+    alignVideo: true,
     videoPosition: {
       value: "center left",
       label: "Center Left",
@@ -56,7 +56,7 @@ function Upload({ show, handleClose }) {
       req.append("positionX", newQueModalData.positionX);
       req.append("positionY", newQueModalData.positionY);
 
-      req.append("flow_type", "Upload");
+      req.append("flow_type", "upload");
       req.append("video_align", videoConfigForm.alignVideo);
       req.append("overlay_text", videoConfigForm.overlayText);
       req.append("text_size", videoConfigForm.textSize.value);
@@ -70,6 +70,7 @@ function Upload({ show, handleClose }) {
       });
       if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
+        handleClose();
       } else {
         dispatch(throwError(res.data.message));
       }
@@ -78,7 +79,6 @@ function Upload({ show, handleClose }) {
       dispatch(handelCatch(error));
     }
     dispatch(setNewQueModalData({}));
-    handleClose();
     setIsCreate(false);
   };
 
@@ -91,7 +91,9 @@ function Upload({ show, handleClose }) {
       tempVideo.onloadedmetadata = () => {
         setMAX(Math.ceil(tempVideo.duration));
       };
+      return;
     }
+    setVideoSrc("");
   }, [videoFile]);
 
   return (

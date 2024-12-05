@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   handelNodePosition,
   handleFetchFlowData,
+  setNewQueModalData,
   setQueModelConfig,
   setShowCreateFlowModal,
   throwError,
@@ -56,7 +57,21 @@ const FlowCanvas = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
-    // if (nodes.length === 2) dispatch(setShowCreateFlowModal(true));
+    if (nodes.length === 2) {
+      const startNode = nodes.find((x) => x.type === "Start");
+      const endNode = nodes.find((x) => x.type === "End");
+      const req = {
+        targetId: endNode.id,
+        sourceId: startNode.id,
+        interaction_id: id,
+        type: "Question",
+        title: "untitled",
+        positionX: (startNode.position.x + endNode.position.x) / 2 - 100,
+        positionY: (startNode.position.y + endNode.position.y) / 2 - 125,
+      };
+      dispatch(setNewQueModalData(req));
+      dispatch(setShowCreateFlowModal(true));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes.length]);
 
