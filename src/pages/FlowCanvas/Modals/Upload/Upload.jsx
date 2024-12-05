@@ -55,7 +55,6 @@ function Upload({ show, handleClose }) {
       req.append("title", newQueModalData.title);
       req.append("positionX", newQueModalData.positionX);
       req.append("positionY", newQueModalData.positionY);
-
       req.append("flow_type", "Upload");
       req.append("video_align", videoConfigForm.alignVideo);
       req.append("overlay_text", videoConfigForm.overlayText);

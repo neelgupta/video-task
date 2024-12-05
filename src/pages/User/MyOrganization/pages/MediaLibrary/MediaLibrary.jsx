@@ -13,6 +13,8 @@ function MediaLibrary() {
   const [isUpload, setIsUpload] = useState(false);
   const [isFetch, setIsFetch] = useState(false);
   const [mediaList, setMediaList] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,8 +29,9 @@ function MediaLibrary() {
     try {
       setMediaList([]);
       const res = await api.get(
-        `interactions/get-library/${selectedOrganizationId}`
+        `interactions/get-library/${selectedOrganizationId}?search=${searchValue}`
       );
+      console.log("res", res);
       if (res.status === 200) {
         setMediaList(res.data.response);
       } else {
@@ -71,7 +74,13 @@ function MediaLibrary() {
                   className="fit-image icon-color-1B2559"
                 />
               </span>
-              <input type="text" placeholder="Search" />
+              <input
+                type="text"
+                value={searchValue}
+                placeholder="Search"
+                onChange={(e) => setSearchValue(e.target.value)}
+                onBlur={() => fetchMediaList()}
+              />
             </div>
             <div
               className="btn-group wp-100"
@@ -140,7 +149,7 @@ function MediaLibrary() {
                       src={icons.single_arrow}
                       alt=""
                       className="fit-image icon_img_double_arrow"
-                    /> */}
+                      /> */}
                         </div>
                         <div
                           style={{
@@ -151,7 +160,7 @@ function MediaLibrary() {
                           }}
                           className="text-14-400"
                         >
-                          Title {index + 1}
+                          {ele.title}
                         </div>
                       </div>
                     </div>
@@ -159,8 +168,12 @@ function MediaLibrary() {
                 })}
 
               {mediaList.length === 0 && (
-                <div>
-                  <p>Media not found!</p>
+                <div
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <p className="text-18-600">Media not found!</p>
                 </div>
               )}
             </>
