@@ -56,7 +56,7 @@ const FlowCanvas = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
-    if (nodes.length === 2) dispatch(setShowCreateFlowModal(true));
+    // if (nodes.length === 2) dispatch(setShowCreateFlowModal(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes.length]);
 

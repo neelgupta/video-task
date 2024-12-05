@@ -42,6 +42,12 @@
       overflow: hidden;
       position: relative;
       .media_img {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: bottom center;
+        overflow: hidden;
+        object-fit: cover;
         position: absolute;
         z-index: 999;
       }

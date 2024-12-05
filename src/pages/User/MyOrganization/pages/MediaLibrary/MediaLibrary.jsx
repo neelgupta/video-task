@@ -1,14 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MediaLibrary.scss";
 import { icons } from "../../../../../utils/constants";
 import { creteImgFilter } from "../../../../../utils/helpers";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import UploadMedia from "./UploadMedia";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { api } from "../../../../../services/api";
+import { handelCatch, throwError } from "../../../../../store/globalSlice";
 function MediaLibrary() {
   const reduxData = useSelector((state) => state.global);
-  const { isResponsive, themeColor } = reduxData;
+  const { isResponsive, themeColor, selectedOrganizationId } = reduxData;
   const [isUpload, setIsUpload] = useState(false);
+  const [isFetch, setIsFetch] = useState(false);
+  const [mediaList, setMediaList] = useState([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (selectedOrganizationId) {
+      fetchMediaList();
+    }
+    // eslint-disable-next-line
+  }, [selectedOrganizationId]);
+
+  const fetchMediaList = async () => {
+    setIsFetch(true);
+    try {
+      setMediaList([]);
+      const res = await api.get(
+        `interactions/get-library/${selectedOrganizationId}`
+      );
+      if (res.status === 200) {
+        setMediaList(res.data.response);
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsFetch(false);
+  };
+
   return (
     <>
       <UploadMedia show={isUpload} onHide={() => setIsUpload(false)} />
@@ -64,6 +96,7 @@ function MediaLibrary() {
                     padding: "15px",
                     width: "200px !important",
                   }}
+                  disabled={true}
                   onClick={() => setIsUpload(true)}
                 >
                   <img
@@ -79,44 +112,59 @@ function MediaLibrary() {
           </div>
         </div>
         <div className="Media-gallery">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((ele, index) => {
-            return (
-              <div className="Media_card" key={index}>
-                <img
-                  src={icons.avatar9}
-                  alt=""
-                  className="fit-image media_img"
-                />
-                <div className="hover_card">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "end",
-                      padding: "10px",
-                      width: "100%",
-                    }}
-                  >
-                    <img
+          {isFetch ? (
+            <div>
+              <Spinner style={{ color: "black" }} size="xl" />
+            </div>
+          ) : (
+            <>
+              {mediaList.length > 0 &&
+                mediaList.map((ele, index) => {
+                  return (
+                    <div className="Media_card" key={index}>
+                      <img
+                        src={ele.video_thumbnail}
+                        alt=""
+                        className="media_img"
+                      />
+                      <div className="hover_card">
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "end",
+                            padding: "10px",
+                            width: "100%",
+                          }}
+                        >
+                          {/* <img
                       src={icons.single_arrow}
                       alt=""
                       className="fit-image icon_img_double_arrow"
-                    />
-                  </div>
-                  <div
-                    style={{
-                      background: "rgba(0,0,0,0.2)",
-                      padding: "5px 10px",
-                      color: "white",
-                      width: "100%",
-                    }}
-                    className="text-14-400"
-                  >
-                    Title {index + 1}
-                  </div>
+                    /> */}
+                        </div>
+                        <div
+                          style={{
+                            background: "rgba(0,0,0,0.2)",
+                            padding: "5px 10px",
+                            color: "white",
+                            width: "100%",
+                          }}
+                          className="text-14-400"
+                        >
+                          Title {index + 1}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+              {mediaList.length === 0 && (
+                <div>
+                  <p>Media not found!</p>
                 </div>
-              </div>
-            );
-          })}
+              )}
+            </>
+          )}
         </div>
       </div>
     </>
