@@ -25,13 +25,11 @@ const VideoModal = ({ show, handleClose }) => {
     modalType,
     createQusModalData,
   } = queModelData;
-  console.log("createQusModalData", createQusModalData);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [file, setFile] = useState(null);
   const [videoSrc, setVideoSrc] = useState(null);
   useEffect(() => {
-    console.log("file", file);
     if (file && file.type.startsWith("video/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -39,7 +37,7 @@ const VideoModal = ({ show, handleClose }) => {
       };
       reader.readAsDataURL(file); // Read the file as a data URL
     } else {
-      console.log("Please upload a valid video file.");
+      dispatch(throwError("Please upload a valid video file."));
     }
   }, [file]);
   useEffect(() => {

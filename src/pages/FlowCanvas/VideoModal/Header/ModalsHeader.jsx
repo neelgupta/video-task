@@ -12,7 +12,6 @@ function ModalsHeader({
   queModelData,
 }) {
   const { modalType } = queModelData;
-  console.log("modalType", modalType);
   const headerTabArray = ["video", "answer", "logic"];
   return (
     <div className="Video_header">

@@ -94,7 +94,6 @@ const FlowCanvas = () => {
           ],
         };
         const res = await api.put("interactions/update-cordinates", req);
-        console.log("res", res);
         if (res.status !== 200) {
           console.log("field");
           fetchFlowData();
@@ -150,7 +149,6 @@ const FlowCanvas = () => {
             });
           }}
           onEdgesChange={(change) => {
-            console.log("onEdgesChange", change);
             onEdgesChange(change);
           }}
           className="react_flow_canvas"

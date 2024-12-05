@@ -46,8 +46,6 @@ function Upload({ show, handleClose }) {
   const handleSubmitNewQue = async () => {
     try {
       setIsCreate(true);
-      console.log("newQueModalData", newQueModalData);
-      console.log("videoConfigForm", videoConfigForm);
       const req = new FormData();
 
       req.append("interaction_id", newQueModalData.interaction_id);
@@ -75,7 +73,6 @@ function Upload({ show, handleClose }) {
       } else {
         dispatch(throwError(res.data.message));
       }
-      console.log("res", res);
     } catch (error) {
       console.log("error", error);
       dispatch(handelCatch(error));
@@ -92,7 +89,6 @@ function Upload({ show, handleClose }) {
       const tempVideo = document.createElement("video");
       tempVideo.src = videoUrl;
       tempVideo.onloadedmetadata = () => {
-        console.log("Video duration:", tempVideo.duration, "seconds");
         setMAX(Math.ceil(tempVideo.duration));
       };
     }

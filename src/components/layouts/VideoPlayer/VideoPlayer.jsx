@@ -33,18 +33,15 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
 
   const handleTimeUpdate = () => {
     const video = videoRef.current;
-    console.log("video.currentTime", video.currentTime);
     setCurrentTime(video.currentTime);
   };
 
   const handleLoadedMetadata = () => {
     const video = videoRef.current;
-    console.log("video.duration", video.duration);
     setDuration(video.duration);
   };
 
   const handleProgressBarChange = (e) => {
-    console.log("e", e);
     const video = videoRef.current;
     video.currentTime = e.target.value;
   };
