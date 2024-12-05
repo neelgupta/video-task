@@ -56,7 +56,7 @@ function Upload({ show, handleClose }) {
       req.append("positionX", newQueModalData.positionX);
       req.append("positionY", newQueModalData.positionY);
 
-      req.append("flow_type", "upload");
+      req.append("flow_type", "Upload");
       req.append("video_align", videoConfigForm.alignVideo);
       req.append("overlay_text", videoConfigForm.overlayText);
       req.append("text_size", videoConfigForm.textSize.value);
@@ -70,6 +70,7 @@ function Upload({ show, handleClose }) {
       });
       if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
+        dispatch(setNewQueModalData({}));
         handleClose();
       } else {
         dispatch(throwError(res.data.message));
@@ -78,7 +79,6 @@ function Upload({ show, handleClose }) {
       console.log("error", error);
       dispatch(handelCatch(error));
     }
-    dispatch(setNewQueModalData({}));
     setIsCreate(false);
   };
 
