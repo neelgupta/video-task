@@ -7,7 +7,6 @@ import { Button, Spinner } from "react-bootstrap";
 import CreateFolderModal from "./CreateFolderModal";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteModal from "../../../components/layouts/DeleteModal";
-import CustomFileMenu from "./CustomFileMeu";
 import { icons } from "../../../utils/constants";
 import { creteImgFilter } from "../../../utils/helpers";
 import { api } from "../../../services/api";

@@ -11,14 +11,9 @@ import "./ButtonEdge.scss";
 import { creteImgFilter } from "../../../../utils/helpers";
 import { useDispatch } from "react-redux";
 import {
-  handelCreateQuestion,
-  setCreateQusModalData,
   setNewQueModalData,
   setShowCreateFlowModal,
-  showSuccess,
-  throwError,
 } from "../../../../store/globalSlice";
-import { api } from "../../../../services/api";
 function ButtonEdge({
   id,
   source,
