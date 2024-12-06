@@ -102,7 +102,9 @@ const MyCollection = () => {
               <div
                 className="pointer"
                 onClick={() => {
-                  navigate(`/user/collection/${item._id}`);
+                  navigate(`/user/collection/${item._id}`, {
+                    state: { selectedItem: item },
+                  });
                 }}
               >
                 <img
@@ -125,8 +127,8 @@ const MyCollection = () => {
           );
         })
       ) : (
-        <div className="f-center wp-100">
-          <Spinner size="xl" className="mt-50" />
+        <div className="fa-center wp-100">
+          <Spinner size="xl" className="mt-50 ms-50" />
         </div>
       )}
       <Button

@@ -216,13 +216,21 @@ function VideoConfiguration({
                   {...props}
                   style={{
                     ...props.style,
-                    height: isDragged ? "25px" : "20px",
-                    width: isDragged ? "25px" : "20px",
+                    height: isDragged ? "28px" : "28px",
+                    width: isDragged ? "28px" : "28px",
                     borderRadius: "50%",
-                    backgroundColor: isDragged ? "#7b5aff" : "#B3A1FF",
-                    boxShadow: "0px 2px 6px #AAA",
+                    backgroundColor: isDragged ? "#7b5aff" : "#fff",
+                    border: isDragged ? "none" : "2px solid #7b5aff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "12px",
+                    color: isDragged ? "white" : "black",
+                    fontWeight: "600",
                   }}
-                ></div>
+                >
+                  {videoConfigForm.textReveal}
+                </div>
               )}
             />
             <div className="slider-labels mt-10">

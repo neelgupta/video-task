@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../../services/api";
 import "./MyFolder.scss";
 import { icons } from "../../../../utils/constants";
@@ -12,24 +12,32 @@ import {
 import { Spinner } from "react-bootstrap";
 import CustomFileMenu from "./CustomFileMenu";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
+import MoveFolderModel from "./MoveFolderModel";
+import { creteImgFilter } from "../../../../utils/helpers";
 function MyFolder() {
   const { id } = useParams();
+  const location = useLocation();
+  const selectedItem = location.state?.selectedItem;
   const navigate = useNavigate();
   const [fileList, setFileList] = useState([]);
   const [isFetch, setIsFetch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
   const [isDelete, setIsDelete] = useState(false);
-
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showMoveFolderModal, setShowMoveFolderModal] = useState(false);
+  const [moveFolderItem, setMoveFolderItem] = useState({});
+  const [folderList, setFolderList] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (id) {
+    if (id && selectedItem) {
+      console.log("selectedItem", selectedItem);
       getFolderCollection();
+      fetchFolderList();
       return;
     }
     navigate("/user/collection");
     // eslint-disable-next-line
-  }, [id]);
+  }, [id, selectedItem]);
 
   const getFolderCollection = async () => {
     setIsFetch(true);
@@ -46,6 +54,21 @@ function MyFolder() {
       dispatch(handelCatch(error));
     }
     setIsFetch(false);
+  };
+
+  const fetchFolderList = async () => {
+    try {
+      const res = await api.get(
+        `interactions/get-folders/${selectedItem.organization_id}`
+      );
+      console.log("res", res);
+      if (res.status === 200) {
+        setFolderList(res.data.response);
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
   };
 
   const handelDeleteInt = async (id) => {
@@ -78,6 +101,42 @@ function MyFolder() {
         title="Are you sure you want to proceed?"
         text="Once deleted, they cannot be recovered."
       />
+
+      <MoveFolderModel
+        show={showMoveFolderModal}
+        int={moveFolderItem}
+        selectedFolder={selectedItem}
+        folderList={folderList}
+        getFolderCollection={getFolderCollection}
+        handleClose={() => {
+          setShowMoveFolderModal(false);
+        }}
+      />
+      <div
+        className="ms-10"
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div className="w-25 h-25 me-10 mb-3">
+          <img
+            src={icons.fillFolderOpen}
+            alt=""
+            className="fit-image"
+            style={{ filter: creteImgFilter("#4b4b4b") }}
+          />
+        </div>
+        <div
+          className="text-24-500 m-0 p-0"
+          style={{
+            color: "rgb(75, 75, 75)",
+            textTransform: "capitalize",
+          }}
+        >
+          {selectedItem.folder_name}
+        </div>
+      </div>
       <div className="collection-list-container">
         {isFetch ? (
           <Spinner />
@@ -94,6 +153,10 @@ function MyFolder() {
                       onDeleteClick={() => {
                         setDeleteId(ele._id);
                         setShowDeleteModal(true);
+                      }}
+                      onMoveClick={() => {
+                        setMoveFolderItem(ele);
+                        setShowMoveFolderModal(true);
                       }}
                     />
                   </div>
@@ -119,7 +182,7 @@ function MyFolder() {
                         }}
                         className="text-16-600"
                       >
-                        title
+                        {ele.title}
                       </div>
                     </div>
                   </div>
@@ -128,8 +191,8 @@ function MyFolder() {
             })}
           </>
         ) : (
-          <div>
-            <p>data not found</p>
+          <div className="text-16-500 ms-15">
+            <p>Folder data not found..!</p>
           </div>
         )}
       </div>

@@ -63,7 +63,7 @@ const UserRoute = () => {
     {
       path: "/user/collection/:id",
       component: <MyFolder />,
-      pageTitle: "My Collection",
+      pageTitle: "My Folder",
       onBack: () => navigate("/user/collection"),
     },
     {

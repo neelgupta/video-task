@@ -94,6 +94,9 @@ import master from "../../assets/images/svgIcons/master.svg";
 import avatar10 from "../../assets/images/avatar10.png";
 import avatar11 from "../../assets/images/avatar11.png";
 import pushIcon from "../../assets/images/svgIcons/pushIcon.svg";
+import outlineFolderOpen from "../../assets/images/svgIcons/outlineFolderOpen.svg";
+import folderMove from "../../assets/images/svgIcons/folderMove.svg";
+import fillFolderOpen from "../../assets/images/svgIcons/fillFolderOpen.svg";
 
 export const icons = {
   logo,
@@ -192,4 +195,7 @@ export const icons = {
   avatar11,
   avatar10,
   pushIcon,
+  outlineFolderOpen,
+  folderMove,
+  fillFolderOpen,
 };
