@@ -34,7 +34,9 @@ function ButtonEdge({
   selected,
   intId,
   index,
+  data: { isHover },
 }) {
+  console.log("isHover", isHover);
   const { setEdges, setNodes } = useReactFlow();
   const { id: flowId } = useParams();
   const [edgePath, labelX, labelY] = getBezierPath({
@@ -89,16 +91,16 @@ function ButtonEdge({
           // stroke: selected ? `url(#gradient-border)` : "#000",
           stroke: selected ? `url(#gradient-border)` : "#000",
 
-          strokeWidth: selected ? 6 : 4,
+          strokeWidth: selected ? 6 : isHover ? 1 : 4,
           strokeLinecap: "square",
         }}
         className="custom-edge-path"
       />
-      {selected && (
+      {isHover && (
         <path
           d={edgePath}
           stroke="#fff"
-          strokeWidth="1" // Border thickness (thicker when selected)
+          strokeWidth="2" // Border thickness (thicker when selected)
           fill="none" // No fill inside the path
           strokeDasharray="5,10" // Dashed line pattern (5px dash, 5px space)
           strokeLinecap="square" // Round end caps for the strokes

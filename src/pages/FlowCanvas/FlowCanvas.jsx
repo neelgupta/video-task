@@ -165,6 +165,25 @@ const FlowCanvas = () => {
           }}
           onEdgesChange={(change) => {
             onEdgesChange(change);
+            console.log("change", change);
+          }}
+          onEdgeMouseEnter={(event, edge) => {
+            setEdges((eds) =>
+              eds.map((e) =>
+                e.id === edge.id
+                  ? { ...e, data: { ...e.data, isHover: true } }
+                  : e
+              )
+            );
+          }}
+          onEdgeMouseLeave={(event, edge) => {
+            setEdges((eds) =>
+              eds.map((e) =>
+                e.id === edge.id
+                  ? { ...e, data: { ...e.data, isHover: false } }
+                  : e
+              )
+            );
           }}
           className="react_flow_canvas"
           nodeTypes={nodeTypes}
