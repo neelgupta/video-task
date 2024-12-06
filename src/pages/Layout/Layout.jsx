@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import "./Layout.scss";
 import { useDispatch } from "react-redux";
 import { setIsResponsive } from "../../store/globalSlice";
-import NewQnAFlowModal from "../NewQnAFlowModal";
-import CreateWithAI from "../NewQnAFlowModal/CreateWithAI";
+import NewQnAFlowModal from "../User/NewQnAFlowModal";
+import CreateWithAI from "../User/NewQnAFlowModal/CreateWithAI";
 
 const Layout = ({ children, pageTitle, onBack }) => {
   const [show, setShow] = useState(false);

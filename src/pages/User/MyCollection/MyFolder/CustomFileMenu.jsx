@@ -17,7 +17,13 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-const CustomFileMenu = ({ onEditClick, onDeleteClick, onMoveClick }) => {
+const CustomFileMenu = ({
+  onEditClick,
+  onDeleteClick,
+  onMoveClick,
+  onViewClick,
+  onDuplicateClick,
+}) => {
   return (
     <Dropdown>
       <Dropdown.Toggle as={CustomToggle}>
@@ -33,7 +39,9 @@ const CustomFileMenu = ({ onEditClick, onDeleteClick, onMoveClick }) => {
 
       <Dropdown.Menu style={{ boxShadow: "0px 0px 50px rgba(0,0,0,0.8)" }}>
         <Dropdown.Item
-          onClick={() => {}}
+          onClick={() => {
+            onViewClick();
+          }}
           className="text-14-600 "
           style={{ display: "flex", alignItems: "center" }}
         >
@@ -64,7 +72,12 @@ const CustomFileMenu = ({ onEditClick, onDeleteClick, onMoveClick }) => {
         >
           Move to folder
         </Dropdown.Item>
-        <Dropdown.Item onClick={() => {}} className="text-14-500">
+        <Dropdown.Item
+          onClick={() => {
+            onDuplicateClick();
+          }}
+          className="text-14-500"
+        >
           Duplicate
         </Dropdown.Item>
         <Dropdown.Divider

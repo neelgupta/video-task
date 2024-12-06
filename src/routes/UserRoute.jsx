@@ -21,6 +21,7 @@ import {
   setSelectedOrganization,
 } from "../store/globalSlice";
 import MyFolder from "../pages/User/MyCollection/MyFolder";
+import ViewInteraction from "../pages/User/ViewInteraction";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -121,6 +122,8 @@ const UserRoute = () => {
         );
       })}
       <Route path="/user/flow/:id" element={<FlowCanvas />} />
+      <Route path="/user/view-flow" element={<ViewInteraction />} />
+
       <Route path="*" element={<Navigate to="/user/dashboard" />} />
     </Routes>
   );

@@ -32,7 +32,6 @@ function MyFolder() {
     if (id && selectedItem) {
       console.log("selectedItem", selectedItem);
       getFolderCollection();
-      fetchFolderList();
       return;
     }
     navigate("/user/collection");
@@ -88,6 +87,34 @@ function MyFolder() {
     }
     setShowDeleteModal(false);
     setIsDelete(false);
+  };
+
+  const handleView = (ele) => {
+    const req = {
+      intId: ele._id,
+      organizationId: ele.organization_id,
+    };
+    const query = new URLSearchParams({
+      data: JSON.stringify(req),
+    }).toString();
+    window.open(`/user/view-flow?${query}`, "_blank");
+  };
+
+  const handleDuplicate = async (int) => {
+    try {
+      const req = {
+        interaction_id: int._id,
+        folder_id: id,
+      };
+      const res = await api.post("interactions/copy-interaction", req);
+      if (res.status === 200) {
+        getFolderCollection();
+      }
+      console.log("res", res);
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
   };
   return (
     <div className="MyFolder">
@@ -158,6 +185,8 @@ function MyFolder() {
                         setMoveFolderItem(ele);
                         setShowMoveFolderModal(true);
                       }}
+                      onViewClick={() => handleView(ele)}
+                      onDuplicateClick={() => handleDuplicate(ele)}
                     />
                   </div>
                   <div className="file-card">

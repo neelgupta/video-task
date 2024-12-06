@@ -1,7 +1,6 @@
 .createWithAIContainer {
   .modal-content {
     background-color: white;
-
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -14,7 +13,7 @@
           rgba(255, 198, 252, 0) 50.52%,
           rgba(217, 197, 216, 0.4) 100%
         ),
-        url("../../assets/images/qnabackground.png");
+        url("../../../assets/images/qnabackground.png");
       filter: opacity(0.45);
       position: absolute;
       width: 100%;

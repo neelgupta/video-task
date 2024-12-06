@@ -4,8 +4,8 @@ import "./CreateWithAI.scss";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { showSuccess, throwError } from "../../store/globalSlice";
-import { api, TestApi } from "../../services/api";
+import { showSuccess, throwError } from "../../../store/globalSlice";
+import { api } from "../../../services/api";
 
 const options = [
   { value: "english", label: "English" },
@@ -118,6 +118,7 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
       show={show}
       onHide={handleClose}
       centered
+      backdrop="static"
       className="createWithAIContainer"
     >
       <div className="p-20 " style={{ zIndex: "100" }}>

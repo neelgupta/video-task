@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import "./NewQnAFlowModal.scss";
-import { icons } from "../../utils/constants";
+import { icons } from "../../../utils/constants";
 import OutlineRadio from "./OutlineRadio";
 import Select from "react-select";
-import { creteImgFilter } from "../../utils/helpers";
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -90,6 +89,7 @@ const NewQnAFlowModal = ({
       show={show}
       onHide={handleClose}
       centered
+      backdrop="static"
       className="qnaFlowModal"
     >
       <div className="p-10" style={{ zIndex: "100" }}>
