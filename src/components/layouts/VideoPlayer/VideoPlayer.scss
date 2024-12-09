@@ -98,18 +98,18 @@
       align-items: center;
       justify-content: center;
     }
-    .overlay-text {
-      position: absolute;
-      top: 50px;
-      left: 50px;
-      right: 50px;
-      bottom: 100px;
-      overflow: auto;
-      color: white;
-      font-weight: 700;
-      overflow-wrap: break-word;
-      transition-duration: 0.3s;
-      transition-property: opacity;
-    }
+  }
+  .overlay-text {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    right: 50px;
+    bottom: 100px;
+    overflow: auto;
+    color: white;
+    font-weight: 700;
+    overflow-wrap: break-word;
+    transition-duration: 0.3s;
+    transition-property: opacity;
   }
 }
