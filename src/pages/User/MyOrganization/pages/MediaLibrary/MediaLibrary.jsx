@@ -24,6 +24,11 @@ function MediaLibrary() {
     // eslint-disable-next-line
   }, [selectedOrganizationId]);
 
+  useEffect(() => {
+    fetchMediaList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue]);
+
   const fetchMediaList = async () => {
     setIsFetch(true);
     try {
@@ -79,7 +84,7 @@ function MediaLibrary() {
                 value={searchValue}
                 placeholder="Search"
                 onChange={(e) => setSearchValue(e.target.value)}
-                onBlur={() => fetchMediaList()}
+                // onBlur={() => fetchMediaList()}
               />
             </div>
             <div
