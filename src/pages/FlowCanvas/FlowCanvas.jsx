@@ -31,6 +31,8 @@ import {
   throwError,
 } from "../../store/globalSlice";
 import Upload from "./Modals/Upload/Upload";
+import DeleteModal from "../../components/layouts/DeleteModal";
+
 // import { showVideoModel } from "../../utils/helpers";
 
 const nodeClassName = (node) => node.type;
@@ -119,6 +121,10 @@ const FlowCanvas = () => {
       fetchFlowData();
     }
     seyIsCanvasLock(false);
+  };
+
+  const handleDeleteFolder = (id) => {
+    console.log("id", id);
   };
 
   return (

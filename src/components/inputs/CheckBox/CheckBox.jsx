@@ -10,10 +10,16 @@ const CheckBox = ({ className, isCheck, onChange }) => {
 
   return (
     <div id="checkbox-container">
-      <Form.Check type="checkbox" className={className} checked={checked}>
+      <Form.Check
+        type="checkbox"
+        className={className}
+        value={checked}
+        checked={checked}
+      >
         <Form.Check.Input
           onChange={(e) => {
             setChecked(e.target.checked);
+            onChange && onChange(e.target.checked);
           }}
           style={{
             borderColor: checked ? themeColor.darkColor : "#757F95",

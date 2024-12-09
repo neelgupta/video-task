@@ -31,7 +31,6 @@ function ButtonEdge({
   index,
   data: { isHover },
 }) {
-  console.log("isHover", isHover);
   const { setEdges, setNodes } = useReactFlow();
   const { id: flowId } = useParams();
   const [edgePath, labelX, labelY] = getBezierPath({

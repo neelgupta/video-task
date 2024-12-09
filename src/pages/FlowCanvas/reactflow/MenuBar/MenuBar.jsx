@@ -8,6 +8,7 @@ import DocsIcon from "../../../../assets/images/icons/DocsIcon";
 import ProfileWithArrowIcon from "../../../../assets/images/icons/ProfileWithArrowIcon";
 import PlayIcon from "../../../../assets/images/icons/PlayIcon";
 import { icons } from "../../../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 const MenuBar = React.forwardRef(({ className, ...props }) => {
   const [selectMenuIcon, setSelectMenuIcon] = useState("");

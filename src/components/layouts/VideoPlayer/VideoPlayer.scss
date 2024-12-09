@@ -38,7 +38,7 @@
     .control-volume {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 20px;
+      margin-bottom: 0px;
       .volume {
         img {
           filter: invert(100%) sepia(10%) saturate(4492%) hue-rotate(184deg)
@@ -104,7 +104,7 @@
     top: 50px;
     left: 50px;
     right: 50px;
-    bottom: 100px;
+    bottom: 130px;
     overflow: auto;
     color: white;
     font-weight: 700;

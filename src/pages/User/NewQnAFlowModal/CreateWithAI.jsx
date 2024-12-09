@@ -140,7 +140,7 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
                 <input
                   type="text"
                   className="form-control rounded-3"
-                  placeholder="Name your QnAFlow"
+                  placeholder="Name your Flow AI"
                   style={{
                     width: "100%",
                     padding: "0.5rem",

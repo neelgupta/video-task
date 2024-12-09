@@ -5,16 +5,24 @@ import { icons } from "../../../../utils/constants";
 import { Button } from "react-bootstrap";
 import UndoIcon from "../../../../assets/images/icons/UndoIcon";
 import RedoIcon from "../../../../assets/images/icons/RedoIcon";
+import { useNavigate } from "react-router-dom";
 
 const TitleUndoRedo = React.forwardRef(({ className, ...props }) => {
+  const navigate = useNavigate();
+
   return (
     <Panel position="top-left" {...props} className="p-20 pt-35">
       <div className={styles.mainContentContainer}>
         <div className={styles.titleContentContainer}>
-          <div className="text-16-500">Title of FlōwAI</div>
-          <div>
-            <img src={icons.editIcon} alt="edit icon" />
+          <div
+            className="w-30 h-30 f-center"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <img src={icons.arrow_left} alt="edit icon" className="fit-image" />
           </div>
+          <div className="text-16-500">Flōw AI</div>
         </div>
         <div className={styles.undoContainer}>
           <Button className={styles.undoBtn} onClick={() => {}}>

@@ -21,8 +21,8 @@ const VideoUpload = ({ setFileValue, videoFile }) => {
       if (!file) {
         const selectedFile = acceptedFiles[0];
         const { size, type } = selectedFile;
-        if (parseInt(size / 1024 / 1024) > 8) {
-          dispatch(throwError("File size must be less than 8 MB."));
+        if (parseInt(size / 1024 / 1024) > 4) {
+          dispatch(throwError("File size must be less than 4 MB."));
           return;
         }
         if (

@@ -12,7 +12,8 @@ import {
 } from "../../../../store/globalSlice";
 import VideoConfiguration from "./VideoConfiguration";
 import { api } from "../../../../services/api";
-
+import AnswerTab from "./AnswerTab";
+const headerTabArray = ["video", "answer", "logic"];
 function Upload({ show, handleClose }) {
   const dispatch = useDispatch();
   const { newQueModalData } = useSelector((state) => state.global);
@@ -21,6 +22,7 @@ function Upload({ show, handleClose }) {
   const [videoSrc, setVideoSrc] = useState("");
   const [videoFile, setVideoFile] = useState(null);
   const [isCreate, setIsCreate] = useState(false);
+  const [headerTab, setHeaderTab] = useState("video");
   const [videoConfigForm, setVideoConfigForm] = useState({
     alignVideo: true,
     videoPosition: {
@@ -123,46 +125,84 @@ function Upload({ show, handleClose }) {
               )}
             </div>
           </div>
-          <div className="wp-40 content-body">
-            <div className="modal-title">
-              <div className="w-30 pointer" onClick={() => setCurrentKey(1)}>
-                <img src={icons.arrow_left} alt="" className="fit-image" />
-              </div>
-              <div className="text-22-600">
-                Upload With
-                <span className="text-22-400 ms-5" style={{ color: "#7B5AFF" }}>
-                  FlōwAI
-                </span>
+          <div className="wp-40 ">
+            <div className="Video_header">
+              <div
+                className="wp-45 header_item"
+                style={{ justifyContent: "space-between" }}
+              >
+                <div className="header_tab">
+                  {headerTabArray.map((ele, index) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => setHeaderTab(ele)}
+                        className={headerTab === ele && "active"}
+                      >
+                        {ele}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            <div className="p-20">
-              {currentKey === 1 && (
-                <UploadVideoComponent
-                  setVideoFile={setVideoFile}
-                  videoFile={videoFile}
-                  onNextPage={() => {
-                    if (!videoFile) {
-                      dispatch(throwError("video is not selected"));
-                      return;
-                    }
-                    setCurrentKey(2);
-                  }}
-                />
-              )}
-              {currentKey === 2 && (
-                <div>
-                  <VideoConfiguration
-                    setModalType={() => {}}
-                    onSubmit={() => {
-                      handleSubmitNewQue();
-                    }}
-                    videoConfigForm={videoConfigForm}
-                    setVideoConfigForm={setVideoConfigForm}
-                    MAX={MAX}
-                    isCreate={isCreate}
-                  />
+            <div className="content-body auri-scroll">
+              {headerTab === "video" && (
+                <div className="video">
+                  <div className="modal-title">
+                    <div
+                      className="w-30 pointer"
+                      onClick={() => setCurrentKey(1)}
+                    >
+                      <img
+                        src={icons.arrow_left}
+                        alt=""
+                        className="fit-image"
+                      />
+                    </div>
+                    <div className="text-22-600">
+                      Upload With
+                      <span
+                        className="text-22-400 ms-5"
+                        style={{ color: "#7B5AFF" }}
+                      >
+                        FlōwAI
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-20">
+                    {currentKey === 1 && (
+                      <UploadVideoComponent
+                        setVideoFile={setVideoFile}
+                        videoFile={videoFile}
+                        onNextPage={() => {
+                          if (!videoFile) {
+                            dispatch(throwError("video is not selected"));
+                            return;
+                          }
+                          setCurrentKey(2);
+                        }}
+                      />
+                    )}
+                    {currentKey === 2 && (
+                      <div>
+                        <VideoConfiguration
+                          setModalType={() => {}}
+                          onSubmit={() => {
+                            handleSubmitNewQue();
+                          }}
+                          videoConfigForm={videoConfigForm}
+                          setVideoConfigForm={setVideoConfigForm}
+                          MAX={MAX}
+                          isCreate={isCreate}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
+
+              {headerTab === "answer" && <AnswerTab />}
             </div>
           </div>
         </div>
