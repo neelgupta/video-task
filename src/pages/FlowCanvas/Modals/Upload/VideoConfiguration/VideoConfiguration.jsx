@@ -50,15 +50,6 @@ function VideoConfiguration({
   return (
     <div className="VideoConfiguration-container">
       <h3 className="text-22-600 mb-20">Video</h3>
-      {isThumbnail && (
-        <div className="img-title mb-20" style={{}}>
-          <img src={icons.videoAvatar} alt="" className="img_fit_video" />
-          <div className="double-star">
-            <img src={icons.doubleStar} alt="" className="fit-image " />
-          </div>
-        </div>
-      )}
-
       <div className="align-option mb-20">
         <div className="text-18-500" style={{ color: "#7D8185" }}>
           Align Video
@@ -220,7 +211,10 @@ function VideoConfiguration({
                     width: isDragged ? "28px" : "28px",
                     borderRadius: "50%",
                     backgroundColor: isDragged ? "#7b5aff" : "#fff",
-                    border: isDragged ? "none" : "2px solid #7b5aff",
+                    border: "2px solid",
+                    borderColor: !videoConfigForm.overlayText
+                      ? "rgba(0,0,0,0.3)"
+                      : "#7b5aff",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

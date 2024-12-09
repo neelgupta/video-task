@@ -12,6 +12,12 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showCenterPlay, setShowCenterPlay] = useState(false);
+  const [isMute, setIsMute] = useState(true);
+  useEffect(() => {
+    const video = videoRef.current;
+    // default video controls
+    video.volume = 0;
+  }, []);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -46,6 +52,28 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
     video.currentTime = e.target.value;
   };
 
+  const handleVolume = () => {
+    const video = videoRef.current;
+    if (isMute) {
+      video.volume = 1;
+      setIsMute(false);
+      return;
+    }
+    setIsMute(true);
+    video.volume = 0;
+  };
+
+  const handleDragRange = (event) => {
+    const type = event.type;
+    const video = videoRef.current;
+    if (type === "mousedown") {
+      video.pause();
+      return;
+    }
+    if (isPlaying) {
+      video.play();
+    }
+  };
   return (
     <div
       className="VideoPlayer-container"
@@ -65,6 +93,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
           ref={videoRef}
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
+          onClick={togglePlay}
           className="video"
           style={{
             // backgroundPosition: videoPosition.value,
@@ -113,38 +142,68 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
       )}
 
       <div className="control-box">
-        <button onClick={togglePlay} className="push-play-btn">
-          {isPlaying ? "Pause" : "Play"}
-        </button>
-        <input
-          type="range"
-          min="0"
-          max={duration}
-          value={currentTime}
-          onChange={handleProgressBarChange}
-          style={{
-            flex: 1,
-            margin: "0 10px",
-          }}
-        />
-
-        <span className="duration-text">
-          {Math.floor(currentTime)} / {Math.floor(duration)} sec
-        </span>
-        <button onClick={handleSpeedChange} className="speed-btn">
-          {playbackSpeed}x
-        </button>
-        <button
-          onClick={() => videoRef.current.requestFullscreen()}
-          className="full-screen-btn"
-        >
-          <img
-            src={icons.fitView}
-            alt=""
-            className="fir-image"
-            style={{ filter: creteImgFilter("#ffffff") }}
+        <div className="control-volume">
+          <div className="w-30 h-30 f-center pointer volume">
+            <img
+              src={icons[isMute ? "volumeOff" : "volumeOn"]}
+              alt=""
+              className="fit-image w-25 h-25 "
+              onClick={handleVolume}
+            />
+          </div>
+        </div>
+        <div className="all-control">
+          <button onClick={togglePlay} className="push-play-btn">
+            {/* {currentTime === duration ? "Play" : isPlaying ? "Pause" : "Play"} */}
+            <div className="w-40 h-40 f-center pointer">
+              <img
+                src={
+                  icons[
+                    currentTime === duration
+                      ? "push"
+                      : isPlaying
+                      ? "play"
+                      : "push"
+                  ]
+                }
+                alt=""
+                className="fit-image w-40 h-40"
+                style={{ filter: creteImgFilter("#ffffff") }}
+              />
+            </div>
+          </button>
+          <input
+            type="range"
+            min="0"
+            max={duration}
+            value={currentTime}
+            onChange={handleProgressBarChange}
+            onMouseDown={handleDragRange}
+            onMouseUp={handleDragRange}
+            style={{
+              flex: 1,
+              margin: "0 10px",
+            }}
           />
-        </button>
+
+          <span className="duration-text">
+            {Math.floor(currentTime)} / {Math.floor(duration)} sec
+          </span>
+          <button onClick={handleSpeedChange} className="speed-btn">
+            {playbackSpeed}x
+          </button>
+          <button
+            onClick={() => videoRef.current.requestFullscreen()}
+            className="full-screen-btn"
+          >
+            <img
+              src={icons.fitView}
+              alt=""
+              className="fir-image"
+              style={{ filter: creteImgFilter("#ffffff") }}
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

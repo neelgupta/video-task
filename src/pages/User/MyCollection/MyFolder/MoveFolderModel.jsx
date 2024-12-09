@@ -47,7 +47,6 @@ function MoveFolderModel({
   handleClose,
   int,
   selectedFolder,
-  folderList,
   getFolderCollection,
 }) {
   const dispatch = useDispatch();
@@ -55,11 +54,13 @@ function MoveFolderModel({
   const [isOneFolder, setIsOneFolder] = useState(false);
   const [selectFolder, setSelectFolder] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [folderList, setFolderList] = useState([]);
 
   useEffect(() => {
     setIsOneFolder(false);
     if (folderList.length < 2) {
       setIsOneFolder(true);
+      return;
     }
     const optionList = folderList.map((o) => {
       return {
@@ -71,6 +72,26 @@ function MoveFolderModel({
     setMoveFolderList(optionList);
     setSelectFolder(optionList.find((x) => x._id === selectedFolder._id));
   }, [folderList, selectedFolder]);
+
+  useEffect(() => {
+    if (selectedFolder) fetchFolderList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFolder]);
+
+  const fetchFolderList = async () => {
+    try {
+      const res = await api.get(
+        `interactions/get-folders/${selectedFolder.organization_id}`
+      );
+      console.log("res", res);
+      if (res.status === 200) {
+        setFolderList(res.data.response);
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+  };
 
   const handleSubmit = async () => {
     setIsUpdate(true);

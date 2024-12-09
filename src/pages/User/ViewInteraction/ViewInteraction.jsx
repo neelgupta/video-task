@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ViewInteraction.scss";
-import { Tab, Tabs } from "react-bootstrap";
+import { Button, Tab, Tabs } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { api } from "../../../services/api";
 import { handelCatch } from "../../../store/globalSlice";
+import { VideoPlayer } from "../../../components";
 function ViewInteraction() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -16,6 +17,17 @@ function ViewInteraction() {
   const [intData, setIntData] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const videoConfig = {
+    alignVideo: true,
+    videoPosition: {
+      value: "center left",
+    },
+    overlayText: "",
+    textSize: {
+      value: "20px",
+    },
+    textReveal: [0],
+  };
   useEffect(() => {
     if (data) {
       setQueryParams(JSON.parse(data));
@@ -54,10 +66,16 @@ function ViewInteraction() {
     }
     setKey(index + 1);
   };
+  const handleBack = (index) => {
+    if (index === queNodes.length - 1) {
+      setKey("End");
+      return;
+    }
+    setKey(index + 1);
+  };
 
   return (
     <div className="ViewInteraction-container">
-      <div>{queryParams?.intId}</div>
       <Tabs
         id="controlled-tab-example"
         activeKey={key}
@@ -66,21 +84,103 @@ function ViewInteraction() {
       >
         {queNodes.length > 0 &&
           queNodes.map((node, index) => {
+            const {
+              video_url,
+              video_align,
+              overlay_text,
+              text_size,
+              fade_revea,
+            } = node;
+            console.log("bode", {
+              video_url,
+              video_align,
+              overlay_text,
+              text_size,
+              fade_revea,
+            });
             return (
               <Tab eventKey={index} key={index}>
-                <div className="w-200 h-125">
-                  <img
-                    src={node.video_thumbnail}
-                    alt=""
-                    className="fit-image"
-                  />
+                <div
+                  className="wp-100 d-flex"
+                  style={{
+                    background: "#fff",
+                    position: "absolute",
+                    top: "0px",
+                    bottom: "0px",
+                  }}
+                >
+                  <div
+                    className="wp-55 hp-100 m-0 p-0"
+                    style={{ overflow: "hidden" }}
+                  >
+                    <div
+                      className="wp-100 hp-100 f-center"
+                      style={{ background: "black" }}
+                    >
+                      {video_url && (
+                        <VideoPlayer
+                          videoUrl={video_url || ""}
+                          videoConfigForm={{
+                            alignVideo: video_align,
+                            videoPosition: {
+                              value: "center left",
+                            },
+                            overlayText: overlay_text || "",
+                            textSize: {
+                              value: `${text_size || 0}px`,
+                            },
+                            textReveal: [parseInt(fade_revea)],
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="wp-45 hp-100 f-center">
+                    <div className="wp-100 p-30 d-flex" style={{ gap: "20px" }}>
+                      <Button
+                        className="text-18-600 wp-100 p-15"
+                        style={{
+                          background: "#f0f0f0",
+                          border: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "black",
+                          cursor: "pointer",
+                        }}
+                        disabled={index === 0}
+                        onClick={() => {
+                          setKey(index - 1);
+                        }}
+                      >
+                        <span>Back</span>
+                      </Button>
+                      <Button
+                        className="text-18-600 wp-100 p-15"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                          border: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          handleNext(index);
+                        }}
+                      >
+                        <span>Next</span>
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <button onClick={() => handleNext(index)}>Next</button>
               </Tab>
             );
           })}
         <Tab eventKey="End">
           <div>End</div>
+          <Button onClick={() => setKey(queNodes.length - 1)}>Back</Button>
         </Tab>
       </Tabs>
     </div>

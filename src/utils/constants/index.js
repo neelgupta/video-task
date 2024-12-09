@@ -97,6 +97,10 @@ import pushIcon from "../../assets/images/svgIcons/pushIcon.svg";
 import outlineFolderOpen from "../../assets/images/svgIcons/outlineFolderOpen.svg";
 import folderMove from "../../assets/images/svgIcons/folderMove.svg";
 import fillFolderOpen from "../../assets/images/svgIcons/fillFolderOpen.svg";
+import volumeOn from "../../assets/images/svgIcons/volumeOn.svg";
+import volumeOff from "../../assets/images/svgIcons/volumeOff.svg";
+import play from "../../assets/images/svgIcons/play.svg";
+import push from "../../assets/images/svgIcons/push.svg";
 
 export const icons = {
   logo,
@@ -198,4 +202,8 @@ export const icons = {
   outlineFolderOpen,
   folderMove,
   fillFolderOpen,
+  volumeOn,
+  volumeOff,
+  play,
+  push,
 };

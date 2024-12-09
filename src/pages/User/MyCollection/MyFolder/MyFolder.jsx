@@ -26,11 +26,9 @@ function MyFolder() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showMoveFolderModal, setShowMoveFolderModal] = useState(false);
   const [moveFolderItem, setMoveFolderItem] = useState({});
-  const [folderList, setFolderList] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     if (id && selectedItem) {
-      console.log("selectedItem", selectedItem);
       getFolderCollection();
       return;
     }
@@ -53,21 +51,6 @@ function MyFolder() {
       dispatch(handelCatch(error));
     }
     setIsFetch(false);
-  };
-
-  const fetchFolderList = async () => {
-    try {
-      const res = await api.get(
-        `interactions/get-folders/${selectedItem.organization_id}`
-      );
-      console.log("res", res);
-      if (res.status === 200) {
-        setFolderList(res.data.response);
-      }
-    } catch (error) {
-      console.log("error", error);
-      dispatch(handelCatch(error));
-    }
   };
 
   const handelDeleteInt = async (id) => {
@@ -133,7 +116,6 @@ function MyFolder() {
         show={showMoveFolderModal}
         int={moveFolderItem}
         selectedFolder={selectedItem}
-        folderList={folderList}
         getFolderCollection={getFolderCollection}
         handleClose={() => {
           setShowMoveFolderModal(false);
