@@ -1,43 +1,88 @@
 import React from "react";
 import { TextArea } from "../../../../../../components";
+import { Form } from "react-bootstrap";
+import { ErrorMessage, Field } from "formik";
 
-function FileUploadFormate() {
+function FileUploadFormate({ setFieldValue, values, errors }) {
   return (
-    <div id="FileUploadFormate">
+    <Form id="FileUploadFormate">
+      {/* Title */}
       <div className="mb-20">
-        <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
+        <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
           Title:
         </div>
         <div className="wp-100 InputBox">
-          <input
-            type="string"
-            value={"Resume Video"}
+          <Field
+            type="text"
+            name="title"
             placeholder="Enter title"
+            className={`form-control`}
+          />
+          <ErrorMessage
+            name="title"
+            component="div"
+            className="error-message"
           />
         </div>
       </div>
 
-      <div className="mb-20 wp-100">
-        <div className="text-18-500 mb-10" style={{ color: "#7D8185" }}>
+      {/* Description */}
+      <div className="mb-20 wp-100 ">
+        <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
           Description:
         </div>
-        <TextArea
-          id="Description"
-          placeholder="Description..."
-          style={{ borderRadius: "10px" }}
-        />
-      </div>
-      <div
-        className="wp-100 mb-20"
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <div className="text-22-600">Disable Data Collection</div>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <div className={`align-btn active`}>Yes</div>
-          <div className={`align-btn`}>No</div>
+        <div className="InputBox">
+          <Field
+            as="textarea"
+            name="description"
+            placeholder="Description..."
+            style={{
+              borderRadius: "10px",
+              width: "100%",
+              padding: "10px",
+              minHeight: "100px",
+              resize: "none",
+            }}
+            className={`form-control`}
+          />
+          <ErrorMessage
+            name="description"
+            component="div"
+            className="error-message"
+          />
         </div>
       </div>
-    </div>
+
+      {/* Disable Data Collection */}
+      <div className="wp-100 mb-20">
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div className="text-22-600">Disable Data Collection</div>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <div
+              onClick={() => setFieldValue("disableDataCollection", true)}
+              className={`align-btn ${
+                values.disableDataCollection ? "active" : ""
+              }`}
+            >
+              Yes
+            </div>
+            <div
+              onClick={() => setFieldValue("disableDataCollection", false)}
+              className={`align-btn ${
+                !values.disableDataCollection ? "active" : ""
+              }`}
+            >
+              No
+            </div>
+          </div>
+        </div>
+        <ErrorMessage
+          name="disableDataCollection"
+          component="div"
+          className="error-message"
+        />
+      </div>
+    </Form>
   );
 }
 

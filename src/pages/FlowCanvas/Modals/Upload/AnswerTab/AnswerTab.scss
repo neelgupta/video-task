@@ -6,7 +6,8 @@
     font-weight: 600;
   }
   .InputBox {
-    input {
+    input,
+    textarea {
       width: 100%;
       padding: 10px 15px;
       outline: none;
@@ -15,10 +16,22 @@
       font-size: 16px;
       border-radius: 10px;
       color: #1b2559;
+      box-shadow: none;
       &:focus {
-        border-color: #8000ff;
+        border-color: #7b5aff;
       }
     }
+  }
+  .error-input {
+    border-color: var(--4d3b) !important;
+  }
+  .error-label {
+    color: var(--4d3b) !important;
+  }
+  .error-message {
+    padding-left: 5px 0px 0px 8px;
+    font-size: 12px;
+    color: var(--4d3b);
   }
   .align-btn {
     color: #8c8e90;
@@ -56,6 +69,7 @@
           border: 1px solid #8c8e90;
           border-radius: 8px;
           font-size: 12px;
+          box-shadow: none;
           &:focus {
             border-color: #7b5aff;
           }
@@ -75,6 +89,11 @@
           cursor: pointer;
           border: none;
         }
+      }
+      .error-message {
+        padding-left: 5px 0px 0px 8px;
+        font-size: 12px;
+        color: var(--4d3b);
       }
     }
   }

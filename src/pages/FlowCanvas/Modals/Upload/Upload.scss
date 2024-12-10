@@ -33,6 +33,21 @@
         top: 20px;
         right: 20px;
       }
+      .title-input {
+        input {
+          width: 100%;
+          padding: 10px 15px;
+          outline: none;
+          border: none;
+          border: 1px solid #cccccc;
+          font-size: 16px;
+          border-radius: 10px;
+          color: #1b2559;
+          &:focus {
+            border-color: #8000ff;
+          }
+        }
+      }
     }
 
     .Video_header {

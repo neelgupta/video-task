@@ -1,4 +1,6 @@
+import { ErrorMessage, Field } from "formik";
 import React from "react";
+import { Form } from "react-bootstrap";
 import Select from "react-select";
 
 const schedulingOption = [
@@ -19,44 +21,92 @@ const schedulingOption = [
     value: "OnceHub",
   },
 ];
-function CalendarFormate() {
+function CalendarFormate({ setFieldValue, values, errors }) {
   return (
-    <div id="CalendarFormate">
+    <Form id="CalendarFormate">
+      {/* Scheduling Link */}
       <div className="mb-20">
-        <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
+        <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
           Provide your scheduling link:
         </div>
         <div className="wp-100 InputBox">
-          <input type="string" placeholder="Enter the link" />
+          <Field
+            type="text"
+            name="schedulingLink"
+            placeholder="Enter the link"
+            className={`form-control`}
+          />
+          <ErrorMessage
+            name="schedulingLink"
+            component="div"
+            className="error-message"
+          />
         </div>
       </div>
+
+      {/* Scheduling Tool */}
       <div className="mb-20">
-        <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
+        <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
           Opt for your scheduling tool:
         </div>
         <div className="wp-100">
-          <Select style={{}} options={schedulingOption} />
+          <Select
+            options={schedulingOption}
+            value={schedulingOption.find(
+              (x) => x.value === values.schedulingTool
+            )}
+            onChange={(option) => setFieldValue("schedulingTool", option.value)}
+            placeholder="Select a tool"
+          />
+          <ErrorMessage
+            name="schedulingTool"
+            component="div"
+            className="error-message"
+          />
         </div>
       </div>
+
+      {/* Delay */}
       <div className="mb-20">
-        <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
-          Delay for options to show:
+        <div className={`text-12-600 mb-5 `} style={{ color: "#666666" }}>
+          Delay for options to show :
         </div>
         <div className="wp-40 InputBox">
-          <input type="string" value="10 Sec" />
+          <Field type="text" name="delay" className={`form-control`} />
         </div>
+        <ErrorMessage name="delay" component="div" className="error-message" />
       </div>
-      <div
-        className="wp-100 mb-20"
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <div className="text-22-600">Disable Data Collection</div>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <div className={`align-btn active`}>Yes</div>
-          <div className={`align-btn`}>No</div>
+
+      {/* Disable Data Collection */}
+      <div className="wp-100 mb-20">
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div className="text-22-600">Disable Data Collection</div>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <div
+              onClick={() => setFieldValue("disableDataCollection", true)}
+              className={`align-btn ${
+                values.disableDataCollection ? "active" : ""
+              }`}
+            >
+              Yes
+            </div>
+            <div
+              onClick={() => setFieldValue("disableDataCollection", false)}
+              className={`align-btn ${
+                !values.disableDataCollection ? "active" : ""
+              }`}
+            >
+              No
+            </div>
+          </div>
         </div>
+        <ErrorMessage
+          name="disableDataCollection"
+          component="div"
+          className="error-message"
+        />
       </div>
-    </div>
+    </Form>
   );
 }
 

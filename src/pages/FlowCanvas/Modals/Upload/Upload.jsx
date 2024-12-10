@@ -23,6 +23,7 @@ function Upload({ show, handleClose }) {
   const [videoFile, setVideoFile] = useState(null);
   const [isCreate, setIsCreate] = useState(false);
   const [headerTab, setHeaderTab] = useState("video");
+  const [nodeTitle, setNodeTitle] = useState("untitled");
   const [videoConfigForm, setVideoConfigForm] = useState({
     alignVideo: true,
     videoPosition: {
@@ -54,7 +55,6 @@ function Upload({ show, handleClose }) {
       req.append("targetId", newQueModalData.targetId);
       req.append("sourceId", newQueModalData.sourceId);
       req.append("type", newQueModalData.type);
-      req.append("title", newQueModalData.title);
       req.append("positionX", newQueModalData.positionX);
       req.append("positionY", newQueModalData.positionY);
       req.append("flow_type", "Upload");
@@ -62,6 +62,7 @@ function Upload({ show, handleClose }) {
       req.append("overlay_text", videoConfigForm.overlayText);
       req.append("text_size", videoConfigForm.textSize.value);
       req.append("fade_reveal", videoConfigForm.textReveal[0]);
+      req.append("title", nodeTitle);
       if (videoFile) {
         req.append("video", videoFile);
       }
@@ -175,6 +176,8 @@ function Upload({ show, handleClose }) {
                       <UploadVideoComponent
                         setVideoFile={setVideoFile}
                         videoFile={videoFile}
+                        setNodeTitle={setNodeTitle}
+                        nodeTitle={nodeTitle}
                         onNextPage={() => {
                           if (!videoFile) {
                             dispatch(throwError("video is not selected"));
@@ -211,18 +214,56 @@ function Upload({ show, handleClose }) {
   );
 }
 
-const UploadVideoComponent = ({ setVideoFile, onNextPage, videoFile }) => {
+const UploadVideoComponent = ({
+  setVideoFile,
+  onNextPage,
+  videoFile,
+  nodeTitle,
+  setNodeTitle,
+}) => {
+  const dispatch = useDispatch();
   return (
     <>
       <div>
         <div className="content p-10">
           <div>
+            <div className="mb-20">
+              <div
+                className="text-12-600 mb-5"
+                style={{ color: !nodeTitle ? "var(--dc35)" : "#666666" }}
+              >
+                Title*
+              </div>
+              <div className="wp-100 title-input">
+                <input
+                  type="string"
+                  required
+                  placeholder="Enter title..."
+                  value={nodeTitle}
+                  onChange={(e) => {
+                    setNodeTitle(e.target.value);
+                  }}
+                  style={{
+                    borderColor: !nodeTitle ? "var(--dc35)" : "#cccccc",
+                  }}
+                />
+                {!nodeTitle && (
+                  <p
+                    className="text-12-500 ps-8"
+                    style={{ color: "var(--dc35)" }}
+                  >
+                    Title is required.
+                  </p>
+                )}
+              </div>
+            </div>
             <div
               className="text-20-500 mb-20 mt-20"
               style={{ color: "#7D8185" }}
             >
               Upload Video
             </div>
+
             <VideoUpload setFileValue={setVideoFile} videoFile={videoFile} />
           </div>
         </div>
@@ -231,6 +272,7 @@ const UploadVideoComponent = ({ setVideoFile, onNextPage, videoFile }) => {
       <div className="p-10 pt-20 wp-100">
         <Button
           className="text-18-600 wp-100 p-0"
+          type="submit"
           style={{
             background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
             border: "none",
@@ -239,6 +281,10 @@ const UploadVideoComponent = ({ setVideoFile, onNextPage, videoFile }) => {
             justifyContent: "center",
           }}
           onClick={() => {
+            if (!nodeTitle || nodeTitle === "") {
+              dispatch(throwError("Title is required."));
+              return;
+            }
             onNextPage();
           }}
         >
