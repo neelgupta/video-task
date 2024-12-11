@@ -8,6 +8,9 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
   return (
     <Form id="MultipleChoiceFormate">
       {/* Dynamic Options Input */}
+      <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
+        Options :
+      </div>
       <FieldArray name="options">
         {({ push, remove }) => (
           <div className="option-input-group mb-20">
@@ -48,6 +51,7 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
                   border: "none",
                   padding: "8px 10px",
                 }}
+                disabled={(values?.options || []).length > 5}
               >
                 + Add Choice
               </Button>
@@ -64,18 +68,14 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
         <div className="text-18-600">Allow multiple selections</div>
         <div style={{ display: "flex", gap: "10px" }}>
           <div
-            onClick={() => setFieldValue("allowMultipleSelections", true)}
-            className={`align-btn ${
-              values.allowMultipleSelections ? "active" : ""
-            }`}
+            onClick={() => setFieldValue("allow_multiple", true)}
+            className={`align-btn ${values.allow_multiple ? "active" : ""}`}
           >
             Yes
           </div>
           <div
-            onClick={() => setFieldValue("allowMultipleSelections", false)}
-            className={`align-btn ${
-              !values.allowMultipleSelections ? "active" : ""
-            }`}
+            onClick={() => setFieldValue("allow_multiple", false)}
+            className={`align-btn ${!values.allow_multiple ? "active" : ""}`}
           >
             No
           </div>
@@ -112,17 +112,17 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
         <div className="text-18-600">Disable Data Collection</div>
         <div style={{ display: "flex", gap: "10px" }}>
           <div
-            onClick={() => setFieldValue("disableDataCollection", true)}
+            onClick={() => setFieldValue("disable_data_collection", true)}
             className={`align-btn ${
-              values.disableDataCollection ? "active" : ""
+              values.disable_data_collection ? "active" : ""
             }`}
           >
             Yes
           </div>
           <div
-            onClick={() => setFieldValue("disableDataCollection", false)}
+            onClick={() => setFieldValue("disable_data_collection", false)}
             className={`align-btn ${
-              !values.disableDataCollection ? "active" : ""
+              !values.disable_data_collection ? "active" : ""
             }`}
           >
             No
@@ -138,17 +138,17 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
         <div className="text-18-600">Display total choices</div>
         <div style={{ display: "flex", gap: "10px" }}>
           <div
-            onClick={() => setFieldValue("displayTotalChoices", true)}
+            onClick={() => setFieldValue("display_total_choices", true)}
             className={`align-btn ${
-              values.displayTotalChoices ? "active" : ""
+              values.display_total_choices ? "active" : ""
             }`}
           >
             Yes
           </div>
           <div
-            onClick={() => setFieldValue("displayTotalChoices", false)}
+            onClick={() => setFieldValue("display_total_choices", false)}
             className={`align-btn ${
-              !values.displayTotalChoices ? "active" : ""
+              !values.display_total_choices ? "active" : ""
             }`}
           >
             No

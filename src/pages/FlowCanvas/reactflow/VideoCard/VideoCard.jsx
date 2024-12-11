@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import {
   handelCatch,
   handleFetchFlowData,
+  setQueModelConfig,
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
@@ -62,15 +63,11 @@ function VideoCard(props) {
   const { id: flowId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log("data", data);
-  }, [data]);
 
   const handleDelete = async () => {
     setIsDelete(true);
     try {
       const res = await api.delete(`interactions/delete-nodes/${data._id}`);
-      console.log("res", res);
       if (res.status === 200) {
         dispatch(showSuccess(res.data.message));
         dispatch(
@@ -96,7 +93,15 @@ function VideoCard(props) {
     {
       icon: icons.edit,
       label: "edit",
-      onClick: (id) => {},
+      onClick: () => {
+        dispatch(
+          setQueModelConfig({
+            modalType: data?.flow_type || "",
+            nodeData: data,
+            isEdit: true,
+          })
+        );
+      },
     },
     {
       icon: icons.deleteSVG,

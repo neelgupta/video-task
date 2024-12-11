@@ -16,6 +16,7 @@ function VideoConfiguration({
 }) {
   const MIN = 0;
   const positionOption = [
+    { value: "center center", label: "Center Center" },
     { value: "center start", label: "Center Left" },
     { value: "center end", label: "Center Right" },
     { value: "flex-start center", label: "Top Center" },
@@ -93,10 +94,12 @@ function VideoConfiguration({
             style={{}}
             isDisabled={videoConfigForm.alignVideo}
             options={positionOption}
-            value={videoConfigForm.videoPosition}
+            value={positionOption.find(
+              (x) => x.value === videoConfigForm.videoPosition
+            )}
             onChange={(select) => {
               setVideoConfigForm((pre) => {
-                return { ...pre, videoPosition: select };
+                return { ...pre, videoPosition: select.value };
               });
             }}
           />
@@ -133,11 +136,13 @@ function VideoConfiguration({
           </div>
           <div className="w-220">
             <Select
-              value={videoConfigForm.textSize}
+              value={sizeOption.find(
+                (x) => x.value === videoConfigForm.textSize
+              )}
               isDisabled={!videoConfigForm.overlayText}
               onChange={(select) => {
                 setVideoConfigForm((pre) => {
-                  return { ...pre, textSize: select };
+                  return { ...pre, textSize: select.value };
                 });
               }}
               options={sizeOption}

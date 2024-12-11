@@ -91,13 +91,6 @@ function ViewInteraction() {
               text_size,
               fade_revea,
             } = node;
-            console.log("bode", {
-              video_url,
-              video_align,
-              overlay_text,
-              text_size,
-              fade_revea,
-            });
             return (
               <Tab eventKey={index} key={index}>
                 <div

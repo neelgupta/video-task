@@ -13,13 +13,13 @@ function ButtonFormate({ setFieldValue, values, errors }) {
         <div className="wp-100 InputBox">
           <Field
             type="text"
-            name="buttonTitle"
+            name="button_title"
             placeholder="Navigate to"
             className={`form-control`}
           />
           <ErrorMessage
             className="error-message"
-            name="buttonTitle"
+            name="button_title"
             component="div"
           />
         </div>
@@ -44,14 +44,18 @@ function ButtonFormate({ setFieldValue, values, errors }) {
         <div className="text-22-600">Disable Data Collection</div>
         <div style={{ display: "flex", gap: "10px" }}>
           <div
-            onClick={() => setFieldValue("disableDataCollection", true)}
-            className={`align-btn ${values.disableDataCollection && "active"}`}
+            onClick={() => setFieldValue("disable_data_collection", true)}
+            className={`align-btn ${
+              values.disable_data_collection && "active"
+            }`}
           >
             Yes
           </div>
           <div
-            onClick={() => setFieldValue("disableDataCollection", false)}
-            className={`align-btn ${!values.disableDataCollection && "active"}`}
+            onClick={() => setFieldValue("disable_data_collection", false)}
+            className={`align-btn ${
+              !values.disable_data_collection && "active"
+            }`}
           >
             No
           </div>

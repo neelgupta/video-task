@@ -19,6 +19,12 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
     video.volume = 0;
   }, []);
 
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load(); // Force video reload when videoUrl changes
+    }
+  }, [videoUrl]);
+
   const togglePlay = () => {
     const video = videoRef.current;
     if (video.paused) {
@@ -83,8 +89,14 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
       <div
         style={{
           display: "flex",
-          alignItems: videoPosition.value.split(" ")[0],
-          justifyContent: videoPosition.value.split(" ")[1],
+          alignItems:
+            !alignVideo && videoPosition
+              ? videoPosition.split(" ")[0]
+              : "center",
+          justifyContent:
+            !alignVideo && videoPosition
+              ? videoPosition.split(" ")[1]
+              : "center",
           height: "100%",
           margin: "auto",
         }}
@@ -106,7 +118,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
                 }),
           }}
         >
-          <source src={videoUrl} type="video/mp4" />
+          {videoUrl && <source src={videoUrl} type="video/mp4" />}
         </video>
       </div>
       <div
@@ -133,7 +145,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
         <div
           className="overlay-text"
           style={{
-            fontSize: textSize.value,
+            fontSize: textSize,
             opacity: textReveal >= currentTime ? "1" : "0",
           }}
         >

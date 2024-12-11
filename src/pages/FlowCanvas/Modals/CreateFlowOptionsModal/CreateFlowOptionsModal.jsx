@@ -13,32 +13,32 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       icon: icons.webCam,
       title: "WebCam",
       isPro: false,
-      value: "web-cam",
+      value: "Webcam",
     },
     {
       icon: icons.Upload,
       title: "Upload",
       isPro: false,
-      value: "upload",
+      value: "Upload",
       style: { filter: creteImgFilter("#8C8E90") },
     },
     {
       icon: icons.screenShare,
       title: "ScreenShare",
       isPro: false,
-      value: "screen-share",
+      value: "Screen",
     },
     {
       icon: icons.library,
       title: "Library",
       isPro: false,
-      value: "library",
+      value: "Library",
     },
     {
       icon: icons.doubleStar,
       title: "Flōw AI",
       isPro: true,
-      value: "flow-AI",
+      value: "FlowAI",
     },
   ];
 
@@ -75,7 +75,7 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
                   onClick={() => {
                     dispatch(
                       setQueModelConfig({
-                        nodeId: null,
+                        nodeData: null,
                         isEdit: false,
                         modalType: ele.value,
                       })

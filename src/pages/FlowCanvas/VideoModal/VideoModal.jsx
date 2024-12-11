@@ -39,11 +39,12 @@ const VideoModal = ({ show, handleClose }) => {
     } else {
       dispatch(throwError("Please upload a valid video file."));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
   useEffect(() => {
     if (isEdit && nodeId === null) {
       dispatch(
-        setQueModelConfig({ modalType: "", nodeId: null, isEdit: true })
+        setQueModelConfig({ modalType: "", nodeData: null, isEdit: true })
       );
       dispatch(throwError("question id not found"));
     }

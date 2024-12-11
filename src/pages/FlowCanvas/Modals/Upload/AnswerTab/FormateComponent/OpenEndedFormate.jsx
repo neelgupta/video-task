@@ -82,14 +82,14 @@ function OpenEndedFormate({ values, setFieldValue, errors }) {
         <div className="wp-100">
           <Field
             as={Select}
-            name="timeLimit"
+            name="time_limit"
             options={timeLimitOption}
-            value={timeLimitOption.find((x) => x.value === values?.timeLimit)}
-            onChange={(option) => setFieldValue("timeLimit", option.value)}
+            value={timeLimitOption.find((x) => x.value === values?.time_limit)}
+            onChange={(option) => setFieldValue("time_limit", option.value)}
           />
         </div>
         <ErrorMessage
-          name="timeLimit"
+          name="time_limit"
           component="div"
           className="error-message"
         />

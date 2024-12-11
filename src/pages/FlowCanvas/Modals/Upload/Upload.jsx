@@ -13,10 +13,12 @@ import {
 import VideoConfiguration from "./VideoConfiguration";
 import { api } from "../../../../services/api";
 import AnswerTab from "./AnswerTab";
-const headerTabArray = ["video", "answer", "logic"];
 function Upload({ show, handleClose }) {
   const dispatch = useDispatch();
-  const { newQueModalData } = useSelector((state) => state.global);
+  const {
+    newQueModalData,
+    queModelConfig: { nodeData, isEdit, modalType },
+  } = useSelector((state) => state.global);
   const [MAX, setMAX] = useState(0);
   const [currentKey, setCurrentKey] = useState(1);
   const [videoSrc, setVideoSrc] = useState("");
@@ -26,51 +28,66 @@ function Upload({ show, handleClose }) {
   const [nodeTitle, setNodeTitle] = useState("untitled");
   const [videoConfigForm, setVideoConfigForm] = useState({
     alignVideo: true,
-    videoPosition: {
-      value: "center left",
-      label: "Center Left",
-    },
+    videoPosition: "center left",
     overlayText: "",
-    textSize: {
-      label: "Extra Small",
-      value: "20px",
-    },
+    textSize: "",
     textReveal: [0],
   });
 
   useEffect(() => {
-    if (MAX !== 0) {
-      setVideoConfigForm((pre) => {
-        return { ...pre, textReveal: [MAX] };
+    if (isEdit && nodeData) {
+      setNodeTitle(nodeData.title);
+      setVideoConfigForm({
+        alignVideo: nodeData.video_align,
+        videoPosition: !nodeData.video_align && nodeData.video_position,
+        overlayText: nodeData?.overlay_text || "",
+        textSize: nodeData?.overlay_text ? nodeData?.text_size || "12px" : "",
+        textReveal: [
+          nodeData?.overlay_text ? parseInt(nodeData.fade_reveal) : 0,
+        ],
       });
     }
-  }, [MAX]);
+  }, [isEdit, nodeData]);
 
   const handleSubmitNewQue = async () => {
     try {
       setIsCreate(true);
       const req = new FormData();
+      if (!isEdit) {
+        req.append("interaction_id", newQueModalData.interaction_id);
+        req.append("targetId", newQueModalData.targetId);
+        req.append("sourceId", newQueModalData.sourceId);
+        req.append("type", newQueModalData.type);
+        req.append("positionX", newQueModalData.positionX);
+        req.append("positionY", newQueModalData.positionY);
+        req.append("flow_type", modalType);
+      }
+      if (isEdit) {
+        req.append("node_id", nodeData._id);
+      }
 
-      req.append("interaction_id", newQueModalData.interaction_id);
-      req.append("targetId", newQueModalData.targetId);
-      req.append("sourceId", newQueModalData.sourceId);
-      req.append("type", newQueModalData.type);
-      req.append("positionX", newQueModalData.positionX);
-      req.append("positionY", newQueModalData.positionY);
-      req.append("flow_type", "Upload");
       req.append("video_align", videoConfigForm.alignVideo);
-      req.append("overlay_text", videoConfigForm.overlayText);
-      req.append("text_size", videoConfigForm.textSize.value);
-      req.append("fade_reveal", videoConfigForm.textReveal[0]);
+      if (!videoConfigForm.alignVideo) {
+        req.append("video_position", videoConfigForm.videoPosition);
+      }
+      req.append("overlay_text", videoConfigForm?.overlayText || "");
+      if (videoConfigForm?.overlayText) {
+        req.append("text_size", videoConfigForm.textSize);
+        req.append("fade_reveal", videoConfigForm.textReveal[0]);
+      }
       req.append("title", nodeTitle);
       if (videoFile) {
         req.append("video", videoFile);
       }
 
-      const res = await api.post("interactions/create-node", req, {
-        "Content-Type": "multipart/form-data",
-      });
-      if (res.status === 201) {
+      const res = await api[isEdit ? "put" : "post"](
+        `${isEdit ? "interactions/update-node" : "interactions/create-node"}`,
+        req,
+        {
+          "Content-Type": "multipart/form-data",
+        }
+      );
+      if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         dispatch(setNewQueModalData({}));
         handleClose();
@@ -85,18 +102,51 @@ function Upload({ show, handleClose }) {
   };
 
   useEffect(() => {
-    if (videoFile && videoFile.type.startsWith("video/")) {
-      const videoUrl = URL.createObjectURL(videoFile);
+    if (!videoFile && !isEdit) {
+      setVideoSrc("");
+      return;
+    }
+
+    if (isEdit && videoFile) {
+      setVideoConfigForm((pre) => {
+        return { ...pre, textReveal: [0] };
+      });
+    } else {
+      setVideoConfigForm((pre) => {
+        return {
+          ...pre,
+          textReveal: [
+            nodeData?.overlay_text ? parseInt(nodeData.fade_reveal) : 0,
+          ],
+        };
+      });
+    }
+
+    const tempVideo = document.createElement("video");
+    const videoUrl =
+      videoFile && videoFile.type.startsWith("video/")
+        ? URL.createObjectURL(videoFile)
+        : isEdit && nodeData
+        ? nodeData.video_url
+        : null;
+
+    if (videoUrl) {
       setVideoSrc(videoUrl);
-      const tempVideo = document.createElement("video");
       tempVideo.src = videoUrl;
       tempVideo.onloadedmetadata = () => {
         setMAX(Math.ceil(tempVideo.duration));
       };
-      return;
+    } else {
+      setVideoSrc("");
     }
-    setVideoSrc("");
-  }, [videoFile]);
+
+    // Cleanup: Revoke object URL when the component unmounts
+    return () => {
+      if (videoFile && videoFile.type.startsWith("video/")) {
+        URL.revokeObjectURL(videoUrl);
+      }
+    };
+  }, [videoFile, isEdit, nodeData]);
 
   return (
     <Modal
@@ -133,17 +183,19 @@ function Upload({ show, handleClose }) {
                 style={{ justifyContent: "space-between" }}
               >
                 <div className="header_tab">
-                  {headerTabArray.map((ele, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => setHeaderTab(ele)}
-                        className={headerTab === ele && "active"}
-                      >
-                        {ele}
-                      </div>
-                    );
-                  })}
+                  {(!isEdit ? ["video"] : ["video", "answer", "logic"]).map(
+                    (ele, index) => {
+                      return (
+                        <div
+                          key={index}
+                          onClick={() => setHeaderTab(ele)}
+                          className={headerTab === ele && "active"}
+                        >
+                          {ele}
+                        </div>
+                      );
+                    }
+                  )}
                 </div>
               </div>
             </div>
@@ -179,7 +231,7 @@ function Upload({ show, handleClose }) {
                         setNodeTitle={setNodeTitle}
                         nodeTitle={nodeTitle}
                         onNextPage={() => {
-                          if (!videoFile) {
+                          if (!videoFile && !isEdit) {
                             dispatch(throwError("video is not selected"));
                             return;
                           }
@@ -205,7 +257,13 @@ function Upload({ show, handleClose }) {
                 </div>
               )}
 
-              {headerTab === "answer" && <AnswerTab />}
+              {headerTab === "answer" && (
+                <AnswerTab
+                  ansType={nodeData?.answer_type || ""}
+                  ansFormat={nodeData?.answer_format || {}}
+                  onClose={handleClose}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ const initialState = {
   selectedOrganizationId: "",
   showCreateFlowModal: false,
   queModelConfig: {
-    nodeId: null,
+    nodeData: null,
     isEdit: true,
     modalType: "",
   },

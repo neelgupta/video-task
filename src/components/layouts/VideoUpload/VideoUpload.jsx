@@ -16,7 +16,6 @@ const VideoUpload = ({ setFileValue, videoFile }) => {
   }, [file]);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "video/mp4, video/avchd, video/mpc, audio/aac",
     onDrop: (acceptedFiles) => {
       if (!file) {
         const selectedFile = acceptedFiles[0];

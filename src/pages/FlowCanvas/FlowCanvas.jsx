@@ -123,10 +123,6 @@ const FlowCanvas = () => {
     seyIsCanvasLock(false);
   };
 
-  const handleDeleteFolder = (id) => {
-    console.log("id", id);
-  };
-
   return (
     <>
       <CreateFlowOptionsModal
@@ -142,12 +138,16 @@ const FlowCanvas = () => {
         />
       )} */}
 
-      {queModelConfig.modalType === "upload" && (
+      {queModelConfig.modalType === "Upload" && (
         <Upload
-          show={queModelConfig.modalType === "upload"}
+          show={queModelConfig.modalType === "Upload"}
           handleClose={() => {
             dispatch(
-              setQueModelConfig({ modalType: "", nodeId: null, isEdit: true })
+              setQueModelConfig({
+                modalType: "",
+                nodeData: null,
+                isEdit: false,
+              })
             );
             fetchFlowData();
           }}
@@ -171,7 +171,6 @@ const FlowCanvas = () => {
           }}
           onEdgesChange={(change) => {
             onEdgesChange(change);
-            console.log("change", change);
           }}
           onEdgeMouseEnter={(event, edge) => {
             setEdges((eds) =>

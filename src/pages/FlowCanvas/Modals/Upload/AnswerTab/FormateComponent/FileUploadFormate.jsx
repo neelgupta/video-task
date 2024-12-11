@@ -59,17 +59,17 @@ function FileUploadFormate({ setFieldValue, values, errors }) {
           <div className="text-22-600">Disable Data Collection</div>
           <div style={{ display: "flex", gap: "10px" }}>
             <div
-              onClick={() => setFieldValue("disableDataCollection", true)}
+              onClick={() => setFieldValue("disable_data_collection", true)}
               className={`align-btn ${
-                values.disableDataCollection ? "active" : ""
+                values.disable_data_collection ? "active" : ""
               }`}
             >
               Yes
             </div>
             <div
-              onClick={() => setFieldValue("disableDataCollection", false)}
+              onClick={() => setFieldValue("disable_data_collection", false)}
               className={`align-btn ${
-                !values.disableDataCollection ? "active" : ""
+                !values.disable_data_collection ? "active" : ""
               }`}
             >
               No
@@ -77,7 +77,7 @@ function FileUploadFormate({ setFieldValue, values, errors }) {
           </div>
         </div>
         <ErrorMessage
-          name="disableDataCollection"
+          name="disable_data_collection"
           component="div"
           className="error-message"
         />

@@ -3,7 +3,7 @@ import Select from "react-select";
 import "./AnswerTab.scss";
 import OutlineCheck from "../../../../User/MyOrganization/pages/Notifications/OutlineCheck";
 import { TextInput } from "../../../../../components";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import OpenEndedFormate from "./FormateComponent/OpenEndedFormate";
 import ButtonFormate from "./FormateComponent/ButtonFormate";
 import FileUploadFormate from "./FormateComponent/FileUploadFormate";
@@ -11,6 +11,13 @@ import CalendarFormate from "./FormateComponent/CalendarFormate";
 import MultipleChoiceFormate from "./FormateComponent/MultipleChoiceFormate";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handelCatch,
+  showSuccess,
+  throwError,
+} from "../../../../../store/globalSlice";
+import { api } from "../../../../../services/api";
 const AnsFormate = [
   {
     label: "Open Ended",
@@ -34,40 +41,40 @@ const AnsFormate = [
   },
 ];
 
-const handelFrom = (type) => {
+const handelFrom = (type, data) => {
   if (type === "open-ended") {
     return {
       validation: {
         options: Yup.array()
           .min(1, "Select at least one option")
           .required("This field is required"),
-        timeLimit: Yup.string().required("Time limit is required"),
+        time_limit: Yup.string().required("Time limit is required"),
         delay: Yup.string()
           .matches(/^\d+ Sec$/, "Delay must be in 'X Sec' format")
           .required("Delay is required"),
       },
       defaultValue: {
-        options: ["Audio", "Video", "Text"],
-        timeLimit: "",
-        delay: "10 Sec",
+        options: data?.options ? data?.options : ["Audio", "Video", "Text"],
+        time_limit: data?.time_limit || "",
+        delay: data?.delay || "0 Sec",
       },
     };
   }
   if (type === "button") {
     return {
       defaultValue: {
-        buttonTitle: "",
-        delay: "10 Sec",
-        disableDataCollection: true,
+        button_title: data?.button_title || "",
+        delay: data?.delay || "0 Sec",
+        disable_data_collection: data?.disable_data_collection || false,
       },
       validation: {
-        buttonTitle: Yup.string()
+        button_title: Yup.string()
           .required("Button title is required")
           .min(3, "Title must be at least 3 characters"),
         delay: Yup.string()
           .matches(/^\d+ Sec$/, "Delay must be in 'X Sec' format")
           .required("Delay is required"),
-        disableDataCollection: Yup.boolean().required(
+        disable_data_collection: Yup.boolean().required(
           "Disable Data Collection is required"
         ),
       },
@@ -76,9 +83,9 @@ const handelFrom = (type) => {
   if (type === "file-upload") {
     return {
       defaultValue: {
-        title: "Resume Video",
-        description: "",
-        disableDataCollection: true,
+        title: data?.title || "",
+        description: data?.description || "",
+        disable_data_collection: data?.disable_data_collection || false,
       },
       validation: {
         title: Yup.string()
@@ -87,7 +94,7 @@ const handelFrom = (type) => {
         description: Yup.string()
           .required("Description is required")
           .min(10, "Description must be at least 10 characters"),
-        disableDataCollection: Yup.boolean().required(
+        disable_data_collection: Yup.boolean().required(
           "Disable Data Collection is required"
         ),
       },
@@ -96,18 +103,18 @@ const handelFrom = (type) => {
   if (type === "calendar") {
     return {
       defaultValue: {
-        schedulingLink: "",
-        schedulingTool: null,
-        delay: "10 Sec",
-        disableDataCollection: true, // Default value
+        scheduling_link: data?.scheduling_link || "",
+        scheduling_tool: data?.scheduling_tool || null,
+        delay: data?.delay || "0 Sec",
+        disable_data_collection: data?.disable_data_collection || false, // Default value
       },
       validation: {
-        schedulingLink: Yup.string().required("Scheduling link is required"),
-        schedulingTool: Yup.string().required("Scheduling tool is required"),
+        scheduling_link: Yup.string().required("Scheduling link is required"),
+        scheduling_tool: Yup.string().required("Scheduling tool is required"),
         delay: Yup.string()
           .matches(/^\d+ Sec$/, "Delay must be in 'X Sec' format")
           .required("Delay is required"),
-        disableDataCollection: Yup.boolean().required(
+        disable_data_collection: Yup.boolean().required(
           "Disable Data Collection is required"
         ),
       },
@@ -116,11 +123,11 @@ const handelFrom = (type) => {
   if (type === "multiple-choice") {
     return {
       defaultValue: {
-        options: [""],
-        allowMultipleSelections: false,
-        randomize: false,
-        disableDataCollection: false,
-        displayTotalChoices: false,
+        options: data?.options || [""],
+        allow_multiple: data?.allow_multiple || false,
+        randomize: data?.randomize || false,
+        disable_data_collection: data?.disable_data_collection || false,
+        display_total_choices: data?.display_total_choices || false,
       },
       validation: {
         options: Yup.array()
@@ -132,26 +139,60 @@ const handelFrom = (type) => {
   return { defaultValue: {}, validation: {} };
 };
 
-function AnswerTab() {
-  const [ansFormate, setAnsFormate] = useState("open-ended");
+function AnswerTab({ onClose }) {
+  const dispatch = useDispatch();
+  const {
+    queModelConfig: { nodeData },
+  } = useSelector((state) => state.global);
+  const [ansFormate, setAnsFormate] = useState("");
   const [validationSchema, setValidationSchema] = useState(null);
   const [initialFormValues, setFormatDetailsForm] = useState(null);
-
+  const [isUpdate, setIsUpdate] = useState(false);
   useEffect(() => {
-    if (ansFormate) {
-      const form = handelFrom(ansFormate);
+    if (ansFormate && nodeData) {
+      const format = nodeData?.answer_format;
+      const form = handelFrom(ansFormate, format);
       setValidationSchema({
         ...form.validation,
         contactForm: Yup.boolean().required("Contact form is required"),
       });
-      setFormatDetailsForm({ ...form.defaultValue, contactForm: false });
+      setFormatDetailsForm({
+        ...form.defaultValue,
+        contactForm: format?.contactForm,
+      });
     }
-  }, [ansFormate]);
+  }, [ansFormate, nodeData]);
+
+  useEffect(() => {
+    setAnsFormate(nodeData?.answer_type || "open-ended");
+  }, [nodeData]);
+
+  const handleSubmit = async (value) => {
+    setIsUpdate(true);
+    try {
+      const req = {
+        node_id: nodeData._id,
+        answer_type: ansFormate,
+        answer_format: { ...value },
+      };
+      const res = await api.put("interactions/update-answer-format", req);
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        onClose();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsUpdate(false);
+  };
 
   return (
     <div className="AnswerTab-container pe-20 ps-20">
       <div className="title">Answer Format</div>
-      <div className="mt-20">
+      <div className="mt-20" style={{ minHeight: "500px" }}>
         <div className="mb-20">
           <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
             Select answer type :
@@ -178,7 +219,7 @@ function AnswerTab() {
               initialValues={initialFormValues}
               validationSchema={Yup.object().shape({ ...validationSchema })}
               onSubmit={(values) => {
-                console.log("Form values:", values);
+                handleSubmit(values);
               }}
             >
               {({ values, setFieldValue, submitForm, errors }) => (
@@ -270,10 +311,11 @@ function AnswerTab() {
                           padding: "10px 0px",
                         }}
                         type="submit"
+                        disabled={isUpdate}
                         onClick={submitForm}
                       >
                         Done
-                        {/* {isCreate && <Spinner className="ms-10" size="sm" />} */}
+                        {isUpdate && <Spinner className="ms-10" size="sm" />}
                       </Button>
                     </div>
                   </div>
@@ -281,11 +323,6 @@ function AnswerTab() {
               )}
             </Formik>
           )}
-
-          {/* {ansFormate === "button" && <ButtonFormate />}
-          {ansFormate === "file-upload" && <FileUploadFormate />}
-          {ansFormate === "calendar" && <CalendarFormate />}
-          {ansFormate === "multiple-choice" && <MultipleChoiceFormate />} */}
         </div>
       </div>
     </div>
