@@ -8,9 +8,10 @@ import DocsIcon from "../../../../assets/images/icons/DocsIcon";
 import ProfileWithArrowIcon from "../../../../assets/images/icons/ProfileWithArrowIcon";
 import PlayIcon from "../../../../assets/images/icons/PlayIcon";
 import { icons } from "../../../../utils/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MenuBar = React.forwardRef(({ className, ...props }) => {
+  const { id } = useParams();
   const [selectMenuIcon, setSelectMenuIcon] = useState("");
   return (
     <Panel position="top-right" {...props} className="p-20 pt-35">
@@ -76,7 +77,19 @@ const MenuBar = React.forwardRef(({ className, ...props }) => {
             className="w-30"
           />
         </Button>
-        <Button className={`${styles.previewBtn} `} onClick={() => {}}>
+        <Button
+          className={`${styles.previewBtn} `}
+          onClick={() => {
+            const req = {
+              intId: id,
+              organizationId: "",
+            };
+            const query = new URLSearchParams({
+              data: JSON.stringify(req),
+            }).toString();
+            window.open(`/user/view-flow?${query}`, "_blank");
+          }}
+        >
           <PlayIcon className="hover-icons-effect" /> Preview
         </Button>
       </div>

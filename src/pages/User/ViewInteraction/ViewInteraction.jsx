@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./ViewInteraction.scss";
 import { Button, Tab, Tabs } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { api } from "../../../services/api";
 import { handelCatch } from "../../../store/globalSlice";
 import { VideoPlayer } from "../../../components";
+import OpenEndedForm from "./AnswerForm/OpenEndedForm";
 function ViewInteraction() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -124,14 +125,17 @@ function ViewInteraction() {
                       )}
                     </div>
                   </div>
-                  <div
-                    className="wp-45 hp-100 f-center"
-                    style={{ alignItems: "end" }}
-                  >
+                  <div className="wp-45 hp-100 f-center">
                     <div
-                      className="wp-100 p-30 d-flex"
+                      className="wp-100 hp-100 p-30 d-flex"
                       style={{ gap: "20px" }}
-                    ></div>
+                    >
+                      <OpenEndedForm
+                        onNext={() => {
+                          handleNext(index);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </Tab>

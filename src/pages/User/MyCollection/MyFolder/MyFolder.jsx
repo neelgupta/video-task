@@ -13,7 +13,7 @@ import { Spinner } from "react-bootstrap";
 import CustomFileMenu from "./CustomFileMenu";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
 import MoveFolderModel from "./MoveFolderModel";
-import { creteImgFilter } from "../../../../utils/helpers";
+import { creteImgFilter, encrypt } from "../../../../utils/helpers";
 function MyFolder() {
   const { id } = useParams();
   const location = useLocation();
@@ -81,6 +81,13 @@ function MyFolder() {
       data: JSON.stringify(req),
     }).toString();
     window.open(`/user/view-flow?${query}`, "_blank");
+    // ***************************************************8
+    // const req = {
+    //   intId: ele._id,
+    //   organizationId: ele.organization_id,
+    // };
+    // const token = encrypt(ele._id);
+    // window.open(`/user/public/${token}`, "_blank");
   };
 
   const handleDuplicate = async (int) => {
