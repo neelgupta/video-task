@@ -13,6 +13,7 @@ import {
 import VideoConfiguration from "./VideoConfiguration";
 import { api } from "../../../../services/api";
 import AnswerTab from "./AnswerTab";
+
 function Upload({ show, handleClose }) {
   const dispatch = useDispatch();
   const {
@@ -28,9 +29,9 @@ function Upload({ show, handleClose }) {
   const [nodeTitle, setNodeTitle] = useState("untitled");
   const [videoConfigForm, setVideoConfigForm] = useState({
     alignVideo: true,
-    videoPosition: "center left",
+    videoPosition: "center center",
     overlayText: "",
-    textSize: "",
+    textSize: "20px",
     textReveal: [0],
   });
 
@@ -39,9 +40,13 @@ function Upload({ show, handleClose }) {
       setNodeTitle(nodeData.title);
       setVideoConfigForm({
         alignVideo: nodeData.video_align,
-        videoPosition: !nodeData.video_align && nodeData.video_position,
+        videoPosition:
+          (!nodeData.video_align && nodeData?.video_position) ||
+          "center center",
         overlayText: nodeData?.overlay_text || "",
-        textSize: nodeData?.overlay_text ? nodeData?.text_size || "12px" : "",
+        textSize: nodeData?.overlay_text
+          ? nodeData?.text_size || "20px"
+          : "20px",
         textReveal: [
           nodeData?.overlay_text ? parseInt(nodeData.fade_reveal) : 0,
         ],

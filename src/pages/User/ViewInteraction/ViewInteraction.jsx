@@ -89,7 +89,7 @@ function ViewInteraction() {
               video_align,
               overlay_text,
               text_size,
-              fade_revea,
+              fade_reveal,
             } = node;
             return (
               <Tab eventKey={index} key={index}>
@@ -115,57 +115,23 @@ function ViewInteraction() {
                           videoUrl={video_url || ""}
                           videoConfigForm={{
                             alignVideo: video_align,
-                            videoPosition: {
-                              value: "center left",
-                            },
+                            videoPosition: "center center",
                             overlayText: overlay_text || "",
-                            textSize: {
-                              value: `${text_size || 0}px`,
-                            },
-                            textReveal: [parseInt(fade_revea)],
+                            textSize: text_size || "",
+                            textReveal: [parseInt(fade_reveal || 0)],
                           }}
                         />
                       )}
                     </div>
                   </div>
-                  <div className="wp-45 hp-100 f-center">
-                    <div className="wp-100 p-30 d-flex" style={{ gap: "20px" }}>
-                      <Button
-                        className="text-18-600 wp-100 p-15"
-                        style={{
-                          background: "#f0f0f0",
-                          border: "none",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "black",
-                          cursor: "pointer",
-                        }}
-                        disabled={index === 0}
-                        onClick={() => {
-                          setKey(index - 1);
-                        }}
-                      >
-                        <span>Back</span>
-                      </Button>
-                      <Button
-                        className="text-18-600 wp-100 p-15"
-                        style={{
-                          background:
-                            "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
-                          border: "none",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          handleNext(index);
-                        }}
-                      >
-                        <span>Next</span>
-                      </Button>
-                    </div>
+                  <div
+                    className="wp-45 hp-100 f-center"
+                    style={{ alignItems: "end" }}
+                  >
+                    <div
+                      className="wp-100 p-30 d-flex"
+                      style={{ gap: "20px" }}
+                    ></div>
                   </div>
                 </div>
               </Tab>
@@ -176,6 +142,40 @@ function ViewInteraction() {
           <Button onClick={() => setKey(queNodes.length - 1)}>Back</Button>
         </Tab>
       </Tabs>
+      {/* <Button
+        className="text-18-600 wp-100 p-15"
+        style={{
+          background: "#f0f0f0",
+          border: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "black",
+          cursor: "pointer",
+        }}
+        disabled={index === 0}
+        onClick={() => {
+          setKey(index - 1);
+        }}
+      >
+        <span>Back</span>
+      </Button>
+      <Button
+        className="text-18-600 wp-100 p-15"
+        style={{
+          background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+          border: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          handleNext(index);
+        }}
+      >
+        <span>Next</span>
+      </Button> */}
     </div>
   );
 }

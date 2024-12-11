@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import "./AnswerTab.scss";
-import OutlineCheck from "../../../../User/MyOrganization/pages/Notifications/OutlineCheck";
-import { TextInput } from "../../../../../components";
 import { Button, Spinner } from "react-bootstrap";
 import OpenEndedFormate from "./FormateComponent/OpenEndedFormate";
 import ButtonFormate from "./FormateComponent/ButtonFormate";
@@ -55,7 +53,7 @@ const handelFrom = (type, data) => {
       },
       defaultValue: {
         options: data?.options ? data?.options : ["Audio", "Video", "Text"],
-        time_limit: data?.time_limit || "",
+        time_limit: data?.time_limit || "10",
         delay: data?.delay || "0 Sec",
       },
     };
@@ -123,14 +121,14 @@ const handelFrom = (type, data) => {
   if (type === "multiple-choice") {
     return {
       defaultValue: {
-        options: data?.options || [""],
+        choices: data?.choices || [""],
         allow_multiple: data?.allow_multiple || false,
         randomize: data?.randomize || false,
         disable_data_collection: data?.disable_data_collection || false,
         display_total_choices: data?.display_total_choices || false,
       },
       validation: {
-        options: Yup.array()
+        choices: Yup.array()
           .of(Yup.string().trim().required("Option cannot be empty"))
           .min(1, "At least one option is required"),
       },
@@ -154,11 +152,11 @@ function AnswerTab({ onClose }) {
       const form = handelFrom(ansFormate, format);
       setValidationSchema({
         ...form.validation,
-        contactForm: Yup.boolean().required("Contact form is required"),
+        contact_form: Yup.boolean().required("Contact form is required"),
       });
       setFormatDetailsForm({
         ...form.defaultValue,
-        contactForm: format?.contactForm,
+        contact_form: format?.contact_form,
       });
     }
   }, [ansFormate, nodeData]);
@@ -274,20 +272,20 @@ function AnswerTab({ onClose }) {
                       <div style={{ display: "flex", gap: "10px" }}>
                         <div
                           onClick={() => {
-                            setFieldValue("contactForm", true);
+                            setFieldValue("contact_form", true);
                           }}
                           className={`align-btn ${
-                            values.contactForm && "active"
+                            values.contact_form && "active"
                           }`}
                         >
                           Yes
                         </div>
                         <div
                           onClick={() => {
-                            setFieldValue("contactForm", false);
+                            setFieldValue("contact_form", false);
                           }}
                           className={`align-btn ${
-                            !values.contactForm && "active"
+                            !values.contact_form && "active"
                           }`}
                         >
                           No

@@ -1,6 +1,5 @@
 import React from "react";
-import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { Form, Field, FieldArray, ErrorMessage } from "formik";
 import { Button } from "react-bootstrap";
 import { icons } from "../../../../../../utils/constants";
 
@@ -9,29 +8,29 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
     <Form id="MultipleChoiceFormate">
       {/* Dynamic Options Input */}
       <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
-        Options :
+        Choices :
       </div>
-      <FieldArray name="options">
+      <FieldArray name="choices">
         {({ push, remove }) => (
           <div className="option-input-group mb-20">
-            {(values?.options || []).map((option, index) => (
+            {(values?.choices || []).map((option, index) => (
               <div key={index}>
                 <div className="option-input">
                   <Field
-                    name={`options[${index}]`}
+                    name={`choices[${index}]`}
                     placeholder={`Enter choice ${index + 1}`}
                     className="form-control"
                   />
                   <Button
                     className="input-delete-btn"
                     onClick={() => remove(index)}
-                    disabled={(values?.options || []).length === 1}
+                    disabled={(values?.choices || []).length === 1}
                   >
                     <img src={icons.close} alt="" className="fit-image" />
                   </Button>
                 </div>
                 <ErrorMessage
-                  name={`options[${index}]`}
+                  name={`choices[${index}]`}
                   component="div"
                   style={{ color: "red", fontSize: "12px" }}
                   className="error-message"
@@ -51,7 +50,7 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
                   border: "none",
                   padding: "8px 10px",
                 }}
-                disabled={(values?.options || []).length > 5}
+                disabled={(values?.choices || []).length > 5}
               >
                 + Add Choice
               </Button>

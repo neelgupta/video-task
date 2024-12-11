@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { getTrackBackground, Range } from "react-range";
 import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
 import "./VideoConfiguration.scss";
 import { TextArea } from "../../../../../components";
-import { icons } from "../../../../../utils/constants";
 
 function VideoConfiguration({
   isThumbnail,

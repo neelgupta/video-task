@@ -4,6 +4,7 @@ import { creteImgFilter } from "../../../utils/helpers";
 import "./VideoPlayer.scss";
 import { getTrackBackground, Range } from "react-range";
 const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
+  console.log("videoConfigForm", videoConfigForm);
   const videoRef = useRef(null);
   const { alignVideo, overlayText, textSize, textReveal, videoPosition } =
     videoConfigForm;
@@ -147,6 +148,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
           style={{
             fontSize: textSize,
             opacity: textReveal >= currentTime ? "1" : "0",
+            display: textReveal >= currentTime ? "block" : "none",
           }}
         >
           {overlayText}
