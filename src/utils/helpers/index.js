@@ -11,25 +11,41 @@ export const encrypt = (data) => {
     padding: CryptoJS.pad.Pkcs7,
     mode: CryptoJS.mode.CBC,
   });
-  const returnData = encrypted.toString();
-  return returnData;
+
+  // Convert ciphertext to URL-safe Base64
+  const base64String = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+  const urlSafeString = base64String
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, ""); // Remove padding
+  return urlSafeString;
 };
 
 export const decrypt = (encryptedData) => {
   let returnData = {};
   try {
-    var plaintextData = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY, {
-      iv: ENCRYPTION_IV,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-    let decryped = plaintextData.toString(CryptoJS.enc.Utf8);
+    // Convert URL-safe Base64 back to standard Base64
+    const base64String = encryptedData.replace(/-/g, "+").replace(/_/g, "/");
+    const encryptedHexStr = CryptoJS.enc.Base64.parse(base64String);
+    const encryptedBase64Str = CryptoJS.enc.Base64.stringify(encryptedHexStr);
 
-    if (decryped) {
-      returnData = JSON.parse(decryped);
+    // Decrypt the data
+    var plaintextData = CryptoJS.AES.decrypt(
+      encryptedBase64Str,
+      ENCRYPTION_KEY,
+      {
+        iv: ENCRYPTION_IV,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      }
+    );
+
+    let decrypted = plaintextData.toString(CryptoJS.enc.Utf8);
+    if (decrypted) {
+      returnData = JSON.parse(decrypted);
     }
   } catch (error) {
-    // console.log("CATCH", encryptedData);
+    // Handle error
   }
   return returnData;
 };

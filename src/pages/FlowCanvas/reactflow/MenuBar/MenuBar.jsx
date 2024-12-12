@@ -9,6 +9,7 @@ import ProfileWithArrowIcon from "../../../../assets/images/icons/ProfileWithArr
 import PlayIcon from "../../../../assets/images/icons/PlayIcon";
 import { icons } from "../../../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
+import { encrypt } from "../../../../utils/helpers";
 
 const MenuBar = React.forwardRef(({ className, ...props }) => {
   const { id } = useParams();
@@ -80,14 +81,8 @@ const MenuBar = React.forwardRef(({ className, ...props }) => {
         <Button
           className={`${styles.previewBtn} `}
           onClick={() => {
-            const req = {
-              intId: id,
-              organizationId: "",
-            };
-            const query = new URLSearchParams({
-              data: JSON.stringify(req),
-            }).toString();
-            window.open(`/user/view-flow?${query}`, "_blank");
+            const token = encrypt(id);
+            window.open(`/view-flow/${token}/preview`, "_blank");
           }}
         >
           <PlayIcon className="hover-icons-effect" /> Preview

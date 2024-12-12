@@ -122,7 +122,7 @@ const UserRoute = () => {
         );
       })}
       <Route path="/user/flow/:id" element={<FlowCanvas />} />
-      <Route path="/user/view-flow" element={<ViewInteraction />} />
+      <Route path="/view-flow/:token/:type?" element={<ViewInteraction />} />
       <Route path="*" element={<Navigate to="/user/dashboard" />} />
     </Routes>
   );

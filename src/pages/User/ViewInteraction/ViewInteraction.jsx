@@ -7,44 +7,27 @@ import { api } from "../../../services/api";
 import { handelCatch } from "../../../store/globalSlice";
 import { VideoPlayer } from "../../../components";
 import OpenEndedForm from "./AnswerForm/OpenEndedForm";
+import { decrypt } from "../../../utils/helpers";
 function ViewInteraction() {
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const data = query.get("data");
-  const [queryParams, setQueryParams] = useState(null);
+  const { token, type } = useParams();
+  const id = decrypt(token);
   const [key, setKey] = useState(0);
   const [queNodes, setQueNodes] = useState([]);
   const [endNodes, setEndNodes] = useState([]);
   const [intData, setIntData] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const videoConfig = {
-    alignVideo: true,
-    videoPosition: {
-      value: "center left",
-    },
-    overlayText: "",
-    textSize: {
-      value: "20px",
-    },
-    textReveal: [0],
-  };
-  useEffect(() => {
-    if (data) {
-      setQueryParams(JSON.parse(data));
-    }
-  }, [data]);
 
   useEffect(() => {
-    if (queryParams) {
+    if (id) {
       fetchInteraction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryParams]);
+  }, [id]);
 
   const fetchInteraction = async () => {
     try {
-      const res = await api.get(`interactions/get-nodes/${queryParams.intId}`);
+      const res = await api.get(`interactions/get-nodes/${id}`);
       if (res.status === 200) {
         const {
           response: { nodes, edges, ...intr },

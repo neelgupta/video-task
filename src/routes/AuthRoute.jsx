@@ -4,7 +4,6 @@ import Verification from "../pages/Verification";
 import AuthHeader from "../pages/AuthHeader/AuthHeader";
 import Signup from "../pages/Signup";
 import ViewInteraction from "../pages/User/ViewInteraction";
-import Public from "../pages/User/Public";
 
 const AuthRoute = () => {
   return (
@@ -33,8 +32,7 @@ const AuthRoute = () => {
           </AuthHeader>
         }
       />
-      <Route path="/user/public/:token" element={<Public />} />
-
+      <Route path="/view-flow/:token" element={<ViewInteraction />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

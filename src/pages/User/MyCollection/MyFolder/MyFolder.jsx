@@ -73,21 +73,8 @@ function MyFolder() {
   };
 
   const handleView = (ele) => {
-    const req = {
-      intId: ele._id,
-      organizationId: ele.organization_id,
-    };
-    const query = new URLSearchParams({
-      data: JSON.stringify(req),
-    }).toString();
-    window.open(`/user/view-flow?${query}`, "_blank");
-    // ***************************************************8
-    // const req = {
-    //   intId: ele._id,
-    //   organizationId: ele.organization_id,
-    // };
-    // const token = encrypt(ele._id);
-    // window.open(`/user/public/${token}`, "_blank");
+    const token = encrypt(ele._id);
+    window.open(`/view-flow/${token}`, "_blank");
   };
 
   const handleDuplicate = async (int) => {

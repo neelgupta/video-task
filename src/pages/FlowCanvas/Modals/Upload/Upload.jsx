@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   handelCatch,
   setNewQueModalData,
+  setQueModelConfig,
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
@@ -92,10 +93,23 @@ function Upload({ show, handleClose }) {
           "Content-Type": "multipart/form-data",
         }
       );
+      console.log("res", res);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         dispatch(setNewQueModalData({}));
-        handleClose();
+        const nodeData = res.data.response;
+
+        if (!isEdit) {
+          dispatch(
+            setQueModelConfig({
+              modalType: nodeData.flow_type || "",
+              nodeData: nodeData,
+              isEdit: true,
+            })
+          );
+        } else {
+          handleClose();
+        }
       } else {
         dispatch(throwError(res.data.message));
       }
