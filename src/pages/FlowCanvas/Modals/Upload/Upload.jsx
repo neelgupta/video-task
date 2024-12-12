@@ -153,7 +153,7 @@ function Upload({ show, handleClose }) {
       setVideoSrc(videoUrl);
       tempVideo.src = videoUrl;
       tempVideo.onloadedmetadata = () => {
-        setMAX(Math.ceil(tempVideo.duration));
+        setMAX(tempVideo.duration.toFixed(0));
       };
     } else {
       setVideoSrc("");

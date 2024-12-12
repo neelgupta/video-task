@@ -73,8 +73,14 @@ function CalendarFormate({ setFieldValue, values, errors }) {
         <div className={`text-12-600 mb-5 `} style={{ color: "#666666" }}>
           Delay for options to show :
         </div>
-        <div className="wp-40 InputBox">
+        <div
+          className="wp-50 InputBox"
+          style={{ display: "flex", alignItems: "center", gap: "10px" }}
+        >
           <Field type="text" name="delay" className={`form-control`} />
+          <div className="text-14-600" style={{ color: "#666666" }}>
+            Sec.
+          </div>
         </div>
         <ErrorMessage name="delay" component="div" className="error-message" />
       </div>

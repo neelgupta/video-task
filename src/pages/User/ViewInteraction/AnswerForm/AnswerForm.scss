@@ -18,9 +18,7 @@
       position: relative;
     }
   }
-  .text-container,
-  .video-container,
-  .audio-container {
+  .form-container {
     width: 100%;
     height: 100%;
     display: flex;
@@ -28,6 +26,119 @@
     justify-content: space-between;
     flex-direction: column;
     padding: 50px 0px;
+  }
+}
+
+.MultipleChoiceForm-container {
+  width: 100%;
+  height: 100% !important;
+  .option-box {
+    width: min(300px, 40%);
+    cursor: pointer;
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #f1f1f1;
+    gap: 10px;
+    transition-duration: 0.3s;
+    transition-property: background;
+    .option-teg {
+      height: 35px;
+      width: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgb(56, 56, 56);
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      transition-duration: 0.3s;
+      transition-property: background, border;
+    }
+    .option-value {
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: capitalize;
+      color: rgb(100, 100, 100);
+      transition-duration: 0.3s;
+      transition-property: color;
+    }
+    &:hover {
+      background: #e7e1ff;
+      border: 1px solid #7b5aff;
+      .option-teg {
+        background: #7b5aff;
+      }
+      .option-value {
+        color: #7b5aff;
+      }
+    }
+  }
+  .active {
+    background: #e7e1ff;
+    border: 1px solid #7b5aff;
+    .option-teg {
+      background: #7b5aff;
+    }
+    .option-value {
+      color: #7b5aff;
+    }
+  }
+}
+
+.ButtonForm-container {
+  width: 100%;
+  height: 100% !important;
+  button {
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: capitalize;
+    background: #7b5aff;
+    border: none;
+    color: white;
+    transform: scale(1);
+    transition-duration: 0.3s;
+    border-radius: 10px;
+    &:hover {
+      background: #8000ff;
+      color: white;
+    }
+    &:active {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.FileUploadForm-container {
+  width: 100%;
+  height: 100% in !important;
+  .container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    .InputBox {
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px 15px;
+        outline: none;
+        border: none;
+        border: 1px solid #cccccc;
+        font-size: 16px;
+        border-radius: 10px;
+        color: #1b2559;
+        box-shadow: none;
+        &:focus {
+          border-color: #7b5aff;
+        }
+      }
+    }
   }
 }
 

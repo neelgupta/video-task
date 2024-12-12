@@ -8,6 +8,9 @@ import { handelCatch } from "../../../store/globalSlice";
 import { VideoPlayer } from "../../../components";
 import OpenEndedForm from "./AnswerForm/OpenEndedForm";
 import { decrypt } from "../../../utils/helpers";
+import MultipleChoiceForm from "./AnswerForm/MultipleChoiceForm";
+import ButtonForm from "./AnswerForm/ButtonForm";
+import FileUploadForm from "./AnswerForm/FileUploadForm";
 function ViewInteraction() {
   const { token, type } = useParams();
   const id = decrypt(token);
@@ -15,6 +18,7 @@ function ViewInteraction() {
   const [queNodes, setQueNodes] = useState([]);
   const [endNodes, setEndNodes] = useState([]);
   const [intData, setIntData] = useState(null);
+  const [videoTime, setVideoTime] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -74,53 +78,91 @@ function ViewInteraction() {
               overlay_text,
               text_size,
               fade_reveal,
+              answer_type,
             } = node;
             return (
               <Tab eventKey={index} key={index}>
-                <div
-                  className="wp-100 d-flex"
-                  style={{
-                    background: "#fff",
-                    position: "absolute",
-                    top: "0px",
-                    bottom: "0px",
-                  }}
-                >
+                {key === index && (
                   <div
-                    className="wp-55 hp-100 m-0 p-0"
-                    style={{ overflow: "hidden" }}
+                    className="wp-100 d-flex"
+                    style={{
+                      background: "#fff",
+                      position: "absolute",
+                      top: "0px",
+                      bottom: "0px",
+                    }}
                   >
                     <div
-                      className="wp-100 hp-100 f-center"
-                      style={{ background: "black" }}
+                      className="wp-55 hp-100 m-0 p-0"
+                      style={{ overflow: "hidden" }}
                     >
-                      {video_url && (
-                        <VideoPlayer
-                          videoUrl={video_url || ""}
-                          videoConfigForm={{
-                            alignVideo: video_align,
-                            videoPosition: "center center",
-                            overlayText: overlay_text || "",
-                            textSize: text_size || "",
-                            textReveal: [parseInt(fade_reveal || 0)],
-                          }}
-                        />
-                      )}
+                      <div
+                        className="wp-100 hp-100 f-center"
+                        style={{ background: "black" }}
+                      >
+                        {video_url && (
+                          <VideoPlayer
+                            videoUrl={video_url || ""}
+                            videoConfigForm={{
+                              alignVideo: video_align,
+                              videoPosition: "center center",
+                              overlayText: overlay_text || "",
+                              textSize: text_size || "",
+                              textReveal: [parseInt(fade_reveal || 0)],
+                            }}
+                            getCurrentTime={(time) => {
+                              setVideoTime(time);
+                            }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                    <div className="wp-45 hp-100 f-center">
+                      <div
+                        className="wp-100 hp-100 p-30 d-flex"
+                        style={{ gap: "20px" }}
+                      >
+                        {answer_type === "open-ended" && (
+                          <OpenEndedForm
+                            onNext={() => {
+                              handleNext(index);
+                            }}
+                            node={node}
+                            videoTime={videoTime}
+                          />
+                        )}
+
+                        {answer_type === "multiple-choice" && (
+                          <MultipleChoiceForm
+                            onNext={() => {
+                              handleNext(index);
+                            }}
+                            node={node}
+                          />
+                        )}
+
+                        {answer_type === "button" && (
+                          <ButtonForm
+                            onNext={() => {
+                              handleNext(index);
+                            }}
+                            node={node}
+                            videoTime={videoTime}
+                          />
+                        )}
+
+                        {answer_type === "file-upload" && (
+                          <FileUploadForm
+                            onNext={() => {
+                              handleNext(index);
+                            }}
+                            node={node}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="wp-45 hp-100 f-center">
-                    <div
-                      className="wp-100 hp-100 p-30 d-flex"
-                      style={{ gap: "20px" }}
-                    >
-                      <OpenEndedForm
-                        onNext={() => {
-                          handleNext(index);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
+                )}
               </Tab>
             );
           })}

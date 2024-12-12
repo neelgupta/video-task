@@ -4,9 +4,9 @@ import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
 import "./VideoConfiguration.scss";
 import { TextArea } from "../../../../../components";
+import { useSelector } from "react-redux";
 
 function VideoConfiguration({
-  isThumbnail,
   onSubmit,
   videoConfigForm,
   setVideoConfigForm,
@@ -47,8 +47,20 @@ function VideoConfiguration({
       value: "58px",
     },
   ];
+
+  const {
+    queModelConfig: { nodeData, isEdit, modalType },
+  } = useSelector((state) => state.global);
   return (
     <div className="VideoConfiguration-container">
+      {isEdit && (
+        <>
+          <h3 className="text-22-600 mb-10">Thumbnail</h3>
+          <div className="thumbnail-content">
+            <img src={nodeData.video_thumbnail} alt="" className="fit-image" />
+          </div>
+        </>
+      )}
       <h3 className="text-22-600 mb-20">Video</h3>
       <div className="align-option mb-20">
         <div className="text-18-500" style={{ color: "#7D8185" }}>

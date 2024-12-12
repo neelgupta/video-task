@@ -5,6 +5,10 @@
       box-sizing: content-box;
     }
 
+    .react-flow__background {
+      background-image: none; /* Remove dots or grid */
+    }
+
     .react-flow__node {
       font-size: 12px;
     }

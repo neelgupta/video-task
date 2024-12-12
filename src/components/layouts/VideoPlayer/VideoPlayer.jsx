@@ -3,8 +3,9 @@ import { icons } from "../../../utils/constants";
 import { creteImgFilter } from "../../../utils/helpers";
 import "./VideoPlayer.scss";
 import { getTrackBackground, Range } from "react-range";
-const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
-  console.log("videoConfigForm", videoConfigForm);
+import { useDispatch } from "react-redux";
+import { handelCatch } from "../../../store/globalSlice";
+const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
   const videoRef = useRef(null);
   const { alignVideo, overlayText, textSize, textReveal, videoPosition } =
     videoConfigForm;
@@ -14,17 +15,39 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
   const [duration, setDuration] = useState(0);
   const [showCenterPlay, setShowCenterPlay] = useState(false);
   const [isMute, setIsMute] = useState(true);
-  useEffect(() => {
-    const video = videoRef.current;
-    // default video controls
-    video.volume = 0;
-  }, []);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load(); // Force video reload when videoUrl changes
+    const video = videoRef.current;
+
+    if (video) {
+      // Reset the video to the beginning
+      video.pause(); // Pause any ongoing playback
+      video.currentTime = 0; // Ensure the video starts from the beginning
+      video.volume = 0; // Start muted to allow autoplay
+      video.load(); // Reload the video
+
+      // Attempt autoplay with error handling
+      video
+        .play()
+        .then(() => {
+          setIsPlaying(true); // Update state to indicate the video is playing
+        })
+        .catch((error) => {
+          dispatch(handelCatch(error)); // Handle autoplay issues
+          console.warn("Autoplay blocked or interrupted:", error);
+          setIsPlaying(false); // Update state to indicate autoplay failed
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoUrl]);
+
+  useEffect(() => {
+    if (duration && currentTime) {
+      getCurrentTime && getCurrentTime({ currentTime, duration });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTime, duration]);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -127,7 +150,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
           display:
             showCenterPlay ||
             !isPlaying ||
-            Math.floor(currentTime) === Math.floor(duration)
+            currentTime.toFixed(0) === duration.toFixed(0)
               ? "flex"
               : "none",
         }}
@@ -201,7 +224,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm }) => {
           />
 
           <span className="duration-text">
-            {Math.floor(currentTime)} / {Math.floor(duration)} sec
+            {currentTime.toFixed(0)} / {duration.toFixed(0)} sec
           </span>
           <button onClick={handleSpeedChange} className="speed-btn">
             {playbackSpeed}x

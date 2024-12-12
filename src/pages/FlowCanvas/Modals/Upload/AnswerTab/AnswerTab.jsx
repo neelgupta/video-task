@@ -7,7 +7,7 @@ import ButtonFormate from "./FormateComponent/ButtonFormate";
 import FileUploadFormate from "./FormateComponent/FileUploadFormate";
 import CalendarFormate from "./FormateComponent/CalendarFormate";
 import MultipleChoiceFormate from "./FormateComponent/MultipleChoiceFormate";
-import { Formik } from "formik";
+import { ErrorMessage, Formik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -48,13 +48,13 @@ const handelFrom = (type, data) => {
           .required("This field is required"),
         time_limit: Yup.string().required("Time limit is required"),
         delay: Yup.string()
-          .matches(/^\d+ Sec$/, "Delay must be in 'X Sec' format")
+          .matches(/^\d+$/, "Delay must be a number") // Ensures only numeric characters
           .required("Delay is required"),
       },
       defaultValue: {
         options: data?.options ? data?.options : ["Audio", "Video", "Text"],
         time_limit: data?.time_limit || "10",
-        delay: data?.delay || "0 Sec",
+        delay: data?.delay || 0,
       },
     };
   }
@@ -62,7 +62,7 @@ const handelFrom = (type, data) => {
     return {
       defaultValue: {
         button_title: data?.button_title || "",
-        delay: data?.delay || "0 Sec",
+        delay: data?.delay || "0",
         disable_data_collection: data?.disable_data_collection || false,
       },
       validation: {
@@ -70,7 +70,7 @@ const handelFrom = (type, data) => {
           .required("Button title is required")
           .min(3, "Title must be at least 3 characters"),
         delay: Yup.string()
-          .matches(/^\d+ Sec$/, "Delay must be in 'X Sec' format")
+          .matches(/^\d+$/, "Delay must be a number") // Ensures only numeric characters
           .required("Delay is required"),
         disable_data_collection: Yup.boolean().required(
           "Disable Data Collection is required"
@@ -103,14 +103,14 @@ const handelFrom = (type, data) => {
       defaultValue: {
         scheduling_link: data?.scheduling_link || "",
         scheduling_tool: data?.scheduling_tool || null,
-        delay: data?.delay || "0 Sec",
+        delay: data?.delay || "0",
         disable_data_collection: data?.disable_data_collection || false, // Default value
       },
       validation: {
         scheduling_link: Yup.string().required("Scheduling link is required"),
         scheduling_tool: Yup.string().required("Scheduling tool is required"),
         delay: Yup.string()
-          .matches(/^\d+ Sec$/, "Delay must be in 'X Sec' format")
+          .matches(/^\d+$/, "Delay must be a number") // Ensures only numeric characters
           .required("Delay is required"),
         disable_data_collection: Yup.boolean().required(
           "Disable Data Collection is required"
@@ -292,7 +292,11 @@ function AnswerTab({ onClose }) {
                         </div>
                       </div>
                     </div>
-
+                    <ErrorMessage
+                      name="contact_form"
+                      component="div"
+                      className="error-message"
+                    />
                     <div className="mb-20 " style={{ color: "#7B5AFF" }}>
                       <span className="text-14-400 EditContactLink">
                         Edit contact Form?

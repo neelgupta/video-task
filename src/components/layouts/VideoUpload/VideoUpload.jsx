@@ -7,17 +7,12 @@ import { useDispatch } from "react-redux";
 import { throwError } from "../../../store/globalSlice";
 const acceptVideoType = ["mp4", "avchd", "mpc", "aac"];
 const VideoUpload = ({ setFileValue, videoFile }) => {
-  const [file, setFile] = useState(videoFile ? videoFile : null);
   const [uploadProgress, setUploadProgress] = useState(videoFile ? 100 : 0);
   const dispatch = useDispatch();
-  useEffect(() => {
-    setFileValue && setFileValue(file);
-    // eslint-disable-next-line
-  }, [file]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
-      if (!file) {
+      if (!videoFile) {
         const selectedFile = acceptedFiles[0];
         const { size, type } = selectedFile;
         if (parseInt(size / 1024 / 1024) > 4) {
@@ -34,16 +29,16 @@ const VideoUpload = ({ setFileValue, videoFile }) => {
           );
           return;
         }
-        setFile(selectedFile);
-        uploadFile(selectedFile);
+        setFileValue(selectedFile);
+        uploadFile();
       }
     },
   });
   const handleRemoveFile = () => {
-    setFile(null);
+    setFileValue(null);
     setUploadProgress(0);
   };
-  const uploadFile = (file) => {
+  const uploadFile = () => {
     const interval = setInterval(() => {
       setUploadProgress((prevProgress) => {
         if (prevProgress >= 100) {
@@ -59,9 +54,9 @@ const VideoUpload = ({ setFileValue, videoFile }) => {
     <div className="video-upload-container">
       <div
         {...getRootProps({ className: "upload-box" })}
-        style={file ? { cursor: "not-allowed" } : {}}
+        style={videoFile ? { cursor: "not-allowed" } : {}}
       >
-        {!file && <input {...getInputProps()} accept="video/*" />}
+        {!videoFile && <input {...getInputProps()} accept="video/*" />}
         <img
           src={icons.Upload}
           alt="Upload Icon"
@@ -76,13 +71,13 @@ const VideoUpload = ({ setFileValue, videoFile }) => {
           Supported formats: MP4, AVCHD, MPC, AAC
         </p>
       </div>
-      {file && (
+      {videoFile && (
         <div className="footer text-12-600" style={{ color: "#666666" }}>
           <div>Uploading - 1/1 files</div>
           <div>Max Limit: 3MB</div>
         </div>
       )}
-      {file && (
+      {videoFile && (
         <div className="fileProgressContainer">
           <div
             style={{
@@ -92,7 +87,7 @@ const VideoUpload = ({ setFileValue, videoFile }) => {
             }}
           >
             <span className="text-14-500" style={{ color: "#1B2559" }}>
-              {file.name}
+              {videoFile.name}
             </span>
             <button className="removeFileButton" onClick={handleRemoveFile}>
               <img src={icons.close} alt="" className="fit-image w-10" />

@@ -1,0 +1,80 @@
+.audio-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .upload-box {
+    border: 2px dashed #c3c8f9;
+    padding: 40px;
+    text-align: center;
+    width: 100%;
+    background-color: #f8f8ff;
+    transition: border 0.3s ease-in-out;
+  }
+
+  .upload-box:hover {
+    border-color: #6c5eca;
+  }
+
+  .upload-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+  }
+
+  .upload-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000000;
+  }
+
+  .upload-text .browse {
+    color: #6c5eca;
+    cursor: pointer;
+  }
+
+  .supported-formats {
+    font-size: 12px;
+    color: #000000;
+    font-weight: 400;
+    margin-top: 10px;
+  }
+  .footer {
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .fileProgressContainer {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    margin-top: 10px;
+    .removeFileButton {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      outline: none;
+      background-color: transparent;
+      border-radius: 50%;
+      box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    }
+    .progressBar {
+      width: 90%;
+      background-color: #cccccc;
+      height: 5px;
+      margin-top: 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      .progress {
+        background: #7b5aff;
+        height: 5px;
+        border-radius: 10px;
+      }
+    }
+  }
+}

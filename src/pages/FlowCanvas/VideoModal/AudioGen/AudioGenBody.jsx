@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./AudioGen.scss";
 import { icons } from "../../../../utils/constants";
 import TextArea from "../../../../components/inputs/TextArea/TextArea";
-import AudioUpload from "./AudioUpload";
 import { Button } from "react-bootstrap";
+import AudioUpload from "../../../../components/layouts/AudioUpload";
 function AudioGenBody({ setModalType }) {
   const [stockVoice, setStockVoice] = useState([]);
   return (
