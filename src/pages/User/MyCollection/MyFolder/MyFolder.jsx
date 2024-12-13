@@ -14,6 +14,7 @@ import CustomFileMenu from "./CustomFileMenu";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
 import MoveFolderModel from "./MoveFolderModel";
 import { creteImgFilter, encrypt } from "../../../../utils/helpers";
+import Share from "./Share";
 function MyFolder() {
   const { id } = useParams();
   const location = useLocation();
@@ -23,6 +24,7 @@ function MyFolder() {
   const [isFetch, setIsFetch] = useState(false);
   const [deleteId, setDeleteId] = useState("");
   const [isDelete, setIsDelete] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showMoveFolderModal, setShowMoveFolderModal] = useState(false);
   const [moveFolderItem, setMoveFolderItem] = useState({});
@@ -93,6 +95,12 @@ function MyFolder() {
       dispatch(handelCatch(error));
     }
   };
+
+  const handleShare = (id) => {
+    const token = encrypt(id);
+    const url = `${window.location.origin}/view-flow/${token}`;
+    setShareUrl(url);
+  };
   return (
     <div className="MyFolder">
       <DeleteModal
@@ -114,6 +122,12 @@ function MyFolder() {
         handleClose={() => {
           setShowMoveFolderModal(false);
         }}
+      />
+
+      <Share
+        show={shareUrl !== ""}
+        handleClose={() => setShareUrl("")}
+        shareUrl={shareUrl}
       />
       <div
         className="ms-10"
@@ -163,6 +177,7 @@ function MyFolder() {
                       }}
                       onViewClick={() => handleView(ele)}
                       onDuplicateClick={() => handleDuplicate(ele)}
+                      onShareClick={() => handleShare(ele._id)}
                     />
                   </div>
                   <div className="file-card">

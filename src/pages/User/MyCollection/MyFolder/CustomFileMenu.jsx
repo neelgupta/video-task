@@ -23,6 +23,7 @@ const CustomFileMenu = ({
   onMoveClick,
   onViewClick,
   onDuplicateClick,
+  onShareClick,
 }) => {
   return (
     <Dropdown>
@@ -80,6 +81,16 @@ const CustomFileMenu = ({
         >
           Duplicate
         </Dropdown.Item>
+
+        <Dropdown.Item
+          onClick={() => {
+            onShareClick();
+          }}
+          className="text-14-500"
+        >
+          Share
+        </Dropdown.Item>
+
         <Dropdown.Divider
           style={{
             margin: "0.5rem 1rem",

@@ -102,6 +102,9 @@ import volumeOff from "../../assets/images/svgIcons/volumeOff.svg";
 import play from "../../assets/images/svgIcons/play.svg";
 import push from "../../assets/images/svgIcons/push.svg";
 import closeSvg from "../../assets/images/svgIcons/closesvg.svg";
+import copy from "../../assets/images/icons/copy.png";
+
+// copy;
 
 export const icons = {
   logo,
@@ -208,4 +211,5 @@ export const icons = {
   play,
   push,
   closeSvg,
+  copy,
 };
