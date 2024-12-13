@@ -6,6 +6,7 @@ import { TextArea, VideoUpload } from "../../../../components";
 import AudioUpload from "../../../../components/layouts/AudioUpload";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../../store/globalSlice";
+import { Spinner } from "react-bootstrap";
 const optionArray = [
   {
     icon: icons.video,
@@ -26,10 +27,8 @@ const optionArray = [
     isPro: false,
   },
 ];
-function OpenEndedForm({ onNext, node, videoTime }) {
+function OpenEndedForm({ onNext, node, videoTime, isPost }) {
   const { answer_type, answer_format } = node;
-  console.log("answer_format", answer_format);
-
   const dispatch = useDispatch();
   const [tabArray, setTabArray] = useState(optionArray);
   const [isDelay, setIsDelay] = useState(true);
@@ -218,18 +217,24 @@ function OpenEndedForm({ onNext, node, videoTime }) {
                     dispatch(throwError("Please enter an answer."));
                     return;
                   }
-                  onNext();
+                  if (!isPost) {
+                    onNext({ ...answerForm });
+                  }
                 }}
               >
-                <img
-                  src={icons.top_right_arrow}
-                  alt=""
-                  style={{
-                    transform: "rotate(45deg)",
-                    filter: creteImgFilter("#888888"),
-                  }}
-                  className="fit-image w-30"
-                />
+                {isPost ? (
+                  <Spinner size="lg" color="#888888" />
+                ) : (
+                  <img
+                    src={icons.top_right_arrow}
+                    alt=""
+                    style={{
+                      transform: "rotate(45deg)",
+                      filter: creteImgFilter("#888888"),
+                    }}
+                    className="fit-image w-30"
+                  />
+                )}
               </button>
               <button
                 className="cancel-btn"

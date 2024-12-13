@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
-import { VideoUpload } from "../../../../components";
+import UploadFile from "../../../../components/layouts/UploadFile";
+import { throwError } from "../../../../store/globalSlice";
+import { useDispatch } from "react-redux";
+import "./AnswerForm.scss";
+import { Spinner } from "react-bootstrap";
 
-function FileUploadForm({ onNext, node }) {
+function FileUploadForm({ onNext, node, isPost }) {
   const { answer_type, answer_format } = node;
+  const dispatch = useDispatch();
   const [videoFile, setVideoFile] = useState(null);
   return (
     <div className="FileUploadForm-container">
@@ -16,11 +21,11 @@ function FileUploadForm({ onNext, node }) {
             </div>
             <div className="wp-100 InputBox">
               <input
-                disabled
                 type="text"
                 name="title"
+                value={answer_format?.title || ""}
                 placeholder="Enter title"
-                className={`form-control`}
+                className="form-control"
               />
             </div>
           </div>
@@ -32,6 +37,7 @@ function FileUploadForm({ onNext, node }) {
               <textarea
                 name="description"
                 placeholder="Description..."
+                value={answer_format?.description || ""}
                 style={{
                   borderRadius: "10px",
                   width: "100%",
@@ -51,22 +57,37 @@ function FileUploadForm({ onNext, node }) {
               Upload Video
             </div>
 
-            <VideoUpload setFileValue={setVideoFile} videoFile={videoFile} />
+            <UploadFile setFileValue={setVideoFile} videoFile={videoFile} />
           </div>
         </div>
         <div id="ans-btn-group" className="mb-30">
-          <button className="next-btn" onClick={onNext}>
-            <img
-              src={icons.top_right_arrow}
-              alt=""
-              style={{
-                transform: "rotate(45deg)",
-                filter: creteImgFilter("#888888"),
-              }}
-              className="fit-image w-30"
-            />
+          <button
+            className="next-btn"
+            onClick={() => {
+              if (!videoFile) {
+                dispatch(throwError("Please enter an answer."));
+                return;
+              }
+              if (!isPost) {
+                onNext({ ans: videoFile });
+              }
+            }}
+          >
+            {isPost ? (
+              <Spinner size="lg" color="#888888" />
+            ) : (
+              <img
+                src={icons.top_right_arrow}
+                alt=""
+                style={{
+                  transform: "rotate(45deg)",
+                  filter: creteImgFilter("#888888"),
+                }}
+                className="fit-image w-30"
+              />
+            )}
           </button>
-          <button className="cancel-btn" onClick={() => {}}>
+          <button className="cancel-btn" onClick={() => setVideoFile(null)}>
             <img
               src={icons.closeSvg}
               alt=""

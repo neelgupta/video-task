@@ -16,6 +16,7 @@ import {
   throwError,
 } from "../../../../../store/globalSlice";
 import { api } from "../../../../../services/api";
+import ContactForm from "./ContactForm";
 const AnsFormate = [
   {
     label: "Open Ended",
@@ -146,6 +147,8 @@ function AnswerTab({ onClose }) {
   const [validationSchema, setValidationSchema] = useState(null);
   const [initialFormValues, setFormatDetailsForm] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [openContactForm, setOpenContactForm] = useState(false);
+
   useEffect(() => {
     if (ansFormate && nodeData) {
       const format = nodeData?.answer_format;
@@ -189,6 +192,10 @@ function AnswerTab({ onClose }) {
 
   return (
     <div className="AnswerTab-container pe-20 ps-20">
+      <ContactForm
+        show={openContactForm}
+        handleClose={() => setOpenContactForm(false)}
+      />
       <div className="title">Answer Format</div>
       <div className="mt-20" style={{ minHeight: "500px" }}>
         <div className="mb-20">
@@ -298,7 +305,10 @@ function AnswerTab({ onClose }) {
                       className="error-message"
                     />
                     <div className="mb-20 " style={{ color: "#7B5AFF" }}>
-                      <span className="text-14-400 EditContactLink">
+                      <span
+                        className="text-14-400 EditContactLink"
+                        onClick={() => setOpenContactForm(true)}
+                      >
                         Edit contact Form?
                       </span>
                     </div>

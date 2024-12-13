@@ -4,13 +4,18 @@ import "./ViewInteraction.scss";
 import { Button, Tab, Tabs } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { api } from "../../../services/api";
-import { handelCatch } from "../../../store/globalSlice";
+import {
+  handelCatch,
+  showSuccess,
+  throwError,
+} from "../../../store/globalSlice";
 import { VideoPlayer } from "../../../components";
 import OpenEndedForm from "./AnswerForm/OpenEndedForm";
 import { decrypt } from "../../../utils/helpers";
 import MultipleChoiceForm from "./AnswerForm/MultipleChoiceForm";
 import ButtonForm from "./AnswerForm/ButtonForm";
 import FileUploadForm from "./AnswerForm/FileUploadForm";
+import ContactForm from "./AnswerForm/ContactForm";
 function ViewInteraction() {
   const { token, type } = useParams();
   const id = decrypt(token);
@@ -19,6 +24,10 @@ function ViewInteraction() {
   const [endNodes, setEndNodes] = useState([]);
   const [intData, setIntData] = useState(null);
   const [videoTime, setVideoTime] = useState({});
+  const [ansData, setAnsData] = useState({});
+  const [isContact, setIsContact] = useState(false);
+  const [isContactCollected, setIsContactCollected] = useState(false);
+  const [isPost, setIsPost] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -62,6 +71,72 @@ function ViewInteraction() {
     setKey(index + 1);
   };
 
+  const handleSubmitAns = async (index, node, ansValue) => {
+    setIsPost(true);
+    try {
+      const req = new FormData();
+      req.append("interaction_id", node.interaction_id);
+      req.append("node_id", node._id);
+      req.append("node_answer_type", node.answer_type);
+      if (Array.isArray(ansValue?.ans)) {
+        ansValue?.ans.map((x, ind) => {
+          req.append(`answer[${ind}]`, x);
+        });
+      } else {
+        req.append(`answer`, ansValue.ans);
+      }
+      if (node.answer_type === "open-ended") {
+        req.append("type", ansValue.ansType);
+      }
+      const res = await api.post(`interactions/add-answer`, req);
+      if (res.status === 201) {
+        dispatch(showSuccess(res.data.message));
+        handleNext(index);
+        setIsContact(false);
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsPost(false);
+  };
+
+  const handleSubmitAnsWithContact = async (index, node) => {
+    setIsPost(true);
+
+    try {
+      const req = new FormData();
+      req.append("interaction_id", node.interaction_id);
+      req.append("node_id", node._id);
+      req.append("node_answer_type", node.answer_type);
+      if (Array.isArray(ansData?.ans)) {
+        ansData?.ans.map((x, ind) => {
+          req.append(`answer[${ind}]`, x);
+        });
+      } else {
+        req.append(`answer`, ansData.ans);
+      }
+      if (node.answer_type === "open-ended") {
+        req.append("type", ansData.ansType);
+      }
+      const res = await api.post(`interactions/add-answer`, req);
+      if (res.status === 201) {
+        dispatch(showSuccess(res.data.message));
+        setIsContactCollected(true);
+        setIsContact(false);
+        handleNext(index);
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsPost(false);
+  };
+
   return (
     <div className="ViewInteraction-container">
       <Tabs
@@ -79,6 +154,7 @@ function ViewInteraction() {
               text_size,
               fade_reveal,
               answer_type,
+              answer_format,
             } = node;
             return (
               <Tab eventKey={index} key={index}>
@@ -122,41 +198,88 @@ function ViewInteraction() {
                         className="wp-100 hp-100 p-30 d-flex"
                         style={{ gap: "20px" }}
                       >
-                        {answer_type === "open-ended" && (
+                        {!isContact && answer_type === "open-ended" && (
                           <OpenEndedForm
-                            onNext={() => {
-                              handleNext(index);
+                            onNext={(ansValue) => {
+                              if (
+                                answer_format?.contact_form &&
+                                !isContactCollected
+                              ) {
+                                setAnsData(ansValue);
+                                setIsContact(true);
+                                return;
+                              }
+                              handleSubmitAns(index, node, ansValue);
                             }}
                             node={node}
                             videoTime={videoTime}
+                            isPost={isPost}
                           />
                         )}
 
-                        {answer_type === "multiple-choice" && (
+                        {!isContact && answer_type === "multiple-choice" && (
                           <MultipleChoiceForm
-                            onNext={() => {
-                              handleNext(index);
+                            onNext={(ansValue) => {
+                              if (
+                                answer_format?.contact_form &&
+                                !isContactCollected
+                              ) {
+                                setAnsData(ansValue);
+                                setIsContact(true);
+                                return;
+                              }
+                              handleSubmitAns(index, node, ansValue);
                             }}
                             node={node}
+                            isPost={isPost}
                           />
                         )}
 
-                        {answer_type === "button" && (
+                        {!isContact && answer_type === "button" && (
                           <ButtonForm
-                            onNext={() => {
-                              handleNext(index);
+                            onNext={(ansValue) => {
+                              if (
+                                answer_format?.contact_form &&
+                                !isContactCollected
+                              ) {
+                                setAnsData(ansValue);
+                                setIsContact(true);
+                                return;
+                              }
+                              handleSubmitAns(index, node, ansValue);
                             }}
                             node={node}
                             videoTime={videoTime}
+                            isPost={isPost}
                           />
                         )}
 
-                        {answer_type === "file-upload" && (
+                        {!isContact && answer_type === "file-upload" && (
                           <FileUploadForm
-                            onNext={() => {
-                              handleNext(index);
+                            onNext={(ansValue) => {
+                              console.log("ansValue", ansValue);
+                              if (
+                                answer_format?.contact_form &&
+                                !isContactCollected
+                              ) {
+                                setAnsData(ansValue);
+                                setIsContact(true);
+                                return;
+                              }
+                              handleSubmitAns(index, node, ansValue);
                             }}
                             node={node}
+                            isPost={isPost}
+                          />
+                        )}
+
+                        {isContact && !isContactCollected && (
+                          <ContactForm
+                            node={node}
+                            onNext={() =>
+                              handleSubmitAnsWithContact(index, node)
+                            }
+                            isPost={isPost}
                           />
                         )}
                       </div>
@@ -171,40 +294,6 @@ function ViewInteraction() {
           <Button onClick={() => setKey(queNodes.length - 1)}>Back</Button>
         </Tab>
       </Tabs>
-      {/* <Button
-        className="text-18-600 wp-100 p-15"
-        style={{
-          background: "#f0f0f0",
-          border: "none",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "black",
-          cursor: "pointer",
-        }}
-        disabled={index === 0}
-        onClick={() => {
-          setKey(index - 1);
-        }}
-      >
-        <span>Back</span>
-      </Button>
-      <Button
-        className="text-18-600 wp-100 p-15"
-        style={{
-          background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
-          border: "none",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-        }}
-        onClick={() => {
-          handleNext(index);
-        }}
-      >
-        <span>Next</span>
-      </Button> */}
     </div>
   );
 }

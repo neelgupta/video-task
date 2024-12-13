@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
+import "./AnswerForm.scss";
 
-function ButtonForm({ onNext, node, videoTime }) {
+function ButtonForm({ onNext, node, videoTime, isPost }) {
   const { answer_type, answer_format } = node;
-  console.log("answer_format", answer_format);
   const [isDelay, setIsDelay] = useState(true);
 
   useEffect(() => {
@@ -47,7 +47,10 @@ function ButtonForm({ onNext, node, videoTime }) {
             justifyContent: "center",
           }}
         >
-          <button onClick={onNext}>{answer_format.button_title}</button>
+          <button onClick={() => !isPost && onNext({ ans: true })}>
+            {answer_format.button_title}
+            {isPost && <Spinner size="md" />}
+          </button>
         </div>
       )}
     </div>
