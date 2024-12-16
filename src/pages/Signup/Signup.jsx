@@ -1,6 +1,12 @@
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { PasswordInput, Switch, TextInput } from "../../components";
+import {
+  CheckBox,
+  Label,
+  PasswordInput,
+  Switch,
+  TextInput,
+} from "../../components";
 import * as Yup from "yup";
 import "./Signup.scss";
 import { icons } from "../../utils/constants";
@@ -62,7 +68,8 @@ function Signup() {
     setIsSignup(false);
   };
   return (
-    <div id="signUp-container">
+    <>
+      {/* <div id="signUp-container">
       <div className="signUp-card">
         <div className="signUp-title">
           <div className="video_ask_bg">
@@ -302,7 +309,184 @@ function Signup() {
           }}
         </Formik>
       </div>
-    </div>
+    </div> */}
+      <div id="signUp-container">
+        <div className="leftBlock p-49 auri-scroll">
+          <div className="fa-center justify-content-end mb-60">
+            <Button
+              className="w-120 h-51 text-18-500 scale-btn pointer"
+              style={{
+                background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                border: "none",
+                borderRadius: "18px",
+              }}
+              onClick={() => navigate("/")}
+            >
+              Log in
+            </Button>
+          </div>
+          <div className="text-42-600 color-0000 text-center mb-12">
+            Create your account.
+          </div>
+          <div className="f-center flex-nowrap gap-3 mb-29">
+            <div className="line"></div>
+            <div className="text-20-600 color-9f9f text-nowrap">
+              Let’s get started
+            </div>
+            <div className="line"></div>
+          </div>
+          <Formik
+            enableReinitialize
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              values,
+              handleChange,
+              handleSubmit,
+              errors,
+              touched,
+              setFieldValue,
+            }) => (
+              <form
+                onSubmit={handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
+              >
+                <div className="formblock flex-column">
+                  <div className="mb-18 inputClass">
+                    <Label label="Name:" labelClass="text-14-600 color-6666" />
+                    <input
+                      id="user_name"
+                      name="user_name"
+                      type="text"
+                      value={values.user_name}
+                      onChange={handleChange}
+                      placeholder="Enter Name"
+                      autoComplete="new-password"
+                      className={
+                        touched.user_name && errors.user_name ? "error" : ""
+                      }
+                    />
+                    {touched.user_name && errors.user_name && (
+                      <div className="input-error">{errors.user_name}</div>
+                    )}
+                  </div>
+                  <div className="mb-18 inputClass">
+                    <Label label="Email:" labelClass="text-14-600 color-6666" />
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={values.email}
+                      onChange={handleChange}
+                      placeholder="Enter Email"
+                      autoComplete="new-password"
+                      className={touched.email && errors.email ? "error" : ""}
+                    />
+                    {touched.email && errors.email && (
+                      <div className="input-error">{errors.email}</div>
+                    )}
+                  </div>
+                  <div className="mb-26 inputClass">
+                    <Label
+                      label="Password:"
+                      labelClass="text-14-600 color-6666"
+                    />
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      value={values.password}
+                      onChange={handleChange}
+                      placeholder="Enter Password"
+                      autoComplete="new-password"
+                      className={
+                        touched.password && errors.password ? "error" : ""
+                      }
+                    />
+                    {touched.password && errors.password && (
+                      <div className="input-error">{errors.password}</div>
+                    )}
+                  </div>
+                  <div>
+                    <div
+                      className="mb-56 checkBlock"
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                      }}
+                    >
+                      <div>
+                        <CheckBox
+                          isChecked={values.terms.isAgree}
+                          onChange={() => {
+                            setFieldValue("terms", {
+                              ...values.terms,
+                              isAgree: !values.terms.isAgree,
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="text-14-500 color-6666">
+                        I agree to Flow-AI’s Terms of service
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center mb-9">
+                  <Button
+                    type="submit"
+                    className="wp-57 h-62 text-20-500 br-30 pointer"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                      border: "none",
+                    }}
+                    onClick={() => {
+                      !isSignup && handleSubmit();
+                    }}
+                  >
+                    Create Account
+                    {isSignup && <Spinner size="sm" className="ms-10" />}
+                  </Button>
+                </div>
+                <div className="text-20-600 color-9f9f text-center mb-9">
+                  or
+                </div>
+                <div className="text-center mb-19">
+                  <Button
+                    className="wp-57 h-62 text-20-500 br-30 b-cccc bg-ffff color-2559 pointer"
+                    onClick={() => {}}
+                  >
+                    Sign up with Apple
+                  </Button>
+                </div>
+                <div className="text-center color-6fff text-20-500">
+                  Sign up with SSO
+                </div>
+              </form>
+            )}
+          </Formik>
+        </div>
+        <div className="rightBlock">
+          <div className="wp-100 hp-100">
+            <video
+              src="./signUpvedio.mp4"
+              className="full-size-image"
+              autoPlay
+              loop
+              muted 
+              playsInline 
+            />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

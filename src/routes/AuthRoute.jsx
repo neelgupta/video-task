@@ -11,25 +11,25 @@ const AuthRoute = () => {
       <Route
         path="/"
         element={
-          <AuthHeader buttonText="Sign Up" path="/sign-up">
+          // <AuthHeader buttonText="Sign Up" path="/sign-up">
             <Login />
-          </AuthHeader>
+          // </AuthHeader>
         }
       />
       <Route
         path="/verification"
         element={
-          <AuthHeader buttonText="Sign Up" path="/sign-up">
+          // <AuthHeader buttonText="Sign Up" path="/sign-up">
             <Verification />
-          </AuthHeader>
+          // </AuthHeader>
         }
       />
       <Route
         path="/sign-up"
         element={
-          <AuthHeader buttonText="Log in" path="/">
+          // <AuthHeader buttonText="Log in" path="/">
             <Signup />
-          </AuthHeader>
+          // </AuthHeader>
         }
       />
       <Route path="/view-flow/:token" element={<ViewInteraction />} />

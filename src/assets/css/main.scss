@@ -36,7 +36,7 @@ $fonthWeights: 400, 500, 600, 700, 800;
 }
 
 // Margin || Padding---------------------------------------
-@for $size from 0 through 100 {
+@for $size from 0 through 300 {
   .p-#{$size} {
     padding: #{$size}px !important;
   }
@@ -204,6 +204,9 @@ $fonthWeights: 400, 500, 600, 700, 800;
 .wp-60 {
   width: 60%;
 }
+.wp-57 {
+  width: 57.4%;
+}
 .wp-70 {
   width: 70%;
 }
@@ -251,6 +254,9 @@ $fonthWeights: 400, 500, 600, 700, 800;
 }
 .hp-100 {
   height: 100%;
+}
+.hpv-100 {
+  height: 100vh;
 }
 .input-error {
   font-size: 14px;

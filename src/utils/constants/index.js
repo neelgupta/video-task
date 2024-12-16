@@ -103,11 +103,13 @@ import play from "../../assets/images/svgIcons/play.svg";
 import push from "../../assets/images/svgIcons/push.svg";
 import closeSvg from "../../assets/images/svgIcons/closesvg.svg";
 import copy from "../../assets/images/icons/copy.png";
+import loginImage from "../../assets/images/loginI.png";
+import wavy from "../../assets/images/wavy.png";
 
 // copy;
 
 export const icons = {
-  logo,
+  logo,loginImage,
   add,
   eyeClose,
   eye,

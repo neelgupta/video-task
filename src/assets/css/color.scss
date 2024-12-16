@@ -27,9 +27,21 @@
   --darkColor: #7c5bff;
   --lightColor: #b3a1ff;
   --darkText: "#1B2559";
+  --9f9f: #A59F9F;
+  --cccc: #CCCCCC;
+  --6666: #666666;
+  --b6b7: #B6B6B7;
+  --6fff: #8B6FFF;
+  --2559: #1B2559;
 }
 
 $colors: (
+  "9f9f": var(--9f9f),
+  "2559":var(--2559),
+  "6fff":var(--6fff),
+  "b6b7":var(--b6b7),
+  "6666": var(--6666),
+  "cccc": var(--cccc),
   "1923": var(--1923),
   "ffff": var(--ffff),
   "0000": var(--0000),
