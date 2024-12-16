@@ -17,6 +17,7 @@ import {
 } from "../../../../../store/globalSlice";
 import { api } from "../../../../../services/api";
 import ContactForm from "./ContactForm";
+import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
 const AnsFormate = [
   {
     label: "Open Ended",
@@ -35,8 +36,8 @@ const AnsFormate = [
     value: "file-upload",
   },
   {
-    label: "Calendar",
-    value: "calendar",
+    label: "Calender",
+    value: "calender",
   },
 ];
 
@@ -99,7 +100,7 @@ const handelFrom = (type, data) => {
       },
     };
   }
-  if (type === "calendar") {
+  if (type === "calender") {
     return {
       defaultValue: {
         scheduling_link: data?.scheduling_link || "",
@@ -152,6 +153,8 @@ function AnswerTab({ onClose }) {
   useEffect(() => {
     if (ansFormate && nodeData) {
       const format = nodeData?.answer_format;
+      console.log("ansFormate", ansFormate);
+      console.log("format", format);
       const form = handelFrom(ansFormate, format);
       setValidationSchema({
         ...form.validation,
@@ -203,8 +206,7 @@ function AnswerTab({ onClose }) {
             Select answer type :
           </div>
           <div className="wp-100">
-            <Select
-              style={{}}
+            <DropdownOption
               value={AnsFormate.find((o) => o.value === ansFormate)}
               options={AnsFormate}
               onChange={(select) => {
@@ -250,7 +252,7 @@ function AnswerTab({ onClose }) {
                       errors={errors}
                     />
                   )}
-                  {ansFormate === "calendar" && (
+                  {ansFormate === "calender" && (
                     <CalendarFormate
                       values={values}
                       setFieldValue={setFieldValue}

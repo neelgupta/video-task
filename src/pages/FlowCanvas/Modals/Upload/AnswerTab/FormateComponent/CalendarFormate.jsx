@@ -2,6 +2,7 @@ import { ErrorMessage, Field } from "formik";
 import React from "react";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
+import DropdownOption from "../../../../../../components/inputs/DropdownOption/DropdownOption";
 
 const schedulingOption = [
   {
@@ -50,7 +51,7 @@ function CalendarFormate({ setFieldValue, values, errors }) {
           Opt for your scheduling tool:
         </div>
         <div className="wp-100">
-          <Select
+          <DropdownOption
             options={schedulingOption}
             value={schedulingOption.find(
               (x) => x.value === values.scheduling_tool

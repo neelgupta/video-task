@@ -49,7 +49,7 @@ function ButtonForm({ onNext, node, videoTime, isPost }) {
         >
           <button onClick={() => !isPost && onNext({ ans: true })}>
             {answer_format.button_title}
-            {isPost && <Spinner size="md" />}
+            {isPost && <Spinner size="sm" className="ms-10" />}
           </button>
         </div>
       )}

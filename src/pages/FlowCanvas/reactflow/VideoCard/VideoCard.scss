@@ -1,4 +1,6 @@
 .VideoCard-container {
+  position: relative;
+
   .question {
     width: 200px;
     height: 250px;
@@ -10,6 +12,24 @@
     padding: 3px;
     &:hover {
       background: linear-gradient(180deg, #fb82c1 0%, #68c7e8 100%);
+      .contact_icons {
+        background-color: black;
+      }
+    }
+    .contact_icons {
+      position: absolute;
+      bottom: -8px;
+      right: -8px;
+      z-index: 1000;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #7b5aff;
+      border-radius: 8px;
+      box-sizing: border-box;
+      border: 3px solid #f1f1f1;
     }
     .title {
       font-size: 10px;

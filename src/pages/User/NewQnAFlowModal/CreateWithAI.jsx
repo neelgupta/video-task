@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { showSuccess, throwError } from "../../../store/globalSlice";
 import { api } from "../../../services/api";
+import DropdownOption from "../../../components/inputs/DropdownOption/DropdownOption";
 
 const options = [
   { value: "english", label: "English" },
@@ -185,7 +186,7 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
             <div className="form-items">
               <div className="text-16-500 mb-5">Language</div>
               <div>
-                <Select
+                <DropdownOption
                   options={options}
                   value={form.language}
                   name="language"
@@ -198,7 +199,7 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
             <div className="form-items">
               <div className="text-16-500 mb-5">Folder</div>
               <div>
-                <Select
+                <DropdownOption
                   options={folderList}
                   value={form.folder}
                   onChange={(option) => {

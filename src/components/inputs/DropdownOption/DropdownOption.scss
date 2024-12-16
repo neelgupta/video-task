@@ -4,24 +4,26 @@
   }
   .css-t3ipsp-control {
     box-shadow: unset;
-    min-height: 44px;
     border-radius: 0px;
     border: none;
-    border-bottom: 1px solid;
+    border: 1px solid;
+    padding: 5px 10px;
+    border-radius: 10px;
     border-color: #8000ff;
   }
   .css-13cymwt-control {
-    min-height: 44px;
     border-radius: 0px;
     border: none;
-    border-bottom: 1px solid;
-    border-color: #757f9533;
+    border: 1px solid;
+    padding: 5px 10px;
+    border-color: #cccccc;
+    border-radius: 10px;
   }
   .css-t3ipsp-control:hover {
-    border-color: #757f9533;
+    border-color: #8000ff;
   }
   .css-1dimb5e-singleValue {
-    color: #757f95;
+    color: black;
     font-size: 14px;
     font-weight: 400;
   }
@@ -32,15 +34,18 @@
     font-weight: 400;
   }
   .css-tr4s17-option {
-    color: #299f63 !important;
+    color: #8000ff !important;
     background-color: transparent;
   }
   .do-block__option {
     background-color: transparent;
     color: #757f95;
-    font-size: 13px;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
+    &:hover {
+      color: black;
+    }
   }
   .do-block__value-container {
     padding: 2px 0px;

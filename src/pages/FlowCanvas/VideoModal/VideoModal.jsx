@@ -44,7 +44,12 @@ const VideoModal = ({ show, handleClose }) => {
   useEffect(() => {
     if (isEdit && nodeId === null) {
       dispatch(
-        setQueModelConfig({ modalType: "", nodeData: null, isEdit: true })
+        setQueModelConfig({
+          modalType: "",
+          nodeData: null,
+          isEdit: false,
+          isShow: false,
+        })
       );
       dispatch(throwError("question id not found"));
     }

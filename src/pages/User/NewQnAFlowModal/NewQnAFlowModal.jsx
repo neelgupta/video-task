@@ -4,6 +4,7 @@ import "./NewQnAFlowModal.scss";
 import { icons } from "../../../utils/constants";
 import OutlineRadio from "./OutlineRadio";
 import Select from "react-select";
+import DropdownOption from "../../../components/inputs/DropdownOption/DropdownOption";
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -192,7 +193,7 @@ const NewQnAFlowModal = ({
                     >
                       Select CRM to Link
                     </div>
-                    <Select
+                    <DropdownOption
                       options={[]}
                       placeholder={"Select"}
                       name="selectCRM"

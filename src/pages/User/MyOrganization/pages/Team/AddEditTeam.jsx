@@ -8,6 +8,7 @@ import "./Team.scss";
 import { api } from "../../../../../services/api";
 import { useDispatch } from "react-redux";
 import { showSuccess, throwError } from "../../../../../store/globalSlice";
+import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
 
 const option = [
   {
@@ -197,19 +198,14 @@ function AddEditTeam({
                     Role:
                   </div>
                   <div>
-                    <Field name="role">
-                      {({ field }) => (
-                        <Select
-                          {...field}
-                          options={option}
-                          placeholder={"Select Role"}
-                          onChange={(select) => {
-                            console.log("value", select);
-                            setFieldValue("role", select);
-                          }}
-                        />
-                      )}
-                    </Field>
+                    <DropdownOption
+                      options={option}
+                      placeholder={"Select Role"}
+                      onChange={(select) => {
+                        setFieldValue("role", select);
+                      }}
+                      name="role"
+                    />
                     <ErrorMessage
                       name="role"
                       component="div"

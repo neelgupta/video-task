@@ -20,6 +20,7 @@ const initialState = {
     nodeData: null,
     isEdit: true,
     modalType: "",
+    isShow: false,
   },
   queModalData: {},
   newQueModalData: {},

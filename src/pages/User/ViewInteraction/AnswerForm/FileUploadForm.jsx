@@ -26,6 +26,9 @@ function FileUploadForm({ onNext, node, isPost }) {
                 value={answer_format?.title || ""}
                 placeholder="Enter title"
                 className="form-control"
+                style={{
+                  background: "#f1f1f1",
+                }}
               />
             </div>
           </div>
@@ -44,6 +47,7 @@ function FileUploadForm({ onNext, node, isPost }) {
                   padding: "10px",
                   minHeight: "150px",
                   resize: "none",
+                  background: "#f1f1f1",
                 }}
                 className={`form-control`}
               />

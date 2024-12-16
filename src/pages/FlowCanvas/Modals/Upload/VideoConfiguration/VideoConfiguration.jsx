@@ -5,6 +5,7 @@ import Select from "react-select";
 import "./VideoConfiguration.scss";
 import { TextArea } from "../../../../../components";
 import { useSelector } from "react-redux";
+import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
 
 function VideoConfiguration({
   onSubmit,
@@ -101,7 +102,7 @@ function VideoConfiguration({
           Select video position Manually
         </div>
         <div className="w-200">
-          <Select
+          <DropdownOption
             style={{}}
             isDisabled={videoConfigForm.alignVideo}
             options={positionOption}
@@ -146,7 +147,7 @@ function VideoConfiguration({
             Text Size
           </div>
           <div className="w-220">
-            <Select
+            <DropdownOption
               value={sizeOption.find(
                 (x) => x.value === videoConfigForm.textSize
               )}
@@ -157,7 +158,6 @@ function VideoConfiguration({
                 });
               }}
               options={sizeOption}
-              menuPlacement="top"
             />
           </div>
         </div>

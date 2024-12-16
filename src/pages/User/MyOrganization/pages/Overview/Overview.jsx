@@ -9,6 +9,7 @@ import {
   throwError,
 } from "../../../../../store/globalSlice";
 import EditOrganizationName from "./EditOrganizationName";
+import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
 
 const brandingOption = [
   { value: "QnaFlow", label: "QnaFlow" },
@@ -164,7 +165,7 @@ function Overview() {
             Select default email for replies
           </div>
           <div className="w-300 p-10">
-            <Select
+            <DropdownOption
               options={replayEmailOption}
               name="replay_to_email"
               value={form.replay_to_email}
@@ -202,7 +203,7 @@ function Overview() {
               Branding
             </div>
             <div className="w-300 p-10">
-              <Select
+              <DropdownOption
                 name="branding"
                 value={form.branding}
                 options={brandingOption}
@@ -228,7 +229,7 @@ function Overview() {
               Language
             </div>
             <div className="w-300 p-10">
-              <Select
+              <DropdownOption
                 className=""
                 options={languageOptions}
                 placeholder={"Select Language"}
@@ -270,7 +271,7 @@ function Overview() {
               Font
             </div>
             <div className="w-300 p-10">
-              <Select
+              <DropdownOption
                 className=""
                 options={fontFamilyList}
                 placeholder={"Font"}

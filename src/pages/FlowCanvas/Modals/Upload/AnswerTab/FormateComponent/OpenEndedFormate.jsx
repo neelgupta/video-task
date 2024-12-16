@@ -3,6 +3,7 @@ import OutlineCheck from "../../../../../User/MyOrganization/pages/Notifications
 import Select from "react-select";
 import { ErrorMessage, Field } from "formik";
 import { Form } from "react-bootstrap";
+import DropdownOption from "../../../../../../components/inputs/DropdownOption/DropdownOption";
 
 const timeLimitOption = [
   { value: "5", label: "5 Sec" },
@@ -80,8 +81,7 @@ function OpenEndedFormate({ values, setFieldValue, errors }) {
           Time Limit for Answer:
         </div>
         <div className="wp-100">
-          <Field
-            as={Select}
+          <DropdownOption
             name="time_limit"
             options={timeLimitOption}
             value={timeLimitOption.find((x) => x.value === values?.time_limit)}

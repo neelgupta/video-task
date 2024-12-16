@@ -99,6 +99,7 @@ function VideoCard(props) {
             modalType: data?.flow_type || "",
             nodeData: data,
             isEdit: true,
+            isShow: true,
           })
         );
       },
@@ -160,6 +161,17 @@ function VideoCard(props) {
           </div>
         </NodeToolbar>
         <div className="question">
+          {data.answer_format.contact_form && (
+            <div className="contact_icons">
+              <img
+                src={icons.contact}
+                alt=""
+                style={{ filter: creteImgFilter("#ffffff") }}
+                className="fit-image w-15 h-15"
+              />
+            </div>
+          )}
+
           <div
             style={{
               background: "white",

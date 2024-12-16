@@ -10,37 +10,7 @@ import {
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
-
-const customStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    padding: "5px 10px", // Example padding
-    border: "1px solid #CCCCCC", // Customize the border
-    boxShadow: "none", // Customize the box shadow
-    borderRadius: "8px",
-    "&:hover": {
-      border: "1px solid gray", // Customize the border on hover
-    },
-  }),
-  indicatorSeparator: () => ({
-    display: "none", // Remove the divider
-  }),
-  dropdownIndicator: (provided, state) => ({
-    ...provided,
-    color: state.isFocused ? "black" : "gray", // Customize the dropdown indicator color
-    "&:hover": {
-      color: state.isFocused ? "black" : "gray", // Customize the dropdown indicator color on hover
-    },
-  }),
-  placeholder: (provided, state) => ({
-    ...provided,
-    color: "gray", // Customize the placeholder color
-  }),
-  singleValue: (provided, state) => ({
-    ...provided,
-    color: "black", // Customize the selected value color
-  }),
-};
+import DropdownOption from "../../../../components/inputs/DropdownOption/DropdownOption";
 
 function MoveFolderModel({
   show,
@@ -163,7 +133,7 @@ function MoveFolderModel({
             <div className="m-0 p-0 mt-30">
               <div className="title">Choose a folder...</div>
               <div className="mt-10">
-                <Select
+                <DropdownOption
                   options={moveFolderList}
                   placeholder={"Select"}
                   name="selectCRM"
@@ -172,7 +142,6 @@ function MoveFolderModel({
                     setSelectFolder(select);
                   }}
                   isDisabled={isOneFolder}
-                  styles={customStyles}
                 />
               </div>
               {isOneFolder && (

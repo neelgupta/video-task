@@ -105,11 +105,12 @@ import closeSvg from "../../assets/images/svgIcons/closesvg.svg";
 import copy from "../../assets/images/icons/copy.png";
 import loginImage from "../../assets/images/loginI.png";
 import wavy from "../../assets/images/wavy.png";
-
+import contact from "../../assets/images/svgIcons/contact.svg";
 // copy;
 
 export const icons = {
-  logo,loginImage,
+  logo,
+  loginImage,
   add,
   eyeClose,
   eye,
@@ -214,4 +215,5 @@ export const icons = {
   push,
   closeSvg,
   copy,
+  contact,
 };

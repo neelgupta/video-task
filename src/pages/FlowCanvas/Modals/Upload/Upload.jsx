@@ -14,6 +14,8 @@ import {
 import VideoConfiguration from "./VideoConfiguration";
 import { api } from "../../../../services/api";
 import AnswerTab from "./AnswerTab";
+import { ReactMediaRecorder } from "react-media-recorder";
+import Webcam from "./Screens/Webcam";
 
 function Upload({ show, handleClose }) {
   const dispatch = useDispatch();
@@ -21,6 +23,7 @@ function Upload({ show, handleClose }) {
     newQueModalData,
     queModelConfig: { nodeData, isEdit, modalType },
   } = useSelector((state) => state.global);
+  console.log("modalType", modalType);
   const [MAX, setMAX] = useState(0);
   const [currentKey, setCurrentKey] = useState(1);
   const [videoSrc, setVideoSrc] = useState("");
@@ -37,10 +40,16 @@ function Upload({ show, handleClose }) {
   });
 
   useEffect(() => {
+    console.log("videoConfigForm", videoConfigForm);
+  }, [videoConfigForm]);
+
+  useEffect(() => {
     if (isEdit && nodeData) {
+      setHeaderTab("answer");
+      setCurrentKey(2);
       setNodeTitle(nodeData.title);
       setVideoConfigForm({
-        alignVideo: nodeData.video_align,
+        alignVideo: nodeData.video_align || false,
         videoPosition:
           (!nodeData.video_align && nodeData?.video_position) ||
           "center center",
@@ -105,6 +114,7 @@ function Upload({ show, handleClose }) {
               modalType: nodeData.flow_type || "",
               nodeData: nodeData,
               isEdit: true,
+              isShow: true,
             })
           );
         } else {
@@ -183,17 +193,22 @@ function Upload({ show, handleClose }) {
         </div>
         <div className="modal_body">
           <div className="wp-60 video-body">
-            <div
-              className="wp-100 hp-100 f-center"
-              style={{ background: "black" }}
-            >
-              {videoSrc && (
-                <VideoPlayer
-                  videoUrl={videoSrc}
-                  videoConfigForm={videoConfigForm}
-                />
-              )}
-            </div>
+            {modalType === "Upload" && (
+              <div
+                className="wp-100 hp-100 f-center"
+                style={{ background: "black" }}
+              >
+                {videoSrc && (
+                  <VideoPlayer
+                    videoUrl={videoSrc}
+                    videoConfigForm={videoConfigForm}
+                  />
+                )}
+              </div>
+            )}
+            {modalType === "Webcam" && (
+              <Webcam videoConfigForm={videoConfigForm} />
+            )}
           </div>
           <div className="wp-40 ">
             <div className="Video_header">
@@ -261,7 +276,6 @@ function Upload({ show, handleClose }) {
                     {currentKey === 2 && (
                       <div>
                         <VideoConfiguration
-                          setModalType={() => {}}
                           onSubmit={() => {
                             handleSubmitNewQue();
                           }}

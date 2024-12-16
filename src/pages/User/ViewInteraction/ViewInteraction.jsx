@@ -16,6 +16,7 @@ import MultipleChoiceForm from "./AnswerForm/MultipleChoiceForm";
 import ButtonForm from "./AnswerForm/ButtonForm";
 import FileUploadForm from "./AnswerForm/FileUploadForm";
 import ContactForm from "./AnswerForm/ContactForm";
+import CalenderForm from "./AnswerForm/CalenderForm";
 function ViewInteraction() {
   const { token, type } = useParams();
   const id = decrypt(token);
@@ -45,8 +46,12 @@ function ViewInteraction() {
         const {
           response: { nodes, edges, ...intr },
         } = res.data;
+
+        const nodeList = nodes.filter((x) => x.type === "Question");
+
         setIntData(intr);
-        setQueNodes(nodes.filter((x) => x.type === "Question"));
+        setKey(nodeList.length > 0 ? 0 : "End");
+        setQueNodes(nodeList);
         setEndNodes(nodes.find((x) => x.type === "End"));
       }
     } catch (error) {
@@ -88,7 +93,9 @@ function ViewInteraction() {
       if (node.answer_type === "open-ended") {
         req.append("type", ansValue.ansType);
       }
-      const res = await api.post(`interactions/add-answer`, req);
+      const res = await api.post(`interactions/add-answer`, req, {
+        "Content-Type": "multipart/form-data",
+      });
       if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
         handleNext(index);
@@ -121,7 +128,10 @@ function ViewInteraction() {
       if (node.answer_type === "open-ended") {
         req.append("type", ansData.ansType);
       }
-      const res = await api.post(`interactions/add-answer`, req);
+      console.log("req", req);
+      const res = await api.post(`interactions/add-answer`, req, {
+        "Content-Type": "multipart/form-data",
+      });
       if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
         setIsContactCollected(true);
@@ -268,6 +278,14 @@ function ViewInteraction() {
                               }
                               handleSubmitAns(index, node, ansValue);
                             }}
+                            node={node}
+                            isPost={isPost}
+                          />
+                        )}
+
+                        {!isContact && answer_type === "calender" && (
+                          <CalenderForm
+                            onNext={() => {}}
                             node={node}
                             isPost={isPost}
                           />

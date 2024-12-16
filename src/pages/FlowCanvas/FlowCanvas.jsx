@@ -131,22 +131,17 @@ const FlowCanvas = () => {
           dispatch(setShowCreateFlowModal(false));
         }}
       />
-      {/* {queModelConfig.isShow && (
-        <VideoModal
-          show={queModelConfig.isShow}
-          handleClose={() => {}}
-        />
-      )} */}
 
-      {queModelConfig.modalType === "Upload" && (
+      {queModelConfig.isShow && (
         <Upload
-          show={queModelConfig.modalType === "Upload"}
+          show={queModelConfig.isShow}
           handleClose={() => {
             dispatch(
               setQueModelConfig({
                 modalType: "",
                 nodeData: null,
                 isEdit: false,
+                isShow: false,
               })
             );
             fetchFlowData();

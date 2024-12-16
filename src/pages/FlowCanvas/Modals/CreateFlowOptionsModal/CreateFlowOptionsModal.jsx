@@ -78,6 +78,7 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
                         nodeData: null,
                         isEdit: false,
                         modalType: ele.value,
+                        isShow: true,
                       })
                     );
                     handleClose();

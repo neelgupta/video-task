@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import Select from "react-select";
 import TextArea from "../../../../components/inputs/TextArea/TextArea";
 import "./VideoEdit.scss";
+import DropdownOption from "../../../../components/inputs/DropdownOption/DropdownOption";
 
 function VideoEditBody({ setModalType, isThumbnail }) {
   const [alignVideo, setAlignVideo] = useState(true);
@@ -110,7 +111,7 @@ function VideoEditBody({ setModalType, isThumbnail }) {
           Select video position Manually
         </div>
         <div className="w-200">
-          <Select style={{}} options={positionOption} />
+          <DropdownOption style={{}} options={positionOption} />
         </div>
       </div>
       <div className="Overlay-content">
@@ -137,7 +138,7 @@ function VideoEditBody({ setModalType, isThumbnail }) {
             Text Size
           </div>
           <div className="w-220">
-            <Select
+            <DropdownOption
               onChange={() => {}}
               options={sizeOption}
               menuPlacement="top"
