@@ -7,7 +7,27 @@ import {
   showSuccess,
   throwError,
 } from "../../../../../store/globalSlice";
+import "./Overview.scss";
+import { css } from "@emotion/react";
 
+const inputStyle = css`
+  width: 100%;
+  padding: 10px 15px;
+  outline: none;
+  border: 1px solid #cccccc;
+  font-size: 16px;
+  border-radius: 10px;
+  color: #1b2559;
+  box-shadow: none;
+
+  &:focus {
+    border-color: #7b5aff;
+  }
+
+  &:hover {
+    border-color: #333333;
+  }
+`;
 function EditOrganizationName({ show, handleClose }) {
   const [name, setName] = useState("");
   const [organization, setOrganization] = useState({});
@@ -69,7 +89,12 @@ function EditOrganizationName({ show, handleClose }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+      className="EditOrg-container"
+    >
       <div className="p-20 w-500">
         <Modal.Header closeButton style={{ margin: "0px", padding: "0px" }}>
           <div className="text-20-600" style={{ color: "#1B2559" }}>
@@ -81,7 +106,7 @@ function EditOrganizationName({ show, handleClose }) {
             <div className="text-11-600 mb-5" style={{ color: "#666666" }}>
               Organization Name
             </div>
-            <div>
+            <div className="InputBox">
               <input
                 type="text"
                 value={name}
@@ -90,13 +115,6 @@ function EditOrganizationName({ show, handleClose }) {
                 }}
                 className="form-control rounded-3"
                 placeholder="Enter Folder Name"
-                style={{
-                  width: "100%",
-                  padding: "13px",
-                  fontSize: "12px",
-                  outline: "none",
-                  border: "1px solid gray",
-                }}
               />
             </div>
           </div>

@@ -18,12 +18,18 @@
   position: absolute;
   bottom: 10px;
   left: 10px;
+  right: 10px;
   color: white;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.4);
+  text-transform: capitalize;
   backdrop-filter: blur(5px);
-  padding: 5px 20px;
+  padding: 5px 15px;
   border-radius: 50px;
-  font-size: 1rem;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden !important;
 }
 
 .custom-card-menu {

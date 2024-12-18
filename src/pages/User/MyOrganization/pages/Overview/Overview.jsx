@@ -300,24 +300,8 @@ function Overview() {
             >
               Button Border Radius
             </div>
-            <div
-              className="w-300"
-              style={{
-                display: "flex",
-                justifyContent: "end",
-                padding: "0px 10px",
-              }}
-            >
+            <div className="w-300 InputBox">
               <input
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  width: "100%",
-                  padding: "8px 10px",
-                  borderRadius: "4px",
-                  border: "1px solid #cccccc",
-                  outline: "none",
-                }}
                 disabled={isChange === "Border radius"}
                 value={form.border_radius}
                 name="border_radius"

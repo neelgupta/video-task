@@ -2,7 +2,7 @@ import { icons } from "../../../utils/constants";
 import { creteImgFilter, encrypt } from "../../../utils/helpers";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuthData } from "../../../store/globalSlice";
+import { handelCatch, setAuthData } from "../../../store/globalSlice";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = ({ themeColor, isResponsive }) => {
@@ -34,6 +34,17 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
     };
   }, [profileRef]);
 
+  const handelLogout = () => {
+    try {
+      let data = encrypt({ time: new Date().toLocaleString() });
+      localStorage.authData = data;
+      dispatch(setAuthData(data));
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+  };
+
   return (
     <div className="position-relative">
       <div
@@ -64,7 +75,9 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
               My Account
             </div>
 
-            <div className="text-14-400">Sign out</div>
+            <div className="text-14-400" onClick={handelLogout}>
+              Sign out
+            </div>
           </div>
         </div>
       )}

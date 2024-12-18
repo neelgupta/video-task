@@ -1,10 +1,17 @@
 /* eslint-disable react/display-name */
 import React, { useState } from "react";
 import "./Trash.scss";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Spinner } from "react-bootstrap";
 import { icons } from "../../../utils/constants";
 import { creteImgFilter } from "../../../utils/helpers";
 import DeleteModal from "../../../components/layouts/DeleteModal";
+import { api } from "../../../services/api";
+import { useDispatch } from "react-redux";
+import {
+  handelCatch,
+  showSuccess,
+  throwError,
+} from "../../../store/globalSlice";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -19,7 +26,7 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-const CustomMenu = ({ showDeleteModal, setShowDeleteModal }) => {
+const CustomMenu = ({ onDelete, onRestore }) => {
   return (
     <Dropdown>
       <Dropdown.Toggle as={CustomToggle}>
@@ -32,7 +39,12 @@ const CustomMenu = ({ showDeleteModal, setShowDeleteModal }) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item onClick={() => {}} className="text-14-500">
+        <Dropdown.Item
+          onClick={() => {
+            onRestore();
+          }}
+          className="text-14-500"
+        >
           Restore
         </Dropdown.Item>
 
@@ -43,7 +55,7 @@ const CustomMenu = ({ showDeleteModal, setShowDeleteModal }) => {
         />
         <Dropdown.Item
           onClick={() => {
-            setShowDeleteModal(true);
+            onDelete();
           }}
           className="text-14-500 text-danger"
         >
@@ -54,27 +66,99 @@ const CustomMenu = ({ showDeleteModal, setShowDeleteModal }) => {
   );
 };
 
-const Card = ({ item }) => {
+const Card = ({ item, fetchData }) => {
+  console.log("item", item);
+  const dispatch = useDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [isRestore, setIsRestore] = useState(false);
+  const [restoreId, setRestoreId] = useState("");
+  const handelDelete = async () => {
+    setIsDelete(true);
+    try {
+      const res = await api.delete(
+        `interactions/delete-forever-interaction/${item._id}`
+      );
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        fetchData();
+        setShowDeleteModal(false);
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsDelete(false);
+  };
+
+  const handelRestore = async () => {
+    setIsRestore(true);
+    try {
+      const req = {
+        interaction_id: item._id,
+        is_deleted: false,
+      };
+      const res = await api.put("interactions/update-interactions", req);
+      console.log("res", res);
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        fetchData();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setRestoreId("");
+    setIsRestore(false);
+  };
   return (
     <>
       <div className="custom-card">
-        <img src={item.avatar} alt="Avatar" className="custom-card-image" />
+        {item.thumbnailUrl ? (
+          <img
+            src={item.thumbnailUrl}
+            alt="Avatar"
+            className="custom-card-image"
+          />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              background:
+                "linear-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8) 100%)",
+            }}
+          ></div>
+        )}
+
         <div className="custom-card-title">{item.title}</div>
         <div className="custom-card-menu">
-          <CustomMenu
-            showDeleteModal={showDeleteModal}
-            setShowDeleteModal={setShowDeleteModal}
-          />
+          {isRestore && restoreId === item._id ? (
+            <Spinner className="m-10" size="sm" style={{ color: "white" }} />
+          ) : (
+            <CustomMenu
+              onDelete={() => {
+                setShowDeleteModal(true);
+              }}
+              onRestore={() => {
+                handelRestore();
+                setRestoreId(item._id);
+              }}
+            />
+          )}
         </div>
       </div>
       <DeleteModal
         show={showDeleteModal}
         handleClose={() => setShowDeleteModal(false)}
         onDelete={() => {
-          setShowDeleteModal(false);
-          // TODO: Implement delete functionality here
+          handelDelete();
         }}
+        isDelete={isDelete}
         title="Are you sure you want to proceed?"
         text="Once deleted, they cannot be recovered."
       />
