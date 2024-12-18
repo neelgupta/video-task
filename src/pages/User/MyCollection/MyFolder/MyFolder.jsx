@@ -6,6 +6,7 @@ import { icons } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
 import {
   handelCatch,
+  setWebcamModelConfig,
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
@@ -165,6 +166,13 @@ function MyFolder() {
                   <div className="menu">
                     <CustomFileMenu
                       onEditClick={() => {
+                        dispatch(
+                          setWebcamModelConfig({
+                            isShow: false,
+                            blobFile: null,
+                            blobUrl: "",
+                          })
+                        );
                         navigate(`/user/flow/${ele._id}`);
                       }}
                       onDeleteClick={() => {
