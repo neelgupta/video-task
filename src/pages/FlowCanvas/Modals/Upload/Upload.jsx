@@ -8,23 +8,24 @@ import {
   handelCatch,
   setNewQueModalData,
   setQueModelConfig,
+  setWebcamModelConfig,
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
 import VideoConfiguration from "./VideoConfiguration";
 import { api } from "../../../../services/api";
 import AnswerTab from "./AnswerTab";
-import { ReactMediaRecorder } from "react-media-recorder";
-import Webcam from "./Screens/Webcam";
+import { processVideoMetadata } from "../../flowControl";
 
 function Upload({ show, handleClose }) {
   const dispatch = useDispatch();
   const {
     newQueModalData,
     queModelConfig: { nodeData, isEdit, modalType },
+    webcamModelConfig: { blobFile, blobUrl },
   } = useSelector((state) => state.global);
   console.log("modalType", modalType);
-  const [MAX, setMAX] = useState(0);
+  const [MAX, setMAX] = useState(1);
   const [currentKey, setCurrentKey] = useState(1);
   const [videoSrc, setVideoSrc] = useState("");
   const [videoFile, setVideoFile] = useState(null);
@@ -42,6 +43,12 @@ function Upload({ show, handleClose }) {
   useEffect(() => {
     console.log("videoConfigForm", videoConfigForm);
   }, [videoConfigForm]);
+
+  useEffect(() => {
+    if (modalType === "Webcam") {
+      setCurrentKey(2);
+    }
+  }, [modalType]);
 
   useEffect(() => {
     if (isEdit && nodeData) {
@@ -94,6 +101,10 @@ function Upload({ show, handleClose }) {
       if (videoFile) {
         req.append("video", videoFile);
       }
+      if (blobFile) {
+        console.log("blobFile", blobFile);
+        req.append("video", blobFile);
+      }
 
       const res = await api[isEdit ? "put" : "post"](
         `${isEdit ? "interactions/update-node" : "interactions/create-node"}`,
@@ -120,62 +131,80 @@ function Upload({ show, handleClose }) {
         } else {
           handleClose();
         }
+        dispatch(
+          setWebcamModelConfig({
+            blobFile: null,
+            blobUrl: "",
+            isShow: false,
+          })
+        );
       } else {
         dispatch(throwError(res.data.message));
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(handelCatch(error.message || error));
     }
     setIsCreate(false);
   };
 
   useEffect(() => {
-    if (!videoFile && !isEdit) {
-      setVideoSrc("");
-      return;
-    }
+    const handleVideoSetup = async () => {
+      if (
+        (!videoFile && !isEdit && modalType === "Upload") ||
+        (!blobFile && !isEdit && modalType === "Webcam")
+      ) {
+        setVideoSrc("");
+        return;
+      }
 
-    if (isEdit && videoFile) {
-      setVideoConfigForm((pre) => {
-        return { ...pre, textReveal: [0] };
-      });
-    } else {
-      setVideoConfigForm((pre) => {
-        return {
-          ...pre,
-          textReveal: [
-            nodeData?.overlay_text ? parseInt(nodeData.fade_reveal) : 0,
-          ],
-        };
-      });
-    }
-
-    const tempVideo = document.createElement("video");
-    const videoUrl =
-      videoFile && videoFile.type.startsWith("video/")
+      const videoSrc = videoFile?.type.startsWith("video/")
         ? URL.createObjectURL(videoFile)
-        : isEdit && nodeData
+        : isEdit && nodeData?.video_url
         ? nodeData.video_url
         : null;
 
-    if (videoUrl) {
-      setVideoSrc(videoUrl);
-      tempVideo.src = videoUrl;
-      tempVideo.onloadedmetadata = () => {
-        setMAX(tempVideo.duration.toFixed(0));
-      };
-    } else {
-      setVideoSrc("");
-    }
+      if (isEdit && (videoFile || blobFile)) {
+        setVideoConfigForm((prev) => ({ ...prev, textReveal: [0] }));
+      } else {
+        setVideoConfigForm((prev) => ({
+          ...prev,
+          textReveal: [
+            nodeData?.overlay_text ? parseInt(nodeData.fade_reveal, 10) : 0,
+          ],
+        }));
+      }
 
-    // Cleanup: Revoke object URL when the component unmounts
-    return () => {
-      if (videoFile && videoFile.type.startsWith("video/")) {
-        URL.revokeObjectURL(videoUrl);
+      if (modalType === "Upload" && videoSrc) {
+        setVideoSrc(videoSrc);
+        const duration = await processVideoMetadata(videoSrc);
+        setMAX(duration);
+      } else if (modalType === "Webcam") {
+        if (isEdit && nodeData && !blobFile) {
+          setVideoSrc(videoSrc);
+          console.log("videoSrc", videoSrc);
+          const duration = await processVideoMetadata(videoSrc);
+          setMAX(duration);
+        } else if (blobFile) {
+          setVideoSrc(blobUrl);
+          const duration = await processVideoMetadata(blobUrl);
+          console.log("duration", duration);
+          setMAX(duration);
+        }
       }
     };
-  }, [videoFile, isEdit, nodeData]);
+
+    handleVideoSetup();
+
+    return () => {
+      if (modalType === "Webcam" && isEdit && nodeData?.video_url) {
+        URL.revokeObjectURL(nodeData.video_url);
+      }
+      if (modalType === "Upload" && videoFile?.type.startsWith("video/")) {
+        URL.revokeObjectURL(videoFile);
+      }
+    };
+  }, [videoFile, isEdit, nodeData, blobFile, modalType, blobUrl]);
 
   return (
     <Modal
@@ -187,28 +216,34 @@ function Upload({ show, handleClose }) {
       <div className="upload-model-content">
         <div
           className="h-18 w-18 f-center pointer close-icon"
-          onClick={handleClose}
+          onClick={() => {
+            dispatch(
+              setWebcamModelConfig({
+                blobFile: null,
+                blobUrl: "",
+                isShow: false,
+              })
+            );
+            handleClose();
+          }}
         >
           <img src={icons.close} alt="close" className="fit-image" />
         </div>
         <div className="modal_body">
           <div className="wp-60 video-body">
-            {modalType === "Upload" && (
-              <div
-                className="wp-100 hp-100 f-center"
-                style={{ background: "black" }}
-              >
-                {videoSrc && (
-                  <VideoPlayer
-                    videoUrl={videoSrc}
-                    videoConfigForm={videoConfigForm}
-                  />
-                )}
-              </div>
-            )}
-            {modalType === "Webcam" && (
-              <Webcam videoConfigForm={videoConfigForm} />
-            )}
+            <div
+              className="wp-100 hp-100 f-center"
+              style={{ background: "black" }}
+            >
+              {videoSrc && (
+                <VideoPlayer
+                  videoUrl={videoSrc}
+                  videoBlob={blobFile}
+                  isBlob={blobFile ? true : false}
+                  videoConfigForm={videoConfigForm}
+                />
+              )}
+            </div>
           </div>
           <div className="wp-40 ">
             <div className="Video_header">
@@ -239,7 +274,11 @@ function Upload({ show, handleClose }) {
                   <div className="modal-title">
                     <div
                       className="w-30 pointer"
-                      onClick={() => setCurrentKey(1)}
+                      onClick={() => {
+                        if (modalType === "Upload") {
+                          setCurrentKey(1);
+                        }
+                      }}
                     >
                       <img
                         src={icons.arrow_left}

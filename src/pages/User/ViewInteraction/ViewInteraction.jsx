@@ -197,6 +197,7 @@ function ViewInteraction() {
                               textReveal: [parseInt(fade_reveal || 0)],
                             }}
                             getCurrentTime={(time) => {
+                              console.log("time", time);
                               setVideoTime(time);
                             }}
                           />

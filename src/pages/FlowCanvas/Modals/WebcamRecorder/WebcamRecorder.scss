@@ -1,0 +1,142 @@
+.webcamRecorder-modal-container {
+  .modal-dialog {
+    width: 100%;
+    height: 100%;
+    max-width: none !important;
+    margin: 0px;
+    box-shadow: none;
+  }
+  .modal-content {
+    overflow: hidden;
+    width: 100% !important;
+    height: 100%;
+    border-radius: 0px;
+    margin: 0px;
+    .webcamRecorder {
+      width: 100% !important;
+      height: 100%;
+      background-color: black;
+      position: relative;
+      .play-stop-control {
+        position: absolute;
+        z-index: 100;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 50px;
+        border-radius: 100px;
+        display: flex;
+        gap: 20px;
+        background-color: rgba($color: #000000, $alpha: 0.4);
+        .control-button {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+        }
+        .webcam-btn {
+          border: none;
+          border-radius: 50%;
+          height: 60px;
+          width: 60px;
+          background: transparent;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+          color: white;
+        }
+        .stop-btn {
+          padding: 10px;
+        }
+      }
+      .timer-display {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        padding: 10px 50px;
+        border-radius: 100px;
+        background: white;
+        box-shadow: 10px 10px 25px rgba($color: #000000, $alpha: 0.2);
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        z-index: 100;
+
+        .timer {
+          color: red;
+          font-size: 20px;
+          font-weight: 600;
+          width: 50px;
+        }
+        .timer-list-style {
+          width: 15px;
+          height: 15px;
+          background: red;
+          border-radius: 50%;
+        }
+      }
+      .webcam-close-btn {
+        background: rgba($color: #000000, $alpha: 0.2);
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        cursor: pointer;
+      }
+      .webcam-conform-btn-group {
+        display: flex;
+        gap: 30px;
+        position: absolute;
+        z-index: 100;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        .conform-btn,
+        .reject-btn {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          font-weight: 700;
+          color: white;
+          cursor: pointer;
+          transform: scale(1);
+          transition-duration: 0.3s;
+          transition-property: transform;
+        }
+        .conform-btn {
+          background: #6f4cfa;
+          &:hover {
+            transform: scale(1.1);
+            background: #7c5bff;
+          }
+        }
+        .reject-btn {
+          background: rgb(117, 117, 117);
+          &:hover {
+            transform: scale(1.1);
+            background: rgb(151, 151, 151);
+          }
+        }
+      }
+      .webcam-title {
+        position: absolute;
+        bottom: 160px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        font-weight: 600;
+        color: white;
+      }
+    }
+  }
+}

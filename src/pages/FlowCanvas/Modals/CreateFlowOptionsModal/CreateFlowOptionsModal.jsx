@@ -4,7 +4,10 @@ import { Button, Modal } from "react-bootstrap";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 import { useDispatch } from "react-redux";
-import { setQueModelConfig } from "../../../../store/globalSlice";
+import {
+  setQueModelConfig,
+  setWebcamModelConfig,
+} from "../../../../store/globalSlice";
 
 const CreateFlowOptionsModal = ({ show, handleClose }) => {
   const dispatch = useDispatch();
@@ -14,6 +17,18 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       title: "WebCam",
       isPro: false,
       value: "Webcam",
+      onClick: () => {
+        dispatch(setWebcamModelConfig({ isShow: true }));
+        dispatch(
+          setQueModelConfig({
+            nodeData: null,
+            isEdit: false,
+            modalType: "Webcam",
+            isShow: false,
+          })
+        );
+        handleClose();
+      },
     },
     {
       icon: icons.Upload,
@@ -21,24 +36,38 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       isPro: false,
       value: "Upload",
       style: { filter: creteImgFilter("#8C8E90") },
+      onClick: () => {
+        dispatch(
+          setQueModelConfig({
+            nodeData: null,
+            isEdit: false,
+            modalType: "Upload",
+            isShow: true,
+          })
+        );
+        handleClose();
+      },
     },
     {
       icon: icons.screenShare,
       title: "ScreenShare",
       isPro: false,
       value: "Screen",
+      onClick: () => {},
     },
     {
       icon: icons.library,
       title: "Library",
       isPro: false,
       value: "Library",
+      onClick: () => {},
     },
     {
       icon: icons.doubleStar,
       title: "Flōw AI",
       isPro: true,
       value: "FlowAI",
+      onClick: () => {},
     },
   ];
 
@@ -73,15 +102,7 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
                   className="items"
                   key={index}
                   onClick={() => {
-                    dispatch(
-                      setQueModelConfig({
-                        nodeData: null,
-                        isEdit: false,
-                        modalType: ele.value,
-                        isShow: true,
-                      })
-                    );
-                    handleClose();
+                    ele.onClick();
                   }}
                 >
                   {ele.isPro && <span className="proTag">PRO</span>}

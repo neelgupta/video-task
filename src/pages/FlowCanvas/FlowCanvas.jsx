@@ -28,10 +28,12 @@ import {
   setNewQueModalData,
   setQueModelConfig,
   setShowCreateFlowModal,
+  setWebcamModelConfig,
   throwError,
 } from "../../store/globalSlice";
 import Upload from "./Modals/Upload/Upload";
 import DeleteModal from "../../components/layouts/DeleteModal";
+import WebcamRecorder from "./Modals/WebcamRecorder/WebcamRecorder";
 
 // import { showVideoModel } from "../../utils/helpers";
 
@@ -49,15 +51,14 @@ const edgeTypes = {
 
 const FlowCanvas = () => {
   const { id } = useParams();
-  const { queModelConfig, showCreateFlowModal, newQueModalData } = useSelector(
-    (state) => state.global
-  );
+  const { queModelConfig, showCreateFlowModal, webcamModelConfig } =
+    useSelector((state) => state.global);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isCanvasLock, seyIsCanvasLock] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
+  const [isShow, setIsShow] = useState(true);
   useEffect(() => {
     if (nodes.length === 2) {
       const startNode = nodes.find((x) => x.type === "Start");
@@ -144,7 +145,30 @@ const FlowCanvas = () => {
                 isShow: false,
               })
             );
+
             fetchFlowData();
+          }}
+        />
+      )}
+      {webcamModelConfig.isShow && (
+        <WebcamRecorder
+          show={webcamModelConfig.isShow}
+          handleClose={() => {
+            dispatch(
+              setWebcamModelConfig({
+                isShow: false,
+                blobFile: null,
+                blobUrl: "",
+              })
+            );
+            dispatch(
+              setQueModelConfig({
+                modalType: "",
+                nodeData: null,
+                isEdit: false,
+                isShow: false,
+              })
+            );
           }}
         />
       )}

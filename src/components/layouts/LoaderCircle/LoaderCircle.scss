@@ -1,0 +1,30 @@
+.LoaderCircle-container {
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes rotate-reverse {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(-360deg);
+    }
+  }
+  .rotating-path-A {
+    animation: rotate 3s linear infinite;
+    transform-origin: center;
+  }
+  .rotating-path-B {
+    animation: rotate-reverse 2s linear infinite;
+    transform-origin: center;
+  }
+  .rotating-path-C {
+    animation: rotate 1s linear infinite;
+    transform-origin: center;
+  }
+}

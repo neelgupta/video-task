@@ -5,6 +5,7 @@ import "./VideoPlayer.scss";
 import { getTrackBackground, Range } from "react-range";
 import { useDispatch } from "react-redux";
 import { handelCatch } from "../../../store/globalSlice";
+import { processVideoMetadata } from "../../../pages/FlowCanvas/flowControl";
 const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
   const videoRef = useRef(null);
   const { alignVideo, overlayText, textSize, textReveal, videoPosition } =
@@ -19,7 +20,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
 
   useEffect(() => {
     const video = videoRef.current;
-
+    getDuration();
     if (video) {
       // Reset the video to the beginning
       video.pause(); // Pause any ongoing playback
@@ -41,6 +42,12 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoUrl]);
+
+  const getDuration = async () => {
+    const newDuration = await processVideoMetadata(videoUrl);
+    console.log("newDuration", newDuration);
+    setDuration(newDuration);
+  };
 
   useEffect(() => {
     if (duration && currentTime) {
@@ -72,11 +79,6 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
     setCurrentTime(video.currentTime);
   };
 
-  const handleLoadedMetadata = () => {
-    const video = videoRef.current;
-    setDuration(video.duration);
-  };
-
   const handleProgressBarChange = (e) => {
     const video = videoRef.current;
     video.currentTime = e.target.value;
@@ -104,6 +106,12 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
       video.play();
     }
   };
+
+  const handleVideoEnd = () => {
+    videoRef.current.pause();
+    setIsPlaying(false);
+  };
+
   return (
     <div
       className="VideoPlayer-container"
@@ -128,7 +136,8 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
         <video
           ref={videoRef}
           onTimeUpdate={handleTimeUpdate}
-          onLoadedMetadata={handleLoadedMetadata}
+          // onLoadedMetadata={handleLoadedMetadata}
+          onEnded={handleVideoEnd}
           onClick={togglePlay}
           className="video"
           style={{
@@ -150,7 +159,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
           display:
             showCenterPlay ||
             !isPlaying ||
-            currentTime.toFixed(0) === duration.toFixed(0)
+            parseFloat(currentTime.toFixed(0)) === duration
               ? "flex"
               : "none",
         }}
@@ -212,19 +221,21 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
           <input
             type="range"
             min="0"
-            max={duration}
+            max={duration - 1}
+            step="any" // Enable smooth scrolling with fractional steps
             value={currentTime}
-            onChange={handleProgressBarChange}
+            onInput={(e) => handleProgressBarChange(e)}
             onMouseDown={handleDragRange}
             onMouseUp={handleDragRange}
             style={{
               flex: 1,
               margin: "0 10px",
+              cursor: "pointer",
             }}
           />
 
           <span className="duration-text">
-            {currentTime.toFixed(0)} / {duration.toFixed(0)} sec
+            {parseInt(currentTime.toFixed(0))} / {duration} sec
           </span>
           <button onClick={handleSpeedChange} className="speed-btn">
             {playbackSpeed}x

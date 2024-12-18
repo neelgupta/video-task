@@ -106,6 +106,8 @@ import copy from "../../assets/images/icons/copy.png";
 import loginImage from "../../assets/images/loginI.png";
 import wavy from "../../assets/images/wavy.png";
 import contact from "../../assets/images/svgIcons/contact.svg";
+import finish from "../../assets/images/svgIcons/finish.svg";
+
 // copy;
 
 export const icons = {
@@ -216,4 +218,5 @@ export const icons = {
   closeSvg,
   copy,
   contact,
+  finish,
 };

@@ -22,6 +22,11 @@ const initialState = {
     modalType: "",
     isShow: false,
   },
+  webcamModelConfig: {
+    isShow: false,
+    blobFile: null,
+    blobUrl: "",
+  },
   queModalData: {},
   newQueModalData: {},
 };
@@ -59,6 +64,14 @@ const globalSlice = createSlice({
     setQueModelConfig(state, action) {
       state.queModelConfig = { ...state.queModelConfig, ...action.payload };
     },
+
+    setWebcamModelConfig(state, action) {
+      state.webcamModelConfig = {
+        ...state.webcamModelConfig,
+        ...action.payload,
+      };
+    },
+
     setQueModalData(state, action) {
       state.queModalData = { ...action.payload };
     },
@@ -313,6 +326,7 @@ export const {
   setQueModelConfig,
   setShowCreateFlowModal,
   setNewQueModalData,
+  setWebcamModelConfig,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

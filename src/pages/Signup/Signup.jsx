@@ -480,8 +480,8 @@ function Signup() {
               className="full-size-image"
               autoPlay
               loop
-              muted 
-              playsInline 
+              muted
+              playsInline
             />
           </div>
         </div>

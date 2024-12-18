@@ -4,15 +4,21 @@ import "./AnswerForm.scss";
 
 function ButtonForm({ onNext, node, videoTime, isPost }) {
   const { answer_type, answer_format } = node;
-  const [isDelay, setIsDelay] = useState(true);
+  const [isDelay, setIsDelay] = useState(null);
 
   useEffect(() => {
     if (videoTime.duration && videoTime.currentTime) {
       const delay = parseInt(answer_format.delay);
-      const currentTime = parseInt((videoTime?.currentTime || 0).toFixed(0));
-      const duration = parseInt((videoTime?.duration || 0).toFixed(0));
-      if (delay - currentTime === 0 || currentTime === duration) {
+      const currentTime = parseInt(videoTime?.currentTime.toFixed(0)) || 0;
+      const duration = parseInt(videoTime?.duration) || 0;
+      if (
+        delay - currentTime === 0 ||
+        currentTime === duration ||
+        currentTime > delay
+      ) {
         setIsDelay(false);
+      } else if (delay !== 0) {
+        setIsDelay(true);
       }
     }
   }, [videoTime, answer_format]);
@@ -32,13 +38,13 @@ function ButtonForm({ onNext, node, videoTime, isPost }) {
             Interact in{" "}
             <span style={{ color: "#7b5aff" }}>
               {parseInt(answer_format.delay) -
-                parseInt((videoTime?.currentTime || 0).toFixed(0))}
+                parseInt(videoTime?.currentTime.toFixed(0)) || 0}
             </span>
             s...
           </div>
         </div>
       )}
-      {!isDelay && (
+      {!isDelay && isDelay !== null && (
         <div
           className="wp-100 hp-100"
           style={{

@@ -31,7 +31,7 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
   const [tabArray, setTabArray] = useState(optionArray);
-  const [isDelay, setIsDelay] = useState(true);
+  const [isDelay, setIsDelay] = useState(null);
 
   const [answerForm, setAnswerForm] = useState({
     ans: null,
@@ -42,9 +42,15 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
     if (videoTime.duration && videoTime.currentTime) {
       const delay = parseInt(answer_format.delay);
       const currentTime = parseInt((videoTime?.currentTime || 0).toFixed(0));
-      const duration = parseInt((videoTime?.duration || 0).toFixed(0));
-      if (delay - currentTime === 0 || currentTime === duration) {
+      const duration = parseInt(videoTime?.duration) || 0;
+      if (
+        delay - currentTime === 0 ||
+        currentTime === duration ||
+        currentTime > delay
+      ) {
         setIsDelay(false);
+      } else {
+        setIsDelay(true);
       }
     }
   }, [videoTime, answer_format]);
@@ -105,7 +111,7 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
           </div>
         </div>
       )}
-      {!answerForm.ansType && !isDelay && (
+      {!answerForm.ansType && !isDelay && isDelay !== null && (
         <div
           className="wp-100 hp-100"
           style={{
