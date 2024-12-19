@@ -12,6 +12,7 @@ import {
   setWebcamModelConfig,
   throwError,
 } from "../../../../store/globalSlice";
+import NotFoundErrorPage from "./NotFoundErrorPage";
 
 function WebcamRecorder({ show, handleClose }) {
   const [isRecording, setIsRecording] = useState(false);
@@ -20,7 +21,10 @@ function WebcamRecorder({ show, handleClose }) {
   const [camStatus, setCamStatus] = useState("");
   const [permissionsGranted, setPermissionsGranted] = useState(false); // New state for permissions
   const [deviceError, setDeviceError] = useState(null); // New state for device disconnection errors
+  const [mediaUrl, setMediaUrl] = useState(null); // New state for device disconnection errors
+  const [isUpload, setIsUpload] = useState(false);
   const finalVideoObject = useRef(null);
+  const videoStreamRef = useRef(null); // Store webcam stream
   const dispatch = useDispatch();
 
   const {
@@ -34,6 +38,10 @@ function WebcamRecorder({ show, handleClose }) {
     error,
   } = useReactMediaRecorder({ video: true, audio: true });
 
+  useEffect(() => {
+    setMediaUrl(mediaBlobUrl);
+  }, [mediaBlobUrl]);
+
   // Check camera and microphone permissions on load
   useEffect(() => {
     const checkPermissions = async () => {
@@ -42,6 +50,7 @@ function WebcamRecorder({ show, handleClose }) {
           video: true,
           audio: true,
         });
+        videoStreamRef.current = stream;
         monitorDeviceDisconnection(stream);
         setPermissionsGranted(true);
       } catch (err) {
@@ -49,32 +58,31 @@ function WebcamRecorder({ show, handleClose }) {
           "Permissions denied or error accessing media devices.",
           err
         );
-        dispatch(handelCatch(err));
+        setDeviceError("Permissions denied or error accessing media devices.");
+        dispatch(
+          throwError("Permissions denied or error accessing media devices.")
+        );
         setPermissionsGranted(false);
       }
     };
 
     checkPermissions();
-  }, []);
 
-  // Monitor for device disconnections
-  const monitorDeviceDisconnection = (stream) => {
-    const tracks = stream.getTracks();
-    tracks.forEach((track) => {
-      track.onended = () => {
-        console.error(`Device disconnected: ${track.kind}`);
-        setDeviceError(`Your ${track.kind} device was disconnected.`);
-        dispatch(throwError(`Your ${track.kind} device was disconnected.`));
-
-        handleStop(); // Stop recording if a device is disconnected
-      };
-    });
-  };
+    return () => {
+      // Cleanup: stop webcam tracks
+      if (videoStreamRef.current) {
+        const tracks = videoStreamRef.current.getTracks();
+        tracks.forEach((track) => track.stop());
+        videoStreamRef.current = null;
+      }
+    };
+  }, [show]);
 
   // Handle recording errors
   useEffect(() => {
     if (error) {
-      console.error("Recording Error:", error);
+      setDeviceError(`Recording Error:`);
+      setPermissionsGranted(false);
       dispatch(handelCatch(error));
     }
   }, [error]);
@@ -89,6 +97,24 @@ function WebcamRecorder({ show, handleClose }) {
     }
     return () => clearInterval(timer);
   }, [isRecording, isPaused, timeLeft]);
+
+  useEffect(() => {
+    setCamStatus(status);
+  }, [status]);
+
+  // Monitor for device disconnections
+  const monitorDeviceDisconnection = (stream) => {
+    const tracks = stream.getTracks();
+    tracks.forEach((track) => {
+      track.onended = () => {
+        console.error(`error`);
+        setDeviceError(`Your ${track.kind} device was disconnected.`);
+        setPermissionsGranted(false);
+        dispatch(throwError(`Your ${track.kind} device was disconnected.`));
+        handleStop(); // Stop recording if a device is disconnected
+      };
+    });
+  };
 
   const handleStartPauseResume = () => {
     if (!isRecording) {
@@ -119,18 +145,20 @@ function WebcamRecorder({ show, handleClose }) {
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  useEffect(() => {
-    setCamStatus(status);
-  }, [status]);
-
   const handleModalClose = () => {
     handleStop();
     handleClose();
+
+    if (videoStreamRef.current) {
+      const tracks = videoStreamRef.current.getTracks();
+      tracks.forEach((track) => track.stop());
+      videoStreamRef.current = null;
+    }
   };
 
   const handleWebcamSubmit = async () => {
     try {
-      const response = await fetch(mediaBlobUrl);
+      const response = await fetch(mediaUrl);
       const blob = await response.blob();
 
       if (blob.size / 1024 / 1024 > 4) {
@@ -142,7 +170,7 @@ function WebcamRecorder({ show, handleClose }) {
         setWebcamModelConfig({
           isShow: false,
           blobFile: blob,
-          blobUrl: mediaBlobUrl,
+          blobUrl: mediaUrl,
         })
       );
       dispatch(setQueModelConfig({ isShow: true }));
@@ -154,10 +182,13 @@ function WebcamRecorder({ show, handleClose }) {
   };
 
   const handleRestartWebcam = () => {
-    startRecording();
-    pauseRecording();
-    setIsRecording(false);
-    setIsPaused(false);
+    dispatch(
+      setWebcamModelConfig({
+        isShow: false,
+        blobFile: null,
+        blobUrl: "",
+      })
+    );
   };
 
   return (
@@ -169,44 +200,12 @@ function WebcamRecorder({ show, handleClose }) {
       onHide={handleModalClose}
     >
       <div className="wp-100 hp-100 webcamRecorder">
-        {deviceError ? (
-          <div className="stream-error-message">
-            <div className="text-20-600" style={{ color: "red" }}>
-              {deviceError}
-            </div>
-            <div>
-              <button
-                onClick={() => {
-                  dispatch(
-                    setWebcamModelConfig({
-                      isShow: false,
-                      blobFile: null,
-                      blobUrl: "",
-                    })
-                  );
-                }}
-                style={{
-                  border: "none",
-                  borderRadius: "10px",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  background: "white",
-                  color: "black",
-                  padding: "8px 15px",
-                  margin: "20px 0px",
-                  boxShadow: "none",
-                }}
-              >
-                Go back
-              </button>
-            </div>
-          </div>
-        ) : permissionsGranted ? (
-          camStatus === "stopped" && mediaBlobUrl ? (
+        {permissionsGranted ? (
+          (camStatus === "stopped" || isUpload) && mediaUrl ? (
             <>
               <video
                 ref={finalVideoObject}
-                src={mediaBlobUrl}
+                src={mediaUrl}
                 autoPlay
                 loop
                 id="finalVideoObject"
@@ -225,7 +224,12 @@ function WebcamRecorder({ show, handleClose }) {
           ) : (
             <>
               <div className="webcam-close-btn" onClick={handleModalClose}>
-                <img src={icons.closeSvg} alt="" className="fit-image w-20" />
+                <img
+                  src={icons.closeSvg}
+                  alt=""
+                  className="fit-image w-20"
+                  style={{ filter: creteImgFilter("#ffffff") }}
+                />
               </div>
               <div className="play-stop-control">
                 <div className="control-button">
@@ -268,45 +272,27 @@ function WebcamRecorder({ show, handleClose }) {
               )}
 
               {camStatus === "idle" || camStatus === "paused" ? (
-                <LivePreview />
+                <LivePreview
+                  setDeviceError={setDeviceError}
+                  setPermissionsGranted={setPermissionsGranted}
+                />
               ) : camStatus === "recording" ? (
-                <VideoPreview stream={previewStream} />
+                <VideoPreview
+                  stream={previewStream}
+                  setDeviceError={setDeviceError}
+                  setPermissionsGranted={setPermissionsGranted}
+                />
               ) : null}
             </>
           )
         ) : (
-          <div className="permissions-error">
-            <div className="text-20-600" style={{ color: "red" }}>
-              Please enable camera and microphone permissions to use the
-              recorder.
-            </div>
-            <div>
-              <button
-                onClick={() => {
-                  dispatch(
-                    setWebcamModelConfig({
-                      isShow: false,
-                      blobFile: null,
-                      blobUrl: "",
-                    })
-                  );
-                }}
-                style={{
-                  borderRadius: "5px",
-                  border: "none",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  background: "white",
-                  color: "black",
-                  padding: "8px 15px",
-                  margin: "20px 0px",
-                  boxShadow: "none",
-                }}
-              >
-                Go back
-              </button>
-            </div>
-          </div>
+          <NotFoundErrorPage
+            setIsUpload={setIsUpload}
+            errorText={deviceError}
+            setMediaUrl={setMediaUrl}
+            setDeviceError={setDeviceError}
+            setPermissionsGranted={setPermissionsGranted}
+          />
         )}
       </div>
     </Modal>
@@ -315,7 +301,7 @@ function WebcamRecorder({ show, handleClose }) {
 
 export default WebcamRecorder;
 
-const LivePreview = () => {
+const LivePreview = ({ setDeviceError, setPermissionsGranted }) => {
   const videoRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -331,6 +317,8 @@ const LivePreview = () => {
         }
       } catch (err) {
         console.error("Error accessing media devices.", err);
+        setPermissionsGranted(false);
+        setDeviceError("Error accessing media devices.");
         dispatch(handelCatch(err));
       }
     };

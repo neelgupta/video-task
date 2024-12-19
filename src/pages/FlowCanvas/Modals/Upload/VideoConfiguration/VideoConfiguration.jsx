@@ -4,8 +4,10 @@ import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
 import "./VideoConfiguration.scss";
 import { TextArea } from "../../../../../components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
+import { setWebcamModelConfig } from "../../../../../store/globalSlice";
+import { icons } from "../../../../../utils/constants";
 
 function VideoConfiguration({
   onSubmit,
@@ -13,7 +15,9 @@ function VideoConfiguration({
   setVideoConfigForm,
   MAX,
   isCreate,
+  setCurrentKey,
 }) {
+  const dispatch = useDispatch();
   const MIN = 0;
   const positionOption = [
     { value: "center center", label: "Center Center" },
@@ -52,6 +56,37 @@ function VideoConfiguration({
   const {
     queModelConfig: { nodeData, isEdit, modalType },
   } = useSelector((state) => state.global);
+  console.log("modalType", modalType);
+
+  const processDownloadVideo = async () => {
+    try {
+      if (!nodeData?.video_url) return;
+      // Fetch the video file from the URL
+      const response = await fetch(nodeData.video_url);
+
+      // Ensure the request was successful
+      if (!response.ok) {
+        throw new Error(`Failed to fetch video: ${response.statusText}`);
+      }
+
+      // Get the video data as a Blob
+      const videoBlob = await response.blob();
+
+      // Create a URL for the Blob
+      const videoUrl = URL.createObjectURL(videoBlob);
+
+      // Create a download link and trigger the download
+      const downloadLink = document.createElement("a");
+      downloadLink.href = videoUrl;
+      downloadLink.download = "flow-ai.mp4";
+      downloadLink.click();
+
+      URL.revokeObjectURL(videoUrl);
+    } catch (error) {
+      console.error("Error downloading the video:", error);
+    }
+  };
+
   return (
     <div className="VideoConfiguration-container">
       {isEdit && (
@@ -59,6 +94,32 @@ function VideoConfiguration({
           <h3 className="text-22-600 mb-10">Thumbnail</h3>
           <div className="thumbnail-content">
             <img src={nodeData.video_thumbnail} alt="" className="fit-image" />
+            <div
+              className="replace-btn"
+              onClick={() => {
+                if (modalType === "Webcam") {
+                  dispatch(
+                    setWebcamModelConfig({
+                      isShow: true,
+                      blobFile: null,
+                      blobUrl: "",
+                    })
+                  );
+                }
+                if (modalType === "Upload") {
+                  setCurrentKey(1);
+                }
+              }}
+            >
+              <div className="w-25">
+                <img src={icons.replace} alt="" className="fit-image" />
+              </div>
+              <div>Replace</div>
+            </div>
+
+            <div className="download-btn" onClick={processDownloadVideo}>
+              <img src={icons.download} alt="" className="fit-image w-15" />
+            </div>
           </div>
         </>
       )}

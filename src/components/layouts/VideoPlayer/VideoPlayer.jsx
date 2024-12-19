@@ -152,7 +152,10 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
           {videoUrl && <source src={videoUrl} type="video/mp4" />}
         </video>
         <div className="flow-ai-video-logo-container">
-          <div className="text-12-700" style={{ color: "white" }}>
+          <div
+            className="text-12-700"
+            style={{ color: "white", fontSize: "12" }}
+          >
             Powered by:
           </div>
           <div className="text-24-800" style={{ color: "white" }}>
@@ -189,6 +192,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
             opacity: textReveal >= currentTime ? "1" : "0",
             display: textReveal >= currentTime ? "block" : "none",
           }}
+          onClick={togglePlay}
         >
           {overlayText}
         </div>

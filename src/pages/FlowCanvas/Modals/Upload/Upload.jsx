@@ -313,6 +313,7 @@ function Upload({ show, handleClose }) {
                           setVideoConfigForm={setVideoConfigForm}
                           MAX={MAX}
                           isCreate={isCreate}
+                          setCurrentKey={setCurrentKey}
                         />
                       </div>
                     )}

@@ -101,7 +101,7 @@
   }
   .overlay-text {
     position: absolute;
-    top: 50px;
+    top: 120px;
     left: 50px;
     right: 50px;
     bottom: 130px;
@@ -115,10 +115,10 @@
   }
 
   .flow-ai-video-logo-container {
-    background: red;
     position: absolute;
     top: 50px;
     left: 50px;
+    background: red;
     padding: 5px 30px;
     border-radius: 10px;
     opacity: 0.7;
@@ -127,6 +127,7 @@
     transition-duration: 0.3s;
     transition-property: transform, opacity;
     cursor: pointer;
+    user-select: none;
     &:hover {
       opacity: 1;
       transform: scale(1);
