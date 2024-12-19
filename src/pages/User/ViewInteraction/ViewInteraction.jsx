@@ -17,6 +17,7 @@ import ButtonForm from "./AnswerForm/ButtonForm";
 import FileUploadForm from "./AnswerForm/FileUploadForm";
 import ContactForm from "./AnswerForm/ContactForm";
 import CalenderForm from "./AnswerForm/CalenderForm";
+import EndScreen from "./EndScreen";
 function ViewInteraction() {
   const { token, type } = useParams();
   const id = decrypt(token);
@@ -28,6 +29,7 @@ function ViewInteraction() {
   const [ansData, setAnsData] = useState({});
   const [isContact, setIsContact] = useState(false);
   const [isContactCollected, setIsContactCollected] = useState(false);
+  const [answerId, setAnswerId] = useState("");
   const [isPost, setIsPost] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -93,10 +95,17 @@ function ViewInteraction() {
       if (node.answer_type === "open-ended") {
         req.append("type", ansValue.ansType);
       }
+      if (answerId) {
+        req.append("answer_id", answerId);
+      }
       const res = await api.post(`interactions/add-answer`, req, {
         "Content-Type": "multipart/form-data",
       });
       if (res.status === 201) {
+        const ansId = res.data?.response?.answerId;
+        if (!answerId) {
+          setAnswerId(ansId);
+        }
         dispatch(showSuccess(res.data.message));
         handleNext(index);
         setIsContact(false);
@@ -110,9 +119,8 @@ function ViewInteraction() {
     setIsPost(false);
   };
 
-  const handleSubmitAnsWithContact = async (index, node) => {
+  const handleSubmitAnsWithContact = async (index, node, contactValue) => {
     setIsPost(true);
-
     try {
       const req = new FormData();
       req.append("interaction_id", node.interaction_id);
@@ -128,10 +136,24 @@ function ViewInteraction() {
       if (node.answer_type === "open-ended") {
         req.append("type", ansData.ansType);
       }
+      if (answerId) {
+        req.append("answer_id", answerId);
+      }
+
+      Object.keys(contactValue).forEach((key) => {
+        if (contactValue[key]) {
+          req.append(`contact_details[${key}]`, contactValue[key]);
+        }
+      });
+
       const res = await api.post(`interactions/add-answer`, req, {
         "Content-Type": "multipart/form-data",
       });
       if (res.status === 201) {
+        const ansId = res.data?.response?.answerId;
+        if (!answerId) {
+          setAnswerId(ansId);
+        }
         dispatch(showSuccess(res.data.message));
         setIsContactCollected(true);
         setIsContact(false);
@@ -292,8 +314,12 @@ function ViewInteraction() {
                         {isContact && !isContactCollected && (
                           <ContactForm
                             node={node}
-                            onNext={() =>
-                              handleSubmitAnsWithContact(index, node)
+                            onNext={(contactValue) =>
+                              handleSubmitAnsWithContact(
+                                index,
+                                node,
+                                contactValue
+                              )
                             }
                             isPost={isPost}
                           />
@@ -306,7 +332,7 @@ function ViewInteraction() {
             );
           })}
         <Tab eventKey="End">
-          <div>End</div>
+          <EndScreen />
           <Button onClick={() => setKey(queNodes.length - 1)}>Back</Button>
         </Tab>
       </Tabs>
