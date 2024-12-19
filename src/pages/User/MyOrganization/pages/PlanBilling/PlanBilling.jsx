@@ -25,7 +25,6 @@ function PlanBilling() {
   const fetchPlanCard = async () => {
     try {
       const res = await api.get("user/get-plans");
-      console.log("fetchPlanCard", res);
       if (res.status === 200) {
         setPlanCardList(res.data.response);
       }
@@ -36,7 +35,6 @@ function PlanBilling() {
   const fetchAddressCard = async () => {
     try {
       const res = await api.get("user/get-address-list");
-      console.log("fetchAddressCard", res);
       if (res.status === 200) {
         setAddressList(res.data.response);
       }

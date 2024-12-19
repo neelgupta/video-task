@@ -128,7 +128,6 @@ function ViewInteraction() {
       if (node.answer_type === "open-ended") {
         req.append("type", ansData.ansType);
       }
-      console.log("req", req);
       const res = await api.post(`interactions/add-answer`, req, {
         "Content-Type": "multipart/form-data",
       });
@@ -197,7 +196,6 @@ function ViewInteraction() {
                               textReveal: [parseInt(fade_reveal || 0)],
                             }}
                             getCurrentTime={(time) => {
-                              console.log("time", time);
                               setVideoTime(time);
                             }}
                           />
@@ -268,7 +266,6 @@ function ViewInteraction() {
                         {!isContact && answer_type === "file-upload" && (
                           <FileUploadForm
                             onNext={(ansValue) => {
-                              console.log("ansValue", ansValue);
                               if (
                                 answer_format?.contact_form &&
                                 !isContactCollected

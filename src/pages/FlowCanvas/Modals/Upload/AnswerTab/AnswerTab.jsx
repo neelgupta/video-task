@@ -153,8 +153,6 @@ function AnswerTab({ onClose }) {
   useEffect(() => {
     if (ansFormate && nodeData) {
       const format = nodeData?.answer_format;
-      console.log("ansFormate", ansFormate);
-      console.log("format", format);
       const form = handelFrom(ansFormate, format);
       setValidationSchema({
         ...form.validation,

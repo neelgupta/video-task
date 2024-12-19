@@ -12,11 +12,9 @@ function MultipleChoiceForm({ onNext, node, isPost }) {
   const [selectOption, setSelectOption] = useState(null);
   const [optionList, setOptionList] = useState([]);
   const handelOptionSelect = (select) => {
-    console.log("Selected Option:", select);
     if (answer_format.allow_multiple) {
       const selectArray = selectOption || [];
       const isExist = selectArray.includes(select);
-      console.log("Is Option Already Selected:", isExist);
       if (isExist) {
         setSelectOption(selectArray.filter((x) => x !== select));
       } else {

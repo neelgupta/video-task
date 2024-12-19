@@ -36,7 +36,6 @@ function MediaLibrary() {
       const res = await api.get(
         `interactions/get-library/${selectedOrganizationId}?search=${searchValue}`
       );
-      console.log("res", res);
       if (res.status === 200) {
         setMediaList(res.data.response);
       } else {

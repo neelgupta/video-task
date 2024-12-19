@@ -13,9 +13,7 @@ const CustomDatePicker = ({ label, labelClass, required, placeholder }) => {
       <div className="custom-date-picker-block">
         <DatePicker
           selected={null}
-          onChange={(date) => {
-            console.log(date);
-          }}
+          onChange={(date) => {}}
           placeholderText={placeholder || "Start date"}
         />
         <span className="h-18 w-18 d-flex c-icon">

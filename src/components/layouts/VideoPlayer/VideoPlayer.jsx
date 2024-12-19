@@ -45,7 +45,6 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
 
   const getDuration = async () => {
     const newDuration = await processVideoMetadata(videoUrl);
-    console.log("newDuration", newDuration);
     setDuration(newDuration);
   };
 
@@ -131,6 +130,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
               : "center",
           height: "100%",
           margin: "auto",
+          position: "relative",
         }}
       >
         <video
@@ -141,8 +141,6 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
           onClick={togglePlay}
           className="video"
           style={{
-            // backgroundPosition: videoPosition.value,
-
             ...(alignVideo
               ? { objectFit: "contain", height: "100%" }
               : {
@@ -153,7 +151,16 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
         >
           {videoUrl && <source src={videoUrl} type="video/mp4" />}
         </video>
+        <div className="flow-ai-video-logo-container">
+          <div className="text-12-700" style={{ color: "white" }}>
+            Powered by:
+          </div>
+          <div className="text-24-800" style={{ color: "white" }}>
+            Flōw AI
+          </div>
+        </div>
       </div>
+
       <div
         style={{
           display:

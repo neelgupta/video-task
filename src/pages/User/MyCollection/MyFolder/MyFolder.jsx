@@ -43,7 +43,6 @@ function MyFolder() {
     setIsFetch(true);
     try {
       const res = await api.get(`interactions/get-interactions/${id}`);
-      console.log("res", res);
       if (res.status === 200) {
         setFileList(res.data.response);
       } else {
@@ -60,7 +59,6 @@ function MyFolder() {
     try {
       setIsDelete(true);
       const res = await api.delete(`interactions/delete-interactions/${id}`);
-      console.log("res", res);
       if (res.status === 200) {
         dispatch(showSuccess(res.data.message));
         getFolderCollection();
@@ -90,7 +88,6 @@ function MyFolder() {
       if (res.status === 200) {
         getFolderCollection();
       }
-      console.log("res", res);
     } catch (error) {
       console.log("error", error);
       dispatch(handelCatch(error));

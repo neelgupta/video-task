@@ -23,6 +23,7 @@ import VideoCard from "./reactflow/VideoCard/VideoCard";
 import ButtonEdge from "./reactflow/ButtonEdge/ButtonEdge";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  handelCatch,
   handelNodePosition,
   handleFetchFlowData,
   setNewQueModalData,
@@ -113,12 +114,13 @@ const FlowCanvas = () => {
         };
         const res = await api.put("interactions/update-cordinates", req);
         if (res.status !== 200) {
-          console.log("field");
+          dispatch(throwError("Field to move card."));
           fetchFlowData();
         }
       }
     } catch (error) {
       console.log("error", error);
+      dispatch(handelCatch(error));
       fetchFlowData();
     }
     seyIsCanvasLock(false);

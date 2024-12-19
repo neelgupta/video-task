@@ -17,7 +17,6 @@ const DeleteAccountModal = ({ show, handleClose, onDelete }) => {
     setIsDelete(true);
     try {
       const res = await api.post("user/delete-account", { password });
-      console.log("res", res);
       if (res.status === 200) {
         let data = encrypt({ time: new Date().toLocaleString() });
         localStorage.authData = data;

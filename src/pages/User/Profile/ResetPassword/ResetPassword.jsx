@@ -53,9 +53,7 @@ const ResetPassword = ({ setIsResetPassword }) => {
           old_password: values.currentPassword,
           new_password: values.confirmNewPassword,
         };
-        console.log("req", req);
         const res = await api.put("user/change-password", req);
-        console.log("res", res);
         if (res.status === 200) {
           setShowSuccessModal(true);
         } else {

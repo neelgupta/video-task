@@ -226,14 +226,12 @@ export const handleFetchFlowData = (payload) => async (dispatch) => {
   const { id, setEdges, setNodes, navigate } = payload;
   try {
     const res = await api.get(`interactions/get-nodes/${id}`);
-    console.log("res", res);
     if (res.status === 200) {
       const {
         data: {
           response: { edges, nodes },
         },
       } = res;
-      console.log("edges, nodes", { edges, nodes });
       if (nodes && edges && nodes.length > 1 && edges.length > 0) {
         setNodes(
           nodes.map((node, index) => ({
@@ -293,7 +291,6 @@ export const handelNodePosition = (payload) => async (dispatch) => {
   try {
     const { req } = payload;
     const res = await api.put("interactions/update-cordinates", req);
-    console.log("res", res);
     if (res.status === 200) {
       // Dispatch success action
       dispatch(showSuccess(res.data.message));

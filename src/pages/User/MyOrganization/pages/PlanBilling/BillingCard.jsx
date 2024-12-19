@@ -20,7 +20,6 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
     setBillingData([]);
     setShippingData([]);
     if (addressList?.length > 0) {
-      console.log("addressList", addressList);
       setBillingData(
         addressList.filter((ele) => ele.address_type === "Billing")
       );

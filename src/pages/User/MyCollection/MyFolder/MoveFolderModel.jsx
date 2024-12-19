@@ -53,7 +53,6 @@ function MoveFolderModel({
       const res = await api.get(
         `interactions/get-folders/${selectedFolder.organization_id}`
       );
-      console.log("res", res);
       if (res.status === 200) {
         setFolderList(res.data.response);
       }

@@ -23,7 +23,6 @@ const Trash = () => {
       const res = await api.get(
         `interactions/get-archived-interactions/${selectedOrganizationId}`
       );
-      console.log("res", res);
       if (res.status === 200) {
         setTrashList(res.data.response);
       } else {

@@ -10,7 +10,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
 function ContactForm({ onNext, node, isPost }) {
-  console.log("node", node);
   const dispatch = useDispatch();
   const [contactFormData, setContactFormData] = useState({});
   const [form, setForm] = useState({
@@ -25,7 +24,6 @@ function ContactForm({ onNext, node, isPost }) {
   }, [node.interaction_id]);
 
   useEffect(() => {
-    console.log("contactFormData;", contactFormData);
     const setFormData = form || {};
     if (contactFormData.is_name) {
       setFormData["name"] = "";
@@ -65,7 +63,6 @@ function ContactForm({ onNext, node, isPost }) {
       const res = await api.get(
         `interactions/get-interaction-contact/${node.interaction_id}`
       );
-      console.log("res", res);
       if (res.status === 200) {
         setContactFormData(res?.data?.response?.contact_details || {});
       } else {

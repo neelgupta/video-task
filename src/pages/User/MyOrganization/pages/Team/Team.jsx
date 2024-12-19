@@ -112,7 +112,6 @@ function Team() {
     setIsDelete(true);
     try {
       const res = await api.delete(`user/delete-member/${id}`);
-      console.log("res", res);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         fetchMemberList(selectedOrganizationId);

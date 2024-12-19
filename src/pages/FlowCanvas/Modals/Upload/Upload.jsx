@@ -24,7 +24,6 @@ function Upload({ show, handleClose }) {
     queModelConfig: { nodeData, isEdit, modalType },
     webcamModelConfig: { blobFile, blobUrl },
   } = useSelector((state) => state.global);
-  console.log("modalType", modalType);
   const [MAX, setMAX] = useState(1);
   const [currentKey, setCurrentKey] = useState(1);
   const [videoSrc, setVideoSrc] = useState("");
@@ -39,10 +38,6 @@ function Upload({ show, handleClose }) {
     textSize: "20px",
     textReveal: [0],
   });
-
-  useEffect(() => {
-    console.log("videoConfigForm", videoConfigForm);
-  }, [videoConfigForm]);
 
   useEffect(() => {
     if (modalType === "Webcam") {
@@ -102,7 +97,6 @@ function Upload({ show, handleClose }) {
         req.append("video", videoFile);
       }
       if (blobFile) {
-        console.log("blobFile", blobFile);
         req.append("video", blobFile);
       }
 
@@ -113,7 +107,6 @@ function Upload({ show, handleClose }) {
           "Content-Type": "multipart/form-data",
         }
       );
-      console.log("res", res);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         dispatch(setNewQueModalData({}));
@@ -182,13 +175,11 @@ function Upload({ show, handleClose }) {
       } else if (modalType === "Webcam") {
         if (isEdit && nodeData && !blobFile) {
           setVideoSrc(videoSrc);
-          console.log("videoSrc", videoSrc);
           const duration = await processVideoMetadata(videoSrc);
           setMAX(duration);
         } else if (blobFile) {
           setVideoSrc(blobUrl);
           const duration = await processVideoMetadata(blobUrl);
-          console.log("duration", duration);
           setMAX(duration);
         }
       }

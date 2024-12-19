@@ -67,7 +67,6 @@ const CustomMenu = ({ onDelete, onRestore }) => {
 };
 
 const Card = ({ item, fetchData }) => {
-  console.log("item", item);
   const dispatch = useDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -101,7 +100,6 @@ const Card = ({ item, fetchData }) => {
         is_deleted: false,
       };
       const res = await api.put("interactions/update-interactions", req);
-      console.log("res", res);
       if (res.status === 200) {
         dispatch(showSuccess(res.data.message));
         fetchData();

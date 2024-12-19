@@ -53,7 +53,6 @@ const AddressForm = ({
           ? { address_id: editData._id }
           : { address_type: type, organization_id: selectedOrganizationId }),
       };
-      console.log("req", req);
       const res = await api[isEdit ? "put" : "post"](
         isEdit ? "user/update-address" : "user/add-address",
         req

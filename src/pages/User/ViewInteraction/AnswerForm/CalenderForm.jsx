@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 
 function CalenderForm({ node }) {
   const { answer_type, answer_format } = node;
-  console.log("answer_format", answer_format);
   const dispatch = useDispatch();
   return (
     <div className="CalenderForm">

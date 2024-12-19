@@ -50,7 +50,6 @@ function EditOrganizationName({ show, handleClose }) {
   const fetchOrganization = async () => {
     try {
       const res = await api.get(`user/organization/${selectedOrganizationId}`);
-      console.log("res", res);
       if (res.status === 200) {
         setOrganization(res.data.response);
       }
@@ -73,7 +72,6 @@ function EditOrganizationName({ show, handleClose }) {
         organization_name: name,
       };
       const res = await api.put("user/update-organization", req);
-      console.log("res", res);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         dispatch(handleProfileStore());

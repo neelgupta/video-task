@@ -42,7 +42,6 @@ function ContactForm({ handleClose, show }) {
     try {
       const req = { contact_details: { ...contactForm }, interaction_id: id };
       const res = await api.put(`interactions/update-interactions`, req);
-      console.log("res", res);
       if (res.status === 200) {
         dispatch(showSuccess(res.data.message));
         handleClose();

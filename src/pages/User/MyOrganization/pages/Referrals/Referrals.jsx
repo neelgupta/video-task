@@ -79,7 +79,6 @@ function Referrals() {
         referral_email: email,
       };
       const res = await api.post("user/add-referrals", sentReq);
-      console.log("res", res);
       if (res.status === 201) {
         setIsSuccess(true);
         setEmail("");
@@ -99,7 +98,6 @@ function Referrals() {
     try {
       setReferralsList([]);
       const res = await api.get(`user/get-referrals/${selectedOrganizationId}`);
-      console.log("res", res);
       if (res.status === 200) {
         if (res?.data?.response?.length > 0)
           setReferralsList(res.data.response);
