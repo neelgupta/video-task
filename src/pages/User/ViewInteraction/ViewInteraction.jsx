@@ -85,10 +85,15 @@ function ViewInteraction() {
       req.append("interaction_id", node.interaction_id);
       req.append("node_id", node._id);
       req.append("node_answer_type", node.answer_type);
-      if (Array.isArray(ansValue?.ans)) {
-        ansValue?.ans.map((x, ind) => {
-          req.append(`answer[${ind}]`, x);
-        });
+
+      if (node.answer_type === "multiple-choice") {
+        if (Array.isArray(ansValue?.ans)) {
+          ansValue?.ans.map((x, ind) => {
+            req.append(`answer[${ind}]`, x);
+          });
+        } else {
+          req.append(`answer[0]`, ansValue.ans);
+        }
       } else {
         req.append(`answer`, ansValue.ans);
       }

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Accordion, Button, Spinner } from "react-bootstrap";
 import { icons } from "../../../../../utils/constants";
-import { creteImgFilter } from "../../../../../utils/helpers";
+import {
+  creteImgFilter,
+  getColorFromLetter,
+} from "../../../../../utils/helpers";
 import "./Team.scss";
 import { Table } from "../../../../../components";
 import AddEditTeam from "./AddEditTeam";
@@ -37,20 +40,6 @@ const header = [
     className: "wp-15 justify-content-center",
   },
 ];
-
-const getColorFromLetter = (letter) => {
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const index = letters.indexOf(letter.toUpperCase());
-
-  // Ensure the index is valid
-  if (index === -1) {
-    return "rgb(0, 0, 0)"; // Default to black for invalid letters
-  }
-
-  // Generate colors based on the index
-  const hue = (index / letters.length) * 360; // Spread hues across the color wheel
-  return `hsl(${hue}, 70%, 50%)`; // Use HSL to get vibrant colors
-};
 
 function Team() {
   const dispatch = useDispatch();

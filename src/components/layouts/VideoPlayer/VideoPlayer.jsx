@@ -8,8 +8,13 @@ import { handelCatch } from "../../../store/globalSlice";
 import { processVideoMetadata } from "../../../pages/FlowCanvas/flowControl";
 const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
   const videoRef = useRef(null);
-  const { alignVideo, overlayText, textSize, textReveal, videoPosition } =
-    videoConfigForm;
+  const {
+    alignVideo = false,
+    overlayText,
+    textSize,
+    textReveal,
+    videoPosition,
+  } = videoConfigForm;
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
@@ -121,11 +126,11 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
         style={{
           display: "flex",
           alignItems:
-            !alignVideo && videoPosition
+            !alignVideo && videoPosition && alignVideo !== undefined
               ? videoPosition.split(" ")[0]
               : "center",
           justifyContent:
-            !alignVideo && videoPosition
+            !alignVideo && videoPosition && alignVideo !== undefined
               ? videoPosition.split(" ")[1]
               : "center",
           height: "100%",
@@ -141,7 +146,7 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
           onClick={togglePlay}
           className="video"
           style={{
-            ...(alignVideo
+            ...(alignVideo && alignVideo !== undefined
               ? { objectFit: "contain", height: "100%" }
               : {
                   objectFit: "cover",

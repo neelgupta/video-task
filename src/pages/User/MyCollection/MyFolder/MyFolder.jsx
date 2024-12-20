@@ -196,7 +196,12 @@ function MyFolder() {
                       <div className="no-img-box"></div>
                     )}
 
-                    <div className="hover_card">
+                    <div
+                      className="hover_card"
+                      onClick={() => {
+                        navigate(`/user/asset-allocation/${ele._id}`);
+                      }}
+                    >
                       <div
                         style={{
                           padding: "10px 10px",

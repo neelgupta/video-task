@@ -443,3 +443,17 @@ class Solver {
     )}%)`;
   }
 }
+
+export const getColorFromLetter = (letter) => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const index = letters.indexOf(letter.toUpperCase());
+
+  // Ensure the index is valid
+  if (index === -1) {
+    return "rgb(0, 0, 0)"; // Default to black for invalid letters
+  }
+
+  // Generate colors based on the index
+  const hue = (index / letters.length) * 360; // Spread hues across the color wheel
+  return `hsl(${hue}, 70%, 50%)`; // Use HSL to get vibrant colors
+};

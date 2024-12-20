@@ -5,10 +5,11 @@ import { icons } from "../../../../utils/constants";
 import { Button } from "react-bootstrap";
 import UndoIcon from "../../../../assets/images/icons/UndoIcon";
 import RedoIcon from "../../../../assets/images/icons/RedoIcon";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const TitleUndoRedo = React.forwardRef(({ className, ...props }) => {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   return (
     <Panel position="top-left" {...props} className="p-20 pt-35">
@@ -17,7 +18,7 @@ const TitleUndoRedo = React.forwardRef(({ className, ...props }) => {
           <div
             className="w-30 h-30 f-center"
             onClick={() => {
-              navigate(-1);
+              navigate(`/user/asset-allocation/${id}`);
             }}
           >
             <img src={icons.arrow_left} alt="edit icon" className="fit-image" />

@@ -47,11 +47,6 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
       icon: icons.logo,
     },
     {
-      title: "Asset Allocation",
-      url: "/user/asset-allocation",
-      icon: icons.crown,
-    },
-    {
       title: "Interactions",
       url: "/user/interactions",
       icon: icons.Interactions,

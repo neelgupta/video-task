@@ -108,8 +108,9 @@ import wavy from "../../assets/images/wavy.png";
 import contact from "../../assets/images/svgIcons/contact.svg";
 import finish from "../../assets/images/svgIcons/finish.svg";
 import replace from "../../assets/images/svgIcons/replace.svg";
+import feedback from "../../assets/images/icons/feedback.png";
 
-// copy;
+// feedback;
 
 export const icons = {
   logo,
@@ -221,4 +222,5 @@ export const icons = {
   contact,
   finish,
   replace,
+  feedback,
 };

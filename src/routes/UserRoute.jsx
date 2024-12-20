@@ -95,15 +95,15 @@ const UserRoute = () => {
       onBack: () => setIsResetPassword(false),
     },
     {
-      path: "/user/asset-allocation",
+      path: "/user/asset-allocation/:id",
       component: <AssetAllocation />,
       pageTitle: "Asset Allocation",
+      onBack: () => navigate("/user/collection"),
     },
     {
       path: "/user/my-organization/:type",
       component: <MyOrganization />,
       pageTitle: "Explore Your Organization",
-      onSetProfile: () => getProfile(),
     },
   ];
   return (
