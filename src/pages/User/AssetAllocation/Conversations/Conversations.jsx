@@ -225,7 +225,7 @@ function Conversations({ id }) {
                   : { height: "calc(100vh - 370px)" }
               }
             >
-              {contacts.length > 0 &&
+              {contacts.length > 0 ? (
                 contacts.map((ele, index) => {
                   const { contact_id, _id, contact_details, createdAt } = ele;
                   const isActive = _id === selectChat;
@@ -323,7 +323,14 @@ function Conversations({ id }) {
                       </div>
                     </div>
                   );
-                })}
+                })
+              ) : (
+                <div className="f-center">
+                  <div className="text-16-600" style={{ color: "black" }}>
+                    Contact not found.
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
