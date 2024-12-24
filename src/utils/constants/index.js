@@ -109,8 +109,7 @@ import contact from "../../assets/images/svgIcons/contact.svg";
 import finish from "../../assets/images/svgIcons/finish.svg";
 import replace from "../../assets/images/svgIcons/replace.svg";
 import feedback from "../../assets/images/icons/feedback.png";
-
-// feedback;
+import endScreen from "../../assets/images/end-screen.png";
 
 export const icons = {
   logo,
@@ -223,4 +222,5 @@ export const icons = {
   finish,
   replace,
   feedback,
+  endScreen,
 };

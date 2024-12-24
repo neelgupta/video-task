@@ -14,8 +14,8 @@ function AnswerSkeleton({ answerType }) {
             return (
               <div className="open-ended-icon" key={icon}>
                 <Skeleton
-                  baseColor="#d0e6ff"
-                  highlightColor="#f0f7ff"
+                  baseColor="#f6eeff"
+                  highlightColor="#f0e2ff"
                   width={45}
                   borderRadius={"5px"}
                   height={45}
@@ -42,8 +42,8 @@ function AnswerSkeleton({ answerType }) {
             return (
               <div className="multiple-choice-options" key={item}>
                 <Skeleton
-                  baseColor="#d0e6ff"
-                  highlightColor="#f0f7ff"
+                  baseColor="#f6eeff"
+                  highlightColor="#f0e2ff"
                   width={120}
                   borderRadius={"20px"}
                   height={20}
@@ -59,8 +59,8 @@ function AnswerSkeleton({ answerType }) {
         <div className="button-skeleton">
           <div className="button-skeleton-box">
             <Skeleton
-              baseColor="#d0e6ff"
-              highlightColor="#f0f7ff"
+              baseColor="#f6eeff"
+              highlightColor="#f0e2ff"
               width={120}
               borderRadius={"5px"}
               height={40}
@@ -84,8 +84,8 @@ function AnswerSkeleton({ answerType }) {
         <div className="file-upload-skeleton">
           <div className="file-upload-skeleton-box">
             <Skeleton
-              baseColor="#d0e6ff"
-              highlightColor="#f0f7ff"
+              baseColor="#f6eeff"
+              highlightColor="#f0e2ff"
               width={150}
               borderRadius={"5px"}
               height={70}
@@ -111,8 +111,8 @@ function AnswerSkeleton({ answerType }) {
         <div className="calender-skeleton">
           <div className="calender-skeleton-box">
             <Skeleton
-              baseColor="#d0e6ff"
-              highlightColor="#f0f7ff"
+              baseColor="#f6eeff"
+              highlightColor="#f0e2ff"
               width={150}
               borderRadius={"5px"}
               height={70}

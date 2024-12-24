@@ -336,9 +336,18 @@ function ViewInteraction() {
               </Tab>
             );
           })}
-        <Tab eventKey="End">
-          <EndScreen />
-          <Button onClick={() => setKey(queNodes.length - 1)}>Back</Button>
+        <Tab eventKey="End" className="wp-100 hp-100 p-0">
+          <div
+            style={{
+              background: "#fff",
+              position: "absolute",
+              top: "0px",
+              bottom: "0px",
+              width: "100%",
+            }}
+          >
+            <EndScreen />
+          </div>
         </Tab>
       </Tabs>
     </div>

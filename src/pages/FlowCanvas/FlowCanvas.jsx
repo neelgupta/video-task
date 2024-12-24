@@ -224,7 +224,8 @@ const FlowCanvas = () => {
           elementsSelectable={!isCanvasLock} // Disable selecting elements (nodes/edges)
         >
           <MiniMap zoomable pannable nodeClassName={nodeClassName} />
-          <Background style={{ background: "#f1f1f1" }} gap={10000} size={0} />
+          {/* <Background style={{ background: "#f1f1f1" }} gap={10000} size={0} /> */}
+          <Background style={{ background: "#F8F6F1" }} gap={10000} size={0} />
           <Resizer />
           <QuestionMark />
           <MenuBar />

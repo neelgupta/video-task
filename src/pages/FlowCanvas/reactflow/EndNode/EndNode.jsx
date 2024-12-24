@@ -9,8 +9,8 @@ function EndNode(props) {
       <div className="EndNode-text text-18-600">
         <div className="end-node-header">End Screen</div>
         <Skeleton
-          baseColor="#d0e6ff"
-          highlightColor="#f0f7ff"
+          baseColor="#c5c5c5"
+          highlightColor="#f1f1f1"
           width={120}
           borderRadius={"5px"}
           height={10}
@@ -22,16 +22,16 @@ function EndNode(props) {
           <div className="ps-10 pe-10 wp-50">
             <div>
               <Skeleton
-                baseColor="#d0e6ff"
-                highlightColor="#f0f7ff"
+                baseColor="#c5c5c5"
+                highlightColor="#f1f1f1"
                 borderRadius={"10px"}
                 height={10}
               />
             </div>
             <div>
               <Skeleton
-                baseColor="#d0e6ff"
-                highlightColor="#f0f7ff"
+                baseColor="#c5c5c5"
+                highlightColor="#f1f1f1"
                 borderRadius={"10px"}
                 width={50}
                 height={10}
@@ -45,8 +45,8 @@ function EndNode(props) {
           </div>
           <div className="wp-50 h-70">
             <Skeleton
-              baseColor="#d0e6ff"
-              highlightColor="#f0f7ff"
+              baseColor="#c5c5c5"
+              highlightColor="#f1f1f1"
               width={120}
               borderRadius={"10px"}
               height={70}
