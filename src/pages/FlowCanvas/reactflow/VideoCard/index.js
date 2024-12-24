@@ -1,1 +1,1 @@
-export { delete } from "./VideoCard";
+export { default } from "./VideoCard";

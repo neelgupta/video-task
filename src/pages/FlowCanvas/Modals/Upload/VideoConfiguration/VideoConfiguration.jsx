@@ -56,6 +56,7 @@ function VideoConfiguration({
   const {
     queModelConfig: { nodeData, isEdit, modalType },
   } = useSelector((state) => state.global);
+  console.log("nodeData", nodeData);
   console.log("modalType", modalType);
 
   const processDownloadVideo = async () => {
@@ -165,7 +166,7 @@ function VideoConfiguration({
         <div className="w-200">
           <DropdownOption
             style={{}}
-            isDisabled={videoConfigForm.alignVideo}
+            isDisabled={videoConfigForm?.alignVideo}
             options={positionOption}
             value={positionOption.find(
               (x) => x.value === videoConfigForm.videoPosition

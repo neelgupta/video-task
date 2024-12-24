@@ -9,7 +9,7 @@ const Resizer = React.forwardRef(({ className, ...props }) => {
   const { zoomIn, zoomOut } = useReactFlow();
 
   return (
-    <Panel position="bottom-right" {...props} className="p-20 pb-35">
+    <Panel position="bottom-left" {...props} className="p-20 pb-40 ps-100">
       <div className={styles.resizeBtnContainer}>
         <Button
           style={{
@@ -27,7 +27,10 @@ const Resizer = React.forwardRef(({ className, ...props }) => {
             background: "transparent",
             border: "none",
           }}
-          onClick={() => zoomIn({ duration: 300 })}
+          onClick={(e) => {
+            console.log("e", e);
+            zoomIn({ duration: 300 });
+          }}
         >
           <PlusIcon />
         </Button>

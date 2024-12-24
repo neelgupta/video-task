@@ -205,6 +205,7 @@ function AnswerTab({ onClose }) {
           </div>
           <div className="wp-100">
             <DropdownOption
+              isDisabled={!(nodeData?.allowedToEditAnswerType || true)}
               value={AnsFormate.find((o) => o.value === ansFormate)}
               options={AnsFormate}
               onChange={(select) => {

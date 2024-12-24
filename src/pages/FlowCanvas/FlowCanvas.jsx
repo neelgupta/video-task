@@ -19,7 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { api, TestApi } from "../../services/api";
 import StartNode from "./reactflow/StartNode/StartNode";
 import EndNode from "./reactflow/EndNode/EndNode";
-import VideoCard from "./reactflow/VideoCard/VideoCard";
+import VideoCard from "./reactflow/VideoCard";
 import ButtonEdge from "./reactflow/ButtonEdge/ButtonEdge";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -64,17 +64,19 @@ const FlowCanvas = () => {
     if (nodes.length === 2) {
       const startNode = nodes.find((x) => x.type === "Start");
       const endNode = nodes.find((x) => x.type === "End");
-      const req = {
-        targetId: endNode.id,
-        sourceId: startNode.id,
-        interaction_id: id,
-        type: "Question",
-        title: "untitled",
-        positionX: (startNode.position.x + endNode.position.x) / 2 - 100,
-        positionY: (startNode.position.y + endNode.position.y) / 2 - 125,
-      };
-      dispatch(setNewQueModalData(req));
-      dispatch(setShowCreateFlowModal(true));
+      if (endNode && startNode) {
+        const req = {
+          targetId: endNode.id,
+          sourceId: startNode.id,
+          interaction_id: id,
+          type: "Question",
+          title: "untitled",
+          positionX: (startNode.position.x + endNode.position.x) / 2 - 100,
+          positionY: (startNode.position.y + endNode.position.y) / 2 - 125,
+        };
+        dispatch(setNewQueModalData(req));
+        dispatch(setShowCreateFlowModal(true));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes.length]);

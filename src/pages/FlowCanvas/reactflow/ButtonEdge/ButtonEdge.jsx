@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   BaseEdge,
   EdgeLabelRenderer,
@@ -55,10 +55,6 @@ function ButtonEdge({
     };
     dispatch(setNewQueModalData(req));
     dispatch(setShowCreateFlowModal(true));
-
-    // dispatch(
-    //   handelCreateQuestion({ req, id: flowId, setEdges, setNodes, navigate })
-    // );
   };
   return (
     <>
@@ -82,26 +78,24 @@ function ButtonEdge({
         path={edgePath}
         markerEnd={markerEnd}
         style={{
-          // stroke: selected ? `url(#gradient-border)` : "#000",
-          stroke: selected ? `url(#gradient-border)` : "#000",
-
-          strokeWidth: selected ? 6 : isHover ? 1 : 4,
+          stroke: selected ? `url(#gradient-border)` : "#393939",
+          strokeWidth: selected ? 4 : isHover ? 3 : 2,
           strokeLinecap: "square",
         }}
         className="custom-edge-path"
       />
-      {isHover && (
+      {(isHover || selected) && (
         <path
           d={edgePath}
-          stroke="#fff"
-          strokeWidth="2" // Border thickness (thicker when selected)
-          fill="none" // No fill inside the path
-          strokeDasharray="5,10" // Dashed line pattern (5px dash, 5px space)
-          strokeLinecap="square" // Round end caps for the strokes
-          strokeLinejoin="square" // Round corners at joins
-          className="edge-border" // Class for custom styles (if any)
+          stroke={selected ? "#fff" : "#f1f1f1"}
+          strokeWidth={selected ? "1" : "4"}
+          fill="none"
+          strokeDasharray={selected ? "5,10" : "5,10"}
+          strokeLinecap="square"
+          strokeLinejoin="square"
+          className="edge-border"
           style={{
-            animation: "moveBorder 1s linear infinite", // If selected, animate the line
+            animation: `moveBorder 2s linear infinite`,
           }}
         />
       )}

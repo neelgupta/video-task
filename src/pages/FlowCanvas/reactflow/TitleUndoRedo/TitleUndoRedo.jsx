@@ -14,13 +14,13 @@ const TitleUndoRedo = React.forwardRef(({ className, ...props }) => {
   return (
     <Panel position="top-left" {...props} className="p-20 pt-35">
       <div className={styles.mainContentContainer}>
-        <div className={styles.titleContentContainer}>
-          <div
-            className="w-30 h-30 f-center"
-            onClick={() => {
-              navigate(`/user/asset-allocation/${id}`);
-            }}
-          >
+        <div
+          className={styles.titleContentContainer}
+          onClick={() => {
+            navigate(`/user/asset-allocation/${id}`);
+          }}
+        >
+          <div className="w-30 h-30 f-center">
             <img src={icons.arrow_left} alt="edit icon" className="fit-image" />
           </div>
           <div className="text-16-500">Flōw AI</div>

@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { memo, useState } from "react";
 import { Handle, Position, NodeToolbar, useReactFlow } from "@xyflow/react";
-import { Video, MessageCircleMore, Workflow, Copy, Trash2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api, TestApi } from "../../../../services/api";
 import "./VideoCard.scss";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+
 import DeleteModal from "../../../../components/layouts/DeleteModal";
 import { useDispatch } from "react-redux";
 import {
@@ -18,6 +17,7 @@ import {
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
+import AnswerSkeleton from "./AnswerSkeleton";
 const IconRenderer = ({ icon, label, onClick, style }) => {
   const [btnHover, setBtnHover] = useState(false);
 
@@ -56,6 +56,7 @@ const IconRenderer = ({ icon, label, onClick, style }) => {
 };
 function VideoCard(props) {
   const { data, id, title, index } = props;
+  console.log("data", data);
   const [isToolbarVisible, setToolbarVisible] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -184,63 +185,18 @@ function VideoCard(props) {
             <div className="img-box-content">
               <img src={data.video_thumbnail} alt="" />
             </div>
-            <div className="content-body-container p-10">
+            <div className="content-body-container">
               <div
-                className="text-16-600 "
+                className="text-14-600 "
                 style={{ textTransform: "capitalize" }}
               >
+                <span className="text-17-600" style={{ color: "#7b5aff" }}>
+                  {data.index}.
+                </span>{" "}
                 {data.title}.
               </div>
-              <div className="m-0 p-0">
-                <div
-                  className="p-0"
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginBottom: "5px",
-                  }}
-                >
-                  <Skeleton
-                    baseColor="#d0e6ff"
-                    highlightColor="#f0f7ff"
-                    circle
-                    width={40}
-                    height={40}
-                    className="me-10"
-                  />
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Skeleton
-                      baseColor="#d0e6ff"
-                      highlightColor="#f0f7ff"
-                      width={120}
-                      borderRadius={"5px"}
-                      height={15}
-                    />
-                    <Skeleton
-                      baseColor="#d0e6ff"
-                      highlightColor="#f0f7ff"
-                      width={120}
-                      borderRadius={"5px"}
-                      height={10}
-                    />
-                  </div>
-                </div>
-                <div className="m-0 p-0">
-                  <Skeleton
-                    baseColor="#d0e6ff"
-                    highlightColor="#f0f7ff"
-                    count={1}
-                    borderRadius={"5px"}
-                    height={35}
-                  />
-                </div>
+              <div className="m-0 p-0 wp-100 hp-85">
+                <AnswerSkeleton answerType={data?.answer_type || ""} />
               </div>
             </div>
           </div>

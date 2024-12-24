@@ -107,8 +107,8 @@ function Conversations({ id }) {
                 alignItems: "center",
               }}
             >
-              <LoaderCircle />
-              <div className="text-24-600 mt-50" style={{ color: "#1B2559" }}>
+              <LoaderCircle size={150} />
+              <div className="text-18-600 mt-10" style={{ color: "#1B2559" }}>
                 We are getting things ready...
               </div>
             </div>
@@ -423,7 +423,7 @@ function Conversations({ id }) {
                       style={
                         isActive
                           ? {
-                              borderBottom: "3px solid blue",
+                              borderBottom: "3px solid #b19eff",
                             }
                           : {}
                       }

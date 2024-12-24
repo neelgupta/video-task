@@ -1,12 +1,19 @@
 import React from "react";
 import "./LoaderCircle.scss";
-function LoaderCircle() {
+
+function LoaderCircle({ size }) {
+  // Default size if not provided
+  const defaultSize = 209;
+
   return (
-    <div className="LoaderCircle-container">
+    <div
+      className="LoaderCircle-container"
+      style={{ width: size || defaultSize, height: size || defaultSize }}
+    >
       <div>
         <svg
-          width="209"
-          height="209"
+          width={size || defaultSize}
+          height={size || defaultSize}
           viewBox="0 0 209 209"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
