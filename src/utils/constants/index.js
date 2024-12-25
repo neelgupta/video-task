@@ -110,6 +110,7 @@ import finish from "../../assets/images/svgIcons/finish.svg";
 import replace from "../../assets/images/svgIcons/replace.svg";
 import feedback from "../../assets/images/icons/feedback.png";
 import endScreen from "../../assets/images/end-screen.png";
+import userAnswerProfile from "../../assets/images/icons/userAnswerProfile.png";
 
 export const icons = {
   logo,
@@ -223,4 +224,5 @@ export const icons = {
   replace,
   feedback,
   endScreen,
+  userAnswerProfile,
 };

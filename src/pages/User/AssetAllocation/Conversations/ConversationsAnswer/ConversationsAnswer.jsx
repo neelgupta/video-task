@@ -54,7 +54,7 @@ function ConversationsAnswer({ selectMetingCard }) {
                 <div className="answer-text">{answer_details.answer}</div>
               </div>
               <div className="text-10-400" style={{ color: "#888888" }}>
-                {dayjs(answer_details.createdAt).format("DD MMM YYYY | HH:mm")}
+                {dayjs(answer_details?.createdAt).format("DD MMM YYYY | HH:mm")}
               </div>
               <DetailsComponent nodeDetails={nodeDetails} />
             </div>
@@ -255,10 +255,10 @@ const DetailsComponent = ({ nodeDetails, color }) => {
         className="text-18-800"
         style={{ color: color || "#1B2559", textTransform: "capitalize" }}
       >
-        {nodeDetails.title}
+        {nodeDetails?.title || ""}
       </div>
       <div className="text-12-500" style={{ color: color || "#888888" }}>
-        {dayjs(nodeDetails.createdAt).format("DD MMM YYYY @ HH:mm")}
+        {dayjs(nodeDetails?.createdAt).format("DD MMM YYYY @ HH:mm")}
       </div>
     </div>
   );
