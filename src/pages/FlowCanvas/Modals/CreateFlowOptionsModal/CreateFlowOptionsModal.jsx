@@ -53,7 +53,18 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       title: "ScreenShare",
       isPro: false,
       value: "Screen",
-      onClick: () => {},
+      onClick: () => {
+        dispatch(setWebcamModelConfig({ isShow: true }));
+        dispatch(
+          setQueModelConfig({
+            nodeData: null,
+            isEdit: false,
+            modalType: "Screen",
+            isShow: false,
+          })
+        );
+        handleClose();
+      },
     },
     {
       icon: icons.library,

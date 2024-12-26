@@ -126,7 +126,7 @@ function Conversations({
 
         <div
           className={`Conversations-sidebar ${
-            isResponsive ? "wp-100" : "wp-45"
+            isResponsive ? "wp-100" : "wp-35"
           }`}
         >
           <div className="profile-det">
@@ -222,6 +222,7 @@ function Conversations({
                     alt=""
                     className="fit-image hover-icons-effect w-18"
                   />
+                  {/* Chats */}
                 </div>
               </div>
             </div>
@@ -404,8 +405,12 @@ function Conversations({
           </div>
         </div>
         <div
-          className="Conversations-body"
-          style={isResponsive ? { marginTop: "20px" } : {}}
+          className={`Conversations-body `}
+          style={
+            isResponsive
+              ? { marginTop: "20px", width: "100%" }
+              : { minWidth: "calc(65% - 10px)" }
+          }
         >
           <div className="h-95 Conversations-header">
             <div className="f-center">
@@ -522,7 +527,7 @@ function Conversations({
             </div>
           </div>
 
-          <div className="Conversations-content" style={{ height: "380px" }}>
+          <div className="Conversations-content" style={{ height: "430px" }}>
             {selectMetingCard && (
               <ConversationsAnswer
                 selectMetingCard={
@@ -536,7 +541,7 @@ function Conversations({
               />
             )}
           </div>
-          <div className="Conversations-footer">
+          <div className="Conversations-footer auri-scroll">
             <div className="meting-card-body">
               {selectChatDetails?.answers?.length > 0 &&
                 selectChatDetails.answers.map((ele, index) => {

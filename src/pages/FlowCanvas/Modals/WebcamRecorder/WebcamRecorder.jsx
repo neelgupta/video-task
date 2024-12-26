@@ -13,8 +13,9 @@ import {
   throwError,
 } from "../../../../store/globalSlice";
 import NotFoundErrorPage from "./NotFoundErrorPage";
+import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
 
-function WebcamRecorder({ show, handleClose }) {
+function WebcamRecorder({ show, handleClose, recorderConfig, modalType }) {
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
@@ -23,10 +24,13 @@ function WebcamRecorder({ show, handleClose }) {
   const [deviceError, setDeviceError] = useState(null); // New state for device disconnection errors
   const [mediaUrl, setMediaUrl] = useState(null); // New state for device disconnection errors
   const [isUpload, setIsUpload] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
+
   const finalVideoObject = useRef(null);
   const videoStreamRef = useRef(null); // Store webcam stream
   const dispatch = useDispatch();
 
+  // Reinitialize media recorder with updated config
   const {
     status,
     startRecording,
@@ -36,20 +40,28 @@ function WebcamRecorder({ show, handleClose }) {
     mediaBlobUrl,
     previewStream,
     error,
-  } = useReactMediaRecorder({ video: true, audio: true });
+  } = useReactMediaRecorder(recorderConfig);
 
   useEffect(() => {
     setMediaUrl(mediaBlobUrl);
   }, [mediaBlobUrl]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsLoad(true); // Toggle `isLoad` state every 2 seconds
+    }, 1500);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+
   // Check camera and microphone permissions on load
   useEffect(() => {
     const checkPermissions = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
+        const stream = await navigator.mediaDevices.getUserMedia(
+          recorderConfig
+        );
         videoStreamRef.current = stream;
         monitorDeviceDisconnection(stream);
         setPermissionsGranted(true);
@@ -90,16 +102,18 @@ function WebcamRecorder({ show, handleClose }) {
   // Timer for recording
   useEffect(() => {
     let timer;
-    if (isRecording && !isPaused && timeLeft > 0) {
+    if (isRecording && !isPaused && timeLeft > 0 && camStatus === "recording") {
       timer = setInterval(() => setTimeLeft((prevTime) => prevTime - 1), 1000);
     } else if (timeLeft === 0) {
       handleStop();
     }
+
     return () => clearInterval(timer);
-  }, [isRecording, isPaused, timeLeft]);
+  }, [isRecording, isPaused, timeLeft, camStatus]);
 
   useEffect(() => {
     setCamStatus(status);
+    console.log("status", status);
   }, [status]);
 
   // Monitor for device disconnections
@@ -199,6 +213,26 @@ function WebcamRecorder({ show, handleClose }) {
       className="webcamRecorder-modal-container"
       onHide={handleModalClose}
     >
+      {!isLoad && (
+        <div className="loader-box">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <LoaderCircle size={150} />
+            <div className="text-18-600 mt-10" style={{ color: "#1B2559" }}>
+              We are getting things ready...
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="wp-100 hp-100 webcamRecorder">
         {permissionsGranted ? (
           (camStatus === "stopped" || isUpload) && mediaUrl ? (
@@ -275,6 +309,7 @@ function WebcamRecorder({ show, handleClose }) {
                 <LivePreview
                   setDeviceError={setDeviceError}
                   setPermissionsGranted={setPermissionsGranted}
+                  recorderConfig={recorderConfig}
                 />
               ) : camStatus === "recording" ? (
                 <VideoPreview
@@ -301,17 +336,20 @@ function WebcamRecorder({ show, handleClose }) {
 
 export default WebcamRecorder;
 
-const LivePreview = ({ setDeviceError, setPermissionsGranted }) => {
+const LivePreview = ({
+  setDeviceError,
+  setPermissionsGranted,
+  recorderConfig,
+}) => {
   const videoRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getMedia = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
+        const stream = await navigator.mediaDevices.getUserMedia(
+          recorderConfig
+        );
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }

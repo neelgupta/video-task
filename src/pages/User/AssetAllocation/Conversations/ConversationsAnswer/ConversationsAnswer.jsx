@@ -4,6 +4,8 @@ import { icons } from "../../../../../utils/constants";
 import dayjs from "dayjs";
 import { VideoPlayer } from "../../../../../components";
 import { creteImgFilter } from "../../../../../utils/helpers";
+import WaveSurfer from "wavesurfer.js";
+
 function ConversationsAnswer({ selectMetingCard }) {
   console.log("selectMetingCard", selectMetingCard);
   const { node_answer_type, nodeDetails, answer_details } = selectMetingCard;
@@ -122,7 +124,7 @@ function ConversationsAnswer({ selectMetingCard }) {
                   style={{ filter: creteImgFilter("#000000") }}
                 />
               </div>
-              <div>
+              <div className="wp-80">
                 <AudioPlayer audioUrl={answer_details.answer} />
               </div>
               <DetailsComponent nodeDetails={nodeDetails} color={"#000"} />
@@ -265,17 +267,149 @@ const DetailsComponent = ({ nodeDetails, color }) => {
 };
 
 const AudioPlayer = ({ audioUrl }) => {
-  const audioRef = useRef(null);
+  const waveSurferRef = useRef(null); // Reference to the Wavesurfer instance
+  const containerRef = useRef(null); // Reference to the container where the waveform will be drawn
+  const [volume, setVolume] = useState(1); // State to store volume level (range: 0 to 1)
+  const [isPlay, setIsPlay] = useState(false);
   useEffect(() => {
-    if (audioUrl) {
-      audioRef.current.src = audioUrl;
+    setIsPlay(false);
+    // Initialize waveSurfer.js with custom options
+    const waveSurfer = WaveSurfer.create({
+      container: containerRef.current,
+      waveColor: "white", // Color of the waveform
+      progressColor: "hsl(261, 56%, 46%)", // Color of the progress
+      cursorColor: "red", // Color of the cursor
+      height: 100, // Height of the waveform
+      barWidth: 1, // Width of bars if using 'bar' waveform type
+      responsive: true,
+      normalize: true, // Normalize audio volume
+      backend: "MediaElement", // Audio backend (WebAudio or MediaElement)
+      waveFormType: "bar", // Change to bar waveform
+      cursorWidth: 2, // Make the cursor thicker
+      minPxPerSec: 150, // Increase pixels per second for better resolution
+      audioRate: 1.0, // Default playback rate
+      hideScrollbar: true, // Hide scrollbar
+      maxCanvasWidth: 1200, // Max width of the canvas
+      pixelRatio: window.devicePixelRatio, // Set pixel ratio for retina displays
+      progressives: true, // Progressive rendering
+      partialRender: true, // Progressive rendering for large files
+      preload: "auto", // Auto preload
+      hideCursor: false, // Show the cursor while playing
+      splitChannels: false, // Split stereo channels
+    });
+
+    // Load the audio file into waveSurfer
+    waveSurfer.load(audioUrl);
+
+    waveSurferRef.current = waveSurfer;
+
+    waveSurfer.on("finish", () => {
+      setIsPlay(false);
+    });
+
+    return () => {
+      waveSurferRef.current.destroy();
+    };
+  }, [audioUrl]);
+
+  const handlePlayPause = () => {
+    const waveSurfer = waveSurferRef.current;
+    if (waveSurfer.isPlaying()) {
+      waveSurfer.pause();
+      setIsPlay(false);
+    } else {
+      waveSurfer.play();
+      setIsPlay(true);
     }
-  });
+  };
+
+  // Handle volume change
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    const waveSurfer = waveSurferRef.current;
+    waveSurfer.setVolume(newVolume);
+  };
+
   return (
-    <div className="answer-audio-player-box">
-      <audio className="answer-audio-player" ref={audioRef} controls>
-        Your browser does not support the audio element.
-      </audio>
+    <div className="audio-player-container">
+      <div
+        className="wp-100 hp-100"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        <div
+          ref={containerRef}
+          style={{
+            width: "60%",
+            height: "120px",
+            marginTop: "70px",
+            position: "absolute",
+          }}
+        ></div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: "30px",
+        }}
+      >
+        <button onClick={handlePlayPause}>
+          {isPlay ? (
+            <img
+              src={icons.play}
+              alt=""
+              className="fit-image w-30"
+              style={{ filter: creteImgFilter("#ffffff") }}
+            />
+          ) : (
+            <img
+              src={icons.push}
+              alt=""
+              className="fit-image w-30"
+              style={{ filter: creteImgFilter("#ffffff") }}
+            />
+          )}
+        </button>
+        <div
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            display: "flex",
+            gap: "10px",
+            padding: "5px 20px",
+            borderRadius: "50px",
+            background: "#9058f8",
+            border: "2px solid white",
+          }}
+        >
+          <label htmlFor="volume-slider w-25">
+            <img
+              src={icons.volumeOn}
+              alt=""
+              className="fit-image w-25"
+              style={{ filter: creteImgFilter("#ffffff") }}
+            />
+          </label>
+          <input
+            type="range"
+            id="volume-slider"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+            style={{ width: "100%" }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

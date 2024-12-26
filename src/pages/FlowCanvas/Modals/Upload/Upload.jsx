@@ -40,7 +40,7 @@ function Upload({ show, handleClose }) {
   });
 
   useEffect(() => {
-    if (modalType === "Webcam") {
+    if (["Webcam", "Screen"].includes(modalType)) {
       setCurrentKey(2);
     }
   }, [modalType]);
@@ -147,7 +147,7 @@ function Upload({ show, handleClose }) {
     const handleVideoSetup = async () => {
       if (
         (!videoFile && !isEdit && modalType === "Upload") ||
-        (!blobFile && !isEdit && modalType === "Webcam")
+        (!blobFile && !isEdit && ["Webcam", "Screen"].includes(modalType))
       ) {
         setVideoSrc("");
         return;
@@ -174,7 +174,7 @@ function Upload({ show, handleClose }) {
         setVideoSrc(videoSrc);
         const duration = await processVideoMetadata(videoSrc);
         setMAX(duration);
-      } else if (modalType === "Webcam") {
+      } else if (["Webcam", "Screen"].includes(modalType)) {
         if (isEdit && nodeData && !blobFile) {
           setVideoSrc(videoSrc);
           const duration = await processVideoMetadata(videoSrc);
@@ -190,7 +190,11 @@ function Upload({ show, handleClose }) {
     handleVideoSetup();
 
     return () => {
-      if (modalType === "Webcam" && isEdit && nodeData?.video_url) {
+      if (
+        ["Webcam", "Screen"].includes(modalType) &&
+        isEdit &&
+        nodeData?.video_url
+      ) {
         URL.revokeObjectURL(nodeData.video_url);
       }
       if (modalType === "Upload" && videoFile?.type.startsWith("video/")) {

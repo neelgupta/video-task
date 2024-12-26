@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./AssetAllocation.scss";
 import Metrics from "./Metrics";
 import { useDispatch, useSelector } from "react-redux";
-import Results from "./Results/Results";
 import Conversations from "./Conversations";
 import { useNavigate, useParams } from "react-router-dom";
 import { handelCatch, throwError } from "../../../store/globalSlice";

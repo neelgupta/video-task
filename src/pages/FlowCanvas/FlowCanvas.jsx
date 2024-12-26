@@ -157,6 +157,13 @@ const FlowCanvas = () => {
       {webcamModelConfig.isShow && (
         <WebcamRecorder
           show={webcamModelConfig.isShow}
+          recorderConfig={{
+            audio: true,
+            ...(queModelConfig.modalType === "Webcam"
+              ? { video: true }
+              : { screen: true }),
+          }}
+          modalType={queModelConfig.modalType}
           handleClose={() => {
             dispatch(
               setWebcamModelConfig({
@@ -212,6 +219,24 @@ const FlowCanvas = () => {
                   : e
               )
             );
+          }}
+          onConnect={(connection) => {
+            console.log("connection", connection);
+            // connection contains source, target and other details
+            const { source, target } = connection;
+            console.log(`Connected node ${source} to node ${target}`);
+
+            // Here you can handle the connection logic, such as updating state, adding an edge, etc.
+            setEdges((prevEdges) => [
+              ...prevEdges,
+              {
+                id: `${source}-${target}`,
+                source,
+                target,
+                type: "bezier", // or any other edge type you want to use
+                animated: true,
+              },
+            ]);
           }}
           className="react_flow_canvas"
           nodeTypes={nodeTypes}

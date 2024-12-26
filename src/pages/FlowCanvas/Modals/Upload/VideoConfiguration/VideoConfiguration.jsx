@@ -98,7 +98,7 @@ function VideoConfiguration({
             <div
               className="replace-btn"
               onClick={() => {
-                if (modalType === "Webcam") {
+                if (["Webcam", "Screen"].includes(modalType)) {
                   dispatch(
                     setWebcamModelConfig({
                       isShow: true,
