@@ -1,0 +1,89 @@
+.ChatsFilter-modal {
+  .modal-dialog {
+    width: 100%;
+    max-width: none !important;
+    margin: 0px;
+    box-shadow: none;
+  }
+  .modal-container {
+    width: 800px;
+    height: 800px !important;
+    overflow: hidden;
+
+    .modal-body {
+      height: 85%;
+      //   background-color: aqua;
+      .filter-form {
+        width: 100%;
+        height: calc(100% - 30px);
+        overflow: auto;
+        padding: 0px 15px;
+        .filter-title {
+          font-size: 16px;
+          font-weight: 600;
+          margin: 40px 0px 20px 0px;
+          color: black;
+        }
+        .filter-option {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 15px;
+          padding: 0px 10px;
+          .input-label {
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(100, 100, 100);
+          }
+        }
+      }
+    }
+    .modal-footer {
+      width: 100%;
+      height: 15%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0px 30px;
+      .clear-btn {
+        font-size: 18px;
+        cursor: pointer;
+        text-decoration: underline;
+        color: rgba(100, 100, 100);
+        transition-duration: 0.3s;
+        transition-property: color;
+        user-select: none;
+        &:hover {
+          color: black;
+        }
+      }
+      .modal-footer-btn {
+        font-size: 16px;
+        font-weight: 500;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+      }
+      .cancel-btn {
+        color: rgba(50, 50, 50);
+        background: rgb(240, 240, 240);
+        transition-duration: 0.3s;
+        transition-property: background color;
+        &:hover {
+          color: black;
+          background: rgb(220, 220, 220);
+        }
+      }
+      .apply-btn {
+        color: rgb(255, 255, 255);
+        background: rgb(169, 123, 255);
+        transition-duration: 0.3s;
+        transition-property: background;
+        &:hover {
+          background: rgb(142, 81, 255);
+        }
+      }
+      //   background-color: rgb(68, 0, 255);
+    }
+  }
+}

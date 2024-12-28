@@ -109,7 +109,6 @@ function MediaLibrary() {
                     padding: "15px",
                     width: "200px !important",
                   }}
-                  disabled={true}
                   onClick={() => setIsUpload(true)}
                 >
                   <img

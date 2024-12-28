@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import ConversationsAnswer from "./ConversationsAnswer";
 import Share from "../../MyCollection/MyFolder/Share";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
+import ChatsFilter from "./ChatsFilter";
 
 function Conversations({
   id,
@@ -34,7 +35,7 @@ function Conversations({
   const [showCreateConversationModal, setShowCreateConversationModal] =
     useState(false);
   const [shareUrl, setShareUrl] = useState("");
-
+  const [openFilter, setOpenFilter] = useState(false);
   useEffect(() => {
     if (selectedType) {
       if (
@@ -88,6 +89,7 @@ function Conversations({
         handleClose={() => setShareUrl("")}
         shareUrl={shareUrl}
       />
+      <ChatsFilter show={openFilter} onHide={() => setOpenFilter(false)} />
       <div
         className="Conversations-container"
         style={
@@ -216,13 +218,15 @@ function Conversations({
                     className="fit-image hover-icons-effect w-18"
                   />
                 </div>
-                <div className="w-24 h-24 f-center">
+                <div
+                  className="w-24 h-24 f-center"
+                  onClick={() => setOpenFilter(true)}
+                >
                   <img
                     src={icons.control_menu}
                     alt=""
                     className="fit-image hover-icons-effect w-18"
                   />
-                  {/* Chats */}
                 </div>
               </div>
             </div>
@@ -285,18 +289,15 @@ function Conversations({
                           </div>
                           <div style={{ padding: "5px", paddingLeft: "15px" }}>
                             <div
-                              className="pb-5 text-16-600 w-250"
+                              className="pb-5 text-16-600"
                               style={{
                                 color: isActive ? "white" : "#1B2559",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
                                 padding: "0px",
                                 margin: "0px",
                               }}
                             >
                               {contact_id
-                                ? contact_details?.contact_email
+                                ? contact_details?.contact_email.split("@")[0]
                                 : "Anonymous"}
                             </div>
                             <div

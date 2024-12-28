@@ -4,9 +4,6 @@ import { Promptalert } from "./components";
 import AuthRoute from "./routes/AuthRoute";
 import { getDataFromLocalStorage } from "./utils/helpers";
 import UserRoute from "./routes/UserRoute";
-import { useEffect } from "react";
-import { api } from "./services/api";
-import { setProfileData } from "./store/globalSlice";
 
 function App() {
   // eslint-disable-next-line no-unused-vars

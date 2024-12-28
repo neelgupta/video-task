@@ -1,14 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./MediaLibrary.scss";
 import { Button, Modal } from "react-bootstrap";
 import { icons } from "../../../../../utils/constants";
 import { VideoUpload } from "../../../../../components";
+import { useDispatch } from "react-redux";
+import { throwError } from "../../../../../store/globalSlice";
 
 function UploadMedia({ onHide, show, isEdit }) {
+  const [videoFile, setVideoFile] = useState(null);
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({
+    file: null,
+    title: "",
+    descriptions: "",
+  });
+  useEffect(() => {
+    console.log("form", form);
+  }, [form]);
+  const isFormValid = (value) => {
+    if (!value.file) {
+      dispatch(throwError("file required"));
+      return false;
+    }
+    if (!value.title) {
+      dispatch(throwError("title required"));
+      return false;
+    }
+    if (!value.descriptions) {
+      dispatch(throwError("Descriptions required"));
+      return false;
+    }
+    return true;
+  };
+  const onSubmit = () => {
+    if (!isFormValid) {
+      return;
+    }
+  };
   return (
     <Modal onHide={onHide} show={show} centered className="UploadMedia-Model">
       <Modal.Body>
-        <div style={{ width: "600px" }}>
+        <div style={{ width: "600px" }} className="pt-15 ps-15 pe-15">
           <div
             style={{
               display: "flex",
@@ -31,7 +63,10 @@ function UploadMedia({ onHide, show, isEdit }) {
             Add new team members to collaborate and achieve your goals together.
           </div>
           <div className="mt-30">
-            <VideoUpload />
+            <VideoUpload
+              videoFile={form.file}
+              setFileValue={(file) => setForm({ ...form, file })}
+            />
             <div className="mt-20">
               <div
                 className="text-12-500 ps-5 pb-5"
@@ -44,6 +79,8 @@ function UploadMedia({ onHide, show, isEdit }) {
                   className="input wp-100"
                   type="text"
                   name="Title"
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
                   id="Title"
                   placeholder="Title"
                 />
@@ -63,8 +100,12 @@ function UploadMedia({ onHide, show, isEdit }) {
                   name="Title"
                   id="Title"
                   placeholder="Descriptions"
-                  rows={6}
-                  //   style={{ resize: "none" }}
+                  rows={4}
+                  value={form.descriptions}
+                  onChange={(e) =>
+                    setForm({ ...form, descriptions: e.target.value })
+                  }
+                  style={{ resize: "none" }}
                 />
               </div>
             </div>
@@ -98,6 +139,7 @@ function UploadMedia({ onHide, show, isEdit }) {
                 border: "none",
                 borderRadius: "5px",
               }}
+              onClick={onSubmit}
               className="text-14-500 w-150 p-10 ms-10"
             >
               {isEdit ? "Update" : "Create"}
