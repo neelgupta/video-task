@@ -3,6 +3,7 @@ import styles from "./Contacts.module.scss";
 import RecentContacts from "./RecentContacts";
 import Favourites from "./Favourites";
 import AllContacts from "./AllContacts";
+import { useSelector } from "react-redux";
 
 const Contacts = () => {
   const [selectedTab, setSelectedTab] = useState(1);
@@ -35,7 +36,7 @@ const Contacts = () => {
           Favourites
         </div>
       </div>
-      <div className="mt-20 ">
+      <div className={styles.contactListContainer + " mt-20"}>
         {selectedTab === 1 && <RecentContacts />}
         {selectedTab === 2 && <AllContacts />}
         {selectedTab === 3 && <Favourites />}
