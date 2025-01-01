@@ -31,16 +31,17 @@
         align-items: center;
         justify-content: space-between;
         box-shadow: 0px 4px 10px 0px #0000001a;
-        padding: 5px;
+        // padding-top: 10px;
         border-radius: 10px;
         color: white;
+        position: relative;
       }
     }
   }
   .Interactions-body {
     // border: 1px solid black;
+    position: relative;
     box-shadow: 0px 4px 10px 0px #0000001a;
-    width: 100%;
     border-radius: 10px;
 
     .Interactions-header {
@@ -68,33 +69,55 @@
       .meting-card-body {
         display: flex;
         .meting-card {
-          height: 150px;
+          height: 140px;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-direction: column;
           cursor: pointer;
-          margin: 0px 20px;
+          margin: 0px 10px;
           margin-bottom: 5px;
-          .img-btn {
-            position: absolute;
-            // width: 100%;
-            bottom: 0px;
-            height: 40%;
-            background: linear-gradient(
-              0deg,
-              #000000 -43.48%,
-              rgba(0, 0, 0, 0) 76.09%
-            );
+          .node-thumbnail-box {
+            height: 100px;
+            width: 100px;
+            position: relative;
             display: flex;
+            overflow: hidden;
             align-items: center;
             justify-content: center;
-            // background-color: gray;
-            div {
-              padding: 5px 10px;
-              border-radius: 20px;
-              background: #0000004d;
-              color: white;
+            border-radius: 10px;
+            img {
+              width: 100%;
+              height: 100%;
+              background-repeat: no-repeat;
+              object-fit: cover;
+              transform: scale(1);
+              transition-duration: 0.3s;
+              transition-property: transform;
+            }
+            &:hover {
+              img {
+                transform: scale(1.15);
+              }
+            }
+            .img-btn {
+              position: absolute;
+              bottom: 0px;
+              height: 40%;
+              background: linear-gradient(
+                0deg,
+                #000000 -43.48%,
+                rgba(0, 0, 0, 0) 76.09%
+              );
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              div {
+                padding: 5px 10px;
+                border-radius: 20px;
+                background: #0000004d;
+                color: white;
+              }
             }
           }
         }

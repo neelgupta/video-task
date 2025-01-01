@@ -3,11 +3,9 @@ import styles from "./Contacts.module.scss";
 import RecentContacts from "./RecentContacts";
 import Favourites from "./Favourites";
 import AllContacts from "./AllContacts";
-import { useSelector } from "react-redux";
 
 const Contacts = () => {
   const [selectedTab, setSelectedTab] = useState(1);
-
   return (
     <div className={styles.ContactsContainer}>
       <div className={styles.ContactsMenuTab}>

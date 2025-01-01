@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./ContactCard.module.scss";
 import { icons } from "../../../utils/constants";
 import { useNavigate } from "react-router-dom";
-import AddEditContactModal from "./RecentContacts/AddEditContactModal";
+import AddEditContactModal from "./AddEditContactModal/AddEditContactModal";
 import DeleteModal from "../../../components/layouts/DeleteModal";
 import { creteImgFilter, getColorFromLetter } from "../../../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,8 +13,7 @@ import {
 } from "../../../store/globalSlice";
 import { api } from "../../../services/api";
 
-const ContactCard = ({ contact, isFavorite, fetchContact }) => {
-  console.log("contact", contact);
+const ContactCard = ({ contact, onEdit, fetchContact }) => {
   const reduxData = useSelector((state) => state.global);
   const { selectedOrganizationId } = reduxData;
   const dispatch = useDispatch();
@@ -112,7 +111,7 @@ const ContactCard = ({ contact, isFavorite, fetchContact }) => {
           <div
             className={` d-flex gap-2 align-items-center pointer`}
             onClick={() => {
-              setIsShowAddEditModal(true);
+              onEdit(contact);
             }}
           >
             <div>

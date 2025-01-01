@@ -4,105 +4,137 @@ import "./Dashboard.scss";
 import { Button, CheckBox, Table } from "../../../components";
 import { useEffect, useState } from "react";
 import { creteImgFilter } from "../../../utils/helpers";
+import { api } from "../../../services/api";
+const header = [
+  {
+    title: <CheckBox className="s-18" />,
+    className: "wp-5 justify-content-center color-darkText text-16-600",
+  },
+  {
+    title: "Name",
+    className: "wp-15 color-darkText text-16-600",
+  },
+  {
+    title: "Created",
+    className: "wp-15 color-darkText text-16-600",
+  },
+  {
+    title: "Landed",
+    className: "wp-10 justify-content-center color-darkText text-16-600",
+  },
+  {
+    title: "Contacts collected",
+    className: "wp-15 justify-content-center color-darkText text-16-600",
+  },
+
+  {
+    title: "Total interactions",
+    className: "wp-15 justify-content-center color-darkText text-16-600",
+  },
+  {
+    title: "View All",
+    className: "wp-10 justify-content-center color-darkText text-16-600",
+  },
+  {
+    title: "Action",
+    className: "wp-15 justify-content-center color-darkText text-16-600",
+  },
+];
+
+const data = [
+  {
+    name: "Analysis Name",
+    created: "21.03.2021",
+    landed: "1",
+    contacts_collected: "1",
+    interactions: "2",
+  },
+  {
+    name: "Analysis Name",
+    created: "21.03.2021",
+    landed: "1",
+    contacts_collected: "1",
+    interactions: "2",
+  },
+  {
+    name: "Analysis Name",
+    created: "21.03.2021",
+    landed: "1",
+    contacts_collected: "1",
+    interactions: "2",
+  },
+  {
+    name: "Analysis Name",
+    created: "21.03.2021",
+    landed: "1",
+    contacts_collected: "1",
+    interactions: "2",
+  },
+  {
+    name: "Analysis Name",
+    created: "21.03.2021",
+    landed: "1",
+    contacts_collected: "1",
+    interactions: "2",
+  },
+];
+const dashboardCard = [
+  {
+    title: "Total Landed",
+    value: "landed",
+    count: 0,
+    icon: icons.eyeVisible,
+    minWidth: "300",
+  },
+  {
+    title: "Total Completed",
+    count: 0,
+    icon: icons.checkVerified,
+    minWidth: "300",
+    value: "completed",
+  },
+  {
+    title: "Contacts collected",
+    count: 0,
+    icon: icons.usersOutline,
+    minWidth: "330",
+    value: "contacts_collected",
+  },
+];
 function Dashboard() {
   const reduxData = useSelector((state) => state.global);
-  const { isResponsive, themeColor, profileData } = reduxData;
+  const { isResponsive, themeColor, profileData, selectedOrganizationId } =
+    reduxData;
   const [tabIndex, setTabIndex] = useState(1);
+  const [userUsesCard, setUserUsesCard] = useState(dashboardCard);
 
-  const header = [
-    {
-      title: <CheckBox className="s-18" />,
-      className: "wp-5 justify-content-center color-darkText text-16-600",
-    },
-    {
-      title: "Name",
-      className: "wp-15 color-darkText text-16-600",
-    },
-    {
-      title: "Created",
-      className: "wp-15 color-darkText text-16-600",
-    },
-    {
-      title: "Landed",
-      className: "wp-10 justify-content-center color-darkText text-16-600",
-    },
-    {
-      title: "Contacts collected",
-      className: "wp-15 justify-content-center color-darkText text-16-600",
-    },
+  const getCount = async () => {
+    try {
+      const res = await api.get(
+        `dashboard/dashboard-count/${selectedOrganizationId}`
+      );
+      if (res.status === 200) {
+        const data = res.data.response;
+        const newArray = userUsesCard.map((ele) => {
+          return {
+            ...ele,
+            count: data[ele.value],
+          };
+        });
+        setUserUsesCard(newArray);
+      }
+      console.log("res", res);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
-    {
-      title: "Total interactions",
-      className: "wp-15 justify-content-center color-darkText text-16-600",
-    },
-    {
-      title: "View All",
-      className: "wp-10 justify-content-center color-darkText text-16-600",
-    },
-    {
-      title: "Action",
-      className: "wp-15 justify-content-center color-darkText text-16-600",
-    },
-  ];
-
-  const data = [
-    {
-      name: "Analysis Name",
-      created: "21.03.2021",
-      landed: "1",
-      contacts_collected: "1",
-      interactions: "2",
-    },
-    {
-      name: "Analysis Name",
-      created: "21.03.2021",
-      landed: "1",
-      contacts_collected: "1",
-      interactions: "2",
-    },
-    {
-      name: "Analysis Name",
-      created: "21.03.2021",
-      landed: "1",
-      contacts_collected: "1",
-      interactions: "2",
-    },
-    {
-      name: "Analysis Name",
-      created: "21.03.2021",
-      landed: "1",
-      contacts_collected: "1",
-      interactions: "2",
-    },
-    {
-      name: "Analysis Name",
-      created: "21.03.2021",
-      landed: "1",
-      contacts_collected: "1",
-      interactions: "2",
-    },
-  ];
-
-  const userUsesCard = [
-    {
-      title: "Total Landed",
-      count: 5000,
-      icon: icons.eyeVisible,
-      minWidth: "300",
-    },
-    {
-      title: "Total Completed",
-      count: 50,
-      icon: icons.checkVerified,
-      minWidth: "300",
-    },
-    {
-      title: "Contacts collected",
-      count: 50,
-      icon: icons.usersOutline,
-      minWidth: "330",
-    },
-  ];
+  useEffect(() => {
+    if (selectedOrganizationId) {
+      getCount();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrganizationId]);
 
   const rowData = [];
   data?.forEach((elem) => {
@@ -187,8 +219,8 @@ function Dashboard() {
           </strong>
         </h5>
         <p className="text-19-400">
-          {`Here's an overview of your stats for the last`}
-          <strong className="text-19-600">30</strong> days
+          {`Here's an overview of your stats for the last `}
+          <strong className="text-19-600">All</strong> days
         </p>
       </div>
       <div className="big-card-body container-fluid row">

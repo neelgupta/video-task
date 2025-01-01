@@ -300,7 +300,7 @@ function Overview() {
             >
               Button Border Radius
             </div>
-            <div className="w-300 InputBox">
+            <div className="w-300 flow-ai-input p-10">
               <input
                 disabled={isChange === "Border radius"}
                 value={form.border_radius}

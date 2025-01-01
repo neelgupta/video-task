@@ -59,7 +59,7 @@ function AssetAllocation() {
     if (selectedTab === 1) {
       fetchAllConversationsAnswer();
     }
-    fetchAllResultAnswer();
+    if (selectedTab === 2) fetchAllResultAnswer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab]);
 

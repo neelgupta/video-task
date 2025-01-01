@@ -92,19 +92,12 @@ const CreateFolderModal = ({
             <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
               Folder Name
             </div>
-            <div>
+            <div className="flow-ai-input">
               <input
                 type="text"
                 value={folderName}
                 onChange={(e) => setFolderName(e.target.value)}
-                className="form-control rounded-3"
                 placeholder="Enter Folder Name"
-                style={{
-                  width: "100%",
-                  padding: "13px",
-                  fontSize: "14px",
-                  border: "1px solid #CCCCCC",
-                }}
               />
             </div>
           </div>

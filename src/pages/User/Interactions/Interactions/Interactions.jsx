@@ -1,12 +1,19 @@
 /* eslint-disable react/display-name */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Interactions.scss";
 import { icons } from "../../../../utils/constants";
-import { creteImgFilter } from "../../../../utils/helpers";
+import { creteImgFilter, getColorFromLetter } from "../../../../utils/helpers";
 import { interactionsData } from "./constants";
 import { Dropdown } from "react-bootstrap";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handelCatch, throwError } from "../../../../store/globalSlice";
+import { api } from "../../../../services/api";
+import dayjs from "dayjs";
+import InteractionsChatCard from "./InteractionsChatCard";
+import ConversationsAnswer from "../../AssetAllocation/Conversations/ConversationsAnswer";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -21,15 +28,13 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-const InteractionFilter = () => {
-  const [selectedFilter, setSelectedFilter] = useState("All Unread");
-
+const InteractionFilter = ({ setSelectedFilter, selectedFilter }) => {
   const filterOptions = [
-    { label: "All Unread", value: "All Unread" },
-    { label: "This Week", value: "This Week" },
-    { label: "Previous Week", value: "Previous Week" },
-    { label: "This Month", value: "This Month" },
-    { label: "Previous Month", value: "Previous Month" },
+    { label: "All", value: "all" },
+    { label: "This Week", value: "thisWeek" },
+    { label: "Previous Week", value: "previousWeek" },
+    { label: "This Month", value: "thisMonth" },
+    { label: "Previous Month", value: "previousMonth" },
   ];
 
   const handleFilterChange = (filter) => {
@@ -51,8 +56,19 @@ const InteractionFilter = () => {
           <React.Fragment key={option.value}>
             <Dropdown.Item
               onClick={() => handleFilterChange(option.value)}
-              active={selectedFilter === option.value}
               className="text-14-500"
+              style={
+                selectedFilter === option.value
+                  ? {
+                      fontWeight: "bold",
+                      color: "#fff",
+                      backgroundColor: "#7c5bff",
+                    }
+                  : {
+                      backgroundColor: "#fff",
+                      color: "#000",
+                    }
+              }
             >
               {option.label}
             </Dropdown.Item>
@@ -71,86 +87,75 @@ const InteractionFilter = () => {
   );
 };
 
-const InteractionMenu = ({
-  isSelected,
-  setShowDeleteModal,
-  setChatToDelete,
-}) => {
-  const filterOptions = [
-    { label: "Mark as unread", value: "Mark as unread" },
-    { label: "Send a Video reply", value: "Send a Video reply" },
-    { label: "Send an e-mail", value: "Send an e-mail" },
-    { label: "Go to contact", value: "Go to contact" },
-    {
-      label: "Delete Conversation",
-      value: "Delete Conversation",
-    },
-  ];
-
-  const handleFilterChange = (filter) => {
-    //TODO : Do the stuffs
-    if (filter === "Delete Conversation") {
-      setShowDeleteModal(true);
-      setChatToDelete(123);
-    }
-  };
-
-  return (
-    <Dropdown>
-      <Dropdown.Toggle as={CustomToggle}>
-        <img
-          src={icons.three_dots}
-          alt=""
-          className="fit-image"
-          style={{
-            filter: creteImgFilter(isSelected ? "#ffffff" : "#8C8E90"),
-          }}
-        />
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu>
-        {filterOptions.map((option, idx) => (
-          <React.Fragment key={option.value}>
-            <Dropdown.Item
-              onClick={() => handleFilterChange(option.value)}
-              className="text-14-500"
-            >
-              {option.label}
-            </Dropdown.Item>
-
-            {(idx === 0 || idx == filterOptions.length - 2) && (
-              <Dropdown.Divider
-                style={{
-                  margin: "0.5rem 1rem",
-                }}
-              />
-            )}
-          </React.Fragment>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-};
-
 function Interactions() {
+  const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
   // eslint-disable-next-line no-unused-vars
-  const { isResponsive, themeColor } = reduxData;
+  const { isResponsive, themeColor, selectedOrganizationId } = reduxData;
   const [interactions, setInteractions] = useState(interactionsData);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
+  const [selectMetingCard, setSelectMetingCard] = useState(null);
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [isLoad, setIsLoad] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+  const selectedFilterTitleList = {
+    all: ["This week", "Previous week"],
+    thisWeek: ["This Week"],
+    previousWeek: ["Previous Week"],
+    thisMonth: ["This Month"],
+    previousMonth: ["Previous Month"],
+  };
 
-  const handleSelectInteraction = (id) => {
-    setInteractions((prevInteraction) =>
-      prevInteraction.map((interaction) =>
-        interaction.id === id
-          ? { ...interaction, isSelected: true }
-          : { ...interaction, isSelected: false }
-      )
+  const isDateInCurrentWeek = (dateString) => {
+    const givenDate = dayjs(dateString);
+    const today = dayjs();
+
+    const startOfWeek = today.startOf("week");
+    const endOfWeek = today.endOf("week");
+
+    return (
+      (givenDate.isAfter(startOfWeek) && givenDate.isBefore(endOfWeek)) ||
+      givenDate.isSame(startOfWeek, "day") ||
+      givenDate.isSame(endOfWeek, "day")
     );
   };
 
-  const [selectMetingCard, setSelectMetingCard] = useState(1);
+  const fetchAllInteraction = async () => {
+    setIsLoad(false);
+    try {
+      const res = await api.get(
+        `interactions/get-all-interaction-answers/${selectedOrganizationId}/${selectedFilter}`
+      );
+      if (res.status === 200) {
+        const data = res.data.response.map((ele) => {
+          const { createdAt } = ele;
+          return { ...ele, isCurrentWeek: isDateInCurrentWeek(createdAt) };
+        });
+        setInteractions(data);
+        setSelectedContact(data.find((ele) => ele.isCurrentWeek));
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsLoad(true);
+  };
+
+  useEffect(() => {
+    if (selectedFilter) {
+      fetchAllInteraction();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFilter]);
+
+  useEffect(() => {
+    if (selectedContact) {
+      setSelectMetingCard(selectedContact?.answers?.[0]);
+    }
+  }, [selectedContact]);
 
   return (
     <>
@@ -162,7 +167,7 @@ function Interactions() {
       >
         <div
           className={`Interactions-sidebar ${
-            isResponsive ? "wp-100" : "w-300"
+            isResponsive ? "wp-100" : "w-400"
           }`}
         >
           <div className="recent-chats">
@@ -180,223 +185,252 @@ function Interactions() {
               </div>
 
               <div className="w-24 h-24 f-center">
-                <InteractionFilter />
+                <InteractionFilter
+                  setSelectedFilter={setSelectedFilter}
+                  selectedFilter={selectedFilter}
+                />
               </div>
             </div>
-            <div style={{ padding: "5px" }}>
-              <div className="color-darkText text-14-600">This week</div>
-            </div>
+
             <div
               className="p-5 pt-20  auri-scroll list"
-              style={
-                isResponsive
-                  ? { height: "400px" }
-                  : { height: "calc(100vh - 250px)" }
-              }
+              style={{ height: isResponsive ? "400px" : "calc(100vh - 200px)" }}
             >
-              {interactions.map((ele, index) => {
-                const { isSelected, isCurrentWeek } = ele;
-                return (
-                  isCurrentWeek && (
-                    <div
-                      className="chat_card mb-20 pointer"
-                      key={index}
-                      onClick={() => handleSelectInteraction(ele.id)}
-                      style={{ background: isSelected ? "#b19eff" : "white" }}
-                    >
-                      <div className="d-flex ps-30">
-                        <div
-                          className="w-50 h-50 rounded-circle f-center"
-                          style={{ overflow: "hidden" }}
-                        >
-                          <img
-                            src={icons.avatar5}
-                            alt="avatar"
-                            className="fit-image "
-                          />
-                        </div>
-                        <div style={{ padding: "5px", paddingLeft: "10px" }}>
-                          <div
-                            className="pb-5 text-14-500"
-                            style={{ color: isSelected ? "white" : "#1B2559" }}
-                          >
-                            {ele.name}
-                          </div>
-                          <div
-                            className="text-12-500"
-                            style={{ color: isSelected ? "white" : "#8C8E90" }}
-                          >
-                            {ele.mobile}
-                          </div>
+              {selectedFilterTitleList[selectedFilter].map(
+                (title, weekIndex) => {
+                  const filterData = (ele) => {
+                    if (selectedFilter === "all") {
+                      if (ele.isCurrentWeek === (weekIndex === 0)) {
+                        return ele;
+                      }
+                    } else {
+                      return ele;
+                    }
+                  };
+                  return (
+                    <div key={weekIndex}>
+                      <div style={{ padding: "5px" }}>
+                        <div className="color-darkText text-14-600">
+                          {title}
                         </div>
                       </div>
-                      <div
-                        style={{
-                          width: "30px",
-                          height: "60px",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <div className="w-24 h-24">
-                          <InteractionMenu
-                            isSelected={isSelected}
-                            showDeleteModal={showDeleteModal}
-                            setShowDeleteModal={setShowDeleteModal}
-                            setChatToDelete={setChatToDelete}
-                          />
+                      {isLoad ? (
+                        <>
+                          {interactions.filter(filterData).map((ele, index) => {
+                            const { contact_id, contact_details, _id } = ele;
+                            const isActive = selectedContact?._id === _id;
+                            const bgColor = isActive ? "#b19eff" : "white";
+                            const textColor = isActive ? "white" : "#1B2559";
+                            const subTextColor = isActive ? "white" : "#8C8E90";
+
+                            return (
+                              <InteractionsChatCard
+                                key={index}
+                                ele={ele}
+                                subTextColor={subTextColor}
+                                contact_id={contact_id}
+                                contact_details={contact_details}
+                                bgColor={bgColor}
+                                isActive={isActive}
+                                textColor={textColor}
+                                onSelectChat={() => setSelectedContact(ele)}
+                              />
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <div>
+                          <SkeletonTheme>
+                            {weekIndex === 0 ? (
+                              <>
+                                <Skeleton
+                                  height={60}
+                                  borderRadius={10}
+                                  count={selectedFilter === "all" ? 2 : 20}
+                                  style={{ marginBottom: "10px" }}
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <Skeleton
+                                  height={60}
+                                  borderRadius={10}
+                                  count={15}
+                                  style={{ marginBottom: "10px" }}
+                                />
+                              </>
+                            )}
+                          </SkeletonTheme>
                         </div>
-                        <div
-                          style={{ color: isSelected ? "white" : "#8C8E90" }}
-                        >
-                          {ele.timeAgo}
-                        </div>
-                      </div>
+                      )}
                     </div>
-                  )
-                );
-              })}
-              <div style={{ padding: "5px" }}>
-                <div className="color-darkText text-14-600">Previous week</div>
-              </div>
-              {interactions.map((ele, index) => {
-                const { isSelected, isCurrentWeek } = ele;
-                return (
-                  !isCurrentWeek && (
-                    <div
-                      className="chat_card mb-20 pointer"
-                      key={index}
-                      onClick={() => handleSelectInteraction(ele.id)}
-                      style={{ background: isSelected ? "#b19eff" : "white" }}
-                    >
-                      <div className="d-flex ps-30">
-                        <div
-                          className="w-50 h-50 rounded-circle f-center"
-                          style={{ overflow: "hidden" }}
-                        >
-                          <img
-                            src={icons.avatar5}
-                            alt="avatar"
-                            className="fit-image "
-                          />
-                        </div>
-                        <div style={{ padding: "5px", paddingLeft: "10px" }}>
-                          <div
-                            className="pb-5 text-14-500"
-                            style={{ color: isSelected ? "white" : "#1B2559" }}
-                          >
-                            {ele.name}
-                          </div>
-                          <div
-                            className="text-12-500"
-                            style={{ color: isSelected ? "white" : "#8C8E90" }}
-                          >
-                            {ele.mobile}
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          width: "30px",
-                          height: "60px",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <div className="w-24 h-24">
-                          <InteractionMenu isSelected={isSelected} />
-                        </div>
-                        <div
-                          style={{ color: isSelected ? "white" : "#8C8E90" }}
-                        >
-                          {ele.timeAgo}
-                        </div>
-                      </div>
-                    </div>
-                  )
-                );
-              })}
+                  );
+                }
+              )}
             </div>
           </div>
         </div>
         <div
           className="Interactions-body"
-          style={isResponsive ? { marginTop: "20px" } : {}}
+          style={
+            isResponsive
+              ? { marginTop: "20px", width: "100%" }
+              : { width: "calc(100% - 410px)" }
+          }
         >
-          <div className="h-90 Interactions-header">
-            <div className="f-center">
-              <div className="w-79 h-69 profile-img">
-                <img src={icons.avatar7} alt="" className="fit-image" />
-              </div>
-              <div className="text-18-600 color-darkText ms-10">
-                QnA Flow-Flow 2
-              </div>
-            </div>
-            <div className="icon-group">
-              <div className="w-20 h-20">
-                <img
-                  src={icons.edit}
-                  alt=""
-                  className="fit-image hover-icons-effect"
-                />
-              </div>
-              <div className="w-20 h-20">
-                <img
-                  src={icons.teg_svg}
-                  alt=""
-                  className="fit-image hover-icons-effect"
-                />
-              </div>
-              <div className="w-20 h-20">
-                <img
-                  src={icons.exportPng}
-                  alt=""
-                  className="fit-image hover-icons-effect"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            className="Interactions-content"
-            style={isResponsive ? { height: "500px" } : {}}
-          ></div>
-          <div className="Interactions-footer">
-            <div className="meting-card-body">
-              {[1, 2, 3].map((ele, index) => {
-                const isActive = selectMetingCard === ele;
-                return (
+          {isLoad ? (
+            <>
+              <div className="h-90 Interactions-header">
+                <div className="f-center">
                   <div
-                    className="meting-card"
-                    key={index}
-                    onClick={() => setSelectMetingCard(ele)}
-                    style={
-                      isActive
-                        ? {
-                            borderBottom: "3px solid blue",
-                          }
-                        : {}
-                    }
+                    className="w-50 h-50 rounded-circle f-center"
+                    style={{
+                      overflow: "hidden",
+                      color: "white",
+                      backgroundColor: selectedContact?.contact_id
+                        ? getColorFromLetter(
+                            selectedContact.contact_details?.contact_email?.charAt(
+                              0
+                            ) || ""
+                          )
+                        : "#1B2559",
+                    }}
                   >
-                    <div className="w-100" style={{ position: "relative" }}>
-                      <img src={icons.avatar8} alt="" className="fit-image" />
-                      <div className="img-btn w-100">
-                        <div className="text-12-500">Jacob</div>
-                      </div>
+                    <div
+                      className="w-50 h-50 f-center text-22-800"
+                      style={{
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {(selectedContact?.contact_id
+                        ? selectedContact.contact_details?.contact_email?.charAt(
+                            0
+                          ) || ""
+                        : "A"
+                      )
+                        .toString()
+                        .toUpperCase()}
                     </div>
-                    {isActive && (
-                      <div className="text-11-500 color-darkText m-0 p-0 mt-10">
-                        29 OCT 24 | 09:36
-                      </div>
-                    )}
                   </div>
-                );
-              })}
+                  <div className="text-18-600 color-darkText ms-10">
+                    {selectedContact?.contact_id
+                      ? selectedContact.contact_details?.contact_email
+                      : "Anonymous"}
+                  </div>
+                </div>
+                <div className="icon-group">
+                  <div className="w-20 h-20">
+                    <img
+                      src={icons.edit}
+                      alt=""
+                      className="fit-image hover-icons-effect"
+                    />
+                  </div>
+                  <div className="w-20 h-20">
+                    <img
+                      src={icons.teg_svg}
+                      alt=""
+                      className="fit-image hover-icons-effect"
+                    />
+                  </div>
+                  <div className="w-20 h-20">
+                    <img
+                      src={icons.exportPng}
+                      alt=""
+                      className="fit-image hover-icons-effect"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                className="Interactions-content"
+                style={isResponsive ? { height: "500px" } : {}}
+              >
+                <ConversationsAnswer
+                  selectMetingCard={{ ...selectMetingCard }}
+                />
+              </div>
+              <div className="Interactions-footer auri-scroll">
+                <div className="meting-card-body">
+                  {selectedContact?.answers?.length > 0 &&
+                    selectedContact?.answers.map((ele, index) => {
+                      console.log("ele", ele);
+                      const isActive = selectMetingCard?._id === ele?._id;
+                      const { nodeDetails } = ele;
+                      return (
+                        <div
+                          className="meting-card"
+                          key={index}
+                          onClick={() => setSelectMetingCard(ele)}
+                          style={
+                            isActive
+                              ? {
+                                  borderBottom: "3px solid #b19eff",
+                                }
+                              : {}
+                          }
+                        >
+                          <div className="node-thumbnail-box">
+                            <img
+                              src={nodeDetails?.video_thumbnail}
+                              alt=""
+                              className=""
+                            />
+                            <div className="img-btn wp-100">
+                              <div
+                                className="text-12-600"
+                                style={{ textTransform: "capitalize" }}
+                              >
+                                {nodeDetails?.title || ""}
+                              </div>
+                            </div>
+                          </div>
+
+                          {isActive && (
+                            <>
+                              <div className="text-11-500 color-darkText m-0 p-0 mt-5">
+                                {dayjs(nodeDetails.createdAt).format(
+                                  "DD MMM YYYY | HH:mm"
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div
+              style={{
+                position: "absolute",
+                zIndex: "1000",
+                top: "0px",
+                left: "0px",
+                width: "100%",
+                height: "105%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "white",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <LoaderCircle size={150} />
+                <div className="text-18-600 mt-10" style={{ color: "#1B2559" }}>
+                  We are getting things ready...
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <DeleteModal

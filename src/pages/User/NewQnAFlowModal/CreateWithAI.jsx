@@ -137,16 +137,11 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
           <div className="bodyContainer">
             <div className="form-items">
               <div className="text-16-500 mb-5">Title</div>
-              <div>
+              <div className="flow-ai-input">
                 <input
                   type="text"
-                  className="form-control rounded-3"
+                  className=""
                   placeholder="Name your Flow AI"
-                  style={{
-                    width: "100%",
-                    padding: "0.5rem",
-                    fontSize: "14px",
-                  }}
                   required
                   name="title"
                   value={form.title}

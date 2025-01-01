@@ -4,7 +4,7 @@ import { icons } from "../../../../utils/constants";
 import styles from "./RecentContact.module.scss";
 import { Button } from "react-bootstrap";
 import ContactCard from "../ContactCard";
-import AddEditContactModal from "./AddEditContactModal";
+import AddEditContactModal from "../AddEditContactModal";
 import { useDispatch, useSelector } from "react-redux";
 import { api } from "../../../../services/api";
 import { handelCatch, throwError } from "../../../../store/globalSlice";
@@ -16,8 +16,10 @@ const RecentContacts = () => {
   const { selectedOrganizationId } = reduxData;
   const [isShowAddEditModal, setIsShowAddEditModal] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
+  const [editContact, setEditContact] = useState({});
   const [contacts, setContacts] = useState([]);
   const [contactsCount, setContactsCount] = useState(0);
+  const [isEdit, setIsEdit] = useState(false);
   const fetchRecentContact = async () => {
     setIsLoad(false);
     try {
@@ -41,14 +43,41 @@ const RecentContacts = () => {
     if (selectedOrganizationId) fetchRecentContact();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrganizationId]);
+
+  const handleEdit = (value) => {
+    console.log("value", value);
+    setEditContact(value);
+    setIsEdit(true);
+    setIsShowAddEditModal(true);
+  };
   return (
     <>
       <div className={styles.contactContainer}>
+        {isShowAddEditModal && (
+          <AddEditContactModal
+            show={isShowAddEditModal}
+            handleClose={() => {
+              setEditContact(null);
+              setIsEdit(false);
+              setIsShowAddEditModal(false);
+            }}
+            selectedOrganizationId={selectedOrganizationId}
+            isEdit={isEdit}
+            editContact={editContact}
+            fetchContact={fetchRecentContact}
+          />
+        )}
         {isLoad && (
           <div>
             <div className={styles.headerContainer}>
               <div>{contactsCount} Contacts</div>
-              <Button onClick={() => setIsShowAddEditModal(true)}>
+              <Button
+                onClick={() => {
+                  setEditContact({});
+                  setIsEdit(false);
+                  setIsShowAddEditModal(true);
+                }}
+              >
                 <img alt="Add icon" src={icons.addContactIcon} />
                 Add
               </Button>
@@ -59,6 +88,7 @@ const RecentContacts = () => {
                   <ContactCard
                     contact={contact}
                     fetchContact={fetchRecentContact}
+                    onEdit={handleEdit}
                   />
                 </div>
               ))}
@@ -92,11 +122,6 @@ const RecentContacts = () => {
           </div>
         )}
       </div>
-      <AddEditContactModal
-        show={isShowAddEditModal}
-        handleClose={() => setIsShowAddEditModal(false)}
-        isEdit={false}
-      />
     </>
   );
 };

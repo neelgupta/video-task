@@ -4,7 +4,7 @@ import { icons } from "../../../../utils/constants";
 import styles from "./AllContacts.module.scss";
 import { Button } from "react-bootstrap";
 import ContactCard from "../ContactCard";
-import AddEditContactModal from "../RecentContacts/AddEditContactModal";
+import AddEditContactModal from "../AddEditContactModal";
 import { useDispatch, useSelector } from "react-redux";
 import { handelCatch, throwError } from "../../../../store/globalSlice";
 import { api } from "../../../../services/api";
@@ -18,7 +18,8 @@ const AllContacts = () => {
   const [contacts, setContacts] = useState([]);
   const [contactCount, setContactsCount] = useState(0);
   const [isLoad, setIsLoad] = useState(false);
-
+  const [isEdit, setIsEdit] = useState(false);
+  const [editContact, setEditContact] = useState(null);
   const fetchAllContact = async () => {
     setIsLoad(false);
     try {
@@ -45,17 +46,33 @@ const AllContacts = () => {
   }, [selectedOrganizationId]);
   return (
     <>
-      <AddEditContactModal
-        show={isShowAddEditModal}
-        handleClose={() => setIsShowAddEditModal(false)}
-        isEdit={false}
-      />
+      {isShowAddEditModal && (
+        <AddEditContactModal
+          show={isShowAddEditModal}
+          handleClose={() => {
+            setEditContact(null);
+            setIsEdit(false);
+            setIsShowAddEditModal(false);
+          }}
+          selectedOrganizationId={selectedOrganizationId}
+          isEdit={isEdit}
+          editContact={editContact}
+          fetchContact={fetchAllContact}
+        />
+      )}
+
       <div className={styles.contactContainer}>
         {isLoad && (
           <div>
             <div className={styles.headerContainer}>
               <div>{contactCount} Contacts</div>
-              <Button onClick={() => setIsShowAddEditModal(true)}>
+              <Button
+                onClick={() => {
+                  setEditContact(null);
+                  setIsEdit(false);
+                  setIsShowAddEditModal(true);
+                }}
+              >
                 <img alt="Add icon" src={icons.addContactIcon} />
                 Add
               </Button>
@@ -66,6 +83,11 @@ const AllContacts = () => {
                   <ContactCard
                     contact={contact}
                     fetchContact={fetchAllContact}
+                    onEdit={(value) => {
+                      setEditContact(value);
+                      setIsEdit(true);
+                      setIsShowAddEditModal(true);
+                    }}
                   />
                 </div>
               ))}

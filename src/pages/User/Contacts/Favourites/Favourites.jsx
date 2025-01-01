@@ -8,6 +8,7 @@ import { handelCatch, throwError } from "../../../../store/globalSlice";
 import { api } from "../../../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
+import AddEditContactModal from "../AddEditContactModal";
 
 const FavoriteContacts = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,11 @@ const FavoriteContacts = () => {
   const [isLoad, setIsLoad] = useState(false);
   const [contacts, setContacts] = useState([]);
   const [contactsCount, setContactsCount] = useState(0);
-  const fetchAllContact = async () => {
+  const [isEdit, setIsEdit] = useState(false);
+  const [editContact, setEditContact] = useState(null);
+  const [isShowAddEditModal, setIsShowAddEditModal] = useState(false);
+
+  const fetchFavoriteContact = async () => {
     setIsLoad(false);
     try {
       const res = await api.get(
@@ -36,11 +41,25 @@ const FavoriteContacts = () => {
   };
 
   useEffect(() => {
-    if (selectedOrganizationId) fetchAllContact();
+    if (selectedOrganizationId) fetchFavoriteContact();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrganizationId]);
   return (
     <div className={styles.contactContainer}>
+      {isShowAddEditModal && (
+        <AddEditContactModal
+          show={isShowAddEditModal}
+          handleClose={() => {
+            setEditContact(null);
+            setIsEdit(false);
+            setIsShowAddEditModal(false);
+          }}
+          selectedOrganizationId={selectedOrganizationId}
+          isEdit={isEdit}
+          editContact={editContact}
+          fetchContact={fetchFavoriteContact}
+        />
+      )}
       {isLoad && (
         <div>
           <div className={styles.headerContainer}>
@@ -49,7 +68,15 @@ const FavoriteContacts = () => {
           <div className={styles.tableWrapper}>
             {contacts.map((contact, idx) => (
               <div key={contact.id}>
-                <ContactCard contact={contact} fetchContact={fetchAllContact} />
+                <ContactCard
+                  contact={contact}
+                  fetchContact={fetchFavoriteContact}
+                  onEdit={(value) => {
+                    setEditContact(value);
+                    setIsEdit(true);
+                    setIsShowAddEditModal(true);
+                  }}
+                />
               </div>
             ))}
           </div>

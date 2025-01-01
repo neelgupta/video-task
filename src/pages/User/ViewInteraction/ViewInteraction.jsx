@@ -70,13 +70,6 @@ function ViewInteraction() {
     }
     setKey(index + 1);
   };
-  const handleBack = (index) => {
-    if (index === queNodes.length - 1) {
-      setKey("End");
-      return;
-    }
-    setKey(index + 1);
-  };
 
   const handleSubmitAns = async (index, node, ansValue) => {
     setIsPost(true);
@@ -346,7 +339,7 @@ function ViewInteraction() {
               width: "100%",
             }}
           >
-            <EndScreen />
+            <EndScreen answerId={answerId} />
           </div>
         </Tab>
       </Tabs>
