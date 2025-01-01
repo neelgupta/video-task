@@ -46,7 +46,7 @@ function Conversations({
         setSelectChat(contacts?.[0]?._id || "");
       } else if (
         results &&
-        results.length !== 0 &&
+        results?.length !== 0 &&
         selectedType === "Results"
       ) {
         setSelectChat(results?.[0]?._id || "");
@@ -57,7 +57,7 @@ function Conversations({
 
   useEffect(() => {
     if (selectedType === "Conversations") {
-      if (!selectChat || contacts.length === 0) return;
+      if (!selectChat || contacts?.length === 0) return;
 
       const findChat = contacts.find((ele) => ele._id === selectChat);
       if (findChat) {
@@ -68,7 +68,7 @@ function Conversations({
         dispatch(throwError("Chat not found."));
       }
     } else if (selectedType === "Results") {
-      if (!selectChat || results.length === 0) return;
+      if (!selectChat || results?.length === 0) return;
       console.log("results", results);
       const findChat = results.find((ele) => ele._id === selectChat);
       if (findChat) {
@@ -240,7 +240,7 @@ function Conversations({
               }
             >
               {selectedType === "Conversations" ? (
-                contacts.length > 0 ? (
+                contacts?.length > 0 ? (
                   contacts.map((ele, index) => {
                     const { contact_id, _id, contact_details, createdAt } = ele;
                     const isActive = _id === selectChat;
@@ -346,7 +346,7 @@ function Conversations({
                     </div>
                   </div>
                 )
-              ) : results.length > 0 ? (
+              ) : results?.length > 0 ? (
                 results.map((ele, index) => {
                   const { _id, video_thumbnail, title } = ele;
                   // const { contact_id, _id, contact_details, createdAt } = ele;
