@@ -1,0 +1,24 @@
+.AsianContactModalContainer {
+  .modal-content {
+    padding: 25px;
+    padding-bottom: 35px;
+    width: 100% !important;
+    .bodyContainer {
+      .form-items {
+        margin-bottom: 20px;
+      }
+    }
+    .modal-footer {
+      padding-top: 0px;
+      padding-bottom: 0px;
+
+      button {
+        &:nth-child(2) {
+          border: none;
+          color: #ffffff;
+          background: linear-gradient(90deg, #7c5bff 0%, #b3a1ff 100%);
+        }
+      }
+    }
+  }
+}

@@ -99,6 +99,9 @@ function AssetAllocation() {
             isLoad={isLoad}
             contacts={contacts}
             selectedType={"Conversations"}
+            fetchDataFunction={() => {
+              fetchAllConversationsAnswer();
+            }}
           />
         )}
         {selectedTab === 2 && (
@@ -108,6 +111,9 @@ function AssetAllocation() {
             isLoad={isLoad}
             results={results}
             selectedType={"Results"}
+            fetchDataFunction={() => {
+              fetchAllResultAnswer();
+            }}
           />
         )}
         {selectedTab === 3 && <Metrics />}

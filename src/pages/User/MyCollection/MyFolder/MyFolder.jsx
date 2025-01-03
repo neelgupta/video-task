@@ -71,6 +71,7 @@ function MyFolder() {
     }
     setShowDeleteModal(false);
     setIsDelete(false);
+    setDeleteId("");
   };
 
   const handleView = (ele) => {

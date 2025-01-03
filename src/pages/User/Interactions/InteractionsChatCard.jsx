@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
-import React, { useState } from "react";
-import { creteImgFilter, getColorFromLetter } from "../../../../utils/helpers";
+import React, { useEffect, useState } from "react";
+import { creteImgFilter, getColorFromLetter } from "../../../utils/helpers";
 import { Dropdown } from "react-bootstrap";
-import { icons } from "../../../../utils/constants";
+import { icons } from "../../../utils/constants";
 
 function InteractionsChatCard({
   subTextColor,
@@ -12,8 +12,57 @@ function InteractionsChatCard({
   isActive,
   textColor,
   onSelectChat,
+  setShowCreateContact,
+  setShowAssignContact,
+  onSelectMenuContact,
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  const [menuOption, setMenuOption] = useState([]);
+  useEffect(() => {
+    (() => {
+      setIsAnonymous(contact_id ? true : false);
+      setMenuOption(
+        contact_id
+          ? [
+              {
+                label: "Send a Video reply",
+                onClick: () => {},
+                isDisabled: false,
+              },
+              {
+                label: "Send an e-mail",
+                onClick: () => {},
+                isDisabled: false,
+              },
+              {
+                label: "Go to contact",
+                onClick: () => {},
+                isDisabled: false,
+              },
+            ]
+          : [
+              {
+                label: "Create new contact",
+                onClick: () => {
+                  setShowCreateContact(true);
+                  onSelectMenuContact();
+                },
+                isDisabled: false,
+              },
+              {
+                label: "Assign contact",
+                onClick: () => {
+                  setShowAssignContact(true);
+                  onSelectMenuContact();
+                },
+                isDisabled: false,
+              },
+            ]
+      );
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contact_id]);
   return (
     <div className="chat_card mb-20 pointer" style={{ background: bgColor }}>
       <div className="d-flex wp-100 hp-100 p-10" onClick={() => onSelectChat()}>
@@ -85,6 +134,7 @@ function InteractionsChatCard({
             showDeleteModal={showDeleteModal}
             setShowDeleteModal={setShowDeleteModal}
             setChatToDelete={() => {}}
+            menuOption={menuOption}
           />
         </div>
       </div>
@@ -107,27 +157,11 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-const InteractionMenu = ({
-  isSelected,
-  setShowDeleteModal,
-  setChatToDelete,
-}) => {
-  const filterOptions = [
-    { label: "Mark as unread", value: "Mark as unread" },
-    { label: "Send a Video reply", value: "Send a Video reply" },
-    { label: "Send an e-mail", value: "Send an e-mail" },
-    { label: "Go to contact", value: "Go to contact" },
-    {
-      label: "Delete Conversation",
-      value: "Delete Conversation",
-    },
-  ];
-
+const InteractionMenu = ({ isSelected, setShowDeleteModal, menuOption }) => {
   const handleFilterChange = (filter) => {
     //TODO : Do the stuffs
     if (filter === "Delete Conversation") {
       setShowDeleteModal(true);
-      setChatToDelete(123);
     }
   };
 
@@ -145,24 +179,35 @@ const InteractionMenu = ({
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {filterOptions.map((option, idx) => (
+        <Dropdown.Item onClick={() => {}} className="text-14-500">
+          Mark as unread
+        </Dropdown.Item>
+        <Dropdown.Divider
+          style={{
+            margin: "0.5rem 1rem",
+          }}
+        />
+        {menuOption.map((option, idx) => (
           <React.Fragment key={option.value}>
             <Dropdown.Item
-              onClick={() => handleFilterChange(option.value)}
+              onClick={() => {
+                option.onClick();
+              }}
               className="text-14-500"
             >
               {option.label}
             </Dropdown.Item>
-
-            {(idx === 0 || idx == filterOptions.length - 2) && (
-              <Dropdown.Divider
-                style={{
-                  margin: "0.5rem 1rem",
-                }}
-              />
-            )}
           </React.Fragment>
         ))}
+
+        <Dropdown.Divider
+          style={{
+            margin: "0.5rem 1rem",
+          }}
+        />
+        <Dropdown.Item onClick={() => {}} className="text-14-500">
+          Delete Conversation
+        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

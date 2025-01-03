@@ -55,7 +55,7 @@
     .card-body {
       width: calc(100% - 50px);
       display: flex;
-      gap: 0px 60px;
+      gap: 0px 20px;
       overflow: auto;
       .user-card {
         display: flex;
@@ -109,6 +109,16 @@
       padding: 10px 20px;
       margin-left: 20px;
       cursor: pointer;
+    }
+  }
+  .deleteSVG-hover-icons-effect {
+    transform: scale(1);
+    transition: transform 0.2s ease-in;
+    cursor: pointer;
+    &:hover {
+      filter: invert(28%) sepia(98%) saturate(7470%) hue-rotate(358deg)
+        brightness(104%) contrast(117%);
+      transform: scale(1.2);
     }
   }
 }

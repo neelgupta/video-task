@@ -3,6 +3,7 @@ import ReactPaginate from "react-paginate";
 import { useSelector } from "react-redux";
 import "./Table.scss";
 import { Spinner } from "react-bootstrap";
+import LoaderCircle from "../LoaderCircle/LoaderCircle";
 
 const Table = ({
   header,
@@ -14,6 +15,7 @@ const Table = ({
   loader,
 }) => {
   const handlePageChange = (selectedObject) => {
+    console.log("selectedObject", selectedObject);
     onPaginationChange && onPaginationChange(selectedObject.selected);
     // Add your logic here to fetch new data based on the selected page.
   };
@@ -61,7 +63,7 @@ const Table = ({
             })
           ) : (
             <div className="f-center py-50">
-              <Spinner />
+              <LoaderCircle size={100} />
             </div>
           )}
         </div>

@@ -1,10 +1,21 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { icons } from "../../../utils/constants";
 import "./Dashboard.scss";
 import { Button, CheckBox, Table } from "../../../components";
 import { useEffect, useState } from "react";
-import { creteImgFilter } from "../../../utils/helpers";
+import { creteImgFilter, getColorFromLetter } from "../../../utils/helpers";
 import { api } from "../../../services/api";
+import {
+  handelCatch,
+  showSuccess,
+  throwError,
+} from "../../../store/globalSlice";
+import { useNavigate } from "react-router-dom";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { Spinner } from "react-bootstrap";
+import dayjs from "dayjs";
+import DeleteModal from "../../../components/layouts/DeleteModal";
+
 const header = [
   {
     title: <CheckBox className="s-18" />,
@@ -41,43 +52,6 @@ const header = [
   },
 ];
 
-const data = [
-  {
-    name: "Analysis Name",
-    created: "21.03.2021",
-    landed: "1",
-    contacts_collected: "1",
-    interactions: "2",
-  },
-  {
-    name: "Analysis Name",
-    created: "21.03.2021",
-    landed: "1",
-    contacts_collected: "1",
-    interactions: "2",
-  },
-  {
-    name: "Analysis Name",
-    created: "21.03.2021",
-    landed: "1",
-    contacts_collected: "1",
-    interactions: "2",
-  },
-  {
-    name: "Analysis Name",
-    created: "21.03.2021",
-    landed: "1",
-    contacts_collected: "1",
-    interactions: "2",
-  },
-  {
-    name: "Analysis Name",
-    created: "21.03.2021",
-    landed: "1",
-    contacts_collected: "1",
-    interactions: "2",
-  },
-];
 const dashboardCard = [
   {
     title: "Total Landed",
@@ -105,8 +79,136 @@ function Dashboard() {
   const reduxData = useSelector((state) => state.global);
   const { isResponsive, themeColor, profileData, selectedOrganizationId } =
     reduxData;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState(1);
   const [userUsesCard, setUserUsesCard] = useState(dashboardCard);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [contactList, setContactList] = useState([]);
+  const [isContactLoad, setIsContactLoad] = useState(true);
+  const [interactionList, setInteractionList] = useState([]);
+  const [isInteractionLoad, setIsInteractionLoad] = useState(true);
+  const [tableData, setTableData] = useState([]);
+  const [deleteId, setDeleteId] = useState("");
+  const [paginationOption, setPaginationOption] = useState({
+    currentPage: 0,
+    pageSize: 5,
+    count: 0,
+  });
+
+  useEffect(() => {
+    if (selectedOrganizationId) {
+      getCount();
+      getContact();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrganizationId]);
+
+  useEffect(() => {
+    if (selectedOrganizationId) {
+      getInteraction();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paginationOption.currentPage, selectedOrganizationId]);
+
+  useEffect(() => {
+    if (interactionList.length > 0) {
+      const rowData = [];
+      interactionList?.forEach((elem) => {
+        let obj = [
+          {
+            value: <CheckBox className="s-18" />,
+            className: "wp-5 justify-content-center",
+          },
+          {
+            value: <div style={{ color: "#636363" }}>{elem.title}</div>,
+            className: "wp-15 ",
+          },
+          {
+            value: (
+              <div>
+                <span style={{ color: "#636363" }}>
+                  {dayjs(elem.createdAt).format("DD MMM YYYY")}
+                </span>
+              </div>
+            ),
+            className: "wp-15",
+          },
+
+          {
+            value: <div style={{ color: "#636363" }}> {elem.landedCount}</div>,
+            className: "wp-10 color-757f justify-content-center",
+          },
+          {
+            value: <div style={{ color: "#636363" }}>{elem.contactCount}</div>,
+            className: "wp-15 color-757f justify-content-center",
+          },
+          {
+            value: (
+              <div style={{ color: "#636363" }}> {elem.interactionCount} </div>
+            ),
+            className: "wp-15 color-757f justify-content-center",
+          },
+
+          {
+            value: (
+              <div
+                className="f-center "
+                onClick={() => {
+                  navigate(`/user/asset-allocation/${elem._id}`);
+                }}
+              >
+                <img
+                  src={icons.top_right_arrow}
+                  alt="eyeView"
+                  className="fit-image w-16 hover-icons-effect"
+                  style={{ filter: creteImgFilter(themeColor.darkColor) }}
+                />
+              </div>
+            ),
+            className: "wp-10 color-757f justify-content-center",
+          },
+
+          {
+            value: (
+              <div className="f-center gap-3">
+                <div
+                  className="pointer h-16 w-16"
+                  onClick={() => {
+                    navigate(`/user/flow/${elem._id}`);
+                  }}
+                >
+                  <img
+                    src={icons.edit}
+                    alt="edit"
+                    className="fit-image hover-icons-effect"
+                  />
+                </div>
+                <div
+                  className="pointer h-16 w-16"
+                  onClick={() => {
+                    setShowDeleteModal(true);
+                    setDeleteId(elem._id);
+                  }}
+                >
+                  <img
+                    src={icons.deleteSVG}
+                    alt="eyeView"
+                    className="fit-image deleteSVG-hover-icons-effect"
+                  />
+                </div>
+              </div>
+            ),
+            className: "wp-10 justify-content-end",
+          },
+        ];
+        rowData.push({ data: obj });
+      });
+      setTableData(rowData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [interactionList]);
 
   const getCount = async () => {
     try {
@@ -122,95 +224,96 @@ function Dashboard() {
           };
         });
         setUserUsesCard(newArray);
+      } else {
+        dispatch(res.data.message);
       }
-      console.log("res", res);
     } catch (error) {
       console.log("error", error);
+      dispatch(handelCatch(error));
     }
   };
 
-  useEffect(() => {
-    if (selectedOrganizationId) {
-      getCount();
+  const getContact = async () => {
+    setIsContactLoad(true);
+    try {
+      const res = await api.get(
+        `dashboard/dashboard-contact/${selectedOrganizationId}`
+      );
+      if (res.status === 200) {
+        setContactList(res.data.response);
+      } else {
+        dispatch(res.data.message);
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOrganizationId]);
+    setIsContactLoad(false);
+  };
 
-  const rowData = [];
-  data?.forEach((elem) => {
-    let obj = [
-      {
-        value: <CheckBox className="s-18" />,
-        className: "wp-5 justify-content-center",
-      },
-      {
-        value: <div style={{ color: "#636363" }}>{elem.name}</div>,
-        className: "wp-15 ",
-      },
-      {
-        value: (
-          <div>
-            <span style={{ color: "#636363" }}>{elem.created}</span>
-          </div>
-        ),
-        className: "wp-15",
-      },
+  const getInteraction = async () => {
+    setIsInteractionLoad(true);
+    try {
+      const res = await api.get(
+        `dashboard/dashboard-interaction/${selectedOrganizationId}?search=&limit=${paginationOption.pageSize}&page=${paginationOption.currentPage}`
+      );
+      console.log("res", res);
+      if (res.status === 200) {
+        setInteractionList(res.data.response.Records);
+        setPaginationOption({
+          ...paginationOption,
+          count: res.data.response.totalRecords,
+        });
+      } else {
+        dispatch(res.data.message);
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsInteractionLoad(false);
+  };
 
-      {
-        value: <div style={{ color: "#636363" }}> {elem.landed}</div>,
-        className: "wp-10 color-757f justify-content-center",
-      },
-      {
-        value: (
-          <div style={{ color: "#636363" }}>{elem.contacts_collected}</div>
-        ),
-        className: "wp-15 color-757f justify-content-center",
-      },
-      {
-        value: <div style={{ color: "#636363" }}> {elem.interactions} </div>,
-        className: "wp-15 color-757f justify-content-center",
-      },
+  const onPaginationChange = (page) => {
+    setPaginationOption({
+      ...paginationOption,
+      currentPage: page,
+    });
+  };
 
-      {
-        value: (
-          <div className="f-center ">
-            <img
-              src={icons.top_right_arrow}
-              alt="eyeView"
-              className="fit-image w-16 hover-icons-effect"
-              style={{ filter: creteImgFilter(themeColor.darkColor) }}
-            />
-          </div>
-        ),
-        className: "wp-10 color-757f justify-content-center",
-      },
-
-      {
-        value: (
-          <div className="f-center gap-3">
-            <div className="pointer h-16 w-16" onClick={() => {}}>
-              <img
-                src={icons.edit}
-                alt="edit"
-                className="fit-image hover-icons-effect"
-              />
-            </div>
-            <div className="pointer h-16 w-16">
-              <img
-                src={icons.deleteSVG}
-                alt="eyeView"
-                className="fit-image hover-icons-effect"
-              />
-            </div>
-          </div>
-        ),
-        className: "wp-10 justify-content-end",
-      },
-    ];
-    rowData.push({ data: obj });
-  });
+  const handelDeleteInt = async (id) => {
+    try {
+      setIsDelete(true);
+      const res = await api.delete(`interactions/delete-interactions/${id}`);
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        getInteraction();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setShowDeleteModal(false);
+    setIsDelete(false);
+    setDeleteId("");
+  };
   return (
     <div className="Dashboards-container">
+      {showDeleteModal && (
+        <DeleteModal
+          show={showDeleteModal}
+          handleClose={() => setShowDeleteModal(false)}
+          onDelete={() => {
+            handelDeleteInt(deleteId);
+          }}
+          isDelete={isDelete}
+          title="Are you sure you want to proceed?"
+          text="Once deleted, they cannot be recovered."
+        />
+      )}
+
       <div className="">
         <h5 className="text-30-500">
           Welcome Back{" "}
@@ -261,46 +364,74 @@ function Dashboard() {
         <h6 className="text-24-700 mb-30">Recent Contacts</h6>
         <div className="user-card-body">
           <div className="card-body auri-scroll ">
-            {[1, 2, 3, 4].map((_, index) => {
-              return (
-                <div key={index} className="user-card p-10 w-300">
-                  <div
-                    className="w-50 h-50 rounded-circle f-center"
-                    style={{ overflow: "hidden" }}
-                  >
-                    <img
-                      src={icons.avatar5}
-                      alt="avatar"
-                      className="fit-image "
-                    />
-                  </div>
-                  <div className="card-det">
-                    <div className="p-0 m-0 text-14-400">Neil</div>
-                    <div
-                      style={{
-                        textWrap: "nowrap",
-                        color: "rgba(127, 127, 127, 1)",
-                      }}
-                      className="text-12-400"
-                    >
-                      Added to contacts
+            {isContactLoad ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
+                <Spinner size="lg" color="black" />
+              </div>
+            ) : (
+              <>
+                {(contactList || []).map((contact, index) => {
+                  const { contact_email, contact_number } = contact;
+                  return (
+                    <div key={index} className="user-card p-10 ">
+                      <div
+                        className="w-50 h-50 rounded-circle f-center text-22-800"
+                        style={{
+                          overflow: "hidden",
+                          color: "white",
+                          backgroundColor: contact_email
+                            ? getColorFromLetter(contact_email?.charAt(0) || "")
+                            : "#1B2559",
+                        }}
+                      >
+                        {(contact_email ? contact_email?.charAt(0) || "" : "A")
+                          .toString()
+                          .toUpperCase()}
+                      </div>
+                      <div className="card-det">
+                        <div className="p-0 m-0 text-14-400">
+                          {contact_email}
+                        </div>
+                        <div
+                          style={{
+                            textWrap: "nowrap",
+                            color: "rgba(127, 127, 127, 1)",
+                          }}
+                          className="text-12-400"
+                        >
+                          {contact_number || "-"}
+                        </div>
+                      </div>
+                      <div className="f-center ms-10">
+                        <Button
+                          btnText="Connect"
+                          className="text-14-500 h-30 ps-25 pe-25"
+                          btnStyle="linear-gradient"
+                          style={{ borderRadius: "50px" }}
+                          onClick={() => {
+                            navigate("/user/contacts/visit");
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="f-center ms-10">
-                    <Button
-                      btnText="Connect"
-                      className="text-14-500 h-30 ps-25 pe-25"
-                      btnStyle="linear-gradient"
-                      style={{ borderRadius: "50px" }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </>
+            )}
           </div>
           <div
             className="footer"
             style={{ fontSize: "14px", fontWeight: "300" }}
+            onClick={() => {
+              navigate("/user/contacts");
+            }}
           >
             see more
           </div>
@@ -359,7 +490,14 @@ function Dashboard() {
               />
             </div>
           </div>
-          <Table header={header} row={rowData} min="1000px" />
+          <Table
+            header={header}
+            row={tableData}
+            min="1000px"
+            loader={isInteractionLoad}
+            paginationOption={paginationOption}
+            onPaginationChange={onPaginationChange}
+          />
         </div>
       </div>
     </div>

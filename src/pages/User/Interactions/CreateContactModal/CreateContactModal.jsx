@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
-import "./AddEditContactModal.scss";
+import "./CreateContactModal.scss";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,19 +10,21 @@ import {
   throwError,
 } from "../../../../store/globalSlice";
 import { api } from "../../../../services/api";
-const AddEditContactModal = ({
+const CreateContactModal = ({
   show,
   handleClose,
-  isEdit,
-  editContact,
   fetchContact,
   selectedOrganizationId,
+  isAnonymous,
+  selectedContact,
 }) => {
+  console.log("isAnonymous", isAnonymous);
+  console.log("selectedContact", selectedContact);
   const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
-  const [validationSchema, setValidationSchema] = useState({
-    name: Yup.string(),
+  const validationSchema = {
+    name: Yup.string().required("name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -31,7 +33,7 @@ const AddEditContactModal = ({
       .min(10, "Phone number must be at least 10 digits")
       .max(15, "Phone number must be at most 15 digits"),
     productName: Yup.string(),
-  });
+  };
   const [initialValues, setInitialValues] = useState({
     name: "",
     email: "",
@@ -39,36 +41,20 @@ const AddEditContactModal = ({
     productName: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
-
-  useEffect(() => {
-    console.log("isEdit", isEdit);
-    console.log("editContact", editContact);
-    if (isEdit && editContact) {
-      setInitialValues({
-        name: editContact?.contact_name || "",
-        email: editContact?.contact_email || "",
-        phone: editContact?.phone_number || "",
-        productName: editContact?.product_name || "",
-      });
-    }
-  }, [isEdit, editContact]);
-
   const handleSubmitForm = async (value) => {
     setIsSubmit(true);
     try {
       const req = {
+        answer_id: selectedContact._id,
         organization_id: selectedOrganizationId,
         contact_email: value.email,
         ...(value.name && { contact_name: value.name }),
         ...(value.phone && { phone_number: value.phone }),
         ...(value.productName && { product_name: value.productName }),
-        ...(isEdit ? { contact_id: editContact._id } : {}),
       };
-      const res = await api?.[isEdit ? "put" : "post"](
-        isEdit ? "contact/update" : "contact/add",
-        req
-      );
-      if (res.status === 200) {
+      const res = await api.post("contact/create-anonymous", req);
+      console.log("res", res);
+      if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
         fetchContact();
       } else {
@@ -81,18 +67,18 @@ const AddEditContactModal = ({
     handleClose();
     setIsSubmit(false);
   };
-
   return (
     <Modal
       show={show}
       onHide={handleClose}
       centered
+      backdrop="static"
       className="editContactDetailsContainer"
     >
       <Modal.Header closeButton>
         <Modal.Title>
           <div className="text-24-700 text-center" style={{ color: "#1B2559" }}>
-            {isEdit ? "Edit Contact Details" : "Add Contact Details"}
+            Create & Asian Contact
           </div>
         </Modal.Title>
       </Modal.Header>
@@ -101,7 +87,7 @@ const AddEditContactModal = ({
           <Formik
             enableReinitialize
             initialValues={initialValues}
-            validationSchema={Yup.object(validationSchema)}
+            validationSchema={Yup.object().shape(validationSchema)}
             onSubmit={(values, { resetForm }) => {
               handleSubmitForm(values);
             }}
@@ -196,7 +182,7 @@ const AddEditContactModal = ({
                   <Button
                     className="px-40"
                     type="submit"
-                    disabled={isSubmitting}
+                    // disabled={isSubmitting}
                     style={{
                       background: `linear-gradient(to right , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
                       border: "none",
@@ -205,7 +191,7 @@ const AddEditContactModal = ({
                       alignItems: "center",
                     }}
                   >
-                    {isEdit ? "Update" : "Create"}
+                    Create
                     {isSubmit && (
                       <Spinner size="sm" color="white" className="ms-10" />
                     )}
@@ -220,4 +206,4 @@ const AddEditContactModal = ({
   );
 };
 
-export default AddEditContactModal;
+export default CreateContactModal;

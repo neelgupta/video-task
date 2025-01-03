@@ -1,91 +1,22 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from "react";
 import "./Interactions.scss";
-import { icons } from "../../../../utils/constants";
-import { creteImgFilter, getColorFromLetter } from "../../../../utils/helpers";
+import { icons } from "../../../utils/constants";
+import { creteImgFilter, getColorFromLetter } from "../../../utils/helpers";
 import { interactionsData } from "./constants";
 import { Dropdown } from "react-bootstrap";
-import DeleteModal from "../../../../components/layouts/DeleteModal";
+import DeleteModal from "../../../components/layouts/DeleteModal";
 import { useDispatch, useSelector } from "react-redux";
-import { handelCatch, throwError } from "../../../../store/globalSlice";
-import { api } from "../../../../services/api";
+import { handelCatch, throwError } from "../../../store/globalSlice";
+import { api } from "../../../services/api";
 import dayjs from "dayjs";
 import InteractionsChatCard from "./InteractionsChatCard";
-import ConversationsAnswer from "../../AssetAllocation/Conversations/ConversationsAnswer";
+import ConversationsAnswer from "../AssetAllocation/Conversations/ConversationsAnswer";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
-
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-  <a
-    href=""
-    ref={ref}
-    onClick={(e) => {
-      e.preventDefault();
-      onClick(e);
-    }}
-  >
-    {children}
-  </a>
-));
-
-const InteractionFilter = ({ setSelectedFilter, selectedFilter }) => {
-  const filterOptions = [
-    { label: "All", value: "all" },
-    { label: "This Week", value: "thisWeek" },
-    { label: "Previous Week", value: "previousWeek" },
-    { label: "This Month", value: "thisMonth" },
-    { label: "Previous Month", value: "previousMonth" },
-  ];
-
-  const handleFilterChange = (filter) => {
-    setSelectedFilter(filter);
-  };
-
-  return (
-    <Dropdown>
-      <Dropdown.Toggle as={CustomToggle}>
-        <img
-          src={icons.control_menu}
-          alt="Control menu"
-          className="fit-image hover-icons-effect w-18"
-        />
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu>
-        {filterOptions.map((option, idx) => (
-          <React.Fragment key={option.value}>
-            <Dropdown.Item
-              onClick={() => handleFilterChange(option.value)}
-              className="text-14-500"
-              style={
-                selectedFilter === option.value
-                  ? {
-                      fontWeight: "bold",
-                      color: "#fff",
-                      backgroundColor: "#7c5bff",
-                    }
-                  : {
-                      backgroundColor: "#fff",
-                      color: "#000",
-                    }
-              }
-            >
-              {option.label}
-            </Dropdown.Item>
-
-            {idx === 0 && (
-              <Dropdown.Divider
-                style={{
-                  margin: "0.5rem 1rem",
-                }}
-              />
-            )}
-          </React.Fragment>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-};
+import LoaderCircle from "../../../components/layouts/LoaderCircle/LoaderCircle";
+import InteractionFilter from "./InteractionFilter";
+import CreateContactModal from "./CreateContactModal";
+import AssignContactModal from "./AssignContactModal";
 
 function Interactions() {
   const dispatch = useDispatch();
@@ -97,8 +28,13 @@ function Interactions() {
   const [chatToDelete, setChatToDelete] = useState(null);
   const [selectMetingCard, setSelectMetingCard] = useState(null);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [contactForUpdate, setContactForUpdate] = useState({});
+
   const [isLoad, setIsLoad] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [showCreateContact, setShowCreateContact] = useState(false);
+  const [showAssignContact, setShowAssignContact] = useState(false);
+
   const selectedFilterTitleList = {
     all: ["This week", "Previous week"],
     thisWeek: ["This Week"],
@@ -145,11 +81,11 @@ function Interactions() {
   };
 
   useEffect(() => {
-    if (selectedFilter) {
+    if (selectedFilter && selectedOrganizationId) {
       fetchAllInteraction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFilter]);
+  }, [selectedFilter, selectedOrganizationId]);
 
   useEffect(() => {
     if (selectedContact) {
@@ -165,6 +101,38 @@ function Interactions() {
           isResponsive ? { flexDirection: "column" } : { flexDirection: "row" }
         }
       >
+        {showCreateContact && (
+          <CreateContactModal
+            show={showCreateContact}
+            selectedContact={contactForUpdate}
+            isAnonymous={!contactForUpdate?.contact_id ? true : false}
+            handleClose={() => {
+              setShowCreateContact(false);
+              setContactForUpdate({});
+            }}
+            selectedOrganizationId={selectedOrganizationId}
+            fetchContact={() => {
+              fetchAllInteraction();
+            }}
+          />
+        )}
+
+        {showAssignContact && (
+          <AssignContactModal
+            show={showAssignContact}
+            selectedContact={contactForUpdate}
+            isAnonymous={!contactForUpdate?.contact_id ? true : false}
+            handleClose={() => {
+              setShowAssignContact(false);
+              setContactForUpdate({});
+            }}
+            selectedOrganizationId={selectedOrganizationId}
+            fetchContact={() => {
+              fetchAllInteraction();
+            }}
+          />
+        )}
+
         <div
           className={`Interactions-sidebar ${
             isResponsive ? "wp-100" : "w-400"
@@ -234,6 +202,11 @@ function Interactions() {
                                 isActive={isActive}
                                 textColor={textColor}
                                 onSelectChat={() => setSelectedContact(ele)}
+                                setShowCreateContact={setShowCreateContact}
+                                setShowAssignContact={setShowAssignContact}
+                                onSelectMenuContact={() => {
+                                  setContactForUpdate(ele);
+                                }}
                               />
                             );
                           })}
@@ -320,13 +293,15 @@ function Interactions() {
                   </div>
                 </div>
                 <div className="icon-group">
-                  <div className="w-20 h-20">
+                  {/* <div
+                    className="w-20 h-20"
+                  >
                     <img
                       src={icons.edit}
                       alt=""
                       className="fit-image hover-icons-effect"
                     />
-                  </div>
+                  </div> */}
                   <div className="w-20 h-20">
                     <img
                       src={icons.teg_svg}
@@ -355,7 +330,6 @@ function Interactions() {
                 <div className="meting-card-body">
                   {selectedContact?.answers?.length > 0 &&
                     selectedContact?.answers.map((ele, index) => {
-                      console.log("ele", ele);
                       const isActive = selectMetingCard?._id === ele?._id;
                       const { nodeDetails } = ele;
                       return (

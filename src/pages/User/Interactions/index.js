@@ -1,1 +1,1 @@
-export { default } from "./Interaction";
+export { default } from "./Interactions";
