@@ -19,6 +19,7 @@ const Table = ({
     onPaginationChange && onPaginationChange(selectedObject.selected);
     // Add your logic here to fetch new data based on the selected page.
   };
+  console.log("paginationOption", paginationOption);
   return (
     <div id="table-container">
       <div className="table-body auri-scroll">
@@ -70,18 +71,24 @@ const Table = ({
       </div>
       {!hidePagination && (
         <div className="pagination-container">
-          <div className="text-14-500 color-757f">{`Showing ${
-            paginationOption?.currentPage * paginationOption?.pageSize + 1
-          }-${
-            paginationOption?.count <
-            (paginationOption?.currentPage + 1) * paginationOption?.pageSize
-              ? paginationOption?.count
-              : (paginationOption?.currentPage + 1) * paginationOption?.pageSize
-          } from ${paginationOption?.count}`}</div>
+          {paginationOption?.count === 0 ? (
+            <div className="text-16-700">No records</div>
+          ) : (
+            <div className="text-14-500 color-757f">{`Showing ${
+              paginationOption?.currentPage * paginationOption?.pageSize + 1
+            }-${
+              paginationOption?.count <
+              (paginationOption?.currentPage + 1) * paginationOption?.pageSize
+                ? paginationOption?.count
+                : (paginationOption?.currentPage + 1) *
+                  paginationOption?.pageSize
+            } from ${paginationOption?.count}`}</div>
+          )}
+
           <ReactPaginate
             pageCount={
               Math.ceil(paginationOption?.count / paginationOption?.pageSize) ||
-              5
+              1
             }
             marginPagesDisplayed={1}
             pageRangeDisplayed={1}

@@ -66,19 +66,25 @@ const FavoriteContacts = () => {
             <div>{contactsCount} Contacts</div>
           </div>
           <div className={styles.tableWrapper}>
-            {contacts.map((contact, idx) => (
-              <div key={contact.id}>
-                <ContactCard
-                  contact={contact}
-                  fetchContact={fetchFavoriteContact}
-                  onEdit={(value) => {
-                    setEditContact(value);
-                    setIsEdit(true);
-                    setIsShowAddEditModal(true);
-                  }}
-                />
+            {contactsCount > 0 ? (
+              contacts.map((contact, idx) => (
+                <div key={contact.id}>
+                  <ContactCard
+                    contact={contact}
+                    fetchContact={fetchFavoriteContact}
+                    onEdit={(value) => {
+                      setEditContact(value);
+                      setIsEdit(true);
+                      setIsShowAddEditModal(true);
+                    }}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="wp-100 f-center text-18-700">
+                Favorite contact not found!
               </div>
-            ))}
+            )}
           </div>
         </div>
       )}

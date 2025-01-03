@@ -78,19 +78,25 @@ const AllContacts = () => {
               </Button>
             </div>
             <div className={styles.tableWrapper}>
-              {contacts.map((contact, idx) => (
-                <div key={contact.id} className={styles.tableRow}>
-                  <ContactCard
-                    contact={contact}
-                    fetchContact={fetchAllContact}
-                    onEdit={(value) => {
-                      setEditContact(value);
-                      setIsEdit(true);
-                      setIsShowAddEditModal(true);
-                    }}
-                  />
+              {contactCount > 0 ? (
+                contacts.map((contact, idx) => (
+                  <div key={contact.id} className={styles.tableRow}>
+                    <ContactCard
+                      contact={contact}
+                      fetchContact={fetchAllContact}
+                      onEdit={(value) => {
+                        setEditContact(value);
+                        setIsEdit(true);
+                        setIsShowAddEditModal(true);
+                      }}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="wp-100 f-center text-18-700">
+                  Contact not found!
                 </div>
-              ))}
+              )}
             </div>
           </div>
         )}

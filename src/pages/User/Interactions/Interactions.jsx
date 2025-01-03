@@ -4,7 +4,7 @@ import "./Interactions.scss";
 import { icons } from "../../../utils/constants";
 import { creteImgFilter, getColorFromLetter } from "../../../utils/helpers";
 import { interactionsData } from "./constants";
-import { Dropdown } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import DeleteModal from "../../../components/layouts/DeleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import { handelCatch, throwError } from "../../../store/globalSlice";
@@ -164,81 +164,107 @@ function Interactions() {
               className="p-5 pt-20  auri-scroll list"
               style={{ height: isResponsive ? "400px" : "calc(100vh - 200px)" }}
             >
-              {selectedFilterTitleList[selectedFilter].map(
-                (title, weekIndex) => {
-                  const filterData = (ele) => {
-                    if (selectedFilter === "all") {
-                      if (ele.isCurrentWeek === (weekIndex === 0)) {
-                        return ele;
-                      }
-                    } else {
-                      return ele;
-                    }
-                  };
-                  return (
-                    <div key={weekIndex}>
-                      <div style={{ padding: "5px" }}>
-                        <div className="color-darkText text-14-600">
-                          {title}
-                        </div>
-                      </div>
-                      {isLoad ? (
-                        <>
-                          {interactions.filter(filterData).map((ele, index) => {
-                            const { contact_id, contact_details, _id } = ele;
-                            const isActive = selectedContact?._id === _id;
-                            const bgColor = isActive ? "#b19eff" : "white";
-                            const textColor = isActive ? "white" : "#1B2559";
-                            const subTextColor = isActive ? "white" : "#8C8E90";
+              {interactions.length > 0 ? (
+                <>
+                  {selectedFilterTitleList[selectedFilter].map(
+                    (title, weekIndex) => {
+                      const filterData = (ele) => {
+                        if (selectedFilter === "all") {
+                          if (ele.isCurrentWeek === (weekIndex === 0)) {
+                            return ele;
+                          }
+                        } else {
+                          return ele;
+                        }
+                      };
+                      return (
+                        <div key={weekIndex}>
+                          <div style={{ padding: "5px" }}>
+                            <div className="color-darkText text-14-600">
+                              {title}
+                            </div>
+                          </div>
+                          {isLoad ? (
+                            <>
+                              {interactions
+                                .filter(filterData)
+                                .map((ele, index) => {
+                                  const { contact_id, contact_details, _id } =
+                                    ele;
+                                  const isActive = selectedContact?._id === _id;
+                                  const bgColor = isActive
+                                    ? "#b19eff"
+                                    : "white";
+                                  const textColor = isActive
+                                    ? "white"
+                                    : "#1B2559";
+                                  const subTextColor = isActive
+                                    ? "white"
+                                    : "#8C8E90";
 
-                            return (
-                              <InteractionsChatCard
-                                key={index}
-                                ele={ele}
-                                subTextColor={subTextColor}
-                                contact_id={contact_id}
-                                contact_details={contact_details}
-                                bgColor={bgColor}
-                                isActive={isActive}
-                                textColor={textColor}
-                                onSelectChat={() => setSelectedContact(ele)}
-                                setShowCreateContact={setShowCreateContact}
-                                setShowAssignContact={setShowAssignContact}
-                                onSelectMenuContact={() => {
-                                  setContactForUpdate(ele);
-                                }}
-                              />
-                            );
-                          })}
-                        </>
-                      ) : (
-                        <div>
-                          <SkeletonTheme>
-                            {weekIndex === 0 ? (
-                              <>
-                                <Skeleton
-                                  height={60}
-                                  borderRadius={10}
-                                  count={selectedFilter === "all" ? 2 : 20}
-                                  style={{ marginBottom: "10px" }}
-                                />
-                              </>
-                            ) : (
-                              <>
-                                <Skeleton
-                                  height={60}
-                                  borderRadius={10}
-                                  count={15}
-                                  style={{ marginBottom: "10px" }}
-                                />
-                              </>
-                            )}
-                          </SkeletonTheme>
+                                  return (
+                                    <InteractionsChatCard
+                                      key={index}
+                                      ele={ele}
+                                      subTextColor={subTextColor}
+                                      contact_id={contact_id}
+                                      contact_details={contact_details}
+                                      bgColor={bgColor}
+                                      isActive={isActive}
+                                      textColor={textColor}
+                                      onSelectChat={() =>
+                                        setSelectedContact(ele)
+                                      }
+                                      setShowCreateContact={
+                                        setShowCreateContact
+                                      }
+                                      setShowAssignContact={
+                                        setShowAssignContact
+                                      }
+                                      onSelectMenuContact={() => {
+                                        setContactForUpdate(ele);
+                                      }}
+                                    />
+                                  );
+                                })}
+                            </>
+                          ) : (
+                            <div>
+                              <SkeletonTheme>
+                                {weekIndex === 0 ? (
+                                  <>
+                                    <Skeleton
+                                      height={60}
+                                      borderRadius={10}
+                                      count={selectedFilter === "all" ? 2 : 20}
+                                      style={{ marginBottom: "10px" }}
+                                    />
+                                  </>
+                                ) : (
+                                  <>
+                                    <Skeleton
+                                      height={60}
+                                      borderRadius={10}
+                                      count={15}
+                                      style={{ marginBottom: "10px" }}
+                                    />
+                                  </>
+                                )}
+                              </SkeletonTheme>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  );
-                }
+                      );
+                    }
+                  )}
+                </>
+              ) : (
+                <div
+                  className="wp-100 d-flex text-18-700 mt-50"
+                  style={{ justifyContent: "center" }}
+                >
+                  Interactions not found!
+                </div>
               )}
             </div>
           </div>
@@ -254,77 +280,82 @@ function Interactions() {
           {isLoad ? (
             <>
               <div className="h-90 Interactions-header">
-                <div className="f-center">
-                  <div
-                    className="w-50 h-50 rounded-circle f-center"
-                    style={{
-                      overflow: "hidden",
-                      color: "white",
-                      backgroundColor: selectedContact?.contact_id
-                        ? getColorFromLetter(
-                            selectedContact.contact_details?.contact_email?.charAt(
-                              0
-                            ) || ""
+                {interactions.length > 0 ? (
+                  <>
+                    <div className="f-center">
+                      <div
+                        className="w-50 h-50 rounded-circle f-center"
+                        style={{
+                          overflow: "hidden",
+                          color: "white",
+                          backgroundColor: selectedContact?.contact_id
+                            ? getColorFromLetter(
+                                selectedContact.contact_details?.contact_email?.charAt(
+                                  0
+                                ) || ""
+                              )
+                            : "#1B2559",
+                        }}
+                      >
+                        <div
+                          className="w-50 h-50 f-center text-22-800"
+                          style={{
+                            borderRadius: "50%",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {(selectedContact?.contact_id
+                            ? selectedContact.contact_details?.contact_email?.charAt(
+                                0
+                              ) || ""
+                            : "A"
                           )
-                        : "#1B2559",
-                    }}
-                  >
-                    <div
-                      className="w-50 h-50 f-center text-22-800"
-                      style={{
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {(selectedContact?.contact_id
-                        ? selectedContact.contact_details?.contact_email?.charAt(
-                            0
-                          ) || ""
-                        : "A"
-                      )
-                        .toString()
-                        .toUpperCase()}
+                            .toString()
+                            .toUpperCase()}
+                        </div>
+                      </div>
+                      <div className="text-18-600 color-darkText ms-10">
+                        {selectedContact?.contact_id
+                          ? selectedContact.contact_details?.contact_email
+                          : "Anonymous"}
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-18-600 color-darkText ms-10">
-                    {selectedContact?.contact_id
-                      ? selectedContact.contact_details?.contact_email
-                      : "Anonymous"}
-                  </div>
-                </div>
-                <div className="icon-group">
-                  {/* <div
-                    className="w-20 h-20"
-                  >
-                    <img
-                      src={icons.edit}
-                      alt=""
-                      className="fit-image hover-icons-effect"
-                    />
-                  </div> */}
-                  <div className="w-20 h-20">
-                    <img
-                      src={icons.teg_svg}
-                      alt=""
-                      className="fit-image hover-icons-effect"
-                    />
-                  </div>
-                  <div className="w-20 h-20">
-                    <img
-                      src={icons.exportPng}
-                      alt=""
-                      className="fit-image hover-icons-effect"
-                    />
-                  </div>
-                </div>
+                    <div className="icon-group">
+                      <div className="w-20 h-20">
+                        <img
+                          src={icons.teg_svg}
+                          alt=""
+                          className="fit-image hover-icons-effect"
+                        />
+                      </div>
+                      <div className="w-20 h-20">
+                        <img
+                          src={icons.exportPng}
+                          alt=""
+                          className="fit-image hover-icons-effect"
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
               <div
                 className="Interactions-content"
                 style={isResponsive ? { height: "500px" } : {}}
               >
-                <ConversationsAnswer
-                  selectMetingCard={{ ...selectMetingCard }}
-                />
+                {interactions.length > 0 ? (
+                  <ConversationsAnswer
+                    selectMetingCard={{ ...selectMetingCard }}
+                  />
+                ) : (
+                  <div className="wp-100 hp-100 f-center">
+                    <Button className="new-flow-btn">
+                      Create new interactions
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className="Interactions-footer auri-scroll">
                 <div className="meting-card-body">

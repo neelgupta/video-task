@@ -68,7 +68,7 @@ const AddEditContactModal = ({
         isEdit ? "contact/update" : "contact/add",
         req
       );
-      if (res.status === 200) {
+      if ([200, 201].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         fetchContact();
       } else {

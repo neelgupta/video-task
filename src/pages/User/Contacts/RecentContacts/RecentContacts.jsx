@@ -83,15 +83,21 @@ const RecentContacts = () => {
               </Button>
             </div>
             <div className={styles.tableWrapper}>
-              {contacts.map((contact, idx) => (
-                <div key={contact.id} className={styles.tableRow}>
-                  <ContactCard
-                    contact={contact}
-                    fetchContact={fetchRecentContact}
-                    onEdit={handleEdit}
-                  />
+              {contactsCount > 0 ? (
+                contacts.map((contact, idx) => (
+                  <div key={contact.id} className={styles.tableRow}>
+                    <ContactCard
+                      contact={contact}
+                      fetchContact={fetchRecentContact}
+                      onEdit={handleEdit}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="wp-100 f-center text-18-700">
+                  Contact not found!
                 </div>
-              ))}
+              )}
             </div>
           </div>
         )}

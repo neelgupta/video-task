@@ -339,7 +339,7 @@ function ViewInteraction() {
               width: "100%",
             }}
           >
-            <EndScreen answerId={answerId} />
+            <EndScreen answerId={answerId} inEnd={key === "End"} />
           </div>
         </Tab>
       </Tabs>

@@ -240,7 +240,7 @@ function Dashboard() {
         `dashboard/dashboard-contact/${selectedOrganizationId}`
       );
       if (res.status === 200) {
-        setContactList(res.data.response);
+        setContactList(res.data.response || []);
       } else {
         dispatch(res.data.message);
       }
@@ -262,7 +262,7 @@ function Dashboard() {
         setInteractionList(res.data.response.Records);
         setPaginationOption({
           ...paginationOption,
-          count: res.data.response.totalRecords,
+          count: res.data?.response?.totalRecords || 0,
         });
       } else {
         dispatch(res.data.message);
@@ -377,52 +377,70 @@ function Dashboard() {
               </div>
             ) : (
               <>
-                {(contactList || []).map((contact, index) => {
-                  const { contact_email, contact_number } = contact;
-                  return (
-                    <div key={index} className="user-card p-10 ">
-                      <div
-                        className="w-50 h-50 rounded-circle f-center text-22-800"
-                        style={{
-                          overflow: "hidden",
-                          color: "white",
-                          backgroundColor: contact_email
-                            ? getColorFromLetter(contact_email?.charAt(0) || "")
-                            : "#1B2559",
-                        }}
-                      >
-                        {(contact_email ? contact_email?.charAt(0) || "" : "A")
-                          .toString()
-                          .toUpperCase()}
-                      </div>
-                      <div className="card-det">
-                        <div className="p-0 m-0 text-14-400">
-                          {contact_email}
-                        </div>
+                {contactList?.length > 0 ? (
+                  contactList.map((contact, index) => {
+                    const { contact_email, contact_number } = contact;
+                    return (
+                      <div key={index} className="user-card p-10 ">
                         <div
+                          className="w-50 h-50 rounded-circle f-center text-22-800"
                           style={{
-                            textWrap: "nowrap",
-                            color: "rgba(127, 127, 127, 1)",
+                            overflow: "hidden",
+                            color: "white",
+                            backgroundColor: contact_email
+                              ? getColorFromLetter(
+                                  contact_email?.charAt(0) || ""
+                                )
+                              : "#1B2559",
                           }}
-                          className="text-12-400"
                         >
-                          {contact_number || "-"}
+                          {(contact_email
+                            ? contact_email?.charAt(0) || ""
+                            : "A"
+                          )
+                            .toString()
+                            .toUpperCase()}
+                        </div>
+                        <div className="card-det">
+                          <div className="p-0 m-0 text-14-400">
+                            {contact_email}
+                          </div>
+                          <div
+                            style={{
+                              textWrap: "nowrap",
+                              color: "rgba(127, 127, 127, 1)",
+                            }}
+                            className="text-12-400"
+                          >
+                            {contact_number || "-"}
+                          </div>
+                        </div>
+                        <div className="f-center ms-10">
+                          <Button
+                            btnText="Connect"
+                            className="text-14-500 h-30 ps-25 pe-25"
+                            btnStyle="linear-gradient"
+                            style={{ borderRadius: "50px" }}
+                            onClick={() => {
+                              navigate("/user/contacts/visit");
+                            }}
+                          />
                         </div>
                       </div>
-                      <div className="f-center ms-10">
-                        <Button
-                          btnText="Connect"
-                          className="text-14-500 h-30 ps-25 pe-25"
-                          btnStyle="linear-gradient"
-                          style={{ borderRadius: "50px" }}
-                          onClick={() => {
-                            navigate("/user/contacts/visit");
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                ) : (
+                  <div
+                    className="wp-100 hp-100 text-16-600"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    Contact not found!
+                  </div>
+                )}
               </>
             )}
           </div>
