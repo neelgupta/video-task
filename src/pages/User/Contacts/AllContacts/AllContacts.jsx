@@ -26,7 +26,6 @@ const AllContacts = () => {
       const res = await api.get(
         `contact/get-list/${selectedOrganizationId}?search=&type=`
       );
-      console.log("res", res);
       if (res.status === 200) {
         setContacts(res.data.response?.contactData || []);
         setContactsCount(res.data.response?.count || 0);

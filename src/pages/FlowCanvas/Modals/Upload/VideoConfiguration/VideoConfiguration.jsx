@@ -56,8 +56,6 @@ function VideoConfiguration({
   const {
     queModelConfig: { nodeData, isEdit, modalType },
   } = useSelector((state) => state.global);
-  console.log("nodeData", nodeData);
-  console.log("modalType", modalType);
 
   const processDownloadVideo = async () => {
     try {

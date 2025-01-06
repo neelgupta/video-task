@@ -15,11 +15,9 @@ const Table = ({
   loader,
 }) => {
   const handlePageChange = (selectedObject) => {
-    console.log("selectedObject", selectedObject);
     onPaginationChange && onPaginationChange(selectedObject.selected);
     // Add your logic here to fetch new data based on the selected page.
   };
-  console.log("paginationOption", paginationOption);
   return (
     <div id="table-container">
       <div className="table-body auri-scroll">
@@ -72,7 +70,9 @@ const Table = ({
       {!hidePagination && (
         <div className="pagination-container">
           {paginationOption?.count === 0 ? (
-            <div className="text-16-700">No records</div>
+            <div className="text-16-700">
+              {loader ? "Please wait..." : "No records"}
+            </div>
           ) : (
             <div className="text-14-500 color-757f">{`Showing ${
               paginationOption?.currentPage * paginationOption?.pageSize + 1

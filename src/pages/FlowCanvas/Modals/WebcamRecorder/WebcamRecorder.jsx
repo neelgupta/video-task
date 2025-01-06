@@ -111,11 +111,6 @@ function WebcamRecorder({ show, handleClose, recorderConfig, modalType }) {
     return () => clearInterval(timer);
   }, [isRecording, isPaused, timeLeft, camStatus]);
 
-  useEffect(() => {
-    setCamStatus(status);
-    console.log("status", status);
-  }, [status]);
-
   // Monitor for device disconnections
   const monitorDeviceDisconnection = (stream) => {
     const tracks = stream.getTracks();

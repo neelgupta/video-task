@@ -18,8 +18,6 @@ const CreateContactModal = ({
   isAnonymous,
   selectedContact,
 }) => {
-  console.log("isAnonymous", isAnonymous);
-  console.log("selectedContact", selectedContact);
   const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
@@ -53,7 +51,6 @@ const CreateContactModal = ({
         ...(value.productName && { product_name: value.productName }),
       };
       const res = await api.post("contact/create-anonymous", req);
-      console.log("res", res);
       if (res.status === 201) {
         dispatch(showSuccess(res.data.message));
         fetchContact();

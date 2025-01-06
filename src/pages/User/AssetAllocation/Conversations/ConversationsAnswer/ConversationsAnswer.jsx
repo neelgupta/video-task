@@ -7,7 +7,6 @@ import { creteImgFilter } from "../../../../../utils/helpers";
 import WaveSurfer from "wavesurfer.js";
 
 function ConversationsAnswer({ selectMetingCard }) {
-  console.log("selectMetingCard", selectMetingCard);
   const { node_answer_type, nodeDetails, answer_details } = selectMetingCard;
   const videoRef = useRef(null);
   const [isPlay, setIsPlay] = useState(true);

@@ -1,0 +1,8 @@
+<svg class="logo" fill="none" height="30" width="33" xmlns="http://www.w3.org/2000/svg">
+    <!-- Centered ellipse -->
+    <ellipse fill="#111" cx="15.5" cy="7" rx="5" ry="5"></ellipse>
+
+     <path
+        d="M5 14.486c-0.5 0-0.9 0.91-0.8 1.943C5.5 23.616 10 28 15.666 28c5.667 0 10.174-4.384 11.231-11.571 0.1-1.032-0.415-1.943-1.072-1.943H5z"
+        fill="#111"></path>
+</svg>

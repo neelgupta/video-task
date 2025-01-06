@@ -22,7 +22,7 @@ const AddEditContactModal = ({
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
   const [validationSchema, setValidationSchema] = useState({
-    name: Yup.string(),
+    name: Yup.string().required("Name is required"),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -41,8 +41,6 @@ const AddEditContactModal = ({
   const [isSubmit, setIsSubmit] = useState(false);
 
   useEffect(() => {
-    console.log("isEdit", isEdit);
-    console.log("editContact", editContact);
     if (isEdit && editContact) {
       setInitialValues({
         name: editContact?.contact_name || "",

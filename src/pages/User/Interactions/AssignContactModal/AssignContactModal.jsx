@@ -42,7 +42,6 @@ const AssignContactModal = ({
       const res = await api.get(
         `contact/filter-contact/${selectedOrganizationId}?search=${searchText}`
       );
-      console.log("res", res);
       if (res.status === 200) {
         setContactsOption(
           res.data.response.map((ele) => {
@@ -202,7 +201,6 @@ const CustomOption = (props) => {
     innerProps,
     isSelected,
   } = props;
-  console.log("props", props);
 
   return (
     <div

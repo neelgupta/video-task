@@ -28,7 +28,6 @@ const Resizer = React.forwardRef(({ className, ...props }) => {
             border: "none",
           }}
           onClick={(e) => {
-            console.log("e", e);
             zoomIn({ duration: 300 });
           }}
         >

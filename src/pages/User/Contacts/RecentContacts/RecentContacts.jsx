@@ -45,7 +45,6 @@ const RecentContacts = () => {
   }, [selectedOrganizationId]);
 
   const handleEdit = (value) => {
-    console.log("value", value);
     setEditContact(value);
     setIsEdit(true);
     setIsShowAddEditModal(true);

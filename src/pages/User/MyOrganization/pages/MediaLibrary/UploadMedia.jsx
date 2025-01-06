@@ -14,9 +14,6 @@ function UploadMedia({ onHide, show, isEdit }) {
     title: "",
     descriptions: "",
   });
-  useEffect(() => {
-    console.log("form", form);
-  }, [form]);
   const isFormValid = (value) => {
     if (!value.file) {
       dispatch(throwError("file required"));

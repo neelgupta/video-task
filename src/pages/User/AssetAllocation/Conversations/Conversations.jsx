@@ -79,7 +79,6 @@ function Conversations({
       }
     } else if (selectedType === "Results") {
       if (!selectChat || results?.length === 0) return;
-      console.log("results", results);
       const findChat = results.find((ele) => ele._id === selectChat);
       if (findChat) {
         setSelectChatDetails(findChat);

@@ -53,7 +53,12 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
           setShow((prev) => !prev);
         }}
       >
-        <img src={icons.avatar} alt="more" className="fit-image" />
+        <img
+          src={icons.videoUser}
+          alt="more"
+          className="fit-image"
+          style={{ filter: creteImgFilter("#7B5AFF") }}
+        />
       </div>
       {show && (
         <div className="profile-popover" ref={profileRef}>

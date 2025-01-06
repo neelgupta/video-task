@@ -221,10 +221,8 @@ const FlowCanvas = () => {
             );
           }}
           onConnect={(connection) => {
-            console.log("connection", connection);
             // connection contains source, target and other details
             const { source, target } = connection;
-            console.log(`Connected node ${source} to node ${target}`);
 
             // Here you can handle the connection logic, such as updating state, adding an edge, etc.
             setEdges((prevEdges) => [

@@ -257,7 +257,6 @@ function Dashboard() {
       const res = await api.get(
         `dashboard/dashboard-interaction/${selectedOrganizationId}?search=&limit=${paginationOption.pageSize}&page=${paginationOption.currentPage}`
       );
-      console.log("res", res);
       if (res.status === 200) {
         setInteractionList(res.data.response.Records);
         setPaginationOption({
@@ -379,7 +378,7 @@ function Dashboard() {
               <>
                 {contactList?.length > 0 ? (
                   contactList.map((contact, index) => {
-                    const { contact_email, contact_number } = contact;
+                    const { contact_email, phone_number } = contact;
                     return (
                       <div key={index} className="user-card p-10 ">
                         <div
@@ -412,7 +411,7 @@ function Dashboard() {
                             }}
                             className="text-12-400"
                           >
-                            {contact_number || "-"}
+                            {phone_number || "-"}
                           </div>
                         </div>
                         <div className="f-center ms-10">

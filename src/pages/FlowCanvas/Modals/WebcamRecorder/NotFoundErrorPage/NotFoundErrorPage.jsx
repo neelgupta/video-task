@@ -42,9 +42,7 @@ function NotFoundErrorPage({
         );
         return;
       }
-      console.log("Valid file:", file);
       const mediaBlobUrl = URL.createObjectURL(file);
-      console.log("mediaBlobUrl", mediaBlobUrl);
       setMediaUrl(mediaBlobUrl);
       setIsUpload(true);
       setPermissionsGranted(true);

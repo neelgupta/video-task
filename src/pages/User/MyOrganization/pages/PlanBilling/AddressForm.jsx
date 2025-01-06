@@ -57,7 +57,6 @@ const AddressForm = ({
         isEdit ? "user/update-address" : "user/add-address",
         req
       );
-      console.log("res", res);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         onHide(true);

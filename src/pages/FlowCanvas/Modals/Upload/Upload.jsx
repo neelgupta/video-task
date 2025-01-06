@@ -107,12 +107,10 @@ function Upload({ show, handleClose }) {
           "Content-Type": "multipart/form-data",
         }
       );
-      console.log("res", res);
       if ([201, 200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         dispatch(setNewQueModalData({}));
         const nodeData = res.data.response;
-        console.log("nodeData", nodeData);
 
         if (!isEdit) {
           dispatch(
