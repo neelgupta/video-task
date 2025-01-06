@@ -15,8 +15,8 @@ function InteractionsChatCard({
   setShowCreateContact,
   setShowAssignContact,
   onSelectMenuContact,
+  onDeleteChat,
 }) {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [menuOption, setMenuOption] = useState([]);
   useEffect(() => {
@@ -131,8 +131,7 @@ function InteractionsChatCard({
         <div className="w-24 h-24">
           <InteractionMenu
             isSelected={isActive}
-            showDeleteModal={showDeleteModal}
-            setShowDeleteModal={setShowDeleteModal}
+            onDeleteChat={onDeleteChat}
             setChatToDelete={() => {}}
             menuOption={menuOption}
           />
@@ -157,7 +156,12 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-const InteractionMenu = ({ isSelected, setShowDeleteModal, menuOption }) => {
+const InteractionMenu = ({
+  isSelected,
+  setShowDeleteModal,
+  menuOption,
+  onDeleteChat,
+}) => {
   const handleFilterChange = (filter) => {
     //TODO : Do the stuffs
     if (filter === "Delete Conversation") {
@@ -205,7 +209,12 @@ const InteractionMenu = ({ isSelected, setShowDeleteModal, menuOption }) => {
             margin: "0.5rem 1rem",
           }}
         />
-        <Dropdown.Item onClick={() => {}} className="text-14-500">
+        <Dropdown.Item
+          onClick={() => {
+            onDeleteChat();
+          }}
+          className="text-14-500"
+        >
           Delete Conversation
         </Dropdown.Item>
       </Dropdown.Menu>

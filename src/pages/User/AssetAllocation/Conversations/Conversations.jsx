@@ -10,7 +10,11 @@ import {
 import StartConversationModal from "./StartConversationModal";
 import { useDispatch, useSelector } from "react-redux";
 import { api } from "../../../../services/api";
-import { handelCatch, throwError } from "../../../../store/globalSlice";
+import {
+  handelCatch,
+  showSuccess,
+  throwError,
+} from "../../../../store/globalSlice";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import ConversationsAnswer from "./ConversationsAnswer";
@@ -21,6 +25,7 @@ import AddEditContactModal from "../../Contacts/AddEditContactModal";
 import { Dropdown } from "react-bootstrap";
 import CreateContactModal from "../../Interactions/CreateContactModal";
 import AssignContactModal from "../../Interactions/AssignContactModal";
+import DeleteModal from "../../../../components/layouts/DeleteModal";
 
 function Conversations({
   id,
@@ -46,6 +51,9 @@ function Conversations({
   const [showCreateContact, setShowCreateContact] = useState(false);
   const [showAssignContact, setShowAssignContact] = useState(false);
   const [contactForUpdate, setContactForUpdate] = useState({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [chatToDelete, setChatToDelete] = useState(null);
+  const [isDelete, setIsDelete] = useState(false);
   useEffect(() => {
     if (selectedType) {
       if (
@@ -91,6 +99,26 @@ function Conversations({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectChat, contacts, results, selectedType]);
 
+  const deleteConversation = async () => {
+    setIsDelete(true);
+    try {
+      const res = await api.delete(
+        `contact/remove-conversation/${chatToDelete}`
+      );
+      if (res.status === 200) {
+        fetchDataFunction();
+        setShowDeleteModal(false);
+        setChatToDelete("");
+        dispatch(showSuccess(res.data.message));
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsDelete(false);
+  };
   return (
     <>
       <Share
@@ -98,6 +126,18 @@ function Conversations({
         handleClose={() => setShareUrl("")}
         shareUrl={shareUrl}
       />
+      {showDeleteModal && (
+        <DeleteModal
+          show={showDeleteModal}
+          handleClose={() => setShowDeleteModal(false)}
+          onDelete={() => {
+            deleteConversation();
+          }}
+          isDelete={isDelete}
+          title="Are you sure you want to proceed?"
+          text="This will erase all messages and replies in this conversation. Once deleted, they cannot be recovered."
+        />
+      )}
       {isShowEditContact && (
         <AddEditContactModal
           show={isShowEditContact}
@@ -429,6 +469,10 @@ function Conversations({
                             <InteractionMenu
                               isSelected={isActive}
                               menuOption={menuOption}
+                              onDeleteChat={() => {
+                                setChatToDelete(_id);
+                                setShowDeleteModal(true);
+                              }}
                             />
                           </div>
                           <div
@@ -601,7 +645,6 @@ function Conversations({
             <div className="meting-card-body">
               {selectChatDetails?.answers?.length > 0 &&
                 selectChatDetails.answers.map((ele, index) => {
-                  console.log("ele", ele);
                   const isActive = selectMetingCard._id === ele._id;
                   const { nodeDetails, answer_details, node_answer_type } = ele;
                   return (
@@ -698,7 +741,7 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-const InteractionMenu = ({ isSelected, menuOption }) => {
+const InteractionMenu = ({ isSelected, menuOption, onDeleteChat }) => {
   return (
     <Dropdown>
       <Dropdown.Toggle as={CustomToggle}>
@@ -739,7 +782,12 @@ const InteractionMenu = ({ isSelected, menuOption }) => {
             margin: "0.5rem 1rem",
           }}
         />
-        <Dropdown.Item onClick={() => {}} className="text-14-500">
+        <Dropdown.Item
+          onClick={() => {
+            onDeleteChat();
+          }}
+          className="text-14-500"
+        >
           Delete Conversation
         </Dropdown.Item>
       </Dropdown.Menu>

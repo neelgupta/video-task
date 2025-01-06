@@ -7,7 +7,11 @@ import { interactionsData } from "./constants";
 import { Button, Dropdown } from "react-bootstrap";
 import DeleteModal from "../../../components/layouts/DeleteModal";
 import { useDispatch, useSelector } from "react-redux";
-import { handelCatch, throwError } from "../../../store/globalSlice";
+import {
+  handelCatch,
+  showSuccess,
+  throwError,
+} from "../../../store/globalSlice";
 import { api } from "../../../services/api";
 import dayjs from "dayjs";
 import InteractionsChatCard from "./InteractionsChatCard";
@@ -26,10 +30,10 @@ function Interactions() {
   const [interactions, setInteractions] = useState(interactionsData);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
+  const [isDelete, setIsDelete] = useState(false);
   const [selectMetingCard, setSelectMetingCard] = useState(null);
   const [selectedContact, setSelectedContact] = useState(null);
   const [contactForUpdate, setContactForUpdate] = useState({});
-
   const [isLoad, setIsLoad] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [showCreateContact, setShowCreateContact] = useState(false);
@@ -80,6 +84,27 @@ function Interactions() {
     setIsLoad(true);
   };
 
+  const deleteConversation = async () => {
+    setIsDelete(true);
+    try {
+      const res = await api.delete(
+        `contact/remove-conversation/${chatToDelete}`
+      );
+      if (res.status === 200) {
+        fetchAllInteraction();
+        setShowDeleteModal(false);
+        setChatToDelete("");
+        dispatch(showSuccess(res.data.message));
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+    setIsDelete(false);
+  };
+
   useEffect(() => {
     if (selectedFilter && selectedOrganizationId) {
       fetchAllInteraction();
@@ -101,6 +126,19 @@ function Interactions() {
           isResponsive ? { flexDirection: "column" } : { flexDirection: "row" }
         }
       >
+        {showDeleteModal && (
+          <DeleteModal
+            show={showDeleteModal}
+            handleClose={() => setShowDeleteModal(false)}
+            onDelete={() => {
+              deleteConversation();
+            }}
+            isDelete={isDelete}
+            title="Are you sure you want to proceed?"
+            text="This will erase all messages and replies in this conversation. Once deleted, they cannot be recovered."
+          />
+        )}
+
         {showCreateContact && (
           <CreateContactModal
             show={showCreateContact}
@@ -223,6 +261,10 @@ function Interactions() {
                                       }
                                       onSelectMenuContact={() => {
                                         setContactForUpdate(ele);
+                                      }}
+                                      onDeleteChat={() => {
+                                        setChatToDelete(_id);
+                                        setShowDeleteModal(true);
                                       }}
                                     />
                                   );
@@ -438,16 +480,6 @@ function Interactions() {
           )}
         </div>
       </div>
-      <DeleteModal
-        show={showDeleteModal}
-        handleClose={() => setShowDeleteModal(false)}
-        onDelete={() => {
-          setShowDeleteModal(false);
-          // TODO: Implement delete functionality here
-        }}
-        title="Are you sure you want to proceed?"
-        text="This will erase all messages and replies in this conversation. Once deleted, they cannot be recovered."
-      />
     </>
   );
 }

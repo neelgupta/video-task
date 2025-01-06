@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import dayjs from "dayjs";
 const ENCRYPTION_KEY = CryptoJS.enc.Utf8.parse(
   "34145392620706094264300535641132"
 );
@@ -69,6 +70,43 @@ export function getDataFromLocalStorage(key = "") {
   }
   return returnValue;
 }
+
+export const getDateRangeByTag = (tag) => {
+  console.log("tag", tag);
+
+  switch (tag) {
+    case "today":
+      // Ensure the start of the day is at 12:00 AM and the end of the day is at 11:59 PM
+      return {
+        startDate: dayjs().startOf("day").format("YYYY-MM-DD"), // Local time at 12:00 AM (start of the day)
+        endDate: dayjs().endOf("day").format("YYYY-MM-DD"), // Local time at 11:59 PM (end of the day)
+      };
+
+    case "lastWeek":
+      return {
+        startDate: dayjs()
+          .subtract(1, "week")
+          .startOf("week")
+          .format("YYYY-MM-DD"),
+        endDate: dayjs().subtract(1, "week").endOf("week").format("YYYY-MM-DD"),
+      };
+
+    case "lastMonth":
+      return {
+        startDate: dayjs()
+          .subtract(1, "month")
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        endDate: dayjs()
+          .subtract(1, "month")
+          .endOf("month")
+          .format("YYYY-MM-DD"),
+      };
+
+    default:
+      return { startDate: null, endDate: null }; // Default case
+  }
+};
 
 export function getHeaderData() {
   let header = {

@@ -3,7 +3,11 @@ import { icons } from "../../../utils/constants";
 import "./Dashboard.scss";
 import { Button, CheckBox, Table } from "../../../components";
 import { useEffect, useState } from "react";
-import { creteImgFilter, getColorFromLetter } from "../../../utils/helpers";
+import {
+  creteImgFilter,
+  getColorFromLetter,
+  getDateRangeByTag,
+} from "../../../utils/helpers";
 import { api } from "../../../services/api";
 import {
   handelCatch,
@@ -15,7 +19,8 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { Spinner } from "react-bootstrap";
 import dayjs from "dayjs";
 import DeleteModal from "../../../components/layouts/DeleteModal";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const header = [
   {
     title: <CheckBox className="s-18" />,
@@ -81,7 +86,11 @@ function Dashboard() {
     reduxData;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [tabIndex, setTabIndex] = useState(1);
+  const [tabIndex, setTabIndex] = useState("all");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [dateRange, setDateRange] = useState([]);
   const [userUsesCard, setUserUsesCard] = useState(dashboardCard);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -106,107 +115,125 @@ function Dashboard() {
   }, [selectedOrganizationId]);
 
   useEffect(() => {
-    if (selectedOrganizationId) {
+    if (selectedOrganizationId && tabIndex) {
       getInteraction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paginationOption.currentPage, selectedOrganizationId]);
+  }, [
+    paginationOption.currentPage,
+    selectedOrganizationId,
+    startDate,
+    endDate,
+    searchText,
+  ]);
 
   useEffect(() => {
-    if (interactionList.length > 0) {
-      const rowData = [];
-      interactionList?.forEach((elem) => {
-        let obj = [
-          {
-            value: <CheckBox className="s-18" />,
-            className: "wp-5 justify-content-center",
-          },
-          {
-            value: <div style={{ color: "#636363" }}>{elem.title}</div>,
-            className: "wp-15 ",
-          },
-          {
-            value: (
-              <div>
-                <span style={{ color: "#636363" }}>
-                  {dayjs(elem.createdAt).format("DD MMM YYYY")}
-                </span>
-              </div>
-            ),
-            className: "wp-15",
-          },
+    const obj = getDateRangeByTag(tabIndex);
+    setStartDate(
+      dateRange[0]
+        ? dayjs(dateRange[0]).format("YYYY-MM-DD")
+        : obj?.startDate || null
+    );
+    setEndDate(
+      dateRange[1]
+        ? dayjs(dateRange[1]).format("YYYY-MM-DD")
+        : obj?.endDate || null
+    );
+  }, [dateRange, tabIndex]);
 
-          {
-            value: <div style={{ color: "#636363" }}> {elem.landedCount}</div>,
-            className: "wp-10 color-757f justify-content-center",
-          },
-          {
-            value: <div style={{ color: "#636363" }}>{elem.contactCount}</div>,
-            className: "wp-15 color-757f justify-content-center",
-          },
-          {
-            value: (
-              <div style={{ color: "#636363" }}> {elem.interactionCount} </div>
-            ),
-            className: "wp-15 color-757f justify-content-center",
-          },
+  useEffect(() => {
+    const rowData = [];
+    interactionList?.forEach((elem) => {
+      let obj = [
+        {
+          value: <CheckBox className="s-18" />,
+          className: "wp-5 justify-content-center",
+        },
+        {
+          value: <div style={{ color: "#636363" }}>{elem.title}</div>,
+          className: "wp-15 ",
+        },
+        {
+          value: (
+            <div>
+              <span style={{ color: "#636363" }}>
+                {dayjs(elem.createdAt).format("DD MMM YYYY")}
+              </span>
+            </div>
+          ),
+          className: "wp-15",
+        },
 
-          {
-            value: (
+        {
+          value: <div style={{ color: "#636363" }}> {elem.landedCount}</div>,
+          className: "wp-10 color-757f justify-content-center",
+        },
+        {
+          value: <div style={{ color: "#636363" }}>{elem.contactCount}</div>,
+          className: "wp-15 color-757f justify-content-center",
+        },
+        {
+          value: (
+            <div style={{ color: "#636363" }}> {elem.interactionCount} </div>
+          ),
+          className: "wp-15 color-757f justify-content-center",
+        },
+
+        {
+          value: (
+            <div
+              className="f-center "
+              onClick={() => {
+                navigate(`/user/asset-allocation/${elem._id}`);
+              }}
+            >
+              <img
+                src={icons.top_right_arrow}
+                alt="eyeView"
+                className="fit-image w-16 hover-icons-effect"
+                style={{ filter: creteImgFilter(themeColor.darkColor) }}
+              />
+            </div>
+          ),
+          className: "wp-10 color-757f justify-content-center",
+        },
+
+        {
+          value: (
+            <div className="f-center gap-3">
               <div
-                className="f-center "
+                className="pointer h-16 w-16"
                 onClick={() => {
-                  navigate(`/user/asset-allocation/${elem._id}`);
+                  navigate(`/user/flow/${elem._id}`);
                 }}
               >
                 <img
-                  src={icons.top_right_arrow}
-                  alt="eyeView"
-                  className="fit-image w-16 hover-icons-effect"
-                  style={{ filter: creteImgFilter(themeColor.darkColor) }}
+                  src={icons.edit}
+                  alt="edit"
+                  className="fit-image hover-icons-effect"
                 />
               </div>
-            ),
-            className: "wp-10 color-757f justify-content-center",
-          },
-
-          {
-            value: (
-              <div className="f-center gap-3">
-                <div
-                  className="pointer h-16 w-16"
-                  onClick={() => {
-                    navigate(`/user/flow/${elem._id}`);
-                  }}
-                >
-                  <img
-                    src={icons.edit}
-                    alt="edit"
-                    className="fit-image hover-icons-effect"
-                  />
-                </div>
-                <div
-                  className="pointer h-16 w-16"
-                  onClick={() => {
-                    setShowDeleteModal(true);
-                    setDeleteId(elem._id);
-                  }}
-                >
-                  <img
-                    src={icons.deleteSVG}
-                    alt="eyeView"
-                    className="fit-image deleteSVG-hover-icons-effect"
-                  />
-                </div>
+              <div
+                className="pointer h-16 w-16"
+                onClick={() => {
+                  setShowDeleteModal(true);
+                  setDeleteId(elem._id);
+                }}
+              >
+                <img
+                  src={icons.deleteSVG}
+                  alt="eyeView"
+                  className="fit-image deleteSVG-hover-icons-effect"
+                />
               </div>
-            ),
-            className: "wp-10 justify-content-end",
-          },
-        ];
-        rowData.push({ data: obj });
-      });
-      setTableData(rowData);
-    }
+            </div>
+          ),
+          className: "wp-10 justify-content-end",
+        },
+      ];
+      rowData.push({ data: obj });
+    });
+    setTableData(rowData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interactionList]);
 
@@ -254,11 +281,18 @@ function Dashboard() {
   const getInteraction = async () => {
     setIsInteractionLoad(true);
     try {
+      const dataRange = getDateRangeByTag(tabIndex);
       const res = await api.get(
-        `dashboard/dashboard-interaction/${selectedOrganizationId}?search=&limit=${paginationOption.pageSize}&page=${paginationOption.currentPage}`
+        `dashboard/dashboard-interaction/${selectedOrganizationId}?search=${searchText}&limit=${
+          paginationOption.pageSize
+        }&page=${paginationOption.currentPage}&startDate=${
+          startDate || ""
+        }&endDate=${endDate || ""}`
       );
       if (res.status === 200) {
-        setInteractionList(res.data.response.Records);
+        setInteractionList(
+          res.data.response.Records.length > 0 ? res.data.response.Records : []
+        );
         setPaginationOption({
           ...paginationOption,
           count: res.data?.response?.totalRecords || 0,
@@ -298,6 +332,7 @@ function Dashboard() {
     setIsDelete(false);
     setDeleteId("");
   };
+
   return (
     <div className="Dashboards-container">
       {showDeleteModal && (
@@ -461,50 +496,73 @@ function Dashboard() {
             <div className="table-header">
               <div className="tab-btn">
                 <div
-                  onClick={() => setTabIndex(1)}
-                  className={tabIndex === 1 ? "active" : ""}
+                  onClick={() => setTabIndex("all")}
+                  className={tabIndex === "all" ? "active" : ""}
                 >
                   All
                 </div>
                 <div
-                  onClick={() => setTabIndex(2)}
-                  className={tabIndex === 2 ? "active" : ""}
+                  onClick={() => setTabIndex("today")}
+                  className={tabIndex === "today" ? "active" : ""}
                 >
                   Today
                 </div>
                 <div
-                  onClick={() => setTabIndex(3)}
-                  className={tabIndex === 3 ? "active" : ""}
+                  onClick={() => setTabIndex("lastWeek")}
+                  className={tabIndex === "lastWeek" ? "active" : ""}
                 >
                   Last Week
                 </div>
                 <div
-                  onClick={() => setTabIndex(4)}
-                  className={tabIndex === 4 ? "active" : ""}
+                  onClick={() => setTabIndex("lastMonth")}
+                  className={tabIndex === "lastMonth" ? "active" : ""}
                 >
                   Last One Month
                 </div>
               </div>
               <div className="f-center date-btn">
-                <div className="me-20">Created</div>
-                <div className="w-18 h-18 f-center">
-                  <img src={icons.calendar} alt="" className="w-20 fit-image" />
+                <div className="">
+                  <img
+                    src={icons.calendar}
+                    alt=""
+                    className="w-20 fit-image date-label"
+                  />
                 </div>
-              </div>
-              <div className="w-24 h-24 f-center ms-20 pointer">
-                <img
-                  src={icons.search}
-                  alt=""
-                  className="w-20 fit-image hover-icons-effect"
+                <DatePicker
+                  selected={dateRange[0]}
+                  onChange={(dates) => setDateRange(dates)}
+                  selectsRange
+                  startDate={dateRange[0]}
+                  endDate={dateRange[1]}
+                  dateFormat="yyyy/MM/dd"
+                  isClearable
+                  className="custom-date-picker-input"
+                  calendarClassName="custom-calendar"
+                  placeholderText="Select a date range"
                 />
               </div>
             </div>
-            <div className="w-50 h-50 f-center pointer">
-              <img
-                src={icons.deleteSVG}
-                alt=""
-                className="w-20 fit-image hover-icons-effect"
-              />
+            <div className="search-container">
+              <div
+                className="w-20 h-20 f-center ms-20 pointer"
+                style={{ position: "absolute", left: "0px" }}
+              >
+                <img
+                  src={icons.search}
+                  alt=""
+                  className="fit-image"
+                  style={{ filter: creteImgFilter("#aaaaaa") }}
+                />
+              </div>
+              <div className="w-300 flow-ai-input d-flex">
+                <input
+                  type="text"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder="Search..."
+                  style={{ borderRadius: "5px", paddingLeft: "50px" }}
+                />
+              </div>
             </div>
           </div>
           <Table

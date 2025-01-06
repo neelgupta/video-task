@@ -77,6 +77,7 @@
   .table-header {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     padding: 10px;
     padding-bottom: 15px;
     .tab-btn {
@@ -100,16 +101,47 @@
       }
     }
     .date-btn {
-      display: flex;
-      border: 1px solid rgb(171, 171, 171);
-      border-radius: 5px;
-      font-size: 16px;
-      font-weight: 500;
-      overflow: hidden;
-      padding: 10px 20px;
       margin-left: 20px;
-      cursor: pointer;
+      width: 280px;
+      position: relative;
+      .custom-date-picker-input {
+        border: 1px solid rgb(171, 171, 171);
+        width: 100%;
+        font-size: 16px;
+        padding: 10px 10px 10px 40px;
+        border-radius: 5px;
+        outline: none;
+        position: relative;
+        &:focus {
+          border: 1px solid #8567ff;
+        }
+      }
+      .date-label {
+        position: absolute;
+        z-index: 100;
+        left: 10px;
+        filter: invert(39%) sepia(22%) saturate(7164%) hue-rotate(233deg)
+          brightness(107%) contrast(101%);
+      }
+      .react-datepicker__tab-loop {
+        position: absolute;
+      }
+      .react-datepicker__close-icon {
+        &::after {
+          background-color: #555555;
+        }
+      }
+      .custom-calendar {
+        border-radius: 8px; /* Rounded corners */
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+      }
     }
+  }
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
   }
   .deleteSVG-hover-icons-effect {
     transform: scale(1);
