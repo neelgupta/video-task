@@ -89,6 +89,7 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
               onClick={() => {
                 handelOptionSelect(ele);
               }}
+              style={{ borderRadius: `${flowStyle.border_radius}px` }}
             >
               <div className="option-teg">
                 {(selectOption || []).includes(ele) &&

@@ -58,7 +58,10 @@ function ButtonForm({ onNext, node, videoTime, isPost, flowStyle }) {
         >
           <button
             onClick={() => !isPost && onNext({ ans: true })}
-            style={{ fontFamily: `${flowStyle.font}` }}
+            style={{
+              fontFamily: `${flowStyle.font}`,
+              borderRadius: `${flowStyle.border_radius}px`,
+            }}
           >
             {answer_format.button_title}
             {isPost && <Spinner size="sm" className="ms-10" />}
