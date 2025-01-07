@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { icons } from "../../../utils/constants";
-import { creteImgFilter } from "../../../utils/helpers";
+import { creteImgFilter, hexToRgb } from "../../../utils/helpers";
 import "./VideoPlayer.scss";
 import { getTrackBackground, Range } from "react-range";
 import { useDispatch } from "react-redux";
 import { handelCatch } from "../../../store/globalSlice";
 import { processVideoMetadata } from "../../../pages/FlowCanvas/flowControl";
-const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
+const VideoPlayer = ({
+  videoUrl,
+  videoConfigForm,
+  getCurrentTime,
+  flowStyle,
+}) => {
   const videoRef = useRef(null);
   const {
     alignVideo = false,
@@ -156,14 +161,23 @@ const VideoPlayer = ({ videoUrl, videoConfigForm, getCurrentTime }) => {
         >
           {videoUrl && <source src={videoUrl} type="video/mp4" />}
         </video>
-        <div className="flow-ai-video-logo-container">
+        <div
+          className="flow-ai-video-logo-container"
+          style={{
+            background: `rgba(${hexToRgb(flowStyle.primary_color)}, 0.6)`,
+          }}
+        >
           <div
-            className="text-12-700"
-            style={{ color: "white", fontSize: "12" }}
+            className="text-14-500"
+            style={{
+              color: "white",
+              fontSize: "12",
+              fontFamily: `${flowStyle.font}`,
+            }}
           >
-            Powered by:
+            Powered by :
           </div>
-          <div className="text-24-800" style={{ color: "white" }}>
+          <div className="text-20-800" style={{ color: "white" }}>
             Flōw AI
           </div>
         </div>

@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import "./AnswerForm.scss";
 import { Spinner } from "react-bootstrap";
 
-function FileUploadForm({ onNext, node, isPost }) {
+function FileUploadForm({ onNext, node, isPost, flowStyle }) {
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
   const [videoFile, setVideoFile] = useState(null);
@@ -16,7 +16,10 @@ function FileUploadForm({ onNext, node, isPost }) {
       <div className="container">
         <div>
           <div className="mb-20">
-            <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
+            <div
+              className={`text-12-600 mb-5`}
+              style={{ color: "#666666", fontFamily: `${flowStyle.font}` }}
+            >
               Title:
             </div>
             <div className="wp-100 InputBox">
@@ -33,7 +36,10 @@ function FileUploadForm({ onNext, node, isPost }) {
             </div>
           </div>
           <div className="mb-20 wp-100 ">
-            <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
+            <div
+              className={`text-12-600 mb-5`}
+              style={{ color: "#666666", fontFamily: `${flowStyle.font}` }}
+            >
               Description:
             </div>
             <div className="InputBox">
@@ -56,12 +62,16 @@ function FileUploadForm({ onNext, node, isPost }) {
           <div className="mb-20 wp-100 ">
             <div
               className="text-12-600 mb-10 mt-20"
-              style={{ color: "#666666" }}
+              style={{ color: "#666666", fontFamily: `${flowStyle.font}` }}
             >
               Upload Video
             </div>
 
-            <UploadFile setFileValue={setVideoFile} videoFile={videoFile} />
+            <UploadFile
+              setFileValue={setVideoFile}
+              videoFile={videoFile}
+              flowStyle={flowStyle}
+            />
           </div>
         </div>
         <div id="ans-btn-group" className="mb-30">
@@ -76,16 +86,17 @@ function FileUploadForm({ onNext, node, isPost }) {
                 onNext({ ans: videoFile });
               }
             }}
+            style={{ background: flowStyle.secondary_color }}
           >
             {isPost ? (
-              <Spinner size="lg" color="#888888" />
+              <Spinner size="lg" color="#000" />
             ) : (
               <img
                 src={icons.top_right_arrow}
                 alt=""
                 style={{
                   transform: "rotate(45deg)",
-                  filter: creteImgFilter("#888888"),
+                  filter: creteImgFilter("#000"),
                 }}
                 className="fit-image w-30"
               />

@@ -18,6 +18,7 @@ import FileUploadForm from "./AnswerForm/FileUploadForm";
 import ContactForm from "./AnswerForm/ContactForm";
 import CalenderForm from "./AnswerForm/CalenderForm";
 import EndScreen from "./EndScreen";
+// profileData;
 function ViewInteraction() {
   const { token, type } = useParams();
   const id = decrypt(token);
@@ -31,6 +32,15 @@ function ViewInteraction() {
   const [isContactCollected, setIsContactCollected] = useState(false);
   const [answerId, setAnswerId] = useState("");
   const [isPost, setIsPost] = useState(false);
+  const [flowStyle, setFlowStyle] = useState({
+    primary_color: "#7B5AFF",
+    secondary_color: "#B3A1FF",
+    background_color: "#FFFFFF",
+    language: "english",
+    border_radius: "Arial",
+    font: 10,
+  });
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,6 +50,10 @@ function ViewInteraction() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => {
+    console.log("flowStyle", flowStyle);
+  }, [flowStyle]);
 
   const fetchInteraction = async () => {
     try {
@@ -52,6 +66,14 @@ function ViewInteraction() {
         const nodeList = nodes.filter((x) => x.type === "Question");
 
         setIntData(intr);
+        setFlowStyle({
+          primary_color: intr?.primary_color || "#7B5AFF",
+          secondary_color: intr?.secondary_color || "#B3A1FF",
+          background_color: intr?.background_color || "#FFFFFF",
+          language: intr?.language || "english",
+          border_radius: intr?.border_radius || "Arial",
+          font: intr?.font || 10,
+        });
         setKey(nodeList.length > 0 ? 0 : "End");
         setQueNodes(nodeList);
         setEndNodes(nodes.find((x) => x.type === "End"));
@@ -207,6 +229,7 @@ function ViewInteraction() {
                       >
                         {video_url && (
                           <VideoPlayer
+                            flowStyle={flowStyle}
                             videoUrl={video_url || ""}
                             videoConfigForm={{
                               alignVideo: video_align,
@@ -222,13 +245,17 @@ function ViewInteraction() {
                         )}
                       </div>
                     </div>
-                    <div className="wp-45 hp-100 f-center">
+                    <div
+                      className="wp-45 hp-100 f-center"
+                      style={{ background: flowStyle.background_color }}
+                    >
                       <div
                         className="wp-100 hp-100 p-30 d-flex"
                         style={{ gap: "20px" }}
                       >
                         {!isContact && answer_type === "open-ended" && (
                           <OpenEndedForm
+                            flowStyle={flowStyle}
                             onNext={(ansValue) => {
                               if (
                                 answer_format?.contact_form &&
@@ -248,6 +275,7 @@ function ViewInteraction() {
 
                         {!isContact && answer_type === "multiple-choice" && (
                           <MultipleChoiceForm
+                            flowStyle={flowStyle}
                             onNext={(ansValue) => {
                               if (
                                 answer_format?.contact_form &&
@@ -266,6 +294,7 @@ function ViewInteraction() {
 
                         {!isContact && answer_type === "button" && (
                           <ButtonForm
+                            flowStyle={flowStyle}
                             onNext={(ansValue) => {
                               if (
                                 answer_format?.contact_form &&
@@ -285,6 +314,7 @@ function ViewInteraction() {
 
                         {!isContact && answer_type === "file-upload" && (
                           <FileUploadForm
+                            flowStyle={flowStyle}
                             onNext={(ansValue) => {
                               if (
                                 answer_format?.contact_form &&
@@ -319,6 +349,7 @@ function ViewInteraction() {
                                 contactValue
                               )
                             }
+                            flowStyle={flowStyle}
                             isPost={isPost}
                           />
                         )}
@@ -339,7 +370,11 @@ function ViewInteraction() {
               width: "100%",
             }}
           >
-            <EndScreen answerId={answerId} inEnd={key === "End"} />
+            <EndScreen
+              answerId={answerId}
+              inEnd={key === "End"}
+              flowStyle={flowStyle}
+            />
           </div>
         </Tab>
       </Tabs>

@@ -119,7 +119,7 @@ function ButtonEdge({
             <img
               src={icons.addIcon}
               alt=""
-              className="fit-image"
+              className="fit-image w-12"
               style={{ filter: creteImgFilter("#fff") }}
             />
           </button>

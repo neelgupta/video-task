@@ -73,7 +73,7 @@ function Interactions() {
           return { ...ele, isCurrentWeek: isDateInCurrentWeek(createdAt) };
         });
         setInteractions(data);
-        setSelectedContact(data.find((ele) => ele.isCurrentWeek));
+        setSelectedContact(data[0]);
       } else {
         dispatch(throwError(res.data.message));
       }
@@ -202,7 +202,7 @@ function Interactions() {
               className="p-5 pt-20  auri-scroll list"
               style={{ height: isResponsive ? "400px" : "calc(100vh - 200px)" }}
             >
-              {interactions.length > 0 ? (
+              {interactions.length > 0 || !isLoad ? (
                 <>
                   {selectedFilterTitleList[selectedFilter].map(
                     (title, weekIndex) => {
@@ -217,13 +217,23 @@ function Interactions() {
                       };
                       return (
                         <div key={weekIndex}>
-                          <div style={{ padding: "5px" }}>
-                            <div className="color-darkText text-14-600">
-                              {title}
-                            </div>
-                          </div>
                           {isLoad ? (
                             <>
+                              <div style={{ padding: "5px" }}>
+                                <div className="color-darkText text-14-600">
+                                  {interactions.filter(filterData).length ===
+                                  0 ? (
+                                    <div
+                                      className="text-14-500 p-10 ps-20 "
+                                      style={{ color: "rgba(0,0,0,0.5)" }}
+                                    >
+                                      {title} interaction not found.
+                                    </div>
+                                  ) : (
+                                    title
+                                  )}
+                                </div>
+                              </div>
                               {interactions
                                 .filter(filterData)
                                 .map((ele, index) => {
@@ -241,32 +251,34 @@ function Interactions() {
                                     : "#8C8E90";
 
                                   return (
-                                    <InteractionsChatCard
-                                      key={index}
-                                      ele={ele}
-                                      subTextColor={subTextColor}
-                                      contact_id={contact_id}
-                                      contact_details={contact_details}
-                                      bgColor={bgColor}
-                                      isActive={isActive}
-                                      textColor={textColor}
-                                      onSelectChat={() =>
-                                        setSelectedContact(ele)
-                                      }
-                                      setShowCreateContact={
-                                        setShowCreateContact
-                                      }
-                                      setShowAssignContact={
-                                        setShowAssignContact
-                                      }
-                                      onSelectMenuContact={() => {
-                                        setContactForUpdate(ele);
-                                      }}
-                                      onDeleteChat={() => {
-                                        setChatToDelete(_id);
-                                        setShowDeleteModal(true);
-                                      }}
-                                    />
+                                    <>
+                                      <InteractionsChatCard
+                                        key={index}
+                                        ele={ele}
+                                        subTextColor={subTextColor}
+                                        contact_id={contact_id}
+                                        contact_details={contact_details}
+                                        bgColor={bgColor}
+                                        isActive={isActive}
+                                        textColor={textColor}
+                                        onSelectChat={() =>
+                                          setSelectedContact(ele)
+                                        }
+                                        setShowCreateContact={
+                                          setShowCreateContact
+                                        }
+                                        setShowAssignContact={
+                                          setShowAssignContact
+                                        }
+                                        onSelectMenuContact={() => {
+                                          setContactForUpdate(ele);
+                                        }}
+                                        onDeleteChat={() => {
+                                          setChatToDelete(_id);
+                                          setShowDeleteModal(true);
+                                        }}
+                                      />
+                                    </>
                                   );
                                 })}
                             </>
@@ -305,7 +317,8 @@ function Interactions() {
                   className="wp-100 d-flex text-18-700 mt-50"
                   style={{ justifyContent: "center" }}
                 >
-                  Interactions not found!
+                  {selectedFilterTitleList[selectedFilter]?.[0]} Interactions
+                  not found!
                 </div>
               )}
             </div>

@@ -27,7 +27,7 @@ const optionArray = [
     isPro: false,
   },
 ];
-function OpenEndedForm({ onNext, node, videoTime, isPost }) {
+function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
   const [tabArray, setTabArray] = useState(optionArray);
@@ -101,7 +101,10 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
             justifyContent: "center",
           }}
         >
-          <div className="text-26-600">
+          <div
+            className="text-26-500"
+            style={{ fontFamily: `${flowStyle.font}` }}
+          >
             Interact in{" "}
             <span style={{ color: "#7b5aff" }}>
               {parseInt(answer_format.delay) -
@@ -123,7 +126,11 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
         >
           <div
             className="text-20-500 mb-50"
-            style={{ color: "#7D8185", textAlign: "center" }}
+            style={{
+              color: "#7D8185",
+              textAlign: "center",
+              fontFamily: `${flowStyle.font}`,
+            }}
           >
             How do you want to generate video?
           </div>
@@ -136,10 +143,14 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
                   }
                   className="footer_card pointer"
                   key={index}
-                  style={{ background: "#7B5AFF", color: "white" }}
+                  style={{
+                    background: flowStyle.primary_color,
+                    color: "white",
+                    borderRadius: `${flowStyle?.border_radius || 0}px`,
+                  }}
                 >
                   {ele.isPro && <div className="proTeg">pro</div>}
-                  <div className="wp-100 h-100 f-center">
+                  <div className="h-70 wp-100 f-center">
                     <img
                       src={ele.icon}
                       alt=""
@@ -149,7 +160,12 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
                       }}
                     />
                   </div>
-                  <div className="text-16-500">{ele.text}</div>
+                  <div
+                    className="text-16-500"
+                    style={{ fontFamily: `${flowStyle.font}` }}
+                  >
+                    {ele.text}
+                  </div>
                 </div>
               );
             })}
@@ -161,7 +177,10 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
           <div className="form-container">
             {answerForm.ansType === "text" && (
               <div className="wp-100">
-                <div className="text-20-500" style={{ color: "#7D8185" }}>
+                <div
+                  className="text-20-500"
+                  style={{ color: "#7D8185", fontFamily: `${flowStyle.font}` }}
+                >
                   Description
                 </div>
                 <div style={{ borderRadius: "10px" }}>
@@ -185,7 +204,7 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
               <div className="wp-100">
                 <div
                   className="text-20-500 mb-20 mt-20"
-                  style={{ color: "#7D8185" }}
+                  style={{ color: "#7D8185", fontFamily: `${flowStyle.font}` }}
                 >
                   Upload Video
                 </div>
@@ -195,6 +214,7 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
                     handleVideoLength(file);
                   }}
                   videoFile={answerForm.ans}
+                  flowStyle={flowStyle}
                 />
               </div>
             )}
@@ -203,11 +223,12 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
               <div className="wp-100">
                 <div
                   className="text-20-500 mb-20 "
-                  style={{ color: "#7D8185" }}
+                  style={{ color: "#7D8185", fontFamily: `${flowStyle.font}` }}
                 >
                   Upload Audio
                 </div>
                 <AudioUpload
+                  flowStyle={flowStyle}
                   audio={answerForm.ans}
                   setAudio={(file) => {
                     handleVideoLength(file);
@@ -227,6 +248,7 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
                     onNext({ ...answerForm });
                   }
                 }}
+                style={{ background: flowStyle.secondary_color }}
               >
                 {isPost ? (
                   <Spinner size="lg" color="#888888" />
@@ -236,7 +258,7 @@ function OpenEndedForm({ onNext, node, videoTime, isPost }) {
                     alt=""
                     style={{
                       transform: "rotate(45deg)",
-                      filter: creteImgFilter("#888888"),
+                      filter: creteImgFilter("#000"),
                     }}
                     className="fit-image w-30"
                   />

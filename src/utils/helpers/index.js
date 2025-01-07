@@ -495,3 +495,16 @@ export const getColorFromLetter = (letter) => {
   const hue = (index / letters.length) * 360; // Spread hues across the color wheel
   return `hsl(${hue}, 70%, 50%)`; // Use HSL to get vibrant colors
 };
+
+// const hexToRgb = (hex) => {
+//   // Remove '#' if present
+//   hex = hex.replace(/^#/, "");
+
+//   // Parse the values
+//   let bigint = parseInt(hex, 16);
+//   let r = (bigint >> 16) & 255;
+//   let g = (bigint >> 8) & 255;
+//   let b = bigint & 255;
+
+//   return `${r}, ${g}, ${b}`;
+// };

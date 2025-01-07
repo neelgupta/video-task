@@ -5,7 +5,7 @@ import { creteImgFilter } from "../../../utils/helpers";
 import { icons } from "../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../store/globalSlice";
-function AudioUpload({ audio, setAudio }) {
+function AudioUpload({ audio, setAudio, flowStyle }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const dispatch = useDispatch();
   const { getRootProps, getInputProps } = useDropzone({
@@ -56,15 +56,47 @@ function AudioUpload({ audio, setAudio }) {
           style={{ filter: creteImgFilter("#6C5ECB") }}
         />
         <p className="upload-text">
-          <strong>Drag & drop files or </strong>
-          <span className="browse">Browse</span>
+          <strong
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
+            }}
+          >
+            Drag & drop files or{" "}
+          </strong>
+          <span
+            className="browse"
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
+            }}
+          >
+            Browse
+          </span>
         </p>
-        <p className="supported-formats">Supported formats MP3</p>
+        <p
+          className="supported-formats"
+          style={{
+            ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
+          }}
+        >
+          Supported formats MP3
+        </p>
       </div>
       {audio && (
-        <div className="footer text-12-600" style={{ color: "#666666" }}>
-          <div>Uploading - 1/1 files</div>
-          <div>Max Limit: 3MB</div>
+        <div className="footer text-14-500" style={{ color: "#666666" }}>
+          <div
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
+            }}
+          >
+            Uploading - 1/1 files
+          </div>
+          <div
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
+            }}
+          >
+            Max Limit: 3MB
+          </div>
         </div>
       )}
       {audio && (

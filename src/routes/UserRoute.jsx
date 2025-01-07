@@ -78,7 +78,7 @@ const UserRoute = () => {
       pageTitle: "Dashboard",
     },
     {
-      path: "/user/contacts/visit",
+      path: "/user/contacts/visit/:id",
       component: <VisitContacts />,
       pageTitle: "Back to Contacts",
       onBack: () => navigate("/user/contacts"),

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import "./AnswerForm.scss";
 
-function ButtonForm({ onNext, node, videoTime, isPost }) {
+function ButtonForm({ onNext, node, videoTime, isPost, flowStyle }) {
   const { answer_type, answer_format } = node;
   const [isDelay, setIsDelay] = useState(null);
 
@@ -34,7 +34,10 @@ function ButtonForm({ onNext, node, videoTime, isPost }) {
             justifyContent: "center",
           }}
         >
-          <div className="text-26-600">
+          <div
+            className="text-26-500"
+            style={{ fontFamily: `${flowStyle.font}` }}
+          >
             Interact in{" "}
             <span style={{ color: "#7b5aff" }}>
               {parseInt(answer_format.delay) -
@@ -53,7 +56,10 @@ function ButtonForm({ onNext, node, videoTime, isPost }) {
             justifyContent: "center",
           }}
         >
-          <button onClick={() => !isPost && onNext({ ans: true })}>
+          <button
+            onClick={() => !isPost && onNext({ ans: true })}
+            style={{ fontFamily: `${flowStyle.font}` }}
+          >
             {answer_format.button_title}
             {isPost && <Spinner size="sm" className="ms-10" />}
           </button>

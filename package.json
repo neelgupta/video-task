@@ -24,6 +24,7 @@
     "react-apexcharts": "^1.4.4",
     "react-bootstrap": "^2.10.4",
     "react-chartjs-2": "^5.2.0",
+    "react-color": "^2.19.3",
     "react-color-palette": "^7.3.0",
     "react-datepicker": "^7.6.0",
     "react-dom": "^18.3.1",

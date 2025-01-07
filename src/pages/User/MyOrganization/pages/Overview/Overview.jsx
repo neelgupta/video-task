@@ -1,37 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import "./Overview.scss";
 import { api } from "../../../../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setSelectedOrganization,
-  showSuccess,
-  throwError,
-} from "../../../../../store/globalSlice";
+import { showSuccess, throwError } from "../../../../../store/globalSlice";
 import EditOrganizationName from "./EditOrganizationName";
 import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
-
-const brandingOption = [
-  { value: "QnaFlow", label: "QnaFlow" },
-  { value: "no-branding", label: "No branding" },
-];
-const languageOptions = [
-  { value: "english", label: "English" },
-  { value: "dutch", label: "Dutch" },
-  { value: "spanish", label: "Spanish" },
-];
-const fontFamilyList = [
-  { value: "Arial, sans-serif", label: "Arial" },
-  { value: '"Helvetica Neue", Helvetica, sans-serif', label: "Helvetica" },
-  { value: "Georgia, serif", label: "Georgia" },
-  { value: '"Times New Roman", Times, serif', label: "Times New Roman" },
-  { value: "Courier, monospace", label: "Courier" },
-  { value: '"Courier New", Courier, monospace', label: "Courier New" },
-  { value: "Verdana, sans-serif", label: "Verdana" },
-  { value: "Tahoma, sans-serif", label: "Tahoma" },
-  { value: "Trebuchet MS, sans-serif", label: "Trebuchet MS" },
-  { value: '"Lucida Sans", sans-serif', label: "Lucida Sans" },
-];
+import { Tooltip } from "react-tooltip";
+import { SketchPicker } from "react-color";
+import useClickOutside from "../../../../../hook/useClickOutside";
+import {
+  brandingOption,
+  fontFamilyList,
+  languageOptions,
+} from "./overviewOption";
 
 function Overview() {
   const dispatch = useDispatch();
@@ -45,10 +27,16 @@ function Overview() {
     replay_to_email: "",
     branding: "",
     language: "",
+    Color: "",
     font: "",
     border_radius: "",
   });
-
+  const [flowColor, setFlowColor] = useState({
+    primaryColor: "",
+    secondaryColor: "",
+    backgroundColor: "",
+  });
+  const [showPicker, setShowPicker] = useState("");
   const updateOverview = async (valueObj, keyName) => {
     try {
       setIsChange(keyName);
@@ -100,6 +88,7 @@ function Overview() {
       });
       setReplayEmailOption(option);
     }
+    console.log("organization", organization);
   }, [organization]);
 
   useEffect(() => {
@@ -114,6 +103,11 @@ function Overview() {
         ),
         font: fontFamilyList.find((o) => o.value === organization.font),
         border_radius: parseInt(organization.border_radius),
+      });
+      setFlowColor({
+        primaryColor: organization.primary_color,
+        secondaryColor: organization.secondary_color,
+        backgroundColor: organization.background_color,
       });
     }
   }, [organization, replayEmailOption]);
@@ -175,7 +169,7 @@ function Overview() {
                 if (select.label !== organization.replay_to_email) {
                   updateOverview(
                     { replay_to_email: select.label },
-                    "default email for replies"
+                    "Replay to email"
                   );
                 }
                 return {};
@@ -258,7 +252,92 @@ function Overview() {
             >
               Colors
             </div>
-            <div className="w-300"></div>
+            <div
+              className="w-300 p-10"
+              style={{ display: "flex", gap: "20px" }}
+            >
+              {[
+                {
+                  dbKey: "primary_color",
+                  key: "primaryColor",
+                  label: "primary color",
+                },
+                {
+                  dbKey: "secondary_color",
+                  key: "secondaryColor",
+                  label: "secondary color",
+                },
+                {
+                  dbKey: "background_color",
+                  key: "backgroundColor",
+                  label: "background color",
+                },
+              ].map((colorInput, index) => {
+                return (
+                  <div
+                    key={index}
+                    style={{ position: "relative" }}
+                    className="color-input-container"
+                  >
+                    <button
+                      onClick={() => setShowPicker(colorInput.key)}
+                      style={{
+                        backgroundColor: flowColor?.[colorInput.key] || "#fff",
+                        border: `1px solid ${
+                          showPicker === colorInput.key ? "black" : "white"
+                        }`,
+                      }}
+                      className="color-input-container_btn"
+                      data-tooltip-id={`${colorInput.key}Tooltip`}
+                      data-tooltip-content={`Pick a ${colorInput.label}!`}
+                    ></button>
+
+                    {showPicker !== colorInput.key && (
+                      <Tooltip
+                        id={`${colorInput.key}Tooltip`}
+                        place="bottom"
+                        delayShow={300}
+                        style={{ zIndex: "10" }}
+                      />
+                    )}
+
+                    {showPicker === colorInput.key && (
+                      <div className="color-input-container_picker">
+                        <CustomSketchPicker
+                          colorInput={colorInput}
+                          flowColor={flowColor}
+                          setFlowColor={setFlowColor}
+                        />
+                        <div className="picker-btn">
+                          <button
+                            className="picker-btn_cancel"
+                            onClick={() => {
+                              setShowPicker();
+                            }}
+                          >
+                            cancel
+                          </button>
+                          <button
+                            className="picker-btn_pick"
+                            onClick={() => {
+                              updateOverview(
+                                {
+                                  [colorInput.dbKey]: flowColor[colorInput.key],
+                                },
+                                colorInput.label
+                              );
+                              setShowPicker("");
+                            }}
+                          >
+                            save
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <div
             style={{
@@ -284,6 +363,7 @@ function Overview() {
                   }
                   return {};
                 }}
+                isFont
               />
             </div>
           </div>
@@ -339,3 +419,56 @@ function Overview() {
 }
 
 export default Overview;
+
+const CustomSketchPicker = ({ flowColor, setFlowColor, colorInput }) => {
+  const customStyles = {
+    default: {
+      picker: {
+        width: "200px",
+        boxShadow: "none",
+        borderRadius: "10px",
+      },
+      saturation: {
+        borderRadius: "10px",
+      },
+      controls: {
+        display: "flex",
+        gap: "10px",
+        alignItems: "center",
+      },
+      color: {
+        borderRadius: "10px",
+        width: "20px",
+        height: "20px",
+      },
+      fields: {
+        padding: "0px 5px",
+      },
+      input: {
+        border: "2px solid #ccc",
+        borderRadius: "5px",
+        height: "30px",
+        padding: "0 5px",
+        fontSize: "14px",
+        display: "flex",
+      },
+      label: {
+        fontSize: "12px",
+        color: "#555",
+      },
+    },
+  };
+
+  return (
+    <SketchPicker
+      color={flowColor?.[colorInput.key] || "#000"}
+      onChange={(e) =>
+        setFlowColor({
+          ...flowColor,
+          [colorInput.key]: e.hex,
+        })
+      }
+      styles={customStyles} // Pass custom styles
+    />
+  );
+};

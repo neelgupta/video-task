@@ -9,7 +9,7 @@ import { creteImgFilter } from "../../../../utils/helpers";
 import Skeleton from "react-loading-skeleton";
 
 import DeleteModal from "../../../../components/layouts/DeleteModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   handelCatch,
   handleFetchFlowData,
@@ -56,6 +56,7 @@ const IconRenderer = ({ icon, label, onClick, style }) => {
 };
 function VideoCard(props) {
   const { data, id, title, index } = props;
+  // const { interactionsStyle } = useSelector((state) => state.global);
   const [isToolbarVisible, setToolbarVisible] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);

@@ -6,7 +6,7 @@ import { icons } from "../../../utils/constants";
 import { creteImgFilter } from "../../../utils/helpers";
 import "./UploadFile.scss";
 const acceptVideoType = ["pdf", "docx", "xlsx", "pptx", "jpg", "png", "jpeg"];
-function UploadFile({ setFileValue, videoFile }) {
+function UploadFile({ setFileValue, videoFile, flowStyle }) {
   const [uploadProgress, setUploadProgress] = useState(videoFile ? 100 : 0);
   const dispatch = useDispatch();
 
@@ -66,16 +66,45 @@ function UploadFile({ setFileValue, videoFile }) {
           style={{ filter: creteImgFilter("#6C5ECB") }}
         />
         <p className="upload-text">
-          <strong>Drag & drop files or </strong>
-          <span className="browse">Browse</span>
+          <strong
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
+            }}
+          >
+            Drag & drop files or{" "}
+          </strong>
+          <span
+            className="browse"
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
+            }}
+          >
+            Browse
+          </span>
         </p>
-        <p className="supported-formats">
+        <p
+          className="supported-formats"
+          style={{
+            ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
+          }}
+        >
           Supported formats: {acceptVideoType.map((x) => "." + x).join(", ")}
         </p>
       </div>
       {videoFile && (
-        <div className="footer text-12-600" style={{ color: "#666666" }}>
-          <div>Uploading - 1/1 files</div>
+        <div
+          className="footer text-14-500"
+          style={{
+            color: "#666666",
+          }}
+        >
+          <div
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
+            }}
+          >
+            Uploading - 1/1 files
+          </div>
         </div>
       )}
       {videoFile && (

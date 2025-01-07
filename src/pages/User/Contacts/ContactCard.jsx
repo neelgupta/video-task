@@ -101,7 +101,7 @@ const ContactCard = ({ contact, onEdit, fetchContact }) => {
           </div>
           <div
             className={` d-flex gap-2 align-items-center  pointer`}
-            onClick={() => navigate("/user/contacts/visit")}
+            onClick={() => navigate(`/user/contacts/visit/${contact._id}`)}
           >
             <div>
               <img src={icons.profileIcon} alt="Profile icon" />

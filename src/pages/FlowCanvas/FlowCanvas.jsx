@@ -52,14 +52,20 @@ const edgeTypes = {
 
 const FlowCanvas = () => {
   const { id } = useParams();
-  const { queModelConfig, showCreateFlowModal, webcamModelConfig } =
-    useSelector((state) => state.global);
+  const {
+    queModelConfig,
+    showCreateFlowModal,
+    webcamModelConfig,
+    interactionsStyle,
+  } = useSelector((state) => state.global);
+  console.log('interactionsStyle', interactionsStyle)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isCanvasLock, seyIsCanvasLock] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [isShow, setIsShow] = useState(true);
+
   useEffect(() => {
     if (nodes.length === 2) {
       const startNode = nodes.find((x) => x.type === "Start");

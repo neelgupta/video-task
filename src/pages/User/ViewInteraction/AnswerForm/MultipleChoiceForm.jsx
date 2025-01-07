@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import "./AnswerForm.scss";
 import { Spinner } from "react-bootstrap";
 
-function MultipleChoiceForm({ onNext, node, isPost }) {
+function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
   const [selectOption, setSelectOption] = useState(null);
@@ -57,7 +57,12 @@ function MultipleChoiceForm({ onNext, node, isPost }) {
         {answer_format.display_total_choices && (
           <div
             className="text-20-500 mb-30"
-            style={{ color: "#8000ff", display: "flex", alignItems: "center" }}
+            style={{
+              color: flowStyle.primary_color,
+              fontFamily: `${flowStyle.font}`,
+              display: "flex",
+              alignItems: "center",
+            }}
           >
             <div
               className="w-15 h-15 me-10"
@@ -98,7 +103,12 @@ function MultipleChoiceForm({ onNext, node, isPost }) {
                   index + 1
                 )}
               </div>
-              <div className="option-value">{ele}</div>
+              <div
+                className="option-value"
+                style={{ fontFamily: `${flowStyle.font}` }}
+              >
+                {ele}
+              </div>
             </div>
           );
         })}
@@ -115,6 +125,9 @@ function MultipleChoiceForm({ onNext, node, isPost }) {
               onNext({ ans: selectOption });
             }
           }}
+          style={{
+            background: flowStyle.secondary_color,
+          }}
         >
           {isPost ? (
             <Spinner size="lg" color="#888888" />
@@ -124,7 +137,7 @@ function MultipleChoiceForm({ onNext, node, isPost }) {
               alt=""
               style={{
                 transform: "rotate(45deg)",
-                filter: creteImgFilter("#888888"),
+                filter: creteImgFilter("#000"),
               }}
               className="fit-image w-30"
             />

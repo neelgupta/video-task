@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../../../services/api";
 import { useDispatch } from "react-redux";
 import { handelCatch, throwError } from "../../../../store/globalSlice";
-function EndScreen({ answerId, inEnd }) {
+function EndScreen({ answerId, inEnd, flowStyle }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -31,7 +31,10 @@ function EndScreen({ answerId, inEnd }) {
   return (
     <div className="EndScreen-container">
       <div className="end-header">
-        <div> 🙌 </div> <div> All done! Thank you for answering.</div>
+        <div> 🙌 </div>{" "}
+        <div style={{ fontFamily: `${flowStyle?.font}` }}>
+          All done! Thank you for answering.
+        </div>
       </div>
 
       <div className="EndScreen-content-box">

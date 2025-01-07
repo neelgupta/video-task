@@ -1,6 +1,7 @@
 import Select from "react-select";
 import "./DropdownOption.scss";
 import Label from "../Label";
+import { useEffect } from "react";
 const DropdownOption = ({
   options,
   placeholder,
@@ -10,6 +11,7 @@ const DropdownOption = ({
   onChange,
   value,
   isDisabled,
+  isFont = false,
 }) => {
   const customStyles = {
     // Style for the dropdown container
@@ -23,12 +25,24 @@ const DropdownOption = ({
         borderColor: "#8000ff", // Border color on hover
       },
     }),
-    // Style for the selected value in the control
+    option: (provided, state) => {
+      return {
+        ...provided,
+        color: state.isSelected
+          ? "#8000ff !important"
+          : state.isFocused
+          ? "#000 !important"
+          : "#757f95 !important",
+        backgroundColor: "transparent",
+        ...(isFont ? { fontFamily: state.data.value } : {}), // Apply font dynamically
+      };
+    },
     singleValue: (provided, state) => ({
       ...provided,
       color: state.isDisabled ? "gray" : "black", // Text color
       fontSize: "14px", // Font size
       fontWeight: 400, // Normal font weight
+      ...(isFont ? { fontFamily: state.data.value } : {}),
     }),
   };
 

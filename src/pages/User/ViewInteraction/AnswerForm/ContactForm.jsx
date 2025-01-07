@@ -9,7 +9,7 @@ import { Spinner } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
-function ContactForm({ onNext, node, isPost }) {
+function ContactForm({ onNext, node, isPost, flowStyle }) {
   const dispatch = useDispatch();
   const [contactFormData, setContactFormData] = useState({});
   const [form, setForm] = useState({
@@ -93,7 +93,13 @@ function ContactForm({ onNext, node, isPost }) {
     <div className="ContactForm-container">
       {isLoad && (
         <>
-          <div className="text-20-600 mb-30 " style={{ color: "#8000ff" }}>
+          <div
+            className="text-20-500 mb-30 "
+            style={{
+              color: flowStyle.primary_color,
+              fontFamily: `${flowStyle.font}`,
+            }}
+          >
             Before you go, please leave your contact details so we can get back
             to you...
           </div>
@@ -102,8 +108,11 @@ function ContactForm({ onNext, node, isPost }) {
               {contactFormData?.is_name && (
                 <div className="mb-20 InputBox">
                   <label
-                    className="text-12-600 mb-5"
-                    style={{ color: "#666666" }}
+                    className="text-14-500 mb-5"
+                    style={{
+                      color: "#666666",
+                      fontFamily: `${flowStyle.font}`,
+                    }}
                   >
                     Name:
                   </label>
@@ -117,7 +126,12 @@ function ContactForm({ onNext, node, isPost }) {
                     className="form-control"
                   />
                   {formik.touched.name && formik.errors.name && (
-                    <div className="error-text">{formik.errors.name}</div>
+                    <div
+                      className="error-text"
+                      style={{ fontFamily: `${flowStyle.font}` }}
+                    >
+                      {formik.errors.name}
+                    </div>
                   )}
                 </div>
               )}
@@ -125,8 +139,11 @@ function ContactForm({ onNext, node, isPost }) {
               {contactFormData?.is_email && (
                 <div className="mb-20 InputBox">
                   <label
-                    className="text-12-600 mb-5"
-                    style={{ color: "#666666" }}
+                    className="text-14-500 mb-5"
+                    style={{
+                      color: "#666666",
+                      fontFamily: `${flowStyle.font}`,
+                    }}
                   >
                     Email:
                   </label>
@@ -140,7 +157,12 @@ function ContactForm({ onNext, node, isPost }) {
                     className="form-control"
                   />
                   {formik.touched.email && formik.errors.email && (
-                    <div className="error-text">{formik.errors.email}</div>
+                    <div
+                      className="error-text"
+                      style={{ fontFamily: `${flowStyle.font}` }}
+                    >
+                      {formik.errors.email}
+                    </div>
                   )}
                 </div>
               )}
@@ -148,8 +170,11 @@ function ContactForm({ onNext, node, isPost }) {
               {contactFormData?.is_phone && (
                 <div className="mb-20 InputBox">
                   <label
-                    className="text-12-600 mb-5"
-                    style={{ color: "#666666" }}
+                    className="text-14-500 mb-5"
+                    style={{
+                      color: "#666666",
+                      fontFamily: `${flowStyle.font}`,
+                    }}
                   >
                     Phone number:
                   </label>
@@ -163,7 +188,12 @@ function ContactForm({ onNext, node, isPost }) {
                     className="form-control"
                   />
                   {formik.touched.phone && formik.errors.phone && (
-                    <div className="error-text">{formik.errors.phone}</div>
+                    <div
+                      className="error-text"
+                      style={{ fontFamily: `${flowStyle.font}` }}
+                    >
+                      {formik.errors.phone}
+                    </div>
                   )}
                 </div>
               )}
@@ -171,8 +201,11 @@ function ContactForm({ onNext, node, isPost }) {
               {contactFormData?.is_product && (
                 <div className="mb-20 InputBox">
                   <label
-                    className="text-12-600 mb-5"
-                    style={{ color: "#666666" }}
+                    className="text-14-500 mb-5"
+                    style={{
+                      color: "#666666",
+                      fontFamily: `${flowStyle.font}`,
+                    }}
                   >
                     Product name:
                   </label>
@@ -186,20 +219,34 @@ function ContactForm({ onNext, node, isPost }) {
                     className="form-control"
                   />
                   {formik.touched.product && formik.errors.product && (
-                    <div className="error-text">{formik.errors.product}</div>
+                    <div
+                      className="error-text"
+                      style={{ fontFamily: `${flowStyle.font}` }}
+                    >
+                      {formik.errors.product}
+                    </div>
                   )}
                 </div>
               )}
 
               {contactFormData?.is_note && (
                 <ul>
-                  <li className="text-16-500">{contactFormData?.note || ""}</li>
+                  <li
+                    className="text-16-500"
+                    style={{ fontFamily: `${flowStyle.font}` }}
+                  >
+                    {contactFormData?.note || ""}
+                  </li>
                 </ul>
               )}
             </div>
 
             <div id="ans-btn-group">
-              <button type="submit" className="next-btn">
+              <button
+                type="submit"
+                className="next-btn"
+                style={{ background: flowStyle.secondary_color }}
+              >
                 {isPost ? (
                   <Spinner size="lg" color="#888888" />
                 ) : (
@@ -208,7 +255,7 @@ function ContactForm({ onNext, node, isPost }) {
                     alt=""
                     style={{
                       transform: "rotate(45deg)",
-                      filter: creteImgFilter("#888888"),
+                      filter: creteImgFilter("#000"),
                     }}
                     className="fit-image w-30"
                   />
@@ -231,7 +278,10 @@ function ContactForm({ onNext, node, isPost }) {
           <div>
             <LoaderCircle />
           </div>
-          <div className="text-24-600 mt-50" style={{ color: "#1B2559" }}>
+          <div
+            className="text-24-500 mt-50"
+            style={{ color: "#1B2559", fontFamily: `${flowStyle.font}` }}
+          >
             We are getting things ready...
           </div>
         </div>

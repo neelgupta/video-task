@@ -14,7 +14,9 @@ const initialState = {
   },
   breadCrumbTitle: "",
   profileData: null,
+  interactionsStyle: {},
   selectedOrganizationId: "",
+  organizationData: {},
   showCreateFlowModal: false,
   queModelConfig: {
     nodeData: null,
@@ -63,6 +65,14 @@ const globalSlice = createSlice({
     },
     setQueModelConfig(state, action) {
       state.queModelConfig = { ...state.queModelConfig, ...action.payload };
+    },
+    setOrganizationData(state, action) {
+      state.organizationData = { ...action.payload };
+    },
+    setInteractionsStyle(state, action) {
+      state.interactionsStyle = {
+        ...action.payload,
+      };
     },
 
     setWebcamModelConfig(state, action) {
@@ -223,15 +233,25 @@ export const handleProfileStore = () => async (dispatch) => {
 };
 
 export const handleFetchFlowData = (payload) => async (dispatch) => {
-  const { id, setEdges, setNodes, navigate } = payload;
+  const { id, setEdges, setNodes, navigate, setInteractions } = payload;
   try {
     const res = await api.get(`interactions/get-nodes/${id}`);
     if (res.status === 200) {
       const {
         data: {
-          response: { edges, nodes },
+          response: { edges, nodes, ...int },
         },
       } = res;
+      dispatch(
+        setInteractionsStyle({
+          border_radius: int?.border_radius || 10,
+          background_color: int?.background_color || "",
+          primary_color: int?.primary_color || "",
+          secondary_color: int?.secondary_color || "",
+          language: int?.language || "",
+          font: int?.font || "",
+        })
+      );
       if (nodes && edges && nodes.length > 1 && edges.length > 0) {
         setNodes(
           nodes.map((node, index) => ({
@@ -324,6 +344,8 @@ export const {
   setShowCreateFlowModal,
   setNewQueModalData,
   setWebcamModelConfig,
+  setOrganizationData,
+  setInteractionsStyle,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

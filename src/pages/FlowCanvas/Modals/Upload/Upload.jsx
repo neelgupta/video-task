@@ -23,6 +23,7 @@ function Upload({ show, handleClose }) {
     newQueModalData,
     queModelConfig: { nodeData, isEdit, modalType },
     webcamModelConfig: { blobFile, blobUrl },
+    interactionsStyle,
   } = useSelector((state) => state.global);
   const [MAX, setMAX] = useState(1);
   const [currentKey, setCurrentKey] = useState(1);
@@ -232,6 +233,7 @@ function Upload({ show, handleClose }) {
             >
               {videoSrc && (
                 <VideoPlayer
+                  flowStyle={interactionsStyle}
                   videoUrl={videoSrc}
                   videoBlob={blobFile}
                   isBlob={blobFile ? true : false}
