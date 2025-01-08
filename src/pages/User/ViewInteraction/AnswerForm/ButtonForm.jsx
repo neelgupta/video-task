@@ -60,6 +60,7 @@ function ButtonForm({ onNext, node, videoTime, isPost, flowStyle }) {
             onClick={() => !isPost && onNext({ ans: true })}
             style={{
               fontFamily: `${flowStyle.font}`,
+              background: flowStyle.primary_color,
               borderRadius: `${flowStyle.border_radius}px`,
             }}
           >

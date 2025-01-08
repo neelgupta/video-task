@@ -313,6 +313,7 @@ function Overview() {
                             className="picker-btn_cancel"
                             onClick={() => {
                               setShowPicker();
+                              fetchOverview();
                             }}
                           >
                             cancel

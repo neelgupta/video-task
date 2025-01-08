@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../store/globalSlice";
 import { icons } from "../../../utils/constants";
-import { creteImgFilter } from "../../../utils/helpers";
+import { addWhitenessToHex, creteImgFilter } from "../../../utils/helpers";
 import "./UploadFile.scss";
 const acceptVideoType = ["pdf", "docx", "xlsx", "pptx", "jpg", "png", "jpeg"];
 function UploadFile({ setFileValue, videoFile, flowStyle }) {
@@ -56,14 +56,29 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
     <div className="file-upload-container">
       <div
         {...getRootProps({ className: "upload-box" })}
-        style={videoFile ? { cursor: "not-allowed" } : {}}
+        style={{
+          ...(videoFile ? { cursor: "not-allowed" } : {}),
+          ...(flowStyle?.primary_color
+            ? {
+                border: `2px dashed ${flowStyle?.primary_color}`,
+                background: addWhitenessToHex(flowStyle?.primary_color, 0.95),
+              }
+            : {
+                border: "2px dashed #6c5eca",
+                background: addWhitenessToHex("#6c5eca", 0.95),
+              }),
+        }}
       >
         {!videoFile && <input {...getInputProps()} accept="*" />}
         <img
           src={icons.Upload}
           alt="Upload Icon"
           className="fit-image upload-icon"
-          style={{ filter: creteImgFilter("#6C5ECB") }}
+          style={{
+            filter: creteImgFilter(
+              flowStyle?.primary_color ? flowStyle.primary_color : "#6C5ECB"
+            ),
+          }}
         />
         <p className="upload-text">
           <strong
@@ -76,7 +91,12 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
           <span
             className="browse"
             style={{
-              ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
+              ...(flowStyle
+                ? {
+                    fontFamily: `${flowStyle.font}`,
+                    color: flowStyle.primary_color,
+                  }
+                : {}),
             }}
           >
             Browse
@@ -116,7 +136,15 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
               alignItems: "center",
             }}
           >
-            <span className="text-14-500" style={{ color: "#1B2559" }}>
+            <span
+              className="text-14-500"
+              style={{
+                color: "#1B2559",
+                ...(flowStyle?.font
+                  ? { fontFamily: `${flowStyle?.font}` }
+                  : {}),
+              }}
+            >
               {videoFile.name}
             </span>
             <button className="removeFileButton" onClick={handleRemoveFile}>
@@ -126,7 +154,10 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
           <div className="progressBar">
             <div
               className="progress"
-              style={{ width: `${uploadProgress}%` }}
+              style={{
+                width: `${uploadProgress}%`,
+                background: flowStyle?.primary_color || "#7b5aff",
+              }}
             ></div>
           </div>
         </div>

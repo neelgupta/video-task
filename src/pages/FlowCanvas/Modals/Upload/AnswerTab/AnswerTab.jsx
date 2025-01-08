@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import "./AnswerTab.scss";
 import { Button, Spinner } from "react-bootstrap";
+import { Tooltip } from "react-tooltip";
 import OpenEndedFormate from "./FormateComponent/OpenEndedFormate";
 import ButtonFormate from "./FormateComponent/ButtonFormate";
 import FileUploadFormate from "./FormateComponent/FileUploadFormate";
@@ -199,13 +200,19 @@ function AnswerTab({ onClose }) {
       />
       <div className="title">Answer Format</div>
       <div className="mt-20" style={{ minHeight: "500px" }}>
-        <div className="mb-20">
+        <div className="mb-20" style={{ position: "relative" }}>
           <div className="text-12-600 mb-5" style={{ color: "#666666" }}>
             Select answer type :
           </div>
-          <div className="wp-100">
+          <div
+            className={`wp-100 ${
+              !nodeData.allowedToEditAnswerType && "pointer"
+            }`}
+            data-tooltip-id={`answer-input-tooltip`}
+            data-tooltip-content={`You cannot change the answer type of a step that already has collected responses.`}
+          >
             <DropdownOption
-              isDisabled={!(nodeData?.allowedToEditAnswerType || true)}
+              isDisabled={!nodeData.allowedToEditAnswerType}
               value={AnsFormate.find((o) => o.value === ansFormate)}
               options={AnsFormate}
               onChange={(select) => {
@@ -213,6 +220,17 @@ function AnswerTab({ onClose }) {
               }}
             />
           </div>
+          <Tooltip
+            id={`answer-input-tooltip`}
+            place="bottom"
+            style={{
+              zIndex: "10",
+              position: "absolute",
+              width: "300px",
+              textWrap: "wrap",
+              borderRadius: "5px",
+            }}
+          />
         </div>
 
         <div

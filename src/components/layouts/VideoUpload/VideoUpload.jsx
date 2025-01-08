@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import "./VideoUpload.scss"; // Make sure to create the CSS file for styling
-import { creteImgFilter } from "../../../utils/helpers";
+import { addWhitenessToHex, creteImgFilter } from "../../../utils/helpers";
 import { icons } from "../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../store/globalSlice";
@@ -55,6 +55,15 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
       <div
         {...getRootProps({ className: "upload-box" })}
         style={{
+          ...(flowStyle?.primary_color
+            ? {
+                border: `2px dashed ${flowStyle?.primary_color}`,
+                background: addWhitenessToHex(flowStyle?.primary_color, 0.95),
+              }
+            : {
+                border: "2px dashed #6c5eca",
+                background: addWhitenessToHex("#6c5eca", 0.95),
+              }),
           ...(videoFile ? { cursor: "not-allowed" } : {}),
         }}
       >
@@ -63,7 +72,11 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
           src={icons.Upload}
           alt="Upload Icon"
           className="fit-image upload-icon"
-          style={{ filter: creteImgFilter("#6C5ECB") }}
+          style={{
+            filter: creteImgFilter(
+              flowStyle?.primary_color ? flowStyle.primary_color : "#6C5ECB"
+            ),
+          }}
         />
         <p className="upload-text">
           <strong
@@ -76,7 +89,12 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
           <span
             className="browse"
             style={{
-              ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
+              ...(flowStyle
+                ? {
+                    fontFamily: `${flowStyle.font}`,
+                    color: flowStyle.primary_color,
+                  }
+                : {}),
             }}
           >
             Browse
@@ -128,7 +146,10 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
           <div className="progressBar">
             <div
               className="progress"
-              style={{ width: `${uploadProgress}%` }}
+              style={{
+                width: `${uploadProgress}%`,
+                background: flowStyle?.primary_color || "#7b5aff",
+              }}
             ></div>
           </div>
         </div>

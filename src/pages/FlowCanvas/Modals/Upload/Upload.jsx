@@ -65,6 +65,7 @@ function Upload({ show, handleClose }) {
         ],
       });
     }
+    console.log("nodeData", nodeData);
   }, [isEdit, nodeData]);
 
   const handleSubmitNewQue = async () => {
@@ -329,6 +330,7 @@ function Upload({ show, handleClose }) {
 
               {headerTab === "answer" && (
                 <AnswerTab
+                  nodeData={nodeData}
                   ansType={nodeData?.answer_type || ""}
                   ansFormat={nodeData?.answer_format || {}}
                   onClose={handleClose}

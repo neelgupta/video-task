@@ -77,7 +77,7 @@ function PlanBilling() {
           >
             Plans
           </div>
-          <div className="plans-card-box mt-20">
+          {/* <div className="plans-card-box mt-20">
             {planCardList.length > 0 &&
               planCardList.map((ele, index) => {
                 return <PlanCard ele={ele} key={index} />;
@@ -85,7 +85,8 @@ function PlanBilling() {
             {planCardList.length === 0 && (
               <Spinner animation="border" size="xs" className="ms-20" />
             )}
-          </div>
+          </div> */}
+          <div>working...</div>
         </div>
         <div className="Billing">
           <div className="text-24-700" style={{ color: "#1B2559" }}>

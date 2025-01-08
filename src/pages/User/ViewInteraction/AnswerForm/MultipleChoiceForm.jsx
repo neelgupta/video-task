@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { creteImgFilter } from "../../../../utils/helpers";
+import { addWhitenessToHex, creteImgFilter } from "../../../../utils/helpers";
 import { icons } from "../../../../utils/constants";
 import { throwError } from "../../../../store/globalSlice";
 import { useDispatch } from "react-redux";
@@ -68,7 +68,7 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
               className="w-15 h-15 me-10"
               style={{
                 borderRadius: "50%",
-                background: "#f0f0f0",
+                background: addWhitenessToHex(flowStyle.primary_color, 0.9),
               }}
             ></div>
             {answer_format.allow_multiple
@@ -80,18 +80,46 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
         {optionList.map((ele, index) => {
           return (
             <div
-              className={`option-box ${
-                answer_format.allow_multiple
-                  ? (selectOption || []).includes(ele) && "active"
-                  : selectOption === ele && "active"
-              }`}
+              className={`option-box`}
+              // answer_format.allow_multiple
+              // ? (selectOption || []).includes(ele) && "active"
+              // : selectOption === ele && "active"
               key={index}
               onClick={() => {
                 handelOptionSelect(ele);
               }}
-              style={{ borderRadius: `${flowStyle.border_radius}px` }}
+              style={{
+                borderRadius: `${flowStyle.border_radius}px`,
+                ...(answer_format.allow_multiple
+                  ? (selectOption || []).includes(ele) && {
+                      background: addWhitenessToHex(
+                        flowStyle.primary_color,
+                        0.95
+                      ),
+                      border: `1px solid ${flowStyle.primary_color}`,
+                    }
+                  : selectOption === ele && {
+                      background: addWhitenessToHex(
+                        flowStyle.primary_color,
+                        0.95
+                      ),
+                      border: `1px solid ${flowStyle.primary_color}`,
+                    }),
+              }}
             >
-              <div className="option-teg">
+              <div
+                className="option-teg"
+                style={{
+                  borderRadius: `${flowStyle.border_radius}px`,
+                  ...(answer_format.allow_multiple
+                    ? (selectOption || []).includes(ele) && {
+                        background: flowStyle.primary_color,
+                      }
+                    : selectOption === ele && {
+                        background: flowStyle.primary_color,
+                      }),
+                }}
+              >
                 {(selectOption || []).includes(ele) &&
                 answer_format.allow_multiple ? (
                   <img
@@ -106,7 +134,16 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
               </div>
               <div
                 className="option-value"
-                style={{ fontFamily: `${flowStyle.font}` }}
+                style={{
+                  fontFamily: `${flowStyle.font}`,
+                  ...(answer_format.allow_multiple
+                    ? (selectOption || []).includes(ele) && {
+                        color: flowStyle.primary_color,
+                      }
+                    : selectOption === ele && {
+                        color: flowStyle.primary_color,
+                      }),
+                }}
               >
                 {ele}
               </div>

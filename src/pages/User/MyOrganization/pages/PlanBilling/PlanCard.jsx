@@ -8,9 +8,9 @@ function PlanCard({ ele }) {
     <div className="plans-card">
       <div style={{ position: "relative", width: "100%" }}>
         <div className="text-32-400" style={{ color: "#1B2559" }}>
-          {ele.title}
+          {ele?.title}
         </div>
-        {ele.is_best_deal && (
+        {ele?.is_best_deal && (
           <Button className="Best_Deal_btn">Best Deal</Button>
         )}
       </div>
@@ -18,22 +18,22 @@ function PlanCard({ ele }) {
         className="text-16-400"
         style={{ color: "#536174", textTransform: "capitalize" }}
       >
-        {ele.sub_title}
+        {ele?.sub_title}
       </div>
       <div
         className="text-48-600 mt-10 mb-30"
         style={{
-          color: ele.plan_type === "free" ? "#7B5AFF" : "black",
+          color: ele?.plan_type === "free" ? "#7B5AFF" : "black",
           textTransform: "capitalize",
         }}
       >
-        {ele.plan_type === "free" ? (
+        {ele?.plan_type === "free" ? (
           "Free"
         ) : (
           <>
-            <sup className="text-32-600">{ele.currency}</sup>
-            {ele.price}
-            {ele.plan_type !== "" && (
+            <sup className="text-32-600">{ele?.currency}</sup>
+            {ele?.price}
+            {ele?.plan_type !== "" && (
               <sub className="text-14-400" style={{ color: "#98A2B2" }}>
                 / month
               </sub>
@@ -46,9 +46,9 @@ function PlanCard({ ele }) {
         <div
           className="text-14-500"
           style={{
-            color: ele.plan_type === "free" ? "#7E8B9E" : "white",
+            color: ele?.plan_type === "free" ? "#7E8B9E" : "white",
             background:
-              ele.plan_type === "free"
+              ele?.plan_type === "free"
                 ? "#F6F6F6"
                 : "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
             display: "inline",
@@ -57,7 +57,7 @@ function PlanCard({ ele }) {
           }}
         >
           {ele?.is_upgrade &&
-            (ele.plan_type === "free" ? "Current Plan" : "Upgrade Plan")}
+            (ele?.plan_type === "free" ? "Current Plan" : "Upgrade Plan")}
           {ele?.is_custom && "Contact Us"}
         </div>
       )}
@@ -76,7 +76,7 @@ function PlanCard({ ele }) {
           Everything you get in this plan
         </div>
         <div className="mt-40">
-          {(ele.description || []).map((ele, index) => {
+          {(ele?.description || []).map((ele, index) => {
             return (
               <div
                 key={index}
@@ -108,7 +108,7 @@ function PlanCard({ ele }) {
           })}
         </div>
 
-        {ele.button_text && ele.plan_type !== "free" && (
+        {ele?.button_text && ele?.plan_type !== "free" && (
           <div className="mt-30">
             <Button
               className="wp-100 text-16-500"

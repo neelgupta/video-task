@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import "./AudioUpload.scss";
-import { creteImgFilter } from "../../../utils/helpers";
+import { addWhitenessToHex, creteImgFilter } from "../../../utils/helpers";
 import { icons } from "../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../store/globalSlice";
@@ -46,14 +46,27 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
     <div className="audio-container">
       <div
         {...getRootProps({ className: "upload-box" })}
-        style={audio ? { cursor: "not-allowed" } : {}}
+        style={{
+          ...(audio ? { cursor: "not-allowed" } : {}),
+          ...(flowStyle?.primary_color
+            ? {
+                border: `2px dashed ${flowStyle?.primary_color}`,
+                background: addWhitenessToHex(flowStyle?.primary_color, 0.95),
+              }
+            : {
+                border: "2px dashed #6c5eca",
+                background: addWhitenessToHex("#6c5eca", 0.95),
+              }),
+        }}
       >
         {!audio && <input {...getInputProps()} />}
         <img
           src={icons.Upload}
           alt="Upload Icon"
           className="fit-image upload-icon"
-          style={{ filter: creteImgFilter("#6C5ECB") }}
+          style={{
+            filter: creteImgFilter(flowStyle?.primary_color || "#6C5ECB"),
+          }}
         />
         <p className="upload-text">
           <strong
@@ -67,6 +80,7 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
             className="browse"
             style={{
               ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
+              color: flowStyle?.primary_color || "#6c5eca",
             }}
           >
             Browse
@@ -118,7 +132,10 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
           <div className="progressBar">
             <div
               className="progress"
-              style={{ width: `${uploadProgress}%` }}
+              style={{
+                width: `${uploadProgress}%`,
+                background: flowStyle?.primary_color || "#7b5aff",
+              }}
             ></div>
           </div>
         </div>

@@ -173,6 +173,32 @@ export const generateUniqueString = () => {
   ).padStart(2, "0")}${String(now.getMilliseconds()).padStart(3, "0")}`;
 };
 
+// Add Whiteness to Hex Color
+export const addWhitenessToHex = (hex, whiteness) => {
+  // Validate the whiteness parameter
+  if (whiteness < 0 || whiteness > 1) {
+    throw new Error("Whiteness must be a value between 0 and 1");
+  }
+
+  // Convert hex to RGB
+  const rgb = hexToRgb(hex);
+  if (!rgb) {
+    throw new Error("Invalid hex color code");
+  }
+
+  const white = 255; // RGB for white is [255, 255, 255]
+
+  // Blend each RGB channel with white
+  const newRgb = rgb.map((color) => {
+    return Math.round(color + (white - color) * whiteness);
+  });
+
+  // Convert back to hex
+  const rgbToHex = (r, g, b) =>
+    `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+  return rgbToHex(newRgb[0], newRgb[1], newRgb[2]);
+};
+
 export const hexToRgb = (hex) => {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
