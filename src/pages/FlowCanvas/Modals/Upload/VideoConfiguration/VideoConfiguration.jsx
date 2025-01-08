@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { getTrackBackground, Range } from "react-range";
 import { Button, Spinner } from "react-bootstrap";
 import Select from "react-select";
@@ -85,6 +85,11 @@ function VideoConfiguration({
       console.error("Error downloading the video:", error);
     }
   };
+
+  // useEffect(() => {
+  //   if (MAX) setVideoConfigForm({ ...videoConfigForm, textReveal: [MAX] });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [MAX, videoConfigForm]);
 
   return (
     <div className="VideoConfiguration-container">

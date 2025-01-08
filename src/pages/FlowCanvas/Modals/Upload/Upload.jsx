@@ -174,6 +174,12 @@ function Upload({ show, handleClose }) {
         setVideoSrc(videoSrc);
         const duration = await processVideoMetadata(videoSrc);
         setMAX(duration);
+        if (!isEdit) {
+          setVideoConfigForm({
+            ...videoConfigForm,
+            textReveal: [duration],
+          });
+        }
       } else if (["Webcam", "Screen"].includes(modalType)) {
         if (isEdit && nodeData && !blobFile) {
           setVideoSrc(videoSrc);
@@ -183,6 +189,10 @@ function Upload({ show, handleClose }) {
           setVideoSrc(blobUrl);
           const duration = await processVideoMetadata(blobUrl);
           setMAX(duration);
+          setVideoConfigForm({
+            ...videoConfigForm,
+            textReveal: [duration],
+          });
         }
       }
     };
@@ -201,6 +211,7 @@ function Upload({ show, handleClose }) {
         URL.revokeObjectURL(videoFile);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoFile, isEdit, nodeData, blobFile, modalType, blobUrl]);
 
   return (

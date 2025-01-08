@@ -47,6 +47,10 @@ function WebcamRecorder({ show, handleClose, recorderConfig, modalType }) {
   }, [mediaBlobUrl]);
 
   useEffect(() => {
+    setCamStatus(status);
+  }, [status]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setIsLoad(true); // Toggle `isLoad` state every 2 seconds
     }, 1500);
