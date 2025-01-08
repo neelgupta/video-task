@@ -5,8 +5,10 @@ import { throwError } from "../../../store/globalSlice";
 import { icons } from "../../../utils/constants";
 import { addWhitenessToHex, creteImgFilter } from "../../../utils/helpers";
 import "./UploadFile.scss";
+import { useTranslation } from "react-i18next";
 const acceptVideoType = ["pdf", "docx", "xlsx", "pptx", "jpg", "png", "jpeg"];
 function UploadFile({ setFileValue, videoFile, flowStyle }) {
+  const { t } = useTranslation();
   const [uploadProgress, setUploadProgress] = useState(videoFile ? 100 : 0);
   const dispatch = useDispatch();
 
@@ -16,19 +18,13 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
         const selectedFile = acceptedFiles[0];
         const { size, type } = selectedFile;
         if (parseInt(size / 1024 / 1024) > 4) {
-          dispatch(throwError("File size must be less than 4 MB."));
+          dispatch(throwError(t("uploadFile.fileSizeError")));
           return;
         }
         if (
           !acceptVideoType.includes(type.split("/")?.[1].toLocaleLowerCase())
         ) {
-          dispatch(
-            throwError(
-              `Invalid file type. Please upload a file in one of the following formats: ${acceptVideoType
-                .map((x) => "." + x)
-                .join(", ")}.`
-            )
-          );
+          dispatch(throwError(t("uploadFile.fileTypeError")));
           return;
         }
         setFileValue(selectedFile);
@@ -86,7 +82,7 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
               ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
             }}
           >
-            Drag & drop files or{" "}
+            {t("uploadFile.Drag_&_drop_files_or")}{" "}
           </strong>
           <span
             className="browse"
@@ -99,7 +95,7 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
                 : {}),
             }}
           >
-            Browse
+            {t("uploadFile.Browse")}
           </span>
         </p>
         <p
@@ -108,7 +104,7 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
             ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
           }}
         >
-          Supported formats: {acceptVideoType.map((x) => "." + x).join(", ")}
+          {t("uploadFile.Supported_formats")}
         </p>
       </div>
       {videoFile && (
@@ -123,7 +119,14 @@ function UploadFile({ setFileValue, videoFile, flowStyle }) {
               ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
             }}
           >
-            Uploading - 1/1 files
+            {t("uploadFile.Uploading_files")}
+          </div>
+          <div
+            style={{
+              ...(flowStyle?.font ? { fontFamily: `${flowStyle?.font}` } : {}),
+            }}
+          >
+            {t("uploadFile.Max_limit")}
           </div>
         </div>
       )}

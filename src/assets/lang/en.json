@@ -1,28 +1,74 @@
 {
   "translation": {
-    "sidebar": {
-      "dashboard": "Dashboard",
-      "usersManagement": "Users Management",
-      "subscriberAccounts": "Subscriber accounts",
-      "instructorAccounts": "Instructor accounts",
-      "administrationAccounts": "Administration accounts",
-      "rolesAndPermissions": "Roles and permissions",
-      "dataDeletionRequests": "Data deletion requests",
-      "suspendedUsers": "Suspended users",
-      "courses": "Courses",
-      "iqv": "IQV",
-      "iti": "ITI",
-      "paymentSettings": "Payment Settings",
-      "policies": "Policies",
-      "chats": "Chats",
-      "bar": "Bar",
-      "aPIKeys": "API Keys",
-      "errorLogs": "Error Logs",
-      "announcements": "Announcements",
-      "quizSettings": "Quiz settings",
-      "systemRecovery": "System Recovery",
-      "systemBackup": "System Backup",
-      "systemUnderMaintenance": "System Under Maintenance"
+    "Powered_by": "Powered by",
+    "interact_in": "Interact in",
+    "second": "second",
+    "videoUpload": {
+      "fileTypeError": "Invalid file type. Please upload a file in one of the following formats: video/mp4, video/avchd, video/mpc, or audio/aac.",
+      "fileSizeError": "File size must be less than 4 MB.",
+      "Drag_&_drop_files_or": "Drag & drop files or",
+      "Browse": "Browse",
+      "Supported_formats_MP4_AVCHD_MPC_AAC": "Supported formats: MP4, AVCHD, MPC, AAC",
+      "Uploading_files": "Uploading - 1/1 files",
+      "Max_limit": "Max Limit: 3MB"
+    },
+    "audioUpload": {
+      "fileTypeError": "File type is not valid",
+      "fileSizeError": "File size must be less than 4 MB.",
+      "Drag_&_drop_files_or": "Drag & drop files or",
+      "Browse": "Browse",
+      "Supported_formats_MP3": "Supported formats MP3",
+      "Uploading_files": "Uploading - 1/1 files",
+      "Max_limit": "Max Limit: 3MB"
+    },
+    "uploadFile": {
+      "fileTypeError": "Invalid file type. Please upload a file in one of the following formats: pdf, docx, xlsx, pptx, jpg, png, jpeg",
+      "fileSizeError": "File size must be less than 4 MB.",
+      "Drag_&_drop_files_or": "Drag & drop files or",
+      "Browse": "Browse",
+      "Supported_formats": "Supported formats: pdf, docx, xlsx, pptx, jpg, png, jpeg",
+      "Uploading_files": "Uploading - 1/1 files",
+      "Max_limit": "Max Limit: 3MB"
+    },
+    "contactForm": {
+      "contact_header_text": "Before you go, please leave your contact details so we can get back to you...",
+      "name": "Name",
+      "name_placeholder": "Enter name",
+      "email": "Email",
+      "email_placeholder": "Enter email",
+      "phone": "Phone number",
+      "phone_placeholder": "Enter phone number",
+      "product": "Product name",
+      "product_placeholder": "Enter product name",
+      "lode_text": "We are getting things ready...",
+      "error_message": {
+        "name_required": "Name is required",
+        "email_valid": "Invalid email format",
+        "email_required": "Email is required",
+        "phone_valid": "Invalid phone number",
+        "phone_required": "Phone number is required",
+        "product_required": "Product is required"
+      }
+    },
+    "openEndedForm": {
+      "How_do_you_want_to_generate_video": "How do you want to generate video",
+      "Description": "Description",
+      "Upload_video": "Upload video",
+      "Upload_audio": "Upload audio",
+      "Video": "Video",
+      "Audio": "Audio",
+      "Text": "Text",
+      "descriptionPlaceholder": "Enter your answer..."
+    },
+    "multipleChoiceForm": {
+      "Choose_up_to": "Choose up to",
+      "options": "options",
+      "Choose_1_of": "Choose 1 of"
+    },
+    "fileUploadForm": {
+      "Title": "Title",
+      "Description": "Description",
+      "upload_video": "Upload Video"
     }
   }
 }

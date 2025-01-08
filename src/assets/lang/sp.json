@@ -1,0 +1,74 @@
+{
+  "translation": {
+    "Powered_by": "Desarrollado por",
+    "interact_in": "Interactuar en",
+    "second": "segundo",
+    "videoUpload": {
+      "fileTypeError": "Tipo de archivo no válido. Por favor, suba un archivo en uno de los siguientes formatos: video/mp4, video/avchd, video/mpc o audio/aac.",
+      "fileSizeError": "El tamaño del archivo debe ser inferior a 4 MB.",
+      "Drag_&_drop_files_or": "Arrastra y suelta archivos o",
+      "Browse": "Examinar",
+      "Supported_formats_MP4_AVCHD_MPC_AAC": "Formatos compatibles: MP4, AVCHD, MPC, AAC",
+      "Uploading_files": "Subiendo - 1/1 archivos",
+      "Max_limit": "Límite máximo: 3 MB"
+    },
+    "audioUpload": {
+      "fileTypeError": "El tipo de archivo no es válido",
+      "fileSizeError": "El tamaño del archivo debe ser inferior a 4 MB.",
+      "Drag_&_drop_files_or": "Arrastra y suelta archivos o",
+      "Browse": "Examinar",
+      "Supported_formats_MP3": "Formatos compatibles MP3",
+      "Uploading_files": "Subiendo - 1/1 archivos",
+      "Max_limit": "Límite máximo: 3 MB"
+    },
+    "uploadFile": {
+      "fileTypeError": "Tipo de archivo no válido. Por favor, suba un archivo en uno de los siguientes formatos: pdf, docx, xlsx, pptx, jpg, png, jpeg.",
+      "fileSizeError": "El tamaño del archivo debe ser inferior a 4 MB.",
+      "Drag_&_drop_files_or": "Arrastra y suelta archivos o",
+      "Browse": "Examinar",
+      "Supported_formats": "Formatos compatibles: pdf, docx, xlsx, pptx, jpg, png, jpeg",
+      "Uploading_files": "Subiendo - 1/1 archivos",
+      "Max_limit": "Límite máximo: 3 MB"
+    },
+    "contactForm": {
+      "contact_header_text": "Antes de irte, por favor déjanos tus datos de contacto para que podamos comunicarnos contigo...",
+      "name": "Nombre",
+      "name_placeholder": "Ingresa tu nombre",
+      "email": "Correo electrónico",
+      "email_placeholder": "Ingresa tu correo electrónico",
+      "phone": "Número de teléfono",
+      "phone_placeholder": "Ingresa tu número de teléfono",
+      "product": "Nombre del producto",
+      "product_placeholder": "Ingresa el nombre del producto",
+      "lode_text": "Estamos preparando todo...",
+      "error_message": {
+        "name_required": "El nombre es obligatorio",
+        "email_valid": "Formato de correo electrónico no válido",
+        "email_required": "El correo electrónico es obligatorio",
+        "phone_valid": "Número de teléfono no válido",
+        "phone_required": "El número de teléfono es obligatorio",
+        "product_required": "El producto es obligatorio"
+      }
+    },
+    "openEndedForm": {
+      "How_do_you_want_to_generate_video": "¿Cómo deseas generar un video?",
+      "Description": "Descripción",
+      "Upload_video": "Subir video",
+      "Upload_audio": "Subir audio",
+      "Video": "Video",
+      "Audio": "Audio",
+      "Text": "Texto",
+      "descriptionPlaceholder": "Ingresa tu respuesta..."
+    },
+    "multipleChoiceForm": {
+      "Choose_up_to": "Elige hasta",
+      "options": "opciones",
+      "Choose_1_of": "Elige 1 de"
+    },
+    "fileUploadForm": {
+      "Title": "Título",
+      "Description": "Descripción",
+      "upload_video": "Subir video"
+    }
+  }
+}

@@ -6,12 +6,14 @@ import { getTrackBackground, Range } from "react-range";
 import { useDispatch } from "react-redux";
 import { handelCatch } from "../../../store/globalSlice";
 import { processVideoMetadata } from "../../../pages/FlowCanvas/flowControl";
+import { useTranslation } from "react-i18next";
 const VideoPlayer = ({
   videoUrl,
   videoConfigForm,
   getCurrentTime,
   flowStyle,
 }) => {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const {
     alignVideo = false,
@@ -176,7 +178,7 @@ const VideoPlayer = ({
               lineHeight: "1",
             }}
           >
-            Powered by :
+            {t("Powered_by")}
           </div>
           <div
             className="text-20-800"

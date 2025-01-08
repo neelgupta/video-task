@@ -9,7 +9,9 @@ import { Spinner } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
+import { useTranslation } from "react-i18next";
 function ContactForm({ onNext, node, isPost, flowStyle }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [contactFormData, setContactFormData] = useState({});
   const [form, setForm] = useState({
@@ -37,20 +39,20 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
 
     setValidationSchema({
       name: contactFormData?.is_name
-        ? Yup.string().required("Name is required")
+        ? Yup.string().required(t("contactForm.error_message.name_required"))
         : Yup.string(),
       email: contactFormData?.is_email
         ? Yup.string()
-            .email("Invalid email format")
-            .required("Email is required")
+            .email(t("contactForm.error_message.email_valid"))
+            .required(t("contactForm.error_message.email_required"))
         : Yup.string(),
       phone: contactFormData?.is_phone
         ? Yup.number()
-            .typeError("Invalid phone number")
-            .required("Phone number is required")
+            .typeError(t("contactForm.error_message.phone_valid"))
+            .required(t("contactForm.error_message.phone_required"))
         : Yup.number(),
       product: contactFormData?.is_product
-        ? Yup.string().required("Product name is required")
+        ? Yup.string().required(t("contactForm.error_message.product_required"))
         : Yup.string(),
     });
 
@@ -100,8 +102,7 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
               fontFamily: `${flowStyle.font}`,
             }}
           >
-            Before you go, please leave your contact details so we can get back
-            to you...
+            {t("contactForm.contact_header_text")}
           </div>
           <form onSubmit={formik.handleSubmit} className="ContactForm">
             <div className="form">
@@ -110,11 +111,11 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                   <label
                     className="text-14-500 mb-5"
                     style={{
-                      color: "#666666",
+                      color: "#000",
                       fontFamily: `${flowStyle.font}`,
                     }}
                   >
-                    Name:
+                    {t("contactForm.name")}:
                   </label>
                   <input
                     type="text"
@@ -122,7 +123,7 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                     value={formik.values.name}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    placeholder="Enter name"
+                    placeholder={t("contactForm.name_placeholder")}
                     className="form-control"
                   />
                   {formik.touched.name && formik.errors.name && (
@@ -141,11 +142,11 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                   <label
                     className="text-14-500 mb-5"
                     style={{
-                      color: "#666666",
+                      color: "#000",
                       fontFamily: `${flowStyle.font}`,
                     }}
                   >
-                    Email:
+                    {t("contactForm.email")}:
                   </label>
                   <input
                     type="email"
@@ -153,7 +154,7 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                     value={formik.values.email}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    placeholder="Enter email"
+                    placeholder={t("contactForm.email_placeholder")}
                     className="form-control"
                   />
                   {formik.touched.email && formik.errors.email && (
@@ -172,11 +173,11 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                   <label
                     className="text-14-500 mb-5"
                     style={{
-                      color: "#666666",
+                      color: "#000",
                       fontFamily: `${flowStyle.font}`,
                     }}
                   >
-                    Phone number:
+                    {t("contactForm.phone")}:
                   </label>
                   <input
                     type="number"
@@ -184,7 +185,7 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                     value={formik.values.phone}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    placeholder="Enter phone number"
+                    placeholder={t("contactForm.phone_placeholder")}
                     className="form-control"
                   />
                   {formik.touched.phone && formik.errors.phone && (
@@ -203,11 +204,11 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                   <label
                     className="text-14-500 mb-5"
                     style={{
-                      color: "#666666",
+                      color: "#000",
                       fontFamily: `${flowStyle.font}`,
                     }}
                   >
-                    Product name:
+                    {t("contactForm.product")} :
                   </label>
                   <input
                     type="text"
@@ -215,7 +216,7 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
                     value={formik.values.product}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    placeholder="Enter product name"
+                    placeholder={t("contactForm.product_placeholder")}
                     className="form-control"
                   />
                   {formik.touched.product && formik.errors.product && (
@@ -282,7 +283,7 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
             className="text-24-500 mt-50"
             style={{ color: "#1B2559", fontFamily: `${flowStyle.font}` }}
           >
-            We are getting things ready...
+            {t("contactForm.lode_text")}
           </div>
         </div>
       )}

@@ -5,8 +5,10 @@ import { throwError } from "../../../../store/globalSlice";
 import { useDispatch } from "react-redux";
 import "./AnswerForm.scss";
 import { Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
+  const { t } = useTranslation();
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
   const [selectOption, setSelectOption] = useState(null);
@@ -72,8 +74,12 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
               }}
             ></div>
             {answer_format.allow_multiple
-              ? `Choose up to ${optionList.length} options`
-              : `Choose 1 of ${optionList.length} options`}
+              ? `${t("multipleChoiceForm.Choose_up_to")} ${
+                  optionList.length
+                } ${t("multipleChoiceForm.options")}`
+              : `${t("multipleChoiceForm.Choose_1_of")} ${
+                  optionList.length
+                } ${t("multipleChoiceForm.options")}`}
           </div>
         )}
 

@@ -5,8 +5,10 @@ import { addWhitenessToHex, creteImgFilter } from "../../../utils/helpers";
 import { icons } from "../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../store/globalSlice";
+import { useTranslation } from "react-i18next";
 const acceptVideoType = ["mp4", "avchd", "mpc", "aac"];
 const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
+  const { t } = useTranslation();
   const [uploadProgress, setUploadProgress] = useState(videoFile ? 100 : 0);
   const dispatch = useDispatch();
 
@@ -16,17 +18,13 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
         const selectedFile = acceptedFiles[0];
         const { size, type } = selectedFile;
         if (parseInt(size / 1024 / 1024) > 4) {
-          dispatch(throwError("File size must be less than 4 MB."));
+          dispatch(throwError(t("videoUpload.fileSizeError")));
           return;
         }
         if (
           !acceptVideoType.includes(type.split("/")?.[1].toLocaleLowerCase())
         ) {
-          dispatch(
-            throwError(
-              "Invalid file type. Please upload a file in one of the following formats: video/mp4, video/avchd, video/mpc, or audio/aac."
-            )
-          );
+          dispatch(throwError(t("videoUpload.fileTypeError")));
           return;
         }
         setFileValue(selectedFile);
@@ -84,7 +82,7 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
               ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
             }}
           >
-            Drag & drop files or{" "}
+            {t("videoUpload.Drag_&_drop_files_or")}{" "}
           </strong>
           <span
             className="browse"
@@ -97,7 +95,7 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
                 : {}),
             }}
           >
-            Browse
+            {t("videoUpload.Browse")}
           </span>
         </p>
         <p
@@ -106,7 +104,7 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
             ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
           }}
         >
-          Supported formats: MP4, AVCHD, MPC, AAC
+          {t("videoUpload.Supported_formats_MP4_AVCHD_MPC_AAC")}
         </p>
       </div>
       {videoFile && (
@@ -116,14 +114,14 @@ const VideoUpload = ({ setFileValue, videoFile, flowStyle }) => {
               ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
             }}
           >
-            Uploading - 1/1 files
+            {t("videoUpload.Uploading_files")}
           </div>
           <div
             style={{
               ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
             }}
           >
-            Max Limit: 3MB
+            {t("videoUpload.Max_limit")}
           </div>
         </div>
       )}

@@ -7,6 +7,8 @@ import AudioUpload from "../../../../components/layouts/AudioUpload";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../../store/globalSlice";
 import { Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 const optionArray = [
   {
     icon: icons.video,
@@ -28,6 +30,7 @@ const optionArray = [
   },
 ];
 function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
+  const { i } = useTranslation();
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
   const [tabArray, setTabArray] = useState(optionArray);
@@ -105,12 +108,12 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
             className="text-26-500"
             style={{ fontFamily: `${flowStyle.font}` }}
           >
-            Interact in{" "}
+            {t("interact_in")}{" "}
             <span style={{ color: "#7b5aff" }}>
               {parseInt(answer_format.delay) -
                 parseInt((videoTime?.currentTime || 0).toFixed(0))}
             </span>
-            s...
+            {t("second")}...
           </div>
         </div>
       )}
@@ -127,12 +130,12 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
           <div
             className="text-20-500 mb-50"
             style={{
-              color: "#7D8185",
               textAlign: "center",
               fontFamily: `${flowStyle.font}`,
+              color: flowStyle?.secondary_color || "#7D8185",
             }}
           >
-            How do you want to generate video?
+            {t("openEndedForm.How_do_you_want_to_generate_video")} ?
           </div>
           <div className="footer_card_box">
             {tabArray.map((ele, index) => {
@@ -164,7 +167,7 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
                     className="text-16-500"
                     style={{ fontFamily: `${flowStyle.font}` }}
                   >
-                    {ele.text}
+                    {t(`openEndedForm.${ele.text}`)}
                   </div>
                 </div>
               );
@@ -179,15 +182,18 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
               <div className="wp-100">
                 <div
                   className="text-20-500"
-                  style={{ color: "#7D8185", fontFamily: `${flowStyle.font}` }}
+                  style={{
+                    color: flowStyle?.secondary_color || "#7D8185",
+                    fontFamily: `${flowStyle.font}`,
+                  }}
                 >
-                  Description
+                  {t("openEndedForm.Description")}
                 </div>
                 <div style={{ borderRadius: "10px" }}>
                   <TextArea
                     rows={10}
                     value={answerForm.description}
-                    placeholder={"Discuss your plan for generating video..."}
+                    placeholder={t("openEndedForm.descriptionPlaceholder")}
                     style={{ borderRadius: "10px" }}
                     onChange={(e) => {
                       setAnswerForm({
@@ -204,9 +210,12 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
               <div className="wp-100">
                 <div
                   className="text-20-500 mb-20 mt-20"
-                  style={{ color: "#7D8185", fontFamily: `${flowStyle.font}` }}
+                  style={{
+                    color: flowStyle?.secondary_color || "#7D8185",
+                    fontFamily: `${flowStyle.font}`,
+                  }}
                 >
-                  Upload Video
+                  {t("openEndedForm.Upload_video")}
                 </div>
 
                 <VideoUpload
@@ -223,9 +232,12 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
               <div className="wp-100">
                 <div
                   className="text-20-500 mb-20 "
-                  style={{ color: "#7D8185", fontFamily: `${flowStyle.font}` }}
+                  style={{
+                    color: flowStyle?.secondary_color || "#7D8185",
+                    fontFamily: `${flowStyle.font}`,
+                  }}
                 >
-                  Upload Audio
+                  {t("openEndedForm.Upload_audio")}
                 </div>
                 <AudioUpload
                   flowStyle={flowStyle}

@@ -1,0 +1,74 @@
+{
+  "translation": {
+    "Powered_by": "Propulsé par",
+    "interact_in": "Interagir en",
+    "second": "seconde",
+    "videoUpload": {
+      "fileTypeError": "Type de fichier invalide. Veuillez télécharger un fichier dans l'un des formats suivants : vidéo/mp4, vidéo/avchd, vidéo/mpc ou audio/aac.",
+      "fileSizeError": "La taille du fichier doit être inférieure à 4 Mo.",
+      "Drag_&_drop_files_or": "Glissez-déposez des fichiers ou",
+      "Browse": "Parcourir",
+      "Supported_formats_MP4_AVCHD_MPC_AAC": "Formats pris en charge : MP4, AVCHD, MPC, AAC",
+      "Uploading_files": "Téléchargement - 1/1 fichiers",
+      "Max_limit": "Limite maximale : 3 Mo"
+    },
+    "audioUpload": {
+      "fileTypeError": "Le type de fichier n'est pas valide",
+      "fileSizeError": "La taille du fichier doit être inférieure à 4 Mo.",
+      "Drag_&_drop_files_or": "Glissez-déposez des fichiers ou",
+      "Browse": "Parcourir",
+      "Supported_formats_MP3": "Formats pris en charge MP3",
+      "Uploading_files": "Téléchargement - 1/1 fichiers",
+      "Max_limit": "Limite maximale : 3 Mo"
+    },
+    "uploadFile": {
+      "fileTypeError": "Type de fichier invalide. Veuillez télécharger un fichier dans l'un des formats suivants : pdf, docx, xlsx, pptx, jpg, png, jpeg.",
+      "fileSizeError": "La taille du fichier doit être inférieure à 4 Mo.",
+      "Drag_&_drop_files_or": "Glissez-déposez des fichiers ou",
+      "Browse": "Parcourir",
+      "Supported_formats": "Formats pris en charge : pdf, docx, xlsx, pptx, jpg, png, jpeg",
+      "Uploading_files": "Téléchargement - 1/1 fichiers",
+      "Max_limit": "Limite maximale : 3 Mo"
+    },
+    "contactForm": {
+      "contact_header_text": "Avant de partir, laissez-nous vos coordonnées afin que nous puissions vous recontacter...",
+      "name": "Nom",
+      "name_placeholder": "Entrez votre nom",
+      "email": "E-mail",
+      "email_placeholder": "Entrez votre e-mail",
+      "phone": "Numéro de téléphone",
+      "phone_placeholder": "Entrez votre numéro de téléphone",
+      "product": "Nom du produit",
+      "product_placeholder": "Entrez le nom du produit",
+      "lode_text": "Nous préparons les choses...",
+      "error_message": {
+        "name_required": "Le nom est requis",
+        "email_valid": "Format d'e-mail invalide",
+        "email_required": "L'e-mail est requis",
+        "phone_valid": "Numéro de téléphone invalide",
+        "phone_required": "Le numéro de téléphone est requis",
+        "product_required": "Le produit est requis"
+      }
+    },
+    "openEndedForm": {
+      "How_do_you_want_to_generate_video": "Comment souhaitez-vous générer une vidéo",
+      "Description": "Description",
+      "Upload_video": "Télécharger une vidéo",
+      "Upload_audio": "Télécharger un audio",
+      "Video": "Vidéo",
+      "Audio": "Audio",
+      "Text": "Texte",
+      "descriptionPlaceholder": "Entrez votre réponse..."
+    },
+    "multipleChoiceForm": {
+      "Choose_up_to": "Choisissez jusqu'à",
+      "options": "options",
+      "Choose_1_of": "Choisissez 1 parmi"
+    },
+    "fileUploadForm": {
+      "Title": "Titre",
+      "Description": "Description",
+      "upload_video": "Télécharger une vidéo"
+    }
+  }
+}

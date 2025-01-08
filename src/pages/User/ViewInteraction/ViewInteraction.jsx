@@ -18,6 +18,8 @@ import FileUploadForm from "./AnswerForm/FileUploadForm";
 import ContactForm from "./AnswerForm/ContactForm";
 import CalenderForm from "./AnswerForm/CalenderForm";
 import EndScreen from "./EndScreen";
+import { useTranslation } from "react-i18next";
+import { languageOptions } from "../MyOrganization/pages/Overview/overviewOption";
 // profileData;
 function ViewInteraction() {
   const { token, type } = useParams();
@@ -43,6 +45,7 @@ function ViewInteraction() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     if (id) {
@@ -74,6 +77,11 @@ function ViewInteraction() {
           border_radius: intr?.border_radius || "Arial",
           font: intr?.font || 10,
         });
+        i18n.changeLanguage(
+          languageOptions.find((ele) => ele.value === intr?.language)?.key ||
+            "en"
+        );
+        // i18n.changeLanguage("fr");
         setKey(nodeList.length > 0 ? 0 : "End");
         setQueNodes(nodeList);
         setEndNodes(nodes.find((x) => x.type === "End"));

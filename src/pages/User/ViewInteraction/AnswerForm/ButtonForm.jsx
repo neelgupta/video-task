@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import "./AnswerForm.scss";
+import { t } from "i18next";
 
 function ButtonForm({ onNext, node, videoTime, isPost, flowStyle }) {
   const { answer_type, answer_format } = node;
@@ -38,12 +39,12 @@ function ButtonForm({ onNext, node, videoTime, isPost, flowStyle }) {
             className="text-26-500"
             style={{ fontFamily: `${flowStyle.font}` }}
           >
-            Interact in{" "}
+            {t("interact_in")}{" "}
             <span style={{ color: "#7b5aff" }}>
               {parseInt(answer_format.delay) -
                 parseInt(videoTime?.currentTime.toFixed(0)) || 0}
             </span>
-            s...
+            {t("second")}...
           </div>
         </div>
       )}

@@ -5,7 +5,9 @@ import { addWhitenessToHex, creteImgFilter } from "../../../utils/helpers";
 import { icons } from "../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { throwError } from "../../../store/globalSlice";
+import { useTranslation } from "react-i18next";
 function AudioUpload({ audio, setAudio, flowStyle }) {
+  const { t } = useTranslation();
   const [uploadProgress, setUploadProgress] = useState(0);
   const dispatch = useDispatch();
   const { getRootProps, getInputProps } = useDropzone({
@@ -13,12 +15,12 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
       const audioFile = acceptedFiles[0];
       const { size, type } = audioFile;
       if (parseInt(size / 1024 / 1024) > 4) {
-        dispatch(throwError("File size must be less than 4 MB."));
+        dispatch(throwError(t("audioUpload.fileSizeError")));
         return;
       }
       if (!audio) {
         if (!["audio/mpeg", "audio/wav", "audio/ogg"].includes(type)) {
-          dispatch(throwError("File type is not valid"));
+          dispatch(throwError(t("audioUpload.fileTypeError")));
           return;
         }
         setAudio(acceptedFiles[0]);
@@ -74,7 +76,7 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
               ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
             }}
           >
-            Drag & drop files or{" "}
+            {t("audioUpload.Drag_&_drop_files_or")}{" "}
           </strong>
           <span
             className="browse"
@@ -83,7 +85,7 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
               color: flowStyle?.primary_color || "#6c5eca",
             }}
           >
-            Browse
+            {t("audioUpload.Browse")}
           </span>
         </p>
         <p
@@ -92,7 +94,7 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
             ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
           }}
         >
-          Supported formats MP3
+          {t("audioUpload.Supported_formats_MP3")}
         </p>
       </div>
       {audio && (
@@ -102,14 +104,14 @@ function AudioUpload({ audio, setAudio, flowStyle }) {
               ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
             }}
           >
-            Uploading - 1/1 files
+            {t("audioUpload.Uploading_files")}
           </div>
           <div
             style={{
               ...(flowStyle?.font ? { fontFamily: `${flowStyle.font}` } : {}),
             }}
           >
-            Max Limit: 3MB
+            {t("audioUpload.Max_limit")}
           </div>
         </div>
       )}

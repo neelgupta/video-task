@@ -3,9 +3,9 @@ export const brandingOption = [
   { value: "no-branding", label: "No branding" },
 ];
 export const languageOptions = [
-  { value: "english", label: "English" },
-  { value: "french", label: "french" },
-  { value: "spanish", label: "Spanish" },
+  { value: "english", label: "English", key: "en" },
+  { value: "french", label: "French", key: "fr" },
+  { value: "spanish", label: "Spanish", key: "sp" },
 ];
 export const fontFamilyList = [
   { label: "Arial", value: "Arial" },

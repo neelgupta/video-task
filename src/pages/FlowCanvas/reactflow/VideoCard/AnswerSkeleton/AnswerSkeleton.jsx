@@ -68,9 +68,10 @@ function AnswerSkeleton({ answerType, interactionsStyle }) {
                     background: interactionsStyle.primary_color,
                     lineHeight: "1",
                     borderRadius: interactionsStyle.border_radius || "20px",
+                    fontFamily: `${interactionsStyle.font}`,
                   }}
                 >
-                  {item}{" "}
+                  {item}
                 </div>
               </div>
             );
@@ -95,7 +96,12 @@ function AnswerSkeleton({ answerType, interactionsStyle }) {
               height={40}
             />
             <div className="button-skeleton-text">
-              <span style={{ color: interactionsStyle.primary_color }}>
+              <span
+                style={{
+                  color: interactionsStyle.primary_color,
+                  fontFamily: `${interactionsStyle.font}`,
+                }}
+              >
                 Button
               </span>
               <img
@@ -142,6 +148,7 @@ function AnswerSkeleton({ answerType, interactionsStyle }) {
                 style={{
                   color: interactionsStyle.primary_color,
                   lineHeight: "1",
+                  fontFamily: `${interactionsStyle.font}`,
                 }}
               >
                 File Upload

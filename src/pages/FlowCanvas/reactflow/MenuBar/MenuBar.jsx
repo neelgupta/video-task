@@ -18,7 +18,7 @@ const MenuBar = React.forwardRef(({ className, ...props }) => {
     <Panel position="top-right" {...props} className="p-20 pt-35">
       <div className={styles.menuBarContainer}>
         <div className={`d-flex align-items-center gap-2 pointer w-70 me-10`}>
-          <img src={icons.avatar} alt="avatar" className="fit-image" />
+          <img src={icons.videoUser} alt="avatar" className="fit-image" />
           <svg
             width="20"
             height="12"

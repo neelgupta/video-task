@@ -6,8 +6,10 @@ import { throwError } from "../../../../store/globalSlice";
 import { useDispatch } from "react-redux";
 import "./AnswerForm.scss";
 import { Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 function FileUploadForm({ onNext, node, isPost, flowStyle }) {
+  const { t } = useTranslation();
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
   const [videoFile, setVideoFile] = useState(null);
@@ -18,9 +20,12 @@ function FileUploadForm({ onNext, node, isPost, flowStyle }) {
           <div className="mb-20">
             <div
               className={`text-12-600 mb-5`}
-              style={{ color: "#666666", fontFamily: `${flowStyle.font}` }}
+              style={{
+                color: flowStyle?.secondary_color || "#666666",
+                fontFamily: `${flowStyle.font}`,
+              }}
             >
-              Title:
+              {t("fileUploadForm.Title")}:
             </div>
             <div className="wp-100 InputBox">
               <input
@@ -38,9 +43,12 @@ function FileUploadForm({ onNext, node, isPost, flowStyle }) {
           <div className="mb-20 wp-100 ">
             <div
               className={`text-12-600 mb-5`}
-              style={{ color: "#666666", fontFamily: `${flowStyle.font}` }}
+              style={{
+                color: flowStyle?.secondary_color || "#666666",
+                fontFamily: `${flowStyle.font}`,
+              }}
             >
-              Description:
+              {t("fileUploadForm.Description")}:
             </div>
             <div className="InputBox">
               <textarea
@@ -62,9 +70,12 @@ function FileUploadForm({ onNext, node, isPost, flowStyle }) {
           <div className="mb-20 wp-100 ">
             <div
               className="text-12-600 mb-10 mt-20"
-              style={{ color: "#666666", fontFamily: `${flowStyle.font}` }}
+              style={{
+                color: flowStyle?.secondary_color || "#666666",
+                fontFamily: `${flowStyle.font}`,
+              }}
             >
-              Upload Video
+              {t("fileUploadForm.upload_video")}
             </div>
 
             <UploadFile
