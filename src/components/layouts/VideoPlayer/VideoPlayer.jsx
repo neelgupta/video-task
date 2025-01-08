@@ -173,11 +173,15 @@ const VideoPlayer = ({
               color: "white",
               fontSize: "12",
               fontFamily: `${flowStyle.font}`,
+              lineHeight: "1",
             }}
           >
             Powered by :
           </div>
-          <div className="text-20-800" style={{ color: "white" }}>
+          <div
+            className="text-20-800"
+            style={{ color: "white", lineHeight: "1" }}
+          >
             Flōw AI
           </div>
         </div>

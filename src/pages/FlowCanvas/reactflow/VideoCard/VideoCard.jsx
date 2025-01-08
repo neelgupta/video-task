@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { api, TestApi } from "../../../../services/api";
 import "./VideoCard.scss";
 import { icons } from "../../../../utils/constants";
-import { creteImgFilter } from "../../../../utils/helpers";
+import { addWhitenessToHex, creteImgFilter } from "../../../../utils/helpers";
 import Skeleton from "react-loading-skeleton";
 
 import DeleteModal from "../../../../components/layouts/DeleteModal";
@@ -56,7 +56,8 @@ const IconRenderer = ({ icon, label, onClick, style }) => {
 };
 function VideoCard(props) {
   const { data, id, title, index } = props;
-  // const { interactionsStyle } = useSelector((state) => state.global);
+  const { interactionsStyle } = useSelector((state) => state.global);
+  console.log("interactionsStyle", interactionsStyle);
   const [isToolbarVisible, setToolbarVisible] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -163,7 +164,10 @@ function VideoCard(props) {
         </NodeToolbar>
         <div className="question">
           {data.answer_format.contact_form && (
-            <div className="contact_icons">
+            <div
+              className="contact_icons"
+              style={{ background: interactionsStyle.primary_color }}
+            >
               <img
                 src={icons.contact}
                 alt=""
@@ -185,18 +189,34 @@ function VideoCard(props) {
             <div className="img-box-content">
               <img src={data.video_thumbnail} alt="" />
             </div>
-            <div className="content-body-container">
+            <div
+              className="content-body-container"
+              style={
+                {
+                  // background: addWhitenessToHex(
+                  //   interactionsStyle.background_color,
+                  //   0.6
+                  // ),
+                }
+              }
+            >
               <div
                 className="text-14-600 "
-                style={{ textTransform: "capitalize" }}
+                style={{
+                  textTransform: "capitalize",
+                  color: interactionsStyle.primary_color,
+                }}
               >
-                <span className="text-17-600" style={{ color: "#7b5aff" }}>
+                <span className="text-17-600" style={{ color: "#000" }}>
                   {data.index}.
                 </span>{" "}
                 {data.title}.
               </div>
               <div className="m-0 p-0 wp-100 hp-85">
-                <AnswerSkeleton answerType={data?.answer_type || ""} />
+                <AnswerSkeleton
+                  answerType={data?.answer_type || ""}
+                  interactionsStyle={interactionsStyle}
+                />
               </div>
             </div>
           </div>

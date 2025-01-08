@@ -192,6 +192,9 @@ function AnswerTab({ onClose }) {
     setIsUpdate(false);
   };
 
+  const isAnsDisabled =
+    nodeData?.allowedToEditAnswerType === false ? true : false;
+
   return (
     <div className="AnswerTab-container pe-20 ps-20">
       <ContactForm
@@ -205,14 +208,12 @@ function AnswerTab({ onClose }) {
             Select answer type :
           </div>
           <div
-            className={`wp-100 ${
-              !nodeData.allowedToEditAnswerType && "pointer"
-            }`}
+            className={`wp-100 ${isAnsDisabled && "pointer"}`}
             data-tooltip-id={`answer-input-tooltip`}
             data-tooltip-content={`You cannot change the answer type of a step that already has collected responses.`}
           >
             <DropdownOption
-              isDisabled={!nodeData.allowedToEditAnswerType}
+              isDisabled={isAnsDisabled}
               value={AnsFormate.find((o) => o.value === ansFormate)}
               options={AnsFormate}
               onChange={(select) => {
@@ -220,17 +221,19 @@ function AnswerTab({ onClose }) {
               }}
             />
           </div>
-          <Tooltip
-            id={`answer-input-tooltip`}
-            place="bottom"
-            style={{
-              zIndex: "10",
-              position: "absolute",
-              width: "300px",
-              textWrap: "wrap",
-              borderRadius: "5px",
-            }}
-          />
+          {isAnsDisabled && (
+            <Tooltip
+              id={`answer-input-tooltip`}
+              place="bottom"
+              style={{
+                zIndex: "10",
+                position: "absolute",
+                width: "300px",
+                textWrap: "wrap",
+                borderRadius: "5px",
+              }}
+            />
+          )}
         </div>
 
         <div

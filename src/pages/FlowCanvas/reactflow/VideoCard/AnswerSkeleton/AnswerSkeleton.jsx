@@ -1,10 +1,13 @@
 import React from "react";
 import "./AnswerSkeleton.scss";
 import { icons } from "../../../../../utils/constants";
-import { creteImgFilter } from "../../../../../utils/helpers";
+import {
+  addWhitenessToHex,
+  creteImgFilter,
+} from "../../../../../utils/helpers";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-function AnswerSkeleton({ answerType }) {
+function AnswerSkeleton({ answerType, interactionsStyle }) {
   return (
     <div className="wp-100 hp-100">
       {answerType === "open-ended" && (
@@ -13,18 +16,24 @@ function AnswerSkeleton({ answerType }) {
             return (
               <div className="open-ended-icon" key={icon}>
                 <Skeleton
-                  baseColor="#f6eeff"
-                  highlightColor="#f0e2ff"
+                  baseColor={addWhitenessToHex(
+                    interactionsStyle.primary_color,
+                    0.8
+                  )}
+                  highlightColor={addWhitenessToHex(
+                    interactionsStyle.primary_color,
+                    0.95
+                  )}
                   width={45}
-                  borderRadius={"5px"}
+                  borderRadius={`${interactionsStyle.border_radius}px`}
                   height={45}
                 />
                 <img
                   src={icons[icon]}
                   alt=""
-                  className="w-20"
+                  className="w-20 h-20"
                   style={{
-                    filter: creteImgFilter("#7b5aff"),
+                    filter: creteImgFilter(interactionsStyle.primary_color),
                     position: "absolute",
                     zIndex: "10000",
                   }}
@@ -41,13 +50,28 @@ function AnswerSkeleton({ answerType }) {
             return (
               <div className="multiple-choice-options" key={item}>
                 <Skeleton
-                  baseColor="#f6eeff"
-                  highlightColor="#f0e2ff"
+                  baseColor={addWhitenessToHex(
+                    interactionsStyle.primary_color,
+                    0.8
+                  )}
+                  highlightColor={addWhitenessToHex(
+                    interactionsStyle.primary_color,
+                    0.95
+                  )}
                   width={120}
-                  borderRadius={"20px"}
-                  height={20}
+                  borderRadius={`${interactionsStyle.border_radius}px`}
+                  height={25}
                 />
-                <div className="multiple-choice-label">{item} </div>
+                <div
+                  className="multiple-choice-label"
+                  style={{
+                    background: interactionsStyle.primary_color,
+                    lineHeight: "1",
+                    borderRadius: interactionsStyle.border_radius || "20px",
+                  }}
+                >
+                  {item}{" "}
+                </div>
               </div>
             );
           })}
@@ -58,20 +82,28 @@ function AnswerSkeleton({ answerType }) {
         <div className="button-skeleton">
           <div className="button-skeleton-box">
             <Skeleton
-              baseColor="#f6eeff"
-              highlightColor="#f0e2ff"
+              baseColor={addWhitenessToHex(
+                interactionsStyle.primary_color,
+                0.8
+              )}
+              highlightColor={addWhitenessToHex(
+                interactionsStyle.primary_color,
+                0.95
+              )}
               width={120}
-              borderRadius={"5px"}
+              borderRadius={`${interactionsStyle.border_radius}px`}
               height={40}
             />
-            <div className="button-skeleton-text" style={{}}>
-              <span>Button</span>
+            <div className="button-skeleton-text">
+              <span style={{ color: interactionsStyle.primary_color }}>
+                Button
+              </span>
               <img
                 src={icons.link}
                 alt=""
                 className="w-20"
                 style={{
-                  filter: creteImgFilter("#7b5aff"),
+                  filter: creteImgFilter(interactionsStyle.primary_color),
                 }}
               />
             </div>
@@ -83,11 +115,17 @@ function AnswerSkeleton({ answerType }) {
         <div className="file-upload-skeleton">
           <div className="file-upload-skeleton-box">
             <Skeleton
-              baseColor="#f6eeff"
-              highlightColor="#f0e2ff"
-              width={150}
-              borderRadius={"5px"}
-              height={70}
+              baseColor={addWhitenessToHex(
+                interactionsStyle.primary_color,
+                0.8
+              )}
+              highlightColor={addWhitenessToHex(
+                interactionsStyle.primary_color,
+                0.95
+              )}
+              width={170}
+              borderRadius={`${interactionsStyle.border_radius}px`}
+              height={75}
             />
             <div className="file-upload-text" style={{}}>
               <div>
@@ -96,11 +134,18 @@ function AnswerSkeleton({ answerType }) {
                   alt=""
                   className="w-35"
                   style={{
-                    filter: creteImgFilter("#7b5aff"),
+                    filter: creteImgFilter(interactionsStyle.primary_color),
                   }}
                 />
               </div>
-              <div>File Upload</div>
+              <div
+                style={{
+                  color: interactionsStyle.primary_color,
+                  lineHeight: "1",
+                }}
+              >
+                File Upload
+              </div>
             </div>
           </div>
         </div>
@@ -110,10 +155,16 @@ function AnswerSkeleton({ answerType }) {
         <div className="calender-skeleton">
           <div className="calender-skeleton-box">
             <Skeleton
-              baseColor="#f6eeff"
-              highlightColor="#f0e2ff"
-              width={150}
-              borderRadius={"5px"}
+              baseColor={addWhitenessToHex(
+                interactionsStyle.primary_color,
+                0.8
+              )}
+              highlightColor={addWhitenessToHex(
+                interactionsStyle.primary_color,
+                0.95
+              )}
+              width={170}
+              borderRadius={`${interactionsStyle.border_radius}px`}
               height={70}
             />
             <div className="calender-text">
@@ -123,13 +174,19 @@ function AnswerSkeleton({ answerType }) {
                   alt=""
                   className="w-35"
                   style={{
-                    filter: creteImgFilter("#7b5aff"),
+                    filter: creteImgFilter(interactionsStyle.primary_color),
                   }}
                 />
               </div>
               <div className="calender-grid">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((count) => {
-                  return <div key={count} className="calender-grid-box"></div>;
+                  return (
+                    <div
+                      key={count}
+                      className="calender-grid-box"
+                      style={{ background: interactionsStyle.primary_color }}
+                    ></div>
+                  );
                 })}
               </div>
             </div>
