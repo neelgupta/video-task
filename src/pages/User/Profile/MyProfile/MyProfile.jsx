@@ -17,8 +17,7 @@ const MyProfile = ({ isResetPassword, setIsResetPassword }) => {
 
   useEffect(() => {
     if (profileData) {
-      const { profile } = profileData;
-      if (profile) setUserData(profile);
+      setUserData(profileData);
     }
   }, [profileData]);
 

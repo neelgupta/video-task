@@ -32,6 +32,7 @@ const Login = () => {
     setIsLogin(true);
     try {
       const res = await api.post("user/sign-in", values);
+      console.log("res", res);
       const data = res.data;
       if (data.status === 200) {
         const { token, role } = data.response;
@@ -139,141 +140,148 @@ const Login = () => {
       </div>
     </div> */}
       <div id="login-container">
-      <div className="leftBlock p-49 auri-scroll">
-        <div className="fa-center justify-content-end mb-60">
-          <Button
-            className="w-120 h-51 text-18-500 scale-btn pointer"
-            style={{
-              background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
-              border: "none",
-              borderRadius: "18px",
-            }}
-            onClick={() => navigate("/sign-up")}
-          >
-            Sign up
-          </Button>
-        </div>
-        <div className="text-42-600 color-0000 text-center mb-12">
-          Welcome Back
-        </div>
-        <div className="f-center flex-nowrap gap-3 mb-29">
-          <div className="line"></div>
-          <div className="text-20-600 color-9f9f text-nowrap">
-            Let’s get started
+        <div className="leftBlock p-49 auri-scroll">
+          <div className="fa-center justify-content-end mb-60">
+            <Button
+              className="w-120 h-51 text-18-500 scale-btn pointer"
+              style={{
+                background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                border: "none",
+                borderRadius: "18px",
+              }}
+              onClick={() => navigate("/sign-up")}
+            >
+              Sign up
+            </Button>
           </div>
-          <div className="line"></div>
+          <div className="text-42-600 color-0000 text-center mb-12">
+            Welcome Back
+          </div>
+          <div className="f-center flex-nowrap gap-3 mb-29">
+            <div className="line"></div>
+            <div className="text-20-600 color-9f9f text-nowrap">
+              Let’s get started
+            </div>
+            <div className="line"></div>
+          </div>
+          <Formik
+            enableReinitialize
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ values, handleChange, handleSubmit, errors, touched }) => (
+              <form
+                onSubmit={handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
+              >
+                <div className="f-center flex-column">
+                  <div className="mb-18 inputClass">
+                    <Label label="Email:" labelClass="text-14-600 color-6666" />
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={values.email}
+                      onChange={handleChange}
+                      placeholder="Enter Email"
+                      autoComplete="new-password"
+                      className={touched.email && errors.email ? "error" : ""}
+                    />
+                    {touched.email && errors.email && (
+                      <div className="input-error">{errors.email}</div>
+                    )}
+                  </div>
+                  <div className="mb-26 inputClass">
+                    <Label
+                      label="Password:"
+                      labelClass="text-14-600 color-6666"
+                    />
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      value={values.password}
+                      onChange={handleChange}
+                      placeholder="Enter Password"
+                      autoComplete="new-password"
+                      className={
+                        touched.password && errors.password ? "error" : ""
+                      }
+                    />
+                    {touched.password && errors.password && (
+                      <div className="input-error">{errors.password}</div>
+                    )}
+                  </div>
+                  <div>
+                    <div
+                      className="forgotBlock wp-100 color-6fff text-18-500 mb-56 pointer"
+                      // onClick={() => navigate("/forgot-password")}
+                      onClick={() => navigate("/verification")}
+                    >
+                      Forgot Password?
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center mb-9">
+                  <Button
+                    type="submit"
+                    className="wp-57 h-62 text-20-500 br-30 pointer"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                      border: "none",
+                    }}
+                    onClick={() => {
+                      !isLogin && handleSubmit();
+                    }}
+                    disabled={isLogin}
+                  >
+                    Login
+                    {isLogin && <Spinner size="sm" className="ms-10" />}
+                  </Button>
+                </div>
+                <div className="text-20-600 color-9f9f text-center mb-9">
+                  or
+                </div>
+                <div className="text-center mb-19">
+                  <Button
+                    className="wp-57 h-62 text-20-500 br-30 b-cccc bg-ffff color-2559 pointer"
+                    onClick={() => {}}
+                  >
+                    Sign up with Apple
+                  </Button>
+                </div>
+                <div className="text-center mb-27">
+                  <Button
+                    className="wp-57 h-62 text-20-500 br-30 b-cccc bg-ffff color-2559 pointer"
+                    onClick={() => {}}
+                  >
+                    Sign up with Facebook
+                  </Button>
+                </div>
+                <div className="text-center color-6fff text-20-500">
+                  Sign up with SSO
+                </div>
+              </form>
+            )}
+          </Formik>
         </div>
-        <Formik
-        enableReinitialize
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ values, handleChange, handleSubmit, errors, touched }) => (
-            <form onSubmit={handleSubmit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSubmit();
-              }
-            }}>
-              <div className="f-center flex-column">
-                <div className="mb-18 inputClass">
-                  <Label
-                    label="Email:"
-                    labelClass="text-14-600 color-6666"
-                  />
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={values.email}
-                    onChange={handleChange}
-                    placeholder="Enter Email"
-                    autoComplete="new-password"
-                    className={touched.email && errors.email ? "error" : ""}
-                  />
-                  {touched.email && errors.email && (
-                    <div className="input-error">{errors.email}</div>
-                  )}
-                </div>
-                <div className="mb-26 inputClass">
-                  <Label
-                    label="Password:"
-                    labelClass="text-14-600 color-6666"
-                  />
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    value={values.password}
-                    onChange={handleChange}
-                    placeholder="Enter Password"
-                    autoComplete="new-password"
-                    className={touched.password && errors.password ? "error" : ""}
-                  />
-                  {touched.password && errors.password && (
-                    <div className="input-error">{errors.password}</div>
-                  )}
-                </div>
-                <div>
-
-                <div
-                  className="forgotBlock wp-100 color-6fff text-18-500 mb-56 pointer"
-                  // onClick={() => navigate("/forgot-password")}
-                  onClick={() => navigate("/verification")}
-
-                >
-                  Forgot Password?
-                </div>
-                </div>
-              </div>
-              <div className="text-center mb-9">
-                <Button
-                  type="submit"
-                  className="wp-57 h-62 text-20-500 br-30 pointer"
-                  style={{
-                    background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
-                    border: "none",
-                  }}
-                  onClick={() => {
-                    !isLogin && handleSubmit();
-                  }}
-                  disabled={isLogin}
-                >
-                  Login
-                  {isLogin && <Spinner size="sm" className="ms-10" />}
-                </Button>
-              </div>
-              <div className="text-20-600 color-9f9f text-center mb-9">or</div>
-              <div className="text-center mb-19">
-                <Button
-                  className="wp-57 h-62 text-20-500 br-30 b-cccc bg-ffff color-2559 pointer"
-                  onClick={() => {}}
-                >
-                  Sign up with Apple
-                </Button>
-              </div>
-              <div className="text-center mb-27">
-                <Button
-                  className="wp-57 h-62 text-20-500 br-30 b-cccc bg-ffff color-2559 pointer"
-                  onClick={() => {}}
-                >
-                  Sign up with Facebook
-                </Button>
-              </div>
-              <div className="text-center color-6fff text-20-500">
-                Sign up with SSO
-              </div>
-            </form>
-          )}
-        </Formik>
-      </div>
-      <div className="rightBlock">
-        <div className="wp-100 hp-100">
-          <img src={icons.loginImage} loading="lazy" alt="Login" className="full-size-image" />
+        <div className="rightBlock">
+          <div className="wp-100 hp-100">
+            <img
+              src={icons.loginImage}
+              loading="lazy"
+              alt="Login"
+              className="full-size-image"
+            />
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

@@ -8,7 +8,6 @@ import EditOrganizationName from "./EditOrganizationName";
 import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
 import { Tooltip } from "react-tooltip";
 import { SketchPicker } from "react-color";
-import useClickOutside from "../../../../../hook/useClickOutside";
 import {
   brandingOption,
   fontFamilyList,
@@ -80,10 +79,12 @@ function Overview() {
 
   useEffect(() => {
     if (organization?.members?.length > 0) {
+      console.log("organization?.members", organization?.members);
       const option = organization.members.map((ele) => {
+        console.log("ele", ele);
         return {
-          value: ele.userId._id,
-          label: ele.userId.email,
+          value: ele.userId?._id,
+          label: ele.userId?.email,
         };
       });
       setReplayEmailOption(option);

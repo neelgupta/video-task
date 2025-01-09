@@ -1,0 +1,36 @@
+#admin-AdminLayout-container {
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  // background-color: gray;
+
+  .right-body-content {
+    flex-grow: 1;
+    // width: 100%;
+    width: calc(100% - 264px);
+    .body-block {
+      padding: 18px;
+      height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+  }
+  @media (max-width: 660px) {
+    .right-body-content {
+      width: 100%;
+    }
+  }
+  @media (max-width: 660px) {
+    .right-body-content {
+      width: 100%;
+      padding: 0px;
+      .body-block {
+        padding: 10px;
+        max-height: unset;
+        overflow: unset;
+      }
+    }
+  }
+  .video-ask-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}

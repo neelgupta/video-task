@@ -387,4 +387,31 @@ a {
       border-color: #7b5aff;
     }
   }
+  textarea {
+    width: 100%;
+    padding: 10px 15px;
+    outline: none;
+    border: none;
+    border: 1px solid #cccccc;
+    font-size: 16px;
+    border-radius: 10px;
+    color: #1b2559;
+    box-shadow: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden !important;
+    resize: none;
+    &:focus {
+      border-color: #7b5aff;
+    }
+  }
+  .input-error {
+    color: red;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    margin: 5px 0px 0px 5px;
+  }
 }

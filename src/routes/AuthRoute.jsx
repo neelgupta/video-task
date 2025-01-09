@@ -12,7 +12,7 @@ const AuthRoute = () => {
         path="/"
         element={
           // <AuthHeader buttonText="Sign Up" path="/sign-up">
-            <Login />
+          <Login />
           // </AuthHeader>
         }
       />
@@ -20,15 +20,15 @@ const AuthRoute = () => {
         path="/verification"
         element={
           // <AuthHeader buttonText="Sign Up" path="/sign-up">
-            <Verification />
+          <Verification />
           // </AuthHeader>
         }
       />
       <Route
-        path="/sign-up"
+        path="/sign-up/:token?"
         element={
           // <AuthHeader buttonText="Log in" path="/">
-            <Signup />
+          <Signup />
           // </AuthHeader>
         }
       />

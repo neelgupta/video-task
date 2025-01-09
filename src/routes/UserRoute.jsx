@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Layout from "../pages/Layout";
 import Price from "../pages/User/Price";
-import Subscription from "../pages/User/Subscription";
+import Subscription from "../pages/Admin/Subscription";
 import Dashboard from "../pages/User/Dashboard";
 import AssetAllocation from "../pages/User/AssetAllocation";
 import Interaction from "../pages/User/Interactions";
@@ -42,10 +42,7 @@ const UserRoute = () => {
       path: "/user/price",
       component: <Price />,
     },
-    {
-      path: "/user/subscription",
-      component: <Subscription />,
-    },
+
     {
       path: "/user/interactions",
       component: <Interaction />,

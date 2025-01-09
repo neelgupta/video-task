@@ -1,0 +1,202 @@
+#admin-sidebar-container {
+  width: 254px;
+  height: calc(100vh - 20px);
+  margin: 10px 0px 10px 10px;
+  user-select: none;
+  position: relative;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0px 17px 40px 4px #7090b01c;
+  overflow: auto;
+  .Organization-btn {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .custom-btn {
+      border-radius: 200px;
+      box-shadow: 0px 6px 24px 1px rgba(112, 144, 176, 0.04);
+      transition: transform 0.3s;
+      position: relative;
+      overflow: hidden;
+      .arrow_icon {
+        transform: rotate(0deg);
+        transition-duration: 0.2s;
+        transition-property: transform;
+      }
+      .organizationMenu {
+        position: absolute;
+        background-color: white;
+        bottom: -100px;
+        width: 200px;
+        box-shadow: 0px 6px 24px 1px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        z-index: 100;
+        opacity: 0;
+        transition-duration: 0.2s;
+        transition-property: opacity;
+        .link {
+          cursor: pointer;
+          color: #000000;
+          &:hover {
+            color: #7b5aff;
+          }
+        }
+      }
+      &:hover {
+        overflow: visible;
+        .arrow_icon {
+          transform: rotate(180deg);
+        }
+        .organizationMenu {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  .side-option-container {
+    margin-top: 16px;
+    overflow: auto;
+    .main-option-block {
+      .option-item {
+        padding: 12px 12px 12px 16px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        .icon-block {
+          height: 24px;
+          width: 24px;
+        }
+        .title-block {
+          color: var(--7f95);
+          flex-grow: 1;
+        }
+        .down-block {
+          height: 18px;
+          width: 18px;
+        }
+      }
+      .active {
+        background-color: var(--f5ef);
+        position: relative;
+        .v-active-line {
+          position: absolute;
+          left: 0;
+          top: 0;
+          background-color: var(--9f63);
+          width: 4px;
+          height: 100%;
+        }
+      }
+      .child-option-block {
+        padding-left: 48px;
+
+        .child-item {
+          color: var(--7f95);
+          margin-bottom: 8px;
+        }
+      }
+    }
+  }
+  .side-footer {
+    padding: 20px;
+    background-color: var(--ffff);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  .gradient-card {
+    margin-top: 50px;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .circle-container {
+      width: 100%;
+      margin-bottom: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .icon-container {
+        background-color: white;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        top: -50%;
+        transform: translateY(-70%);
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .circle-box {
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+
+    h2 {
+      font-size: 16px;
+      margin: 10px 0;
+      font-weight: 700;
+      margin-top: 40px;
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 20px 0px;
+    }
+
+    .try-now-button {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 20px;
+      padding: 10px 50px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      transition-duration: 0.5s;
+      transition-property: padding, background-color;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+        padding: 10px 60px;
+      }
+    }
+  }
+  .close-icon {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+  }
+}
+.offcanvas-lg {
+  width: fit-content !important;
+  border: unset !important;
+  .offcanvas-header {
+    display: none;
+  }
+  .offcanvas-body {
+    padding: unset;
+    padding-right: 10px;
+  }
+}
+
+.new-video-menu {
+  position: absolute;
+  left: 15px;
+  top: 50px;
+  width: 120%;
+  max-width: 300px;
+  border: 1px solid #e8e9ea;
+  background: #ffffff;
+  z-index: 999;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 40px;
+}
