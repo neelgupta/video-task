@@ -6,8 +6,16 @@ import { api } from "../../../../../services/api";
 import { showSuccess, throwError } from "../../../../../store/globalSlice";
 import { Spinner } from "react-bootstrap";
 import DeleteModal from "../../../../../components/layouts/DeleteModal";
+import dayjs from "dayjs";
 
-function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
+function BillingCard({
+  addressType,
+  type,
+  onAddEdit,
+  addressList,
+  onFetch,
+  PaymentCard,
+}) {
   const dispatch = useDispatch();
   const [billingData, setBillingData] = useState([]);
   const [shippingData, setShippingData] = useState([]);
@@ -36,15 +44,19 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
       return shippingData;
     }
     if (type === "Payment") {
-      return billingData;
+      return PaymentCard;
     }
   };
 
-  const deleteAddress = async (id) => {
+  const onDelete = async (id) => {
     setIsDelete(true);
     try {
-      const res = await api.delete(`user/delete-address/${id}`);
-      if ([201, 200].includes(res.status)) {
+      const res = await api.delete(
+        type === "Payment"
+          ? `user/delete-payment-method/${id}`
+          : `user/delete-address/${id}`
+      );
+      if ([200].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         onFetch();
       } else {
@@ -63,7 +75,7 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
         show={showDeleteModal}
         handleClose={() => setShowDeleteModal(false)}
         onDelete={() => {
-          deleteAddress(deletedId);
+          onDelete(deletedId);
         }}
         isDelete={isDelete}
         title="Are you sure you want to proceed?"
@@ -77,13 +89,16 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
           return (
             <div className="det_card" key={index}>
               <div className="edit_delete_btn">
-                <img
-                  src={icons.edit}
-                  alt=""
-                  className="fit-image w-18 h-18 pointer "
-                  style={{ filter: creteImgFilter("#1B2559") }}
-                  onClick={() => onAddEdit(true, ele)}
-                />
+                {type !== "Payment" && (
+                  <img
+                    src={icons.edit}
+                    alt=""
+                    className="fit-image w-18 h-18 pointer "
+                    style={{ filter: creteImgFilter("#1B2559") }}
+                    onClick={() => onAddEdit(true, ele)}
+                  />
+                )}
+
                 {isDelete && deletedId === ele._id ? (
                   <div className="w-18 h-18 fa-center">
                     <Spinner
@@ -148,13 +163,13 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
                       className="text-12-500 mt-5"
                       style={{ color: "#2C2C2C" }}
                     >
-                      **** **** **** 4002
+                      **** **** **** {ele.card_number.slice(-4)}
                     </div>
                     <div
                       className="text-10-500 mt-5"
                       style={{ color: "#696969" }}
                     >
-                      Expiry on 20/2024
+                      Expiry on {dayjs(ele.expiry_date).format("MM/YYYY")}
                     </div>
                     <div className="mt-10">
                       <img
@@ -167,7 +182,7 @@ function BillingCard({ addressType, type, onAddEdit, addressList, onFetch }) {
                         className="text-11-400 ms-5"
                         style={{ color: "#696969" }}
                       >
-                        drchque@gmail.com
+                        {ele.email}
                       </span>
                     </div>
                   </div>

@@ -1,0 +1,10 @@
+.PurchasePlan-card {
+  .modal-dialog {
+    min-width: min(700px, 100%) !important;
+  }
+  .modal-content {
+    width: 100% !important;
+    border-radius: 10px !important;
+    padding: 10px;
+  }
+}

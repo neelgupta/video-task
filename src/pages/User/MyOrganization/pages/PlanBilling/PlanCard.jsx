@@ -3,7 +3,7 @@ import { creteImgFilter } from "../../../../../utils/helpers";
 import { icons } from "../../../../../utils/constants";
 import { Button } from "react-bootstrap";
 
-function PlanCard({ ele }) {
+function PlanCard({ ele, onPurchase, isActive }) {
   return (
     <div className="plans-card">
       <div style={{ position: "relative", width: "100%" }}>
@@ -21,7 +21,9 @@ function PlanCard({ ele }) {
         {ele?.sub_title}
       </div>
       <div
-        className="text-48-600 mt-10 mb-30"
+        className={`text-${
+          ele.plan_type === "enterprise" ? "35" : "48"
+        }-600 mt-10 mb-30`}
         style={{
           color: ele?.plan_type === "free" ? "#7B5AFF" : "black",
           textTransform: "capitalize",
@@ -31,7 +33,9 @@ function PlanCard({ ele }) {
           "Free"
         ) : (
           <>
-            <sup className="text-32-600">{ele?.currency}</sup>
+            <sup className="text-32-600">
+              {ele?.currency === "USD" ? "$" : "$"}
+            </sup>
             {ele?.price}
             {ele?.plan_type !== "" && (
               <sub className="text-14-400" style={{ color: "#98A2B2" }}>
@@ -41,26 +45,7 @@ function PlanCard({ ele }) {
           </>
         )}
       </div>
-
-      {(ele?.is_upgrade || ele?.is_custom) && (
-        <div
-          className="text-14-500"
-          style={{
-            color: ele?.plan_type === "free" ? "#7E8B9E" : "white",
-            background:
-              ele?.plan_type === "free"
-                ? "#F6F6F6"
-                : "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
-            display: "inline",
-            padding: "10px 20px",
-            borderRadius: "8px",
-          }}
-        >
-          {ele?.is_upgrade &&
-            (ele?.plan_type === "free" ? "Current Plan" : "Upgrade Plan")}
-          {ele?.is_custom && "Contact Us"}
-        </div>
-      )}
+      {isActive && <div className="active">Active plan</div>}
 
       <div className="mt-30">
         <div
@@ -73,39 +58,109 @@ function PlanCard({ ele }) {
           className="text-16-400"
           style={{ color: "#536174", textTransform: "capitalize" }}
         >
-          Everything you get in this plan
+          {ele?.description}
         </div>
         <div className="mt-40">
-          {(ele?.description || []).map((ele, index) => {
-            return (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "20px",
-                }}
-                className="mt-20 mb-20"
-              >
-                <div className="w-20 h-20">
-                  <img
-                    src={icons.check}
-                    alt=""
-                    className="fit-image"
-                    style={{ filter: creteImgFilter("#7B5BFF") }}
-                  />
-                </div>
-                <div
-                  className="text-16-400 "
-                  style={{
-                    color: "#536174",
-                  }}
-                >
-                  {ele}
-                </div>
-              </div>
-            );
-          })}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+            }}
+            className="mt-20 mb-20"
+          >
+            <div className="w-20 h-20">
+              <img
+                src={icons.check}
+                alt=""
+                className="fit-image"
+                style={{ filter: creteImgFilter("#7B5BFF") }}
+              />
+            </div>
+            <div
+              className="text-16-400 "
+              style={{
+                color: "#536174",
+              }}
+            >
+              {ele.page} Page Unlock
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+            }}
+            className="mt-20 mb-20"
+          >
+            <div className="w-20 h-20">
+              <img
+                src={icons.check}
+                alt=""
+                className="fit-image"
+                style={{ filter: creteImgFilter("#7B5BFF") }}
+              />
+            </div>
+            <div
+              className="text-16-400 "
+              style={{
+                color: "#536174",
+              }}
+            >
+              {ele.storage} GB Storage
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+            }}
+            className="mt-20 mb-20"
+          >
+            <div className="w-20 h-20">
+              <img
+                src={icons.check}
+                alt=""
+                className="fit-image"
+                style={{ filter: creteImgFilter("#7B5BFF") }}
+              />
+            </div>
+            <div
+              className="text-16-400 "
+              style={{
+                color: "#536174",
+              }}
+            >
+              {ele.members} Team Members
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+            }}
+            className="mt-20 mb-20"
+          >
+            <div className="w-20 h-20">
+              <img
+                src={icons.check}
+                alt=""
+                className="fit-image"
+                style={{ filter: creteImgFilter("#7B5BFF") }}
+              />
+            </div>
+            <div
+              className="text-16-400 "
+              style={{
+                color: "#536174",
+              }}
+            >
+              Unlimited basic feature
+            </div>
+          </div>
         </div>
 
         {ele?.button_text && ele?.plan_type !== "free" && (
@@ -117,6 +172,7 @@ function PlanCard({ ele }) {
                 background: "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",
                 border: "none",
               }}
+              onClick={() => onPurchase(ele)}
             >
               {ele.button_text}
             </Button>

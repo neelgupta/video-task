@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import SubscriptionForm from "./SubscriptionForm";
 import { api } from "../../../services/api";
 import Swal from "sweetalert2";
-import { handelCatch, throwError } from "../../../store/globalSlice";
+import {
+  handelCatch,
+  showSuccess,
+  throwError,
+} from "../../../store/globalSlice";
 function Subscription() {
   const reduxData = useSelector((state) => state.global);
   const { themeColor } = reduxData;
@@ -72,43 +76,43 @@ function Subscription() {
     }
     setIsLoad(false);
   };
-  const handleIsActive = async (id, value) => {
-    const body = {
-      isActive: value,
-    };
-    const res = await api.put(`user/subscription-plan/${id}`, body);
-    if (res.status === 200) {
-      Swal.fire("Active status changed successfully", "success");
-      getSubscriptionList();
+
+  const handleDelete = (itemId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete this item? This process cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteItem(itemId);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Cancelled", "Your item is safe :)", "error");
+      }
+    });
+  };
+
+  const deleteItem = async (itemId) => {
+    try {
+      const res = await api.delete(
+        `admin/delete-subscription-plan/${itemId}`,
+        {}
+      );
+      if (res.status === 200) {
+        dispatch(showSuccess(res.data.message));
+        getSubscriptionList();
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
     }
   };
-  // const handleDelete = (itemId) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "Do you really want to delete this item? This process cannot be undone.",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //     cancelButtonText: "No, cancel!",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       deleteItem(itemId);
-  //     } else if (result.dismiss === Swal.DismissReason.cancel) {
-  //       Swal.fire("Cancelled", "Your item is safe :)", "error");
-  //     }
-  //   });
-  // };
-  // const deleteItem = async (itemId) => {
-  //   const res = await api.delete(`user/subscription-plan/${itemId}`, {});
-  //   if (res.status === 200) {
-  //     getSubscriptionList();
-  //     Swal.fire("Deleted!", "Your item has been deleted.", "success");
-  //   } else {
-  //     Swal.fire(res.data.message, "error");
-  //   }
-  // };
 
   useEffect(() => {
     const data = [];
@@ -157,8 +161,7 @@ function Subscription() {
               <div
                 className="pointer d-flex h-20 w-20"
                 onClick={() => {
-                  // handleDelete(elem._id);
-                  console.log("elem", elem);
+                  handleDelete(elem._id);
                 }}
               >
                 <img

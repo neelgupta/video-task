@@ -18,6 +18,7 @@ import {
   showSuccess,
   throwError,
 } from "../../../store/globalSlice";
+import { useState } from "react";
 
 const planTypeList = [
   { value: "free", label: "Free" },
@@ -26,12 +27,13 @@ const planTypeList = [
 
 function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
   const dispatch = useDispatch();
+  const [isLoad, setIsLoad] = useState(false);
   const initialValues = {
     title: editData?.title || "",
     description: editData?.description || "",
     sub_title: editData?.sub_title || "",
     members: editData?.members || "",
-    price: editData?.price || "",
+    price: editData?.price || 0,
     storage: editData?.storage || "",
     page: editData?.page || "",
     plan_type: editData?.plan_type || "free",
@@ -51,14 +53,21 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
   });
 
   const handleSubmit = async (formValue) => {
-    console.log("formValue", formValue);
+    setIsLoad(true);
     try {
       const req = {
         ...formValue,
+        ...(isEdit
+          ? { plan_id: editData._id, plan_type: editData.plan_type }
+          : {}),
       };
-      const res = await api.post("admin/add-subscription-plan", req);
-      console.log("res", res);
-      if (res.status === 200) {
+      const res = await api[isEdit ? "put" : "post"](
+        isEdit
+          ? "admin/update-subscription-plan"
+          : "admin/add-subscription-plan",
+        req
+      );
+      if ([200, 201].includes(res.status)) {
         dispatch(showSuccess(res.data.message));
         onHide();
         getSubscriptionList();
@@ -69,6 +78,7 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
       console.log("error", error);
       dispatch(handelCatch(error));
     }
+    setIsLoad(false);
   };
   return (
     <Modal
@@ -104,6 +114,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
               >
                 <div className="container-flued row">
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 flow-ai-input">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Title:
+                    </div>
                     <input
                       label=""
                       name="title"
@@ -118,6 +134,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                     )}
                   </div>
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 flow-ai-input">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Sub title:
+                    </div>
                     <input
                       label=""
                       name="sub_title"
@@ -132,6 +154,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                     )}
                   </div>
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 flow-ai-input">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Price:
+                    </div>
                     <input
                       label=""
                       name="price"
@@ -146,6 +174,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                     )}
                   </div>
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 flow-ai-input">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Page:
+                    </div>
                     <input
                       label=""
                       name="page"
@@ -160,6 +194,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                     )}
                   </div>
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 flow-ai-input">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Storage {"(GB)"} :
+                    </div>
                     <input
                       label=""
                       name="storage"
@@ -174,6 +214,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                     )}
                   </div>
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 ">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Plan type :
+                    </div>
                     <DropdownOption
                       name="plan_type"
                       id="plan_type"
@@ -190,6 +236,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                     />
                   </div>
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 flow-ai-input">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Members:
+                    </div>
                     <input
                       name="members"
                       id="members"
@@ -204,6 +256,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                     )}
                   </div>
                   <div className="col-lg-6 col-sm-6 col-12 mb-18 flow-ai-input">
+                    <div
+                      className="text-14-500 ms-5"
+                      style={{ color: "#808080" }}
+                    >
+                      Button text:
+                    </div>
                     <input
                       name="button_text"
                       id="button_text"
@@ -219,6 +277,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                   </div>
                 </div>
                 <div className="mb-18 flow-ai-input">
+                  <div
+                    className="text-14-500 ms-5"
+                    style={{ color: "#808080" }}
+                  >
+                    Description :
+                  </div>
                   <textarea
                     label=""
                     name="description"
@@ -247,10 +311,12 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
                 </div> */}
                 <div className="d-flex justify-content-end gap-3 mt-32">
                   <Button
+                    loading={isLoad}
                     btnText={isEdit ? "Update" : "Add"}
                     className="w-120 h-53 text-18-500"
                     onClick={handleSubmit}
                     btnStyle="linear-gradient"
+                    loaderTyp={"PD"}
                   />
                 </div>
               </form>

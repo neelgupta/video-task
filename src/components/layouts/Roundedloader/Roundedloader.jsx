@@ -16,7 +16,7 @@ const Roundedloader = ({ size, type }) => {
         animation="border"
         role="status"
         size={size || "sm"}
-        variant={variantType[type] || "dark"}
+        variant={variantType[type] || "light"}
       />
     </div>
   );

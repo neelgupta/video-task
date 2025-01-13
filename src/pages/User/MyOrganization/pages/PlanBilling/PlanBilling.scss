@@ -11,6 +11,15 @@
         width: max(300px, 24%);
         border: 1px solid #e0e3e8;
         border-radius: 8px;
+        .active {
+          padding: 5px 10px;
+          border-radius: 50px;
+          color: darkgreen;
+          background: lightgreen;
+          display: inline-block;
+          font-size: 14px;
+          font-weight: 600;
+        }
         .Best_Deal_btn {
           position: absolute;
           top: 0;
@@ -82,6 +91,7 @@
 .PaymentForm-form {
   .modal-content {
     border-radius: 10px !important;
+    width: 700px;
   }
   input {
     font-size: 16px;
@@ -95,6 +105,86 @@
     color: red;
     font-size: 12px; /* Adjust size as needed */
     margin-top: 5px; /* Adjust spacing as needed */
+  }
+  .select-billing-address-card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px 0px;
+    .billing-card {
+      box-sizing: border-box;
+      border-radius: 10px;
+      width: 45%;
+      position: relative;
+      padding: 5px 5px 5px 25px;
+      border: 1px solid #aaa;
+      cursor: pointer;
+      transform: scale(1);
+      transition-duration: 0.3s;
+      transition-property: transform;
+      .details {
+        display: flex;
+        flex-direction: column;
+        p {
+          margin: 0;
+          padding: 0;
+          font-size: 12px;
+          text-wrap: wrap;
+          &:nth-child(1) {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(0, 0, 0, 0.4);
+            text-transform: capitalize;
+          }
+          &:nth-child(2) {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgb(0, 0, 0);
+            text-transform: capitalize;
+          }
+          &:nth-child(3) {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgb(0, 0, 0);
+            text-transform: capitalize;
+          }
+        }
+      }
+      &:hover {
+        transform: scale(1.05);
+      }
+      .details-icon {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+    }
+    .active {
+      border: 1px solid #4d20ff;
+      .details {
+        p {
+          &:nth-child(1) {
+            color: #896cff;
+          }
+          &:nth-child(2) {
+            color: #4d20ff;
+          }
+          &:nth-child(3) {
+            color: #4d20ff;
+          }
+        }
+      }
+      .details-icon {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        filter: invert(44%) sepia(78%) saturate(4592%) hue-rotate(234deg)
+          brightness(105%) contrast(113%);
+        transform: scale(1.3);
+      }
+    }
   }
 }
 

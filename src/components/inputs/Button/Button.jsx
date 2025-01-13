@@ -15,6 +15,7 @@ const Button = ({
   leftIconClass,
   style,
   iconColor,
+  loaderTyp = "",
 }) => {
   return (
     <div id="button-container">
@@ -51,7 +52,7 @@ const Button = ({
           {loading && (
             <span>
               <Roundedloader
-                type={["PD", "RD"].includes(btnStyle) ? "L" : "D"}
+                type={["PD", "RD"].includes(loaderTyp) ? "L" : "D"}
               />
             </span>
           )}
