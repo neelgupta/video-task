@@ -146,14 +146,16 @@ $fonthWeights: 400, 500, 600, 700, 800;
 
 .hover-icons-effect {
   transform: scale(1);
-  transition: transform 0.3s ease-in;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   cursor: pointer;
-  &:hover {
-    filter: invert(38%) sepia(65%) saturate(3797%) hue-rotate(236deg)
-      brightness(102%) contrast(101%);
-    transform: scale(1.2);
-  }
 }
+
+.hover-icons-effect:hover {
+  filter: invert(38%) sepia(65%) saturate(3797%) hue-rotate(236deg)
+    brightness(102%) contrast(101%);
+  transform: scale(1.2);
+}
+
 .hover-effect {
   cursor: pointer;
   &:hover {

@@ -3,7 +3,7 @@ import { creteImgFilter } from "../../../../../utils/helpers";
 import { icons } from "../../../../../utils/constants";
 import { Button } from "react-bootstrap";
 
-function PlanCard({ ele, onPurchase, isActive }) {
+function PlanCard({ ele, onPurchase, isActive, isPurchase }) {
   return (
     <div className="plans-card">
       <div style={{ position: "relative", width: "100%" }}>
@@ -167,6 +167,7 @@ function PlanCard({ ele, onPurchase, isActive }) {
           <div className="mt-30">
             <Button
               className="wp-100 text-16-500"
+              disabled={isPurchase}
               style={{
                 padding: "12px 0px",
                 background: "linear-gradient(180deg, #7B5BFF 0%, #B3A1FF 100%)",

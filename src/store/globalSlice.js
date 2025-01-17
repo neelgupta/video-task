@@ -16,6 +16,7 @@ const initialState = {
   profileData: null,
   interactionsStyle: {},
   selectedOrganizationId: "",
+  myOrganization: {},
   organizationData: {},
   showCreateFlowModal: false,
   queModelConfig: {
@@ -90,6 +91,10 @@ const globalSlice = createSlice({
     },
     setNewQueModalData(state, action) {
       state.newQueModalData = action.payload;
+    },
+
+    setMyOrganization(state, action) {
+      state.myOrganization = action.payload;
     },
   },
 });
@@ -221,9 +226,11 @@ export const handleProfileStore = () => async (dispatch) => {
     const res = await api.get("user/profile");
     if (res.status && res.status === 200) {
       dispatch(setProfileData(res.data.response));
-      dispatch(
-        setSelectedOrganization(res.data.response.organizations?.[0]._id)
-      );
+      const profile = res.data.response.profile;
+      const organizations = res.data.response.organizations;
+      const myOrg = organizations.find((org) => org.added_by === profile._id);
+      dispatch(setSelectedOrganization(myOrg?._id));
+      dispatch(setMyOrganization({ ...myOrg, userDetails: {} }));
     }
     return;
   } catch (error) {
@@ -346,6 +353,7 @@ export const {
   setWebcamModelConfig,
   setOrganizationData,
   setInteractionsStyle,
+  setMyOrganization,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

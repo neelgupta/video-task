@@ -2,32 +2,55 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { icons } from "../../../utils/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../../components";
 import {
   creteImgFilter,
   getDataFromLocalStorage,
 } from "../../../utils/helpers";
 import "./Sidebar.scss";
+import DropdownOption from "../../../components/inputs/DropdownOption/DropdownOption";
+import {
+  handelCatch,
+  setSelectedOrganization,
+} from "../../../store/globalSlice";
 
 const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const role = getDataFromLocalStorage("role");
   const reduxData = useSelector((state) => state.global);
-  const { themeColor, isResponsive, profileData } = reduxData;
+  const {
+    themeColor,
+    isResponsive,
+    profileData,
+    selectedOrganizationId,
+    myOrganization,
+  } = reduxData;
+  console.log("profileData", profileData);
   const [organization, setOrganization] = useState({});
   const [expand, setExpand] = useState("");
-
+  const [orgOptions, setOrgOptions] = useState([]);
   useEffect(() => {
-    if (profileData && profileData.organizations?.length !== 0) {
-      setOrganization(profileData.organizations?.[0]);
+    if (
+      profileData &&
+      profileData.organizations?.length !== 0 &&
+      selectedOrganizationId
+    ) {
+      setOrganization(
+        profileData.organizations.find(
+          (org) => org._id === selectedOrganizationId
+        )
+      );
+      setOrgOptions(profileData.organizations);
     }
-  }, [profileData]);
+  }, [profileData, selectedOrganizationId]);
 
   const handleNavigate = (parentLink, subChildURL) => {
     navigate(`${parentLink}${subChildURL ? subChildURL : ""}`);
   };
 
+  // dispatch(setSelectedOrganization(res.data.response.organizations?.[0]._id));
   useEffect(() => {
     if (window?.location?.pathname?.includes("user/solutions")) {
       setExpand(1);
@@ -39,6 +62,16 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
       setExpand(4);
     }
   }, []);
+
+  const handelOrganizationsOption = (orgId) => {
+    try {
+      dispatch(setSelectedOrganization(orgId));
+      navigate("/");
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+    }
+  };
 
   const userOptionsList = [
     {
@@ -82,7 +115,7 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
           <Offcanvas.Title>Offcanvas</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="sidebar-card">
-          <div id="admin-sidebar-container" className="auri-scroll">
+          <div id="user-sidebar-container" className="auri-scroll">
             <div
               className="py-10 px-20 f-center"
               style={{
@@ -114,9 +147,11 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
               }}
               className="Organization-btn"
             >
-              <div className="px-15 py-10 pointer f-center text-16-700 color-darkText custom-btn">
+              <div className="px-15 py-10 pointer f-center text-16-700 custom-btn">
                 <div style={{ textTransform: "capitalize" }}>
-                  {organization?.organization_name || ""}
+                  {organization?._id === myOrganization?._id
+                    ? organization?.organization_name
+                    : `${organization?.userDetails?.user_name}'s Org...`}
                 </div>
                 <div className="w-12 ms-10">
                   <img
@@ -126,12 +161,34 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                   />
                 </div>
 
-                <div className="organizationMenu">
+                <div className="organizationMenu auri-scroll">
                   <div
                     className="text-14-500 mb-10"
                     style={{ color: "#989BA1" }}
                   >
                     Setup Organization
+                  </div>
+
+                  {orgOptions.map((org, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={`text-14-600 mb-10 org-Options ${
+                          org._id === selectedOrganizationId ? "active" : ""
+                        }`}
+                        onClick={() => handelOrganizationsOption(org._id)}
+                      >
+                        {org?._id === myOrganization?._id
+                          ? org?.organization_name
+                          : `${org.userDetails.user_name}'s Org...`}
+                      </div>
+                    );
+                  })}
+                  <div
+                    className="text-14-500 mb-10 mt-10"
+                    style={{ color: "#989BA1" }}
+                  >
+                    Organization Setting
                   </div>
                   <div
                     onClick={() => {
@@ -286,43 +343,45 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                 }}
               />
             </div>
-
-            <div className="p-10">
-              <div
-                className="gradient-card"
-                style={{
-                  background: `linear-gradient(135deg, ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
-                }}
-              >
-                <div className="circle-container">
-                  <div className="icon-container">
-                    <div
-                      className="circle-box"
-                      style={{
-                        background: `linear-gradient(to top , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
-                      }}
-                    >
-                      <img
-                        src={icons.crown}
-                        alt="down"
-                        className="fit-image w-40"
+            {!profileData?.profile?.current_subscription_id
+              ?.subscription_plan_id && (
+              <div className="p-10">
+                <div
+                  className="gradient-card"
+                  style={{
+                    background: `linear-gradient(135deg, ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
+                  }}
+                >
+                  <div className="circle-container">
+                    <div className="icon-container">
+                      <div
+                        className="circle-box"
                         style={{
-                          filter: creteImgFilter("#FFFFFF"),
+                          background: `linear-gradient(to top , ${themeColor.darkColor}, ${themeColor.lightColor} 100%)`,
                         }}
-                      />
+                      >
+                        <img
+                          src={icons.crown}
+                          alt="down"
+                          className="fit-image w-40"
+                          style={{
+                            filter: creteImgFilter("#FFFFFF"),
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
+                  <h2>Go Boundless with PRO!</h2>
+                  <p>
+                    Level Up with QnAFlow PRO-Premium AI Video Questions for
+                    Next-Level Engagement!
+                  </p>
+                  <button className="try-now-button" style={{ color: "white" }}>
+                    Try Now
+                  </button>
                 </div>
-                <h2>Go Boundless with PRO!</h2>
-                <p>
-                  Level Up with QnAFlow PRO-Premium AI Video Questions for
-                  Next-Level Engagement!
-                </p>
-                <button className="try-now-button" style={{ color: "white" }}>
-                  Try Now
-                </button>
               </div>
-            </div>
+            )}
           </div>
         </Offcanvas.Body>
       </Offcanvas>

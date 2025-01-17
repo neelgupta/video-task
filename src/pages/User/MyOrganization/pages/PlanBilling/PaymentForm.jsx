@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import "./PlanBilling.scss";
 import { icons } from "../../../../../utils/constants";
 import * as Yup from "yup";
@@ -23,7 +23,7 @@ function PaymentForm({
 }) {
   const dispatch = useDispatch();
   const [selectAddress, setSelectAddress] = useState("");
-
+  const [isLoad, setIsLoad] = useState(false);
   useEffect(() => {
     if (addressArray.length < 0) {
       dispatch(throwError("Please add shipping address"));
@@ -34,6 +34,7 @@ function PaymentForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addressArray]);
   const handleSubmit = async (value) => {
+    setIsLoad(true);
     try {
       const req = {
         shipping_address_id: selectAddress,
@@ -61,6 +62,7 @@ function PaymentForm({
       console.log("error", error);
       dispatch(handelCatch(error));
     }
+    setIsLoad(false);
   };
 
   const formik = useFormik({
@@ -182,7 +184,9 @@ function PaymentForm({
                     const val = e.target.value;
                     const result =
                       val.length > 0 ? val.split(" ").join("") : "";
-                    formik.setFieldValue("CardNumber", result);
+                    if (result.length <= 16) {
+                      formik.setFieldValue("CardNumber", result);
+                    }
                   }}
                   onBlur={formik.handleBlur}
                 />
@@ -215,7 +219,12 @@ function PaymentForm({
                   id="CVV"
                   placeholder="CVV Number"
                   value={formik.values.CVV}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val.length <= 3) {
+                      formik.setFieldValue("CVV", val);
+                    }
+                  }}
                   onBlur={formik.handleBlur}
                 />
                 {formik.touched.CVV && formik.errors.CVV ? (
@@ -325,10 +334,16 @@ function PaymentForm({
                   color: "white",
                   border: "none",
                   borderRadius: "5px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
                 className="text-14-500 w-150 p-10 ms-10"
               >
                 {isEdit ? "Update" : "Create"}
+                {isLoad && (
+                  <Spinner size="sm" color="white" className="ms-10" />
+                )}
               </Button>
             </div>
           </form>

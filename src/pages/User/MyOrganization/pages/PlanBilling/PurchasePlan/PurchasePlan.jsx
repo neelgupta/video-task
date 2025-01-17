@@ -13,6 +13,7 @@ function PurchasePlan({
   planData,
   addressArray,
   paymentCardList,
+  setIsSuccess,
 }) {
   return (
     <Modal
@@ -29,6 +30,7 @@ function PurchasePlan({
             paymentCardList={paymentCardList}
             planData={planData}
             onHide={onHide}
+            setIsSuccess={setIsSuccess}
           />
         </Elements>
       </Modal.Body>

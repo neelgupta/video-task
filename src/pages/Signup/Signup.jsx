@@ -86,7 +86,8 @@ function Signup() {
       ),
   });
 
-  const handleSubmit = async (values) => {
+  const handleSubmitForm = async (values) => {
+    console.log("values------------------------", values);
     setIsSignup(true);
     try {
       const req = {
@@ -136,7 +137,7 @@ function Signup() {
             enableReinitialize
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmitForm}
           >
             {({
               values,
@@ -148,11 +149,11 @@ function Signup() {
             }) => (
               <form
                 onSubmit={handleSubmit}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleSubmit();
-                  }
-                }}
+                // onKeyDown={(e) => {
+                //   if (e.key === "Enter") {
+                //     handleSubmit();
+                //   }
+                // }}
               >
                 <div className="formblock flex-column">
                   <div className="mb-18 inputClass">
@@ -243,9 +244,6 @@ function Signup() {
                       background:
                         "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
                       border: "none",
-                    }}
-                    onClick={() => {
-                      !isSignup && handleSubmit();
                     }}
                   >
                     Create Account

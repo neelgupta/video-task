@@ -5,7 +5,7 @@ import "./Login.scss";
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { encrypt, trimLeftSpace } from "../../utils/helpers";
-import { setAuthData } from "../../store/globalSlice";
+import { handelCatch, setAuthData, throwError } from "../../store/globalSlice";
 import { icons } from "../../utils/constants";
 import { api } from "../../services/api";
 import Swal from "sweetalert2";
@@ -44,10 +44,12 @@ const Login = () => {
         dispatch(setAuthData(encrypt(authBody)));
       } else {
         setErrorMessage(data.message);
+        dispatch(throwError(res.data.message));
       }
     } catch (error) {
       console.log("error", error);
       setErrorMessage(error.response.data.message);
+      dispatch(handelCatch(error));
     }
     setIsLogin(false);
   };

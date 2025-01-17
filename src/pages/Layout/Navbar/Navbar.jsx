@@ -4,6 +4,7 @@ import "./Navbar.scss";
 import { encrypt } from "../../../utils/helpers";
 import { setAuthData } from "../../../store/globalSlice";
 import ProfileMenu from "./ProfileMenu";
+import NotificationMenu from "./NotificationMenu";
 
 const Navbar = ({ setShow, pageTitle, onBack }) => {
   const reduxData = useSelector((state) => state.global);
@@ -48,19 +49,10 @@ const Navbar = ({ setShow, pageTitle, onBack }) => {
           <input type="text" placeholder="Search" />
         </div>
         <div className="right-end-block wp-30">
-          <div
-            className={`pointer rounded-circle f-center ${
-              isResponsive ? "h-30 w-30" : "h-37 w-37"
-            }`}
-          >
-            <span className="h-18 w-18 d-flex">
-              <img
-                src={icons.notificationSvg}
-                alt="notification"
-                className="fit-image icon-color-1B2559 hover-icons-effect"
-              />
-            </span>
-          </div>
+          <NotificationMenu
+            themeColor={themeColor}
+            isResponsive={isResponsive}
+          />
           <div
             className={`pointer rounded-circle f-center ${
               isResponsive ? "h-30 w-30" : "h-37 w-37"
@@ -80,12 +72,6 @@ const Navbar = ({ setShow, pageTitle, onBack }) => {
             </span>
           </div>
           <ProfileMenu themeColor={themeColor} isResponsive={isResponsive} />
-
-          {/* <div
-            className={`pointer ${isResponsive ? "h-30 w-30" : "h-37 w-37"}`}
-          >
-            <img src={icons.avatar} alt="avatar" className="fit-image" />
-          </div> */}
         </div>
       </div>
     </div>

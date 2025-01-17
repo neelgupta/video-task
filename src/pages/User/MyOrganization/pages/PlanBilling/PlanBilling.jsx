@@ -7,8 +7,13 @@ import PaymentForm from "./PaymentForm";
 import AddressForm from "./AddressForm";
 import { api } from "../../../../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { handelCatch, throwError } from "../../../../../store/globalSlice";
+import {
+  handelCatch,
+  handleProfileStore,
+  throwError,
+} from "../../../../../store/globalSlice";
 import PurchasePlan from "./PurchasePlan";
+import SuccessModal from "../../../Profile/ResetPassword/SuccessModal";
 
 const planList = [
   {
@@ -48,6 +53,8 @@ function PlanBilling() {
   const [editData, setEditData] = useState({});
   const [paymentCardList, setPaymentCardList] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -135,7 +142,20 @@ function PlanBilling() {
           addressArray={addressList.filter(
             (ele) => ele.address_type === "Billing"
           )}
+          setIsSuccess={setIsSuccess}
           paymentCardList={paymentCardList}
+        />
+      )}
+
+      {isSuccess && (
+        <SuccessModal
+          show={isSuccess}
+          handleClose={() => {
+            setIsSuccess(false);
+            dispatch(handleProfileStore());
+          }}
+          title="Payment Successful!"
+          message={`Your plan has been successfully purchased.`}
         />
       )}
 
@@ -167,18 +187,36 @@ function PlanBilling() {
           <div className="plans-card-box mt-20">
             {planCardList.length > 0 &&
               planCardList.map((ele, index) => {
+                const isPurchase =
+                  !!profileData?.profile?.current_subscription_id
+                    ?.subscription_plan_id;
                 const isActive =
                   profileData?.profile?.current_subscription_id
                     ?.subscription_plan_id === ele._id;
+
                 return (
                   <PlanCard
                     ele={ele}
                     key={index}
                     onPurchase={(plan) => {
+                      if (
+                        addressList.filter(
+                          (ele) => ele.address_type === "Billing"
+                        ).length === 0 ||
+                        paymentCardList.length === 0
+                      ) {
+                        dispatch(
+                          throwError(
+                            "First add billing address and payment method"
+                          )
+                        );
+                        return;
+                      }
                       setSelectedPlan(plan);
                       setIsPurchasePlan(true);
                     }}
                     isActive={isActive}
+                    isPurchase={isPurchase}
                   />
                 );
               })}
@@ -225,6 +263,14 @@ function PlanBilling() {
                   addressType={ele}
                   type="Payment"
                   onAddEdit={(isEdit, isEditData) => {
+                    if (
+                      addressList.filter(
+                        (ele) => ele.address_type === "Shipping"
+                      ).length === 0
+                    ) {
+                      dispatch(throwError("First add shipping address"));
+                      return;
+                    }
                     setIsAddPayment(true);
                     setIsEdit(isEdit);
                     setEditData(isEditData || {});

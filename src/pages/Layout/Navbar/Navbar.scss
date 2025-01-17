@@ -89,3 +89,91 @@
     }
   }
 }
+
+.NotificationMenu {
+  .active_icon {
+    filter: invert(38%) sepia(65%) saturate(3797%) hue-rotate(236deg)
+      brightness(102%) contrast(101%);
+    transform: scale(1.2);
+  }
+  .notification-popover {
+    position: absolute;
+    right: 5px;
+    top: 60px;
+    width: 300px;
+    border: 1px solid #e8e9ea;
+    background: #ffffff;
+    z-index: 999;
+    border-radius: 5px;
+    padding: 10px 10px;
+    max-height: 500px;
+    overflow: auto;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    .team-notification-container {
+      width: 100%;
+      background: linear-gradient(180deg, #7f5fff 0%, #ae9aff 100%);
+      border-radius: 6px;
+      overflow: hidden;
+      .notification-title {
+        font-size: 10px;
+        padding: 0;
+        margin: 0;
+        margin: 5px 0px 0px 10px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+        text-transform: capitalize;
+        letter-spacing: 2px;
+      }
+      .notification-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .notification-des {
+        width: calc(100% - 60px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        span {
+          margin: 0;
+          padding: 0;
+          font-size: 14px;
+          font-weight: 700;
+          color: rgba(255, 255, 255, 0.9);
+          text-decoration: underline;
+          margin-bottom: 5px;
+          letter-spacing: 2px;
+        }
+        p {
+          margin: 0;
+          padding: 0;
+          text-transform: capitalize;
+          font-size: 12px;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+      .team-notification-btn {
+        display: flex;
+        align-items: center;
+        .notification-btn {
+          width: 50%;
+          border-radius: 0px;
+          border: none;
+          background: rgba(0, 0, 0, 0.2);
+          font-size: 16px;
+          font-weight: 500;
+          &:hover {
+            background: rgba(0, 0, 0, 0.3);
+          }
+        }
+        .accept-btn {
+          border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .reject-btn {
+          border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+}

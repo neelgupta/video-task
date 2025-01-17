@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Spinner } from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -6,6 +6,17 @@ import { icons } from "../../../../../utils/constants";
 import { api } from "../../../../../services/api";
 import { useDispatch } from "react-redux";
 import { showSuccess, throwError } from "../../../../../store/globalSlice";
+import countries from "world-countries/dist/countries.json";
+import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
+import { State } from "country-state-city";
+
+const countriesOption = countries.map((ele) => {
+  return {
+    label: ele?.name?.common + ` - (${ele?.cca2})`,
+    value: ele?.name?.common,
+    cca2: ele?.cca2,
+  };
+});
 
 const AddressForm = ({
   onHide,
@@ -17,27 +28,70 @@ const AddressForm = ({
 }) => {
   const dispatch = useDispatch();
   const [isAdd, setIsAdd] = useState(false);
-  const initialValues = {
+  const [stateOption, setStateOption] = useState([]);
+  const [initialValues, setInitialValues] = useState({
     apartment_number: editData.apartment_number || "",
     Street: editData.street_name || "",
-    State: editData.state || "",
+    State: null,
     PINCode: editData.pinCode || "",
-    Country: editData.country || "",
+    Country: null,
     Email: editData.email || "",
-  };
+  });
+  console.log("initialValues", initialValues);
 
   const validationSchema = Yup.object({
     apartment_number: Yup.string().required("Apartment number required"),
     Street: Yup.string().required("Street required"),
-    State: Yup.string().required("State required"),
+    State: Yup.object({
+      label: Yup.string(),
+      value: Yup.string(),
+    }).required("State required"),
     PINCode: Yup.number()
       .required("PIN code required")
-      .typeError("Must be a number"),
-    Country: Yup.string().required("Country required"),
+      .typeError("Must be a number")
+      .test(
+        "len",
+        "PIN code must be exactly 6 digits",
+        (val) => val && val.toString().length === 6
+      ),
+    Country: Yup.object({
+      label: Yup.string(),
+      value: Yup.string(),
+      cca2: Yup.string(),
+    }).required("Country required"),
     Email: Yup.string()
       .email("Invalid email format")
       .required("Email required"),
   });
+
+  useEffect(() => {
+    if (editData && isEdit && countriesOption.length > 0) {
+      const findCountry = countriesOption.find(
+        (ele) => ele?.value === editData.country
+      );
+      handleCountryChange(findCountry);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit, editData]);
+
+  const handleCountryChange = (selectedCountry) => {
+    const countryStates = State.getStatesOfCountry(selectedCountry.cca2).map(
+      (state) => ({
+        value: state.isoCode,
+        label: state.name,
+      })
+    );
+    setStateOption(countryStates);
+    if (isEdit) {
+      setInitialValues((pre) => {
+        return {
+          ...pre,
+          Country: selectedCountry,
+          State: countryStates.find((ele) => ele.label === editData.state),
+        };
+      });
+    }
+  };
 
   const onSubmit = async (values) => {
     setIsAdd(true);
@@ -45,9 +99,9 @@ const AddressForm = ({
       const req = {
         apartment_number: values.apartment_number,
         street_name: values.Street,
-        state: values.State,
+        state: values.State.label,
         pinCode: values.PINCode,
-        country: values.Country,
+        country: values.Country.value,
         email: values.Email,
         ...(isEdit
           ? { address_id: editData._id }
@@ -95,191 +149,205 @@ const AddressForm = ({
             </div>
           </div>
           <Formik
+            enableReinitialize
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
-            {() => (
-              <Form>
-                <div className="mt-20">
-                  <div
-                    className="text-12-500 ps-5 pb-5"
-                    style={{ color: "#666666", textAlign: "start" }}
-                  >
-                    Apartment Number:
+            {({ values, setFieldValue }) => {
+              return (
+                <Form>
+                  <div className="mt-20">
+                    <div
+                      className="text-12-500 ps-5 pb-5"
+                      style={{ color: "#666666", textAlign: "start" }}
+                    >
+                      Apartment Number:
+                    </div>
+                    <div>
+                      <Field
+                        className="input wp-100"
+                        type="text"
+                        name="apartment_number"
+                        placeholder="Apartment Number"
+                        id="apartment_number"
+                      />
+                      <ErrorMessage
+                        name="apartment_number"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Field
-                      className="input wp-100"
-                      type="text"
-                      name="apartment_number"
-                      placeholder="Apartment Number"
-                      id="apartment_number"
-                    />
-                    <ErrorMessage
-                      name="apartment_number"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                </div>
 
-                <div className="mt-20">
-                  <div
-                    className="text-12-500 ps-5 pb-5"
-                    style={{ color: "#666666", textAlign: "start" }}
-                  >
-                    Street Name:
+                  <div className="mt-20">
+                    <div
+                      className="text-12-500 ps-5 pb-5"
+                      style={{ color: "#666666", textAlign: "start" }}
+                    >
+                      Street Name:
+                    </div>
+                    <div>
+                      <Field
+                        className="input wp-100"
+                        type="text"
+                        name="Street"
+                        id="Street"
+                        placeholder="Street Name"
+                      />
+                      <ErrorMessage
+                        name="Street"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Field
-                      className="input wp-100"
-                      type="text"
-                      name="Street"
-                      id="Street"
-                      placeholder="Street Name"
-                    />
-                    <ErrorMessage
-                      name="Street"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                </div>
 
-                <div className="mt-20">
-                  <div
-                    className="text-12-500 ps-5 pb-5"
-                    style={{ color: "#666666", textAlign: "start" }}
-                  >
-                    State:
+                  <div className="mt-20">
+                    <div
+                      className="text-12-500 ps-5 pb-5"
+                      style={{ color: "#666666", textAlign: "start" }}
+                    >
+                      Country:
+                    </div>
+                    <div>
+                      <DropdownOption
+                        value={values.Country}
+                        name="Country"
+                        placeholder="Country"
+                        options={countriesOption}
+                        onChange={(select) => {
+                          setFieldValue("Country", select);
+                          handleCountryChange(select);
+                          setFieldValue("State", null);
+                        }}
+                      />
+                      <ErrorMessage
+                        name="Country"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Field
-                      className="input wp-100"
-                      type="text"
-                      name="State"
-                      id="State"
-                      placeholder="State"
-                    />
-                    <ErrorMessage
-                      name="State"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                </div>
 
-                <div className="mt-20">
-                  <div
-                    className="text-12-500 ps-5 pb-5"
-                    style={{ color: "#666666", textAlign: "start" }}
-                  >
-                    PIN Code:
+                  <div className="mt-20">
+                    <div
+                      className="text-12-500 ps-5 pb-5"
+                      style={{ color: "#666666", textAlign: "start" }}
+                    >
+                      State:
+                    </div>
+                    <div>
+                      <DropdownOption
+                        value={values.State}
+                        name="State"
+                        placeholder="State"
+                        isDisabled={!values.Country}
+                        options={stateOption}
+                        onChange={(select) => {
+                          setFieldValue("State", select);
+                        }}
+                      />
+                      <ErrorMessage
+                        name="State"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Field
-                      className="input wp-100"
-                      type="text"
-                      name="PINCode"
-                      id="PINCode"
-                      placeholder="PIN Code"
-                    />
-                    <ErrorMessage
-                      name="PINCode"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                </div>
 
-                <div className="mt-20">
-                  <div
-                    className="text-12-500 ps-5 pb-5"
-                    style={{ color: "#666666", textAlign: "start" }}
-                  >
-                    Country:
+                  <div className="mt-20">
+                    <div
+                      className="text-12-500 ps-5 pb-5"
+                      style={{ color: "#666666", textAlign: "start" }}
+                    >
+                      PIN Code:
+                    </div>
+                    <div>
+                      <Field
+                        className="input wp-100"
+                        type="text"
+                        name="PINCode"
+                        id="PINCode"
+                        placeholder="PIN Code"
+                      />
+                      <ErrorMessage
+                        name="PINCode"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Field
-                      className="input wp-100"
-                      type="text"
-                      name="Country"
-                      id="Country"
-                      placeholder="Country"
-                    />
-                    <ErrorMessage
-                      name="Country"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                </div>
 
-                <div className="mt-20">
-                  <div
-                    className="text-12-500 ps-5 pb-5"
-                    style={{ color: "#666666", textAlign: "start" }}
-                  >
-                    Email:
+                  <div className="mt-20">
+                    <div
+                      className="text-12-500 ps-5 pb-5"
+                      style={{ color: "#666666", textAlign: "start" }}
+                    >
+                      Email:
+                    </div>
+                    <div>
+                      <Field
+                        className="input wp-100"
+                        type="email"
+                        name="Email"
+                        id="Email"
+                        placeholder="Email"
+                      />
+                      <ErrorMessage
+                        name="Email"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Field
-                      className="input wp-100"
-                      type="email"
-                      name="Email"
-                      id="Email"
-                      placeholder="Email"
-                    />
-                    <ErrorMessage
-                      name="Email"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-                </div>
 
-                <div
-                  className="wp-100"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "end",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Button
+                  <div
+                    className="wp-100"
                     style={{
-                      background: "#8C8E90",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "5px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "end",
+                      marginTop: "20px",
                     }}
-                    className="text-14-500 w-150 p-10"
-                    onClick={() => onHide(false)}
                   >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    style={{
-                      background:
-                        "linear-gradient(91.9deg, #7B5BFF -2.22%, #B3A1FF 101.51%)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "5px",
-                    }}
-                    className="text-14-500 w-150 p-10 ms-10"
-                    disabled={isAdd}
-                  >
-                    {isAdd && (
-                      <Spinner animation="border" size="sm" className="me-10" />
-                    )}
-                    {isEdit ? "Update" : "Create"}
-                  </Button>
-                </div>
-              </Form>
-            )}
+                    <Button
+                      style={{
+                        background: "#8C8E90",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                      }}
+                      className="text-14-500 w-150 p-10"
+                      onClick={() => onHide(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      style={{
+                        background:
+                          "linear-gradient(91.9deg, #7B5BFF -2.22%, #B3A1FF 101.51%)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                      }}
+                      className="text-14-500 w-150 p-10 ms-10"
+                      disabled={isAdd}
+                    >
+                      {isAdd && (
+                        <Spinner
+                          animation="border"
+                          size="sm"
+                          className="me-10"
+                        />
+                      )}
+                      {isEdit ? "Update" : "Create"}
+                    </Button>
+                  </div>
+                </Form>
+              );
+            }}
           </Formik>
         </div>
       </Modal.Body>

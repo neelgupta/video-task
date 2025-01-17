@@ -14,3 +14,20 @@
     outline: none;
   }
 }
+.leave-btn {
+  font-size: 14px;
+  font-weight: 600;
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  text-transform: capitalize;
+  border-radius: 5px;
+  box-shadow: inset 5px 5px 10px rgba(256, 256, 256, 0.2),
+    inset -5px -5px 10px rgba(0, 0, 0, 0.05);
+  transform: scale(1);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  &:active {
+    transform: scale(0.9);
+  }
+}

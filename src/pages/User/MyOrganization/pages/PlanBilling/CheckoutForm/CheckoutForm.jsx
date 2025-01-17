@@ -13,8 +13,15 @@ import {
 } from "../../../../../../store/globalSlice";
 import { api } from "../../../../../../services/api";
 import { Spinner } from "react-bootstrap";
+import SuccessModal from "../../../../Profile/ResetPassword/SuccessModal";
 
-const CheckoutForm = ({ addressArray, paymentCardList, planData, onHide }) => {
+const CheckoutForm = ({
+  addressArray,
+  paymentCardList,
+  planData,
+  onHide,
+  setIsSuccess,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const { selectedOrganizationId } = useSelector((state) => state.global);
@@ -23,7 +30,6 @@ const CheckoutForm = ({ addressArray, paymentCardList, planData, onHide }) => {
   const [selectPaymentCard, setSelectPaymentCard] = useState("");
   const [isPaymentLoad, setIsPaymentLoad] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
-
   useEffect(() => {
     if (
       !planData?.stripe_plan_id ||
@@ -59,10 +65,10 @@ const CheckoutForm = ({ addressArray, paymentCardList, planData, onHide }) => {
     } else if (paymentIntent.status === "succeeded") {
       dispatch(showSuccess("Subscription plan purchased successfully."));
       const timer = setTimeout(() => {
-        dispatch(handleProfileStore());
-        onHide();
         setIsPaymentLoad(false);
-      }, 3000); // 3-second delay
+        setIsSuccess(true);
+        onHide();
+      }, 1000);
     }
   };
 
