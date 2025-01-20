@@ -1,0 +1,211 @@
+.LogicTab-container {
+  width: 100%;
+  min-height: 700px !important;
+  padding: 5px;
+  .node-index {
+    font-size: 16px;
+    font-weight: 900;
+    margin: 10px;
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    background: #8000ff;
+  }
+  .selected-node-card {
+    width: 100%;
+    border: 2px solid #f1f1f1;
+    background: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition-duration: 0.3s;
+    transition-property: border;
+    position: relative;
+    .jump-menu-container {
+      width: 90%;
+      background-color: rgb(255, 255, 255);
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+      position: absolute;
+      bottom: 0px;
+      z-index: 1000;
+      transform: translateY(calc(100% + 10px));
+      border-radius: 10px;
+      padding: 10px;
+      .divider {
+        width: 100%;
+        height: 2px;
+        background: #ccc;
+        padding: 0;
+        margin: 10px 0px;
+      }
+      .node-option-group {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-direction: column;
+        .node-option {
+          cursor: pointer;
+          width: 100%;
+          border-radius: 10px;
+          background: #f1f1f1;
+          border: 1px solid #f1f1f1;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          transition-duration: 0.3s;
+          transition-property: background, border;
+          padding: 5px 15px;
+          &:hover {
+            background: #ccc;
+            border: 1px solid #ccc;
+          }
+
+          .node-det {
+            display: flex;
+            align-items: center;
+            .node-option-img {
+              width: 45px;
+              height: 45px;
+              overflow: hidden;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              img {
+                background-repeat: no-repeat;
+                background-position: center center;
+                width: 100%;
+                height: 100%;
+                object-fit: fill;
+              }
+            }
+          }
+        }
+        .active-node-option {
+          border: 1px solid #8000ff;
+          background: #f3e9ff;
+          &:hover {
+            border: 1px solid #8000ff;
+            background: #f3e9ff;
+          }
+        }
+      }
+    }
+    &:hover {
+      border: 2px solid #8000ff;
+    }
+    .title-box {
+      width: 100%;
+      height: 100%;
+      padding: 5px 15px;
+      display: flex;
+      align-items: center;
+      border-radius: 9px;
+      cursor: pointer;
+      .node-img {
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid goldenrod;
+        img {
+          background-repeat: no-repeat;
+          background-position: center center;
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+        }
+      }
+      .node-label {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        padding-left: 5px;
+        border-left: 1px solid black;
+        cursor: pointer;
+
+        p {
+          font-size: 16px;
+          font-weight: 500;
+          letter-spacing: 2px;
+          padding: 0;
+          margin: 0;
+        }
+        img {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+    .end-screen-label {
+      width: 70px;
+      height: 60px;
+      background: white;
+      border-bottom-right-radius: 9px;
+      border-top-right-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      .target-node-image {
+        background-repeat: no-repeat;
+        background-position: center center;
+        width: 70px;
+        height: 60px;
+        object-fit: fill;
+        overflow: hidden;
+        border-bottom-right-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+
+      .end-index {
+        position: absolute;
+        left: -15px;
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+        background: #8000ff;
+      }
+    }
+  }
+  .logic-divider {
+    width: 100%;
+    height: 2px;
+    background: #ddd;
+    margin: 30px 0px;
+  }
+  .advance-logic-container {
+    width: 100%;
+    padding: 0px 30px;
+    .advance-logic-input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      p {
+        padding: 0;
+        margin: 0;
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 1px;
+      }
+    }
+  }
+}

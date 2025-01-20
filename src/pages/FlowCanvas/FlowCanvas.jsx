@@ -58,7 +58,6 @@ const FlowCanvas = () => {
     webcamModelConfig,
     interactionsStyle,
   } = useSelector((state) => state.global);
-  console.log('interactionsStyle', interactionsStyle)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isCanvasLock, seyIsCanvasLock] = useState(false);

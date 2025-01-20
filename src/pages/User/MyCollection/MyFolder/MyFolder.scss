@@ -143,6 +143,16 @@
     }
     .share-live-url-content {
       width: 100%;
+
+      .share-option-container {
+        display: flex;
+        gap: 10px;
+        .share-option {
+          border: 1px solid #8000ff;
+          border-radius: 10px;
+          cursor: pointer;
+        }
+      }
       .copyInput {
         width: 100%;
         .InputBox {

@@ -206,7 +206,7 @@ const CreateWithAI = ({ show, handleClose, createFlowModalSubmitData }) => {
           </div>
           <div className="buttonContainer" onClick={handleSubmit}>
             <Button disabled={isCreate}>
-              Create QnAFlow
+              Create Flōw AI
               {isCreate && <Spinner size="sm" className="ms-10" />}
             </Button>
           </div>

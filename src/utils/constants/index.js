@@ -115,6 +115,8 @@ import videoUser from "../../assets/images/videoUser.svg";
 import address from "../../assets/images/svgIcons/address.svg";
 import mastercard from "../../assets/images/svgIcons/mastercard.svg";
 import wallet from "../../assets/images/svgIcons/wallet.svg";
+import html from "../../assets/images/svgIcons/html.svg";
+import hand from "../../assets/images/svgIcons/hand.svg";
 
 export const icons = {
   logo,
@@ -233,4 +235,6 @@ export const icons = {
   address,
   mastercard,
   wallet,
+  html,
+  hand,
 };

@@ -12,6 +12,7 @@ import { api } from "../../../../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import {
   handelCatch,
+  handleProfileStore,
   showSuccess,
   throwError,
 } from "../../../../../store/globalSlice";

@@ -12,9 +12,10 @@ import {
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
-import VideoConfiguration from "./VideoConfiguration";
 import { api } from "../../../../services/api";
+import VideoConfiguration from "./VideoConfiguration";
 import AnswerTab from "./AnswerTab";
+import LogicTab from "./LogicTab";
 import { processVideoMetadata } from "../../flowControl";
 
 function Upload({ show, handleClose }) {
@@ -346,6 +347,10 @@ function Upload({ show, handleClose }) {
                   ansFormat={nodeData?.answer_format || {}}
                   onClose={handleClose}
                 />
+              )}
+
+              {headerTab === "logic" && (
+                <LogicTab nodeData={nodeData} onClose={handleClose} />
               )}
             </div>
           </div>
