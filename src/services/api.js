@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getHeaderData } from "../utils/helpers";
-const baseURL = "https://video-ask-api.vercel.app/api/v1/";
+// const baseURL = "https://video-ask-api.vercel.app/api/v1/";
 // const baseURL = "http://192.168.1.2:8000/api/v1/";
-// const baseURL = "http://localhost:8000/api/v1/";
+const baseURL = "http://localhost:8000/api/v1/";
 
 export const api = {
   header: () => {

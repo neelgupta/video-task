@@ -161,7 +161,7 @@ function VideoCard(props) {
             ))}
           </div>
         </NodeToolbar>
-        <div className="question">
+        <div className={`question ${data?.isSeparate ? "is-separate" : ""}`}>
           {data.answer_format.contact_form && (
             <div
               className="contact_icons"

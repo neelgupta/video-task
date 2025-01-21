@@ -7,7 +7,10 @@ function EndNode(props) {
   return (
     <div className="EndNode-container">
       <div className="EndNode-text text-18-600">
-        <div className="end-node-header">End Screen</div>
+        <div className="end-node-header">
+          <span className="text-14-500 me-10">{props.data.index}</span> End
+          Screen
+        </div>
         <Skeleton
           baseColor="#c5c5c5"
           highlightColor="#f1f1f1"

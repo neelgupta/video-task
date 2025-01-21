@@ -13,26 +13,28 @@ import {
   throwError,
 } from "../../../../../store/globalSlice";
 function LogicTab({ nodeData, onClose }) {
+  console.log("nodeData", nodeData);
   const { id } = useParams();
   const dispatch = useDispatch();
   const [isAdvance, setIsAdvance] = useState(false);
   const [show, setShow] = useState(false);
   const [nodeOption, setNodeOption] = useState([]);
   const [targetNode, setTargetNode] = useState({});
+  const [multiChoice, setMultiChoice] = useState({});
+  const [multiChoiceSelectOption, setMultiChoiceSelectOption] = useState("");
+
   const [isLoad, setIsLoad] = useState(false);
   const menuRef = useRef(false);
 
   useEffect(() => {
-    if (nodeOption.length > 0) {
-      const endNode = nodeOption.find((ele) => ele.type === "End");
-      setTargetNode(endNode);
-    }
+    console.log("nodeOption", nodeOption);
   }, [nodeOption]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShow(false);
+        setMultiChoiceSelectOption("");
       }
     };
 
@@ -50,12 +52,19 @@ function LogicTab({ nodeData, onClose }) {
   }, [nodeData, id]);
 
   const getNodeList = async () => {
+    setNodeOption([]);
     try {
       const res = await api.get(
         `interactions/logic-nodes/${id}?selectedNodeId=${nodeData?._id}`
       );
       if (res.status === 200) {
-        setNodeOption(res.data.response);
+        const data = res.data.response;
+        setNodeOption(data.nodeList);
+        console.log("data.nodeList", data.nodeList);
+        const endNode = data.nodeList.find(
+          (ele) => ele._id === data.targetNodeId
+        );
+        setTargetNode(endNode);
       } else {
         dispatch(throwError(res.data.message));
       }
@@ -87,126 +96,271 @@ function LogicTab({ nodeData, onClose }) {
     setIsLoad(false);
   };
 
+  const numberToCharacter = (num) => {
+    if (num < 1 || num > 26) {
+      return num;
+    }
+    return String.fromCharCode(64 + num);
+  };
+
   return (
     <div className="LogicTab-container">
       <div className="node-index">{nodeData.index}</div>
-      <div className="selected-node-card">
-        <div className="title-box" onClick={() => setShow((pre) => !pre)}>
-          <div className="node-img">
-            <img src={nodeData.video_thumbnail} alt="" className="w-50" />
+      {nodeData.answer_type === "multiple-choice" ? (
+        nodeData.answer_format.choices.map((ele, index) => {
+          return (
+            <div className="selected-node-card mb-10" key={ele}>
+              <div
+                className="title-box"
+                onClick={() => {
+                  setShow(true);
+                  setMultiChoiceSelectOption(index + 1);
+                }}
+              >
+                <div className="node-label" style={{ border: "none" }}>
+                  <p>If</p>
+                </div>
+                <div className="multi-choices-option-id">
+                  {numberToCharacter(index + 1)}
+                </div>
+                <div className="node-label">
+                  <p>Jump to</p>
+                  <img src={icons.arrowRight} alt="" />
+                </div>
+              </div>
+              <div className="end-screen-label">
+                {targetNode && targetNode.type !== "End" ? (
+                  <>
+                    <img
+                      src={targetNode?.video_thumbnail}
+                      alt=""
+                      className="target-node-image"
+                    />
+                    <div className="end-index">{targetNode?.index}</div>
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={icons.hand}
+                      alt=""
+                      className="w-30 fit-image ms-10"
+                    />
+                    <div className="end-index">END</div>
+                  </>
+                )}
+              </div>
+              {show && multiChoiceSelectOption === index + 1 && (
+                <div className="jump-menu-container" ref={menuRef}>
+                  <p className="m-0 p-0 text-14-500 " style={{ color: "#aaa" }}>
+                    Choose your next stop
+                  </p>
+                  <div className="divider"></div>
+                  <div className="node-option-group auri-scroll">
+                    {nodeOption.map((ele, index) => {
+                      const active = targetNode?._id === ele._id;
+                      return ele.type !== "End" ? (
+                        <div
+                          className={`node-option ${
+                            active ? "active-node-option" : ""
+                          } `}
+                          key={index}
+                          onClick={() => setTargetNode(ele)}
+                        >
+                          <div className="node-det">
+                            <div
+                              className="node-option-img"
+                              style={{ border: `1px solid goldenrod` }}
+                            >
+                              <img
+                                src={ele.video_thumbnail}
+                                alt=""
+                                className="w-45"
+                              />
+                            </div>
+                            <div className="text-16-500 ps-10">{ele.title}</div>
+                          </div>
+                          <div className="node-index">{ele.index}</div>
+                        </div>
+                      ) : (
+                        <div
+                          className={`node-option ${
+                            active ? "active-node-option" : ""
+                          } `}
+                          key={index}
+                          onClick={() => setTargetNode(ele)}
+                        >
+                          <div className="node-det">
+                            <div className="node-option-img">
+                              <img src={icons.hand} alt="" className="w-35" />
+                            </div>
+                            <div className="text-16-500  ps-10">End Screen</div>
+                          </div>
+                          <div className="node-index text-12-500">END</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="divider"></div>
+                  <div className="redirect-input flow-ai-input">
+                    <div className="text-14-500 ps-5" style={{ color: "gray" }}>
+                      Redirect to URL
+                    </div>
+                    <input
+                      type="text"
+                      id="redirect"
+                      name="redirect"
+                      placeholder="Enter redirect url"
+                    />
+                  </div>
+                  <div className="pt-20">
+                    <Button
+                      className="text-18-600 wp-100 "
+                      style={{
+                        background:
+                          "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                        border: "none",
+                        padding: "10px 0px",
+                      }}
+                      onClick={() => {
+                        handelSubmitLogic();
+                      }}
+                      disabled={isLoad}
+                    >
+                      Done
+                      {isLoad && (
+                        <Spinner
+                          size="sm"
+                          style={{ color: "white" }}
+                          className="ms-10"
+                        />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })
+      ) : (
+        <div className="selected-node-card">
+          <div className="title-box" onClick={() => setShow((pre) => !pre)}>
+            <div className="node-img">
+              <img src={nodeData.video_thumbnail} alt="" className="w-50" />
+            </div>
+            <div className="node-label">
+              <p>Always jump to</p>
+              <img src={icons.arrowRight} alt="" />
+            </div>
           </div>
-          <div className="node-label">
-            <p>Always jump to</p>
-            <img src={icons.arrowRight} alt="" />
+          <div className="end-screen-label">
+            {targetNode && targetNode.type !== "End" ? (
+              <>
+                <img
+                  src={targetNode?.video_thumbnail}
+                  alt=""
+                  className="target-node-image"
+                />
+                <div className="end-index">{targetNode?.index}</div>
+              </>
+            ) : (
+              <>
+                <img src={icons.hand} alt="" className="w-30 fit-image ms-10" />
+                <div className="end-index">END</div>
+              </>
+            )}
           </div>
-        </div>
-        <div className="end-screen-label">
-          {targetNode && targetNode.type !== "End" ? (
-            <>
-              <img
-                src={targetNode?.video_thumbnail}
-                alt=""
-                className="target-node-image"
-              />
-              <div className="end-index">{targetNode?.index}</div>
-            </>
-          ) : (
-            <>
-              <img src={icons.hand} alt="" className="w-30 fit-image ms-10" />
-              <div className="end-index">END</div>
-            </>
+          {show && (
+            <div className="jump-menu-container" ref={menuRef}>
+              <p className="m-0 p-0 text-14-500 " style={{ color: "#aaa" }}>
+                Choose your next stop
+              </p>
+              <div className="divider"></div>
+              <div className="node-option-group auri-scroll">
+                {nodeOption.map((ele, index) => {
+                  const active = targetNode?._id === ele._id;
+                  return ele.type !== "End" ? (
+                    <div
+                      className={`node-option ${
+                        active ? "active-node-option" : ""
+                      } `}
+                      key={index}
+                      onClick={() => setTargetNode(ele)}
+                    >
+                      <div className="node-det">
+                        <div
+                          className="node-option-img"
+                          style={{ border: `1px solid goldenrod` }}
+                        >
+                          <img
+                            src={ele.video_thumbnail}
+                            alt=""
+                            className="w-45"
+                          />
+                        </div>
+                        <div className="text-16-500 ps-10">{ele.title}</div>
+                      </div>
+                      <div className="node-index">{ele.index}</div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`node-option ${
+                        active ? "active-node-option" : ""
+                      } `}
+                      key={index}
+                      onClick={() => setTargetNode(ele)}
+                    >
+                      <div className="node-det">
+                        <div className="node-option-img">
+                          <img src={icons.hand} alt="" className="w-35" />
+                        </div>
+                        <div className="text-16-500  ps-10">End Screen</div>
+                      </div>
+                      <div className="node-index text-12-500">END</div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="divider"></div>
+              <div className="redirect-input flow-ai-input">
+                <div className="text-14-500 ps-5" style={{ color: "gray" }}>
+                  Redirect to URL
+                </div>
+                <input
+                  type="text"
+                  id="redirect"
+                  name="redirect"
+                  placeholder="Enter redirect url"
+                />
+              </div>
+              <div className="pt-20">
+                <Button
+                  className="text-18-600 wp-100 "
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                    border: "none",
+                    padding: "10px 0px",
+                  }}
+                  onClick={() => {
+                    handelSubmitLogic();
+                  }}
+                  disabled={isLoad}
+                >
+                  Done
+                  {isLoad && (
+                    <Spinner
+                      size="sm"
+                      style={{ color: "white" }}
+                      className="ms-10"
+                    />
+                  )}
+                </Button>
+              </div>
+            </div>
           )}
         </div>
-        {show && (
-          <div className="jump-menu-container" ref={menuRef}>
-            <p className="m-0 p-0 text-14-500 " style={{ color: "#aaa" }}>
-              Choose your next stop
-            </p>
-            <div className="divider"></div>
-            <div className="node-option-group">
-              {nodeOption.map((ele, index) => {
-                const active = targetNode?._id === ele._id;
-                return ele.type !== "End" ? (
-                  <div
-                    className={`node-option ${
-                      active ? "active-node-option" : ""
-                    } `}
-                    key={index}
-                    onClick={() => setTargetNode(ele)}
-                  >
-                    <div className="node-det">
-                      <div
-                        className="node-option-img"
-                        style={{ border: `1px solid goldenrod` }}
-                      >
-                        <img
-                          src={ele.video_thumbnail}
-                          alt=""
-                          className="w-45"
-                        />
-                      </div>
-                      <div className="text-16-500 ps-10">{ele.title}</div>
-                    </div>
-                    <div className="node-index">{ele.index}</div>
-                  </div>
-                ) : (
-                  <div
-                    className={`node-option ${
-                      active ? "active-node-option" : ""
-                    } `}
-                    key={index}
-                    onClick={() => setTargetNode(ele)}
-                  >
-                    <div className="node-det">
-                      <div className="node-option-img">
-                        <img src={icons.hand} alt="" className="w-35" />
-                      </div>
-                      <div className="text-16-500  ps-10">End Screen</div>
-                    </div>
-                    <div className="node-index text-12-500">END</div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="divider"></div>
-            <div className="redirect-input flow-ai-input">
-              <div className="text-14-500 ps-5" style={{ color: "gray" }}>
-                Redirect to URL
-              </div>
-              <input
-                type="text"
-                id="redirect"
-                name="redirect"
-                placeholder="Enter redirect url"
-              />
-            </div>
-            <div className="pt-20">
-              <Button
-                className="text-18-600 wp-100 "
-                style={{
-                  background:
-                    "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
-                  border: "none",
-                  padding: "10px 0px",
-                }}
-                onClick={() => {
-                  handelSubmitLogic();
-                }}
-                disabled={isLoad}
-              >
-                Done
-                {isLoad && (
-                  <Spinner
-                    size="sm"
-                    style={{ color: "white" }}
-                    className="ms-10"
-                  />
-                )}
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
+
       <div className="logic-divider"></div>
       <div className="advance-logic-container">
         <div className="advance-logic-input">

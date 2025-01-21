@@ -1,7 +1,8 @@
 .LogicTab-container {
   width: 100%;
-  min-height: 700px !important;
+  min-height: calc(96vh - 50px);
   padding: 5px;
+  margin: 10px 0px;
   .node-index {
     font-size: 16px;
     font-weight: 900;
@@ -46,9 +47,10 @@
       }
       .node-option-group {
         width: 100%;
+        max-height: 300px;
+        overflow: auto;
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 10px;
         flex-direction: column;
         .node-option {
@@ -111,6 +113,19 @@
       align-items: center;
       border-radius: 9px;
       cursor: pointer;
+      .multi-choices-option-id {
+        margin: 0px 10px;
+        width: 25px;
+        height: 25px;
+        border-radius: 5px;
+        background: #8000ff;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 900;
+      }
       .node-img {
         width: 50px;
         height: 50px;

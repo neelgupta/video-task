@@ -4,10 +4,18 @@ import { addWhitenessToHex, creteImgFilter } from "../../../../utils/helpers";
 import { icons } from "../../../../utils/constants";
 import { useDispatch } from "react-redux";
 import { showSuccess, throwError } from "../../../../store/globalSlice";
+import Editor from "@monaco-editor/react";
 
 function Share({ show, handleClose, shareUrl }) {
   const dispatch = useDispatch();
-  const [selectOption, setSelectOption] = useState("");
+  const [selectOption, setSelectOption] = useState("link");
+  const code = `<iframe
+  src="https://www.videoask.com/f9fc0hjmg"
+  allow="camera *; microphone *; autoplay *; encrypted-media *; fullscreen *; display-capture *;"
+  width="100%"
+  height="600px"
+  style="border: none; border-radius: 24px"
+></iframe>`;
   const handleCopyText = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -33,58 +41,18 @@ function Share({ show, handleClose, shareUrl }) {
         <Modal.Body>
           <div className="share-live-url-content">
             <div className="mb-20 share-option-container">
-              <div
-                className="w-80 h-80 f-center share-option"
-                style={{
-                  background: addWhitenessToHex(
-                    selectOption === "embed" ? "#8000ff" : "#000000",
-                    0.9
-                  ),
-                  border: `1px solid ${
-                    selectOption === "embed" ? "#8000ff" : "#000000"
-                  }`,
-                }}
-                onClick={() => {
-                  setSelectOption("embed");
-                }}
-              >
-                <img
-                  src={icons.html}
-                  alt=""
-                  className="fit-image w-70"
-                  style={{
-                    filter: creteImgFilter(
-                      selectOption === "embed" ? "#8000ff" : "#000000"
-                    ),
-                  }}
-                />
-              </div>
-              <div
-                className="w-80 h-80 f-center share-option"
-                style={{
-                  background: addWhitenessToHex(
-                    selectOption === "link" ? "#8000ff" : "#000000",
-                    0.9
-                  ),
-                  border: `1px solid ${
-                    selectOption === "link" ? "#8000ff" : "#000000"
-                  }`,
-                }}
-                onClick={() => {
-                  setSelectOption("link");
-                }}
-              >
-                <img
-                  src={icons.link}
-                  alt=""
-                  className="fit-image w-50"
-                  style={{
-                    filter: creteImgFilter(
-                      selectOption === "link" ? "#8000ff" : "#000000"
-                    ),
-                  }}
-                />
-              </div>
+              <ShareOption
+                option="embed"
+                currentOption={selectOption}
+                icon={icons.html}
+                onClick={() => setSelectOption("embed")}
+              />
+              <ShareOption
+                option="link"
+                currentOption={selectOption}
+                icon={icons.link}
+                onClick={() => setSelectOption("link")}
+              />
             </div>
             {selectOption === "link" && (
               <div className="copyInput">
@@ -123,6 +91,25 @@ function Share({ show, handleClose, shareUrl }) {
                 </div>
               </div>
             )}
+            {selectOption === "embed" && (
+              <Editor
+                height="300px" // Editor height
+                defaultLanguage="html" // Language mode
+                value={code} // Code to display
+                options={{
+                  readOnly: true, // Makes the editor read-only
+                  domReadOnly: true, // Ensures no DOM-level edits
+                  minimap: { enabled: true }, // Hides the minimap
+                  lineNumbers: "on", // Enables line numbers
+                  scrollBeyondLastLine: false, // Avoid scrolling beyond the last line
+                  copyWithSyntaxHighlighting: true, // Copies code with syntax highlighting
+                  renderWhitespace: "all", // Optionally renders whitespace
+                  fontSize: 12, // Adjust font size
+                  fontFamily: "JetBrains Mono, monospace", // Custom font
+                  wordWrap: "on", // Enables word wrap
+                }}
+              />
+            )}
           </div>
         </Modal.Body>
       </div>
@@ -131,3 +118,26 @@ function Share({ show, handleClose, shareUrl }) {
 }
 
 export default Share;
+
+const ShareOption = ({ option, currentOption, icon, onClick }) => {
+  const isSelected = currentOption === option;
+  const color = isSelected ? "#8000ff" : "#000000";
+
+  return (
+    <div
+      className="w-80 h-80 f-center share-option"
+      style={{
+        background: addWhitenessToHex(color, isSelected ? 0.9 : 0.95),
+        border: `1px solid ${color}`,
+      }}
+      onClick={onClick}
+    >
+      <img
+        src={icon}
+        alt=""
+        className="fit-image w-60 h-60"
+        style={{ filter: creteImgFilter(color) }}
+      />
+    </div>
+  );
+};

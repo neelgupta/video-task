@@ -87,7 +87,7 @@ function ButtonEdge({
       {(isHover || selected) && (
         <path
           d={edgePath}
-          stroke={selected ? "#fff" : "#f1f1f1"}
+          stroke={selected ? "#fff" : "#F8F6F1"}
           strokeWidth={selected ? "1" : "4"}
           fill="none"
           strokeDasharray={selected ? "5,10" : "5,10"}
