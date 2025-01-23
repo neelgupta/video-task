@@ -17,6 +17,7 @@ import VideoConfiguration from "./VideoConfiguration";
 import AnswerTab from "./AnswerTab";
 import LogicTab from "./LogicTab";
 import { processVideoMetadata } from "../../flowControl";
+import { useParams } from "react-router-dom";
 
 function Upload({ show, handleClose }) {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function Upload({ show, handleClose }) {
   const [isCreate, setIsCreate] = useState(false);
   const [headerTab, setHeaderTab] = useState("video");
   const [nodeTitle, setNodeTitle] = useState("untitled");
+
   const [videoConfigForm, setVideoConfigForm] = useState({
     alignVideo: true,
     videoPosition: "center center",
@@ -65,8 +67,9 @@ function Upload({ show, handleClose }) {
           nodeData?.overlay_text ? parseInt(nodeData.fade_reveal) : 0,
         ],
       });
+      // getNodeList();
     }
-    console.log("nodeData", nodeData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, nodeData]);
 
   const handleSubmitNewQue = async () => {

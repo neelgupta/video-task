@@ -3,10 +3,9 @@ import { Form, Field, FieldArray, ErrorMessage } from "formik";
 import { Button } from "react-bootstrap";
 import { icons } from "../../../../../../utils/constants";
 
-function MultipleChoiceFormate({ values, setFieldValue }) {
+function MultipleChoiceFormate({ values, setFieldValue, targetedNode }) {
   return (
     <Form id="MultipleChoiceFormate">
-      {/* Dynamic Options Input */}
       <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
         Choices :
       </div>
@@ -17,7 +16,7 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
               <div key={index}>
                 <div className="option-input">
                   <Field
-                    name={`choices[${index}]`}
+                    name={`choices[${index}].option`}
                     placeholder={`Enter choice ${index + 1}`}
                     className="form-control"
                   />
@@ -30,7 +29,7 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
                   </Button>
                 </div>
                 <ErrorMessage
-                  name={`choices[${index}]`}
+                  name={`choices[${index}].option`}
                   component="div"
                   style={{ color: "red", fontSize: "12px" }}
                   className="error-message"
@@ -42,7 +41,13 @@ function MultipleChoiceFormate({ values, setFieldValue }) {
               style={{ justifyContent: "flex-end" }}
             >
               <Button
-                onClick={() => push("")}
+                onClick={() =>
+                  push({
+                    index: values?.choices.length + 1,
+                    option: "",
+                    targetedNodeId: targetedNode?._id || null,
+                  })
+                }
                 className="text-12-600"
                 style={{
                   background: "white",
