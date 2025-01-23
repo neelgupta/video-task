@@ -227,7 +227,7 @@ function Upload({ show, handleClose }) {
     >
       <div className="upload-model-content">
         <div
-          className="h-18 w-18 f-center pointer close-icon"
+          className="f-center pointer close-icon"
           onClick={() => {
             dispatch(
               setWebcamModelConfig({
@@ -239,7 +239,7 @@ function Upload({ show, handleClose }) {
             handleClose();
           }}
         >
-          <img src={icons.close} alt="close" className="fit-image" />
+          <img src={icons.closeSvg} alt="close" className="fit-image " />
         </div>
         <div className="modal_body">
           <div className="wp-60 video-body">
@@ -258,7 +258,7 @@ function Upload({ show, handleClose }) {
               )}
             </div>
           </div>
-          <div className="wp-40 ">
+          <div className="wp-40 hp-100">
             <div className="Video_header">
               <div
                 className="wp-45 header_item"

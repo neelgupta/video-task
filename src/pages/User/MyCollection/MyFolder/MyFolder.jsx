@@ -16,6 +16,7 @@ import DeleteModal from "../../../../components/layouts/DeleteModal";
 import MoveFolderModel from "./MoveFolderModel";
 import { creteImgFilter, encrypt } from "../../../../utils/helpers";
 import Share from "./Share";
+import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
 function MyFolder() {
   const { id } = useParams();
   const location = useLocation();
@@ -80,6 +81,7 @@ function MyFolder() {
   };
 
   const handleDuplicate = async (int) => {
+    setIsFetch(true);
     try {
       const req = {
         interaction_id: int._id,
@@ -91,8 +93,10 @@ function MyFolder() {
       }
     } catch (error) {
       console.log("error", error);
+      getFolderCollection();
       dispatch(handelCatch(error));
     }
+    setIsFetch(false);
   };
 
   const handleShare = (id) => {
@@ -153,80 +157,91 @@ function MyFolder() {
           {selectedItem.folder_name}
         </div>
       </div>
-      <div className="collection-list-container">
-        {isFetch ? (
-          <Spinner />
-        ) : fileList.length > 0 ? (
-          <>
-            {fileList.map((ele, index) => {
-              return (
-                <div key={index} className="outer-card">
-                  <div className="menu">
-                    <CustomFileMenu
-                      onEditClick={() => {
-                        dispatch(
-                          setWebcamModelConfig({
-                            isShow: false,
-                            blobFile: null,
-                            blobUrl: "",
-                          })
-                        );
-                        navigate(`/user/flow/${ele._id}`);
-                      }}
-                      onDeleteClick={() => {
-                        setDeleteId(ele._id);
-                        setShowDeleteModal(true);
-                      }}
-                      onMoveClick={() => {
-                        setMoveFolderItem(ele);
-                        setShowMoveFolderModal(true);
-                      }}
-                      onViewClick={() => handleView(ele)}
-                      onDuplicateClick={() => handleDuplicate(ele)}
-                      onShareClick={() => handleShare(ele._id)}
-                    />
-                  </div>
-                  <div className="file-card">
-                    {ele.thumbnailUrl ? (
-                      <img
-                        src={ele.thumbnailUrl}
-                        alt=""
-                        className="file-image"
-                      />
-                    ) : (
-                      <div className="no-img-box"></div>
-                    )}
 
-                    <div
-                      className="hover_card"
-                      onClick={() => {
-                        navigate(`/user/asset-allocation/${ele._id}`);
-                      }}
-                    >
-                      <div
-                        style={{
-                          padding: "10px 10px",
-                          color: "white",
-                          width: "100%",
-                          textTransform: "capitalize",
-                          textAlign: "center",
+      {isFetch ? (
+        <div
+          className="f-center wp-100 hp-100"
+          style={{ flexDirection: "column" }}
+        >
+          <LoaderCircle size={150} />
+          <div className="text-18-600 mt-15" style={{ color: "#1B2559" }}>
+            We are getting things ready...
+          </div>
+        </div>
+      ) : (
+        <div className="collection-list-container">
+          {fileList.length > 0 ? (
+            <>
+              {fileList.map((ele, index) => {
+                return (
+                  <div key={index} className="outer-card">
+                    <div className="menu">
+                      <CustomFileMenu
+                        onEditClick={() => {
+                          dispatch(
+                            setWebcamModelConfig({
+                              isShow: false,
+                              blobFile: null,
+                              blobUrl: "",
+                            })
+                          );
+                          navigate(`/user/flow/${ele._id}`);
                         }}
-                        className="text-16-600"
+                        onDeleteClick={() => {
+                          setDeleteId(ele._id);
+                          setShowDeleteModal(true);
+                        }}
+                        onMoveClick={() => {
+                          setMoveFolderItem(ele);
+                          setShowMoveFolderModal(true);
+                        }}
+                        onViewClick={() => handleView(ele)}
+                        onDuplicateClick={() => handleDuplicate(ele)}
+                        onShareClick={() => handleShare(ele._id)}
+                      />
+                    </div>
+                    <div className="file-card">
+                      {ele.thumbnailUrl ? (
+                        <img
+                          src={ele.thumbnailUrl}
+                          alt=""
+                          className="file-image"
+                        />
+                      ) : (
+                        <div className="no-img-box"></div>
+                      )}
+
+                      <div
+                        className="hover_card"
+                        onClick={() => {
+                          navigate(`/user/asset-allocation/${ele._id}`);
+                        }}
                       >
-                        {ele.title}
+                        <div
+                          style={{
+                            padding: "10px 10px",
+                            color: "white",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            textAlign: "center",
+                          }}
+                          className="text-16-600"
+                        >
+                          {ele.title}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </>
-        ) : (
-          <div className="text-16-500 ms-15">
-            <p>Folder data not found..!</p>
-          </div>
-        )}
-      </div>
+                );
+              })}
+            </>
+          ) : (
+            <div className="text-16-500 ms-15">
+              <p>Folder data not found..!</p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

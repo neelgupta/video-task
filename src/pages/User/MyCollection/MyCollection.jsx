@@ -12,6 +12,7 @@ import { creteImgFilter } from "../../../utils/helpers";
 import { api } from "../../../services/api";
 import { showSuccess, throwError } from "../../../store/globalSlice";
 import { useNavigate } from "react-router-dom";
+import LoaderCircle from "../../../components/layouts/LoaderCircle/LoaderCircle";
 
 const MyCollection = () => {
   const dispatch = useDispatch();
@@ -71,7 +72,7 @@ const MyCollection = () => {
   };
 
   return (
-    <div className="d-flex flex-wrap folder-container">
+    <div className="d-flex flex-wrap folder-container wp-100">
       <DeleteModal
         show={showDeleteModal}
         handleClose={() => setShowDeleteModal(false)}
@@ -127,8 +128,11 @@ const MyCollection = () => {
           );
         })
       ) : (
-        <div className="fa-center wp-100">
-          <Spinner size="xl" className="mt-50 ms-50" />
+        <div className="f-center wp-100" style={{ flexDirection: "column" }}>
+          <LoaderCircle size={150} />
+          <div className="text-18-600 mt-15" style={{ color: "#1B2559" }}>
+            We are getting things ready...
+          </div>
         </div>
       )}
       <Button
