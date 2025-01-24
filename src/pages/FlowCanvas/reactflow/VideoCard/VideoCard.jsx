@@ -56,7 +56,6 @@ const IconRenderer = ({ icon, label, onClick, style }) => {
 };
 function VideoCard(props) {
   const { data, id, title, index } = props;
-  console.log("data", data);
   const { interactionsStyle } = useSelector((state) => state.global);
   const [isToolbarVisible, setToolbarVisible] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);

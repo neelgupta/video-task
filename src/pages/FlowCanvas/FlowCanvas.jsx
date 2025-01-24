@@ -35,6 +35,7 @@ import {
 import Upload from "./Modals/Upload/Upload";
 import DeleteModal from "../../components/layouts/DeleteModal";
 import WebcamRecorder from "./Modals/WebcamRecorder/WebcamRecorder";
+import RedirectCard from "./reactflow/RedirectCard";
 
 // import { showVideoModel } from "../../utils/helpers";
 
@@ -44,6 +45,7 @@ const nodeTypes = {
   Start: StartNode,
   End: EndNode,
   Question: VideoCard,
+  Redirect: RedirectCard,
 };
 
 const edgeTypes = {

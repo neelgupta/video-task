@@ -32,7 +32,6 @@ const Login = () => {
     setIsLogin(true);
     try {
       const res = await api.post("user/sign-in", values);
-      console.log("res", res);
       const data = res.data;
       if (data.status === 200) {
         const { token, role } = data.response;

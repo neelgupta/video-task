@@ -13,40 +13,97 @@ import {
   throwError,
 } from "../../../../../store/globalSlice";
 import LoaderCircle from "../../../../../components/layouts/LoaderCircle/LoaderCircle";
+import * as Yup from "yup";
 
 function LogicTab({ nodeData, onClose }) {
+  console.log("nodeData", nodeData);
   const { id } = useParams();
   const dispatch = useDispatch();
   const [isLoad, setIsLoad] = useState(true);
   const [isAdvance, setIsAdvance] = useState(false);
   const [show, setShow] = useState(false);
   const [nodeOption, setNodeOption] = useState([]);
-  const [targetNode, setTargetNode] = useState({});
+  const [targetNode, setTargetNode] = useState(null);
+  const [redirectUrl, setRedirectUrl] = useState({ value: "", error: null });
+  const [multipleRedirectUrl, setMultipleRedirectUrl] = useState({});
+
   const [multipleTargetNode, setMultipleTargetNode] = useState({});
   const [multiChoiceSelectOption, setMultiChoiceSelectOption] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
   const menuRef = useRef(false);
 
+  const validateUrl = async (url) => {
+    const schema = Yup.string().url("Invalid URL format"); // Validate URL format
+    try {
+      await schema.validate(url);
+      return null; // No error, validation passed
+    } catch (err) {
+      return err.message; // Return validation error message
+    }
+  };
+
   useEffect(() => {
     if (
       nodeOption?.length &&
       nodeData &&
-      nodeData?.answer_type === "multiple-choice"
+      ["multiple-choice", "nps"].includes(nodeData.answer_type)
     ) {
-      const obj = {};
-      nodeData?.answer_format?.choices.forEach((element) => {
-        const findTarget = nodeOption.find(
-          (ele) => ele._id === element.targetedNodeId
-        );
-        obj[element.index] = findTarget;
-      });
-      setMultipleTargetNode(obj);
+      const targetObj = {};
+      const choices =
+        nodeData?.answer_format[
+          nodeData.answer_type === "nps" ? "nps_choices" : "choices"
+        ];
+
+      if (Array.isArray(choices)) {
+        choices.forEach((element) => {
+          const findTarget = nodeOption.find(
+            (ele) => ele._id === element.targetedNodeId
+          );
+          targetObj[element.index] = findTarget;
+        });
+      } else {
+        console.error("Choices is not an array or is undefined");
+      }
+
+      setMultipleTargetNode(targetObj);
     }
   }, [nodeOption, nodeData]);
 
   useEffect(() => {
+    if (
+      nodeData &&
+      ["multiple-choice", "nps"].includes(nodeData?.answer_type)
+    ) {
+      let redirectObj = {};
+      const choices =
+        nodeData?.answer_format[
+          nodeData.answer_type === "nps" ? "nps_choices" : "choices"
+        ];
+
+      if (Array.isArray(choices)) {
+        redirectObj = choices.reduce((acc, val) => {
+          acc[val.index] = { value: "ok", error: "" };
+          return acc;
+        }, {});
+      } else {
+        console.error("Choices is not an array or is undefined");
+      }
+      setMultipleRedirectUrl(redirectObj);
+    }
+  }, [nodeData]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      const isError =
+        nodeData.answer_type === "multiple-choice" ||
+        nodeData.answer_type === "nps"
+          ? false
+          : redirectUrl.error !== null;
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        !isError
+      ) {
         setShow(false);
         setMultiChoiceSelectOption("");
       }
@@ -56,7 +113,8 @@ function LogicTab({ nodeData, onClose }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menuRef, redirectUrl, nodeData]);
 
   useEffect(() => {
     if (nodeData && id) {
@@ -79,6 +137,14 @@ function LogicTab({ nodeData, onClose }) {
           (ele) => ele._id === data.targetNodeId
         );
         setTargetNode(endNode);
+
+        if (
+          !endNode &&
+          nodeData.redirection_url &&
+          !["multiple-choice", "nps"].includes(nodeData?.answer_type)
+        ) {
+          setRedirectUrl({ value: nodeData?.redirection_url, error: null });
+        }
       } else {
         dispatch(throwError(res.data.message));
       }
@@ -95,7 +161,7 @@ function LogicTab({ nodeData, onClose }) {
       const req = {
         interactionId: id,
         selectedNodeId: nodeData?._id,
-        ...(nodeData.answer_type === "multiple-choice"
+        ...(["multiple-choice", "nps"].includes(nodeData.answer_type)
           ? {
               targets: Object.keys(multipleTargetNode).map((key) => {
                 return {
@@ -104,7 +170,10 @@ function LogicTab({ nodeData, onClose }) {
                 };
               }),
             }
-          : { newTargetId: targetNode?._id }),
+          : {
+              newTargetId: targetNode?._id,
+              redirection_url: redirectUrl.value,
+            }),
       };
       const res = await api.put(`interactions/update-edges`, req);
       if (res.status) {
@@ -142,8 +211,10 @@ function LogicTab({ nodeData, onClose }) {
       ) : (
         <div>
           <div className="node-index">{nodeData.index}</div>
-          {nodeData.answer_type === "multiple-choice" ? (
-            nodeData.answer_format.choices.map((ele, index) => {
+          {["multiple-choice", "nps"].includes(nodeData.answer_type) ? (
+            nodeData.answer_format[
+              nodeData.answer_type === "nps" ? "nps_choices" : "choices"
+            ].map((ele, index) => {
               return (
                 <div className="selected-node-card mb-10" key={ele.index}>
                   <div
@@ -157,7 +228,9 @@ function LogicTab({ nodeData, onClose }) {
                       <p>If</p>
                     </div>
                     <div className="multi-choices-option-id">
-                      {numberToCharacter(ele.index)}
+                      {nodeData.answer_type === "nps"
+                        ? ele.index
+                        : numberToCharacter(ele.index)}
                     </div>
                     <div className="node-label">
                       <p>Jump to</p>
@@ -264,6 +337,7 @@ function LogicTab({ nodeData, onClose }) {
                           id="redirect"
                           name="redirect"
                           placeholder="Enter redirect url"
+                          value={multipleRedirectUrl[ele.index].value}
                         />
                       </div>
                       <div className="pt-20">
@@ -308,23 +382,34 @@ function LogicTab({ nodeData, onClose }) {
                 </div>
               </div>
               <div className="end-screen-label">
-                {targetNode && targetNode.type !== "End" ? (
-                  <>
-                    <img
-                      src={targetNode?.video_thumbnail}
-                      alt=""
-                      className="target-node-image"
-                    />
-                    <div className="end-index">{targetNode?.index}</div>
-                  </>
+                {targetNode ? (
+                  targetNode.type !== "End" ? (
+                    <>
+                      <img
+                        src={targetNode?.video_thumbnail}
+                        alt=""
+                        className="target-node-image"
+                      />
+                      <div className="end-index">{targetNode?.index}</div>
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src={icons.hand}
+                        alt=""
+                        className="w-30 fit-image ms-10"
+                      />
+                      <div className="end-index">END</div>
+                    </>
+                  )
                 ) : (
                   <>
                     <img
-                      src={icons.hand}
+                      src={icons.redirect}
                       alt=""
-                      className="w-30 fit-image ms-10"
+                      className="w-25 fit-image ms-10"
                     />
-                    <div className="end-index">END</div>
+                    <div className="end-index">URL</div>
                   </>
                 )}
               </div>
@@ -343,7 +428,10 @@ function LogicTab({ nodeData, onClose }) {
                             active ? "active-node-option" : ""
                           } `}
                           key={index}
-                          onClick={() => setTargetNode(ele)}
+                          onClick={() => {
+                            setTargetNode(ele);
+                            setRedirectUrl({ value: "", error: null });
+                          }}
                         >
                           <div className="node-det">
                             <div
@@ -366,7 +454,10 @@ function LogicTab({ nodeData, onClose }) {
                             active ? "active-node-option" : ""
                           } `}
                           key={index}
-                          onClick={() => setTargetNode(ele)}
+                          onClick={() => {
+                            setTargetNode(ele);
+                            setRedirectUrl({ value: "", error: null });
+                          }}
                         >
                           <div className="node-det">
                             <div className="node-option-img">
@@ -389,7 +480,19 @@ function LogicTab({ nodeData, onClose }) {
                       id="redirect"
                       name="redirect"
                       placeholder="Enter redirect url"
+                      value={redirectUrl?.value}
+                      onChange={async (e) => {
+                        const value = e.target.value;
+                        const error = await validateUrl(value);
+                        setRedirectUrl({ value, error });
+                        setTargetNode(null);
+                      }}
                     />
+                    {redirectUrl?.error && (
+                      <div className="text-12-500" style={{ color: "red" }}>
+                        {redirectUrl?.error}
+                      </div>
+                    )}
                   </div>
                   <div className="pt-20">
                     <Button
@@ -403,7 +506,7 @@ function LogicTab({ nodeData, onClose }) {
                       onClick={() => {
                         setShow((pre) => !pre);
                       }}
-                      disabled={isLoad}
+                      disabled={isLoad || redirectUrl?.error}
                     >
                       Done
                       {isLoad && (
@@ -439,7 +542,18 @@ function LogicTab({ nodeData, onClose }) {
                 }}
                 type="submit"
                 onClick={() => {
-                  handelSubmitLogic();
+                  if (
+                    ["multiple-choice", "nps"].includes(nodeData.answer_type)
+                  ) {
+                    console.log("ok");
+                  } else {
+                    if (!redirectUrl?.error) {
+                      handelSubmitLogic();
+                      return;
+                    } else {
+                      dispatch(throwError("Enter valid redirect url."));
+                    }
+                  }
                 }}
                 disabled={isSubmit}
               >

@@ -79,9 +79,7 @@ function Overview() {
 
   useEffect(() => {
     if (organization?.members?.length > 0) {
-      console.log("organization?.members", organization?.members);
       const option = organization.members.map((ele) => {
-        console.log("ele", ele);
         return {
           value: ele.userId?._id,
           label: ele.userId?.email,
@@ -89,7 +87,6 @@ function Overview() {
       });
       setReplayEmailOption(option);
     }
-    console.log("organization", organization);
   }, [organization]);
 
   useEffect(() => {

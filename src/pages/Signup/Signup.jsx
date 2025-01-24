@@ -44,7 +44,6 @@ function Signup() {
       });
       if (res.status === 200) {
         const data = res.data.response;
-        console.log("data", data);
         if (data?.referral_status && data.referral_status === "pending") {
           setReferralId(data._id);
           setInitialValues({ ...initialValues, email: data.referral_email });
@@ -61,7 +60,6 @@ function Signup() {
         navigate("/sign-up");
         dispatch(throwError(res.data.message));
       }
-      console.log("res", res);
     } catch (error) {
       console.log("error", error);
       navigate("/sign-up");

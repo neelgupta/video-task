@@ -15,6 +15,7 @@
     justify-content: center;
     border-radius: 50%;
     color: white;
+    border: 2px solid #f1f1f1;
     background: #8000ff;
   }
   .selected-node-card {
@@ -188,8 +189,8 @@
       .end-index {
         position: absolute;
         left: -15px;
-        width: 30px;
-        height: 30px;
+        width: 32px;
+        height: 32px;
         font-size: 12px;
         font-weight: 500;
         display: flex;
@@ -197,6 +198,7 @@
         justify-content: center;
         border-radius: 50%;
         color: white;
+        border: 2px solid #f1f1f1;
         background: #8000ff;
       }
     }

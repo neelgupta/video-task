@@ -14,23 +14,24 @@ import {
   setNewQueModalData,
   setShowCreateFlowModal,
 } from "../../../../store/globalSlice";
-function ButtonEdge({
-  id,
-  source,
-  target,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  style = {},
-  markerEnd,
-  selected,
-  intId,
-  index,
-  data: { isHover },
-}) {
+function ButtonEdge(props) {
+  const {
+    id,
+    source,
+    target,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    style = {},
+    markerEnd,
+    selected,
+    intId,
+    index,
+    data: { isHover },
+  } = props;
   const { setEdges, setNodes } = useReactFlow();
   const { id: flowId } = useParams();
   const [edgePath, labelX, labelY] = getBezierPath({

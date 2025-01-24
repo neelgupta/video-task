@@ -22,6 +22,7 @@ import ContactForm from "./ContactForm";
 import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
 import { useParams } from "react-router-dom";
 import LoaderCircle from "../../../../../components/layouts/LoaderCircle/LoaderCircle";
+import NpsFormate from "./FormateComponent/NpsFormate";
 const AnsFormate = [
   {
     label: "Open Ended",
@@ -42,6 +43,22 @@ const AnsFormate = [
   {
     label: "Calender",
     value: "calender",
+  },
+  {
+    label: "AI Chatbot",
+    value: "ai-chatbot",
+  },
+  {
+    label: "LiveCall",
+    value: "live-call",
+  },
+  {
+    label: "NPS",
+    value: "nps",
+  },
+  {
+    label: "Payment",
+    value: "payment",
   },
 ];
 
@@ -155,6 +172,41 @@ const handelFrom = (type, data, targetedNode) => {
       },
     };
   }
+  if (type === "nps") {
+    return {
+      defaultValue: {
+        nps_choices:
+          data?.nps_choices ||
+          Array.from({ length: 11 }, (_, index) => index).map((_, index) => {
+            return {
+              index: index,
+              targetedNodeId: targetedNode?._id || null,
+            };
+          }),
+        left_label: data?.left_label || "",
+        right_label: data?.right_label || "",
+        is_label: data?.is_label || false,
+      },
+      validation: {
+        is_label: Yup.boolean()
+          .oneOf([true, false], "Disable Data Collection is required")
+          .required("Disable Data Collection is required"),
+
+        left_label: Yup.lazy((_, context) => {
+          return context?.parent?.is_label
+            ? Yup.string().required("Left label is required")
+            : Yup.string().nullable();
+        }),
+
+        right_label: Yup.lazy((_, context) => {
+          return context?.parent?.is_label
+            ? Yup.string().required("Right label is required")
+            : Yup.string().nullable();
+        }),
+      },
+    };
+  }
+
   return { defaultValue: {}, validation: {} };
 };
 
@@ -340,6 +392,14 @@ function AnswerTab({ onClose }) {
                       )}
                       {ansFormate === "multiple-choice" && (
                         <MultipleChoiceFormate
+                          values={values}
+                          setFieldValue={setFieldValue}
+                          errors={errors}
+                          targetedNode={targetedNode}
+                        />
+                      )}
+                      {ansFormate === "nps" && (
+                        <NpsFormate
                           values={values}
                           setFieldValue={setFieldValue}
                           errors={errors}

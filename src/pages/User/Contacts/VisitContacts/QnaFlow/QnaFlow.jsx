@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 import ConversationsAnswer from "../../../AssetAllocation/Conversations/ConversationsAnswer";
 
 function QnaFlow({ answersDetails, contact }) {
-  console.log("answersDetails", answersDetails);
   const [selectChat, setSelectChat] = useState(null);
   const [selectMetingCard, setSelectMetingCard] = useState({});
 

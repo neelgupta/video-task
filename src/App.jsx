@@ -12,7 +12,6 @@ function App() {
   // eslint-disable-next-line no-unused-vars
   const reduxData = useSelector((state) => state.global);
   const localData = getDataFromLocalStorage();
-  console.log("localData", localData);
   const isAuth = localData?.token ? true : false;
 
   useEffect(

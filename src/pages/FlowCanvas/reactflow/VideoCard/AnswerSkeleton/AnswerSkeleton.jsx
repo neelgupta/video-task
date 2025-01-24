@@ -44,6 +44,41 @@ function AnswerSkeleton({ answerType, interactionsStyle }) {
         </div>
       )}
 
+      {answerType === "nps" && (
+        <div className="nps-skeleton">
+          {Array.from({ length: 11 }, (_, index) => index).map((ele) => {
+            return (
+              <div className="nps-index" key={ele}>
+                <Skeleton
+                  baseColor={addWhitenessToHex(
+                    interactionsStyle.primary_color,
+                    0.8
+                  )}
+                  highlightColor={addWhitenessToHex(
+                    interactionsStyle.primary_color,
+                    0.95
+                  )}
+                  width={20}
+                  borderRadius={`${interactionsStyle.border_radius}px`}
+                  height={20}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    fontSize: "10px",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  className="f-center pt-3"
+                >
+                  {ele}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {answerType === "multiple-choice" && (
         <div className="multiple-choice-skeleton">
           {[1, 2, 3].map((item) => {

@@ -27,7 +27,6 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
     selectedOrganizationId,
     myOrganization,
   } = reduxData;
-  console.log("profileData", profileData);
   const [organization, setOrganization] = useState({});
   const [expand, setExpand] = useState("");
   const [orgOptions, setOrgOptions] = useState([]);

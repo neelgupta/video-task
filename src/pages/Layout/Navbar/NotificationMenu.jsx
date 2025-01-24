@@ -53,7 +53,6 @@ const NotificationMenu = ({ themeColor, isResponsive }) => {
   const getTeamNotification = async () => {
     try {
       const res = await api.get(`notification/get-team-invitation`);
-      console.log("res", res);
       if (res.status === 200) {
         setNotificationList(
           res.data.response.map((ele) => {
@@ -80,7 +79,6 @@ const NotificationMenu = ({ themeColor, isResponsive }) => {
         invitation_status: status,
       };
       const res = await api.put("notification/update-team-status", req);
-      console.log("res", res);
       if (res.status === 200) {
         dispatch(showSuccess(res.data.message));
         window.location.reload();

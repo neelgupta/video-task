@@ -10,7 +10,6 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
   const navigate = useNavigate();
   const reduxData = useSelector((state) => state.global);
   const { profileData } = reduxData;
-  console.log("profileData", profileData);
   const [show, setShow] = useState(false);
   const profileRef = useRef(null);
   const [userData, setUserData] = useState({});

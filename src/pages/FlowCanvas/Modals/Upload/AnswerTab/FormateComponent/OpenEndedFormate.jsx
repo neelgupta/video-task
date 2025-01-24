@@ -1,8 +1,7 @@
 import React from "react";
 import OutlineCheck from "../../../../../User/MyOrganization/pages/Notifications/OutlineCheck";
 import Select from "react-select";
-import { ErrorMessage, Field } from "formik";
-import { Form } from "react-bootstrap";
+import { ErrorMessage, Field, Form } from "formik";
 import DropdownOption from "../../../../../../components/inputs/DropdownOption/DropdownOption";
 
 const timeLimitOption = [
