@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./LogicTab.scss";
 import { icons } from "../../../../../utils/constants";
 import { Switch } from "../../../../../components";
-import { Button, Col, Spinner } from "react-bootstrap";
-import { useReactFlow } from "@xyflow/react";
+import { Button, Spinner } from "react-bootstrap";
 import { api } from "../../../../../services/api";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -16,7 +15,6 @@ import LoaderCircle from "../../../../../components/layouts/LoaderCircle/LoaderC
 import * as Yup from "yup";
 
 function LogicTab({ nodeData, onClose }) {
-  console.log("nodeData", nodeData);
   const { id } = useParams();
   const dispatch = useDispatch();
   const [isLoad, setIsLoad] = useState(true);
@@ -26,10 +24,10 @@ function LogicTab({ nodeData, onClose }) {
   const [targetNode, setTargetNode] = useState(null);
   const [redirectUrl, setRedirectUrl] = useState({ value: "", error: null });
   const [multipleRedirectUrl, setMultipleRedirectUrl] = useState({});
-
   const [multipleTargetNode, setMultipleTargetNode] = useState({});
   const [multiChoiceSelectOption, setMultiChoiceSelectOption] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
+  const [targetNodeId, setTargetNodeId] = useState("");
   const menuRef = useRef(false);
 
   const validateUrl = async (url) => {
@@ -82,7 +80,7 @@ function LogicTab({ nodeData, onClose }) {
 
       if (Array.isArray(choices)) {
         redirectObj = choices.reduce((acc, val) => {
-          acc[val.index] = { value: "ok", error: "" };
+          acc[val.index] = { value: val?.redirection_url || "", error: null };
           return acc;
         }, {});
       } else {
@@ -91,30 +89,6 @@ function LogicTab({ nodeData, onClose }) {
       setMultipleRedirectUrl(redirectObj);
     }
   }, [nodeData]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const isError =
-        nodeData.answer_type === "multiple-choice" ||
-        nodeData.answer_type === "nps"
-          ? false
-          : redirectUrl.error !== null;
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        !isError
-      ) {
-        setShow(false);
-        setMultiChoiceSelectOption("");
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuRef, redirectUrl, nodeData]);
 
   useEffect(() => {
     if (nodeData && id) {
@@ -136,6 +110,7 @@ function LogicTab({ nodeData, onClose }) {
         const endNode = data.nodeList.find(
           (ele) => ele._id === data.targetNodeId
         );
+        setTargetNodeId(data?.targetNodeId || "");
         setTargetNode(endNode);
 
         if (
@@ -167,6 +142,7 @@ function LogicTab({ nodeData, onClose }) {
                 return {
                   index: parseInt(key),
                   targetedNodeId: multipleTargetNode[key]?._id || null,
+                  redirection_url: multipleRedirectUrl[key]?.value || null,
                 };
               }),
             }
@@ -175,6 +151,7 @@ function LogicTab({ nodeData, onClose }) {
               redirection_url: redirectUrl.value,
             }),
       };
+      console.log("req", req);
       const res = await api.put(`interactions/update-edges`, req);
       if (res.status) {
         dispatch(showSuccess(res.data.message));
@@ -194,6 +171,55 @@ function LogicTab({ nodeData, onClose }) {
       return num;
     }
     return String.fromCharCode(64 + num);
+  };
+
+  const resetSingleTargets = () => {
+    if (targetNodeId && !!nodeOption?.length) {
+      const findTarget = nodeOption.find((ele) => ele._id === targetNodeId);
+      if (findTarget) {
+        setTargetNode(findTarget);
+        setRedirectUrl({ value: "", error: null });
+      } else {
+        if (nodeData.redirection_url) {
+          setRedirectUrl({ value: nodeData.redirection_url, error: null });
+        }
+        setTargetNode(null);
+      }
+      setShow(false);
+      setMultiChoiceSelectOption("");
+    }
+  };
+
+  const resetMultipleTargets = (optionId) => {
+    if (!nodeData || !nodeOption?.length) return;
+
+    const { answer_format, answer_type } = nodeData;
+    const options =
+      answer_type === "nps"
+        ? answer_format?.nps_choices || []
+        : answer_format?.choices || [];
+
+    const findOption = options.find((opt) => opt.index == optionId);
+    if (!findOption) return;
+
+    const newUrlObj = { ...multipleRedirectUrl };
+    const newTargetObj = { ...multipleTargetNode };
+
+    if (findOption.targetedNodeId) {
+      const findTarget = nodeOption.find(
+        (node) => node?._id === findOption.targetedNodeId
+      );
+      newUrlObj[optionId] = { value: "", error: null };
+      newTargetObj[optionId] = findTarget;
+    }
+
+    if (findOption.redirection_url) {
+      newUrlObj[optionId] = { value: findOption.redirection_url, error: null };
+      newTargetObj[optionId] = null;
+    }
+
+    setMultipleRedirectUrl(newUrlObj);
+    setMultipleTargetNode(newTargetObj);
   };
 
   return (
@@ -238,26 +264,36 @@ function LogicTab({ nodeData, onClose }) {
                     </div>
                   </div>
                   <div className="end-screen-label">
-                    {multipleTargetNode[ele.index] &&
-                    multipleTargetNode[ele.index].type !== "End" ? (
-                      <>
-                        <img
-                          src={multipleTargetNode[ele.index]?.video_thumbnail}
-                          alt=""
-                          className="target-node-image"
-                        />
-                        <div className="end-index">
-                          {multipleTargetNode[ele.index]?.index}
-                        </div>
-                      </>
+                    {multipleTargetNode[ele.index] ? (
+                      multipleTargetNode[ele.index].type !== "End" ? (
+                        <>
+                          <img
+                            src={multipleTargetNode[ele.index]?.video_thumbnail}
+                            alt=""
+                            className="target-node-image"
+                          />
+                          <div className="end-index">
+                            {multipleTargetNode[ele.index]?.index}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <img
+                            src={icons.hand}
+                            alt=""
+                            className="w-30 fit-image ms-10"
+                          />
+                          <div className="end-index">END</div>
+                        </>
+                      )
                     ) : (
                       <>
                         <img
-                          src={icons.hand}
+                          src={icons.redirect}
                           alt=""
-                          className="w-30 fit-image ms-10"
+                          className="w-25 fit-image ms-10"
                         />
-                        <div className="end-index">END</div>
+                        <div className="end-index">URL</div>
                       </>
                     )}
                   </div>
@@ -288,6 +324,13 @@ function LogicTab({ nodeData, onClose }) {
                                   updatedState[ele.index] = option;
                                   return updatedState;
                                 });
+                                const newMultipleRedirectUrl =
+                                  multipleRedirectUrl;
+                                newMultipleRedirectUrl[ele.index] = {
+                                  value: "",
+                                  error: null,
+                                };
+                                setMultipleRedirectUrl(newMultipleRedirectUrl);
                               }}
                             >
                               <div className="node-det">
@@ -338,9 +381,47 @@ function LogicTab({ nodeData, onClose }) {
                           name="redirect"
                           placeholder="Enter redirect url"
                           value={multipleRedirectUrl[ele.index].value}
+                          onChange={async (e) => {
+                            const value = e.target.value;
+
+                            // Validate the URL
+                            const error = await validateUrl(value);
+
+                            // Create a new array to avoid mutating state directly
+                            const newMultipleRedirectUrl = {
+                              ...multipleRedirectUrl,
+                            };
+                            newMultipleRedirectUrl[ele.index] = {
+                              value,
+                              error,
+                            };
+
+                            // Update the state with the new array
+                            setMultipleRedirectUrl(newMultipleRedirectUrl);
+
+                            setMultipleTargetNode((pre) => {
+                              const updatedState = { ...pre };
+                              updatedState[ele.index] =
+                                value === ""
+                                  ? nodeOption.find(
+                                      (target) =>
+                                        target._id === ele.targetedNodeId
+                                    ) || null
+                                  : null;
+                              return updatedState;
+                            });
+                          }}
                         />
+                        {multipleRedirectUrl[ele.index]?.error && (
+                          <div className="text-12-500" style={{ color: "red" }}>
+                            {multipleRedirectUrl[ele.index]?.error}
+                          </div>
+                        )}
                       </div>
-                      <div className="pt-20">
+                      <div
+                        className="pt-20"
+                        style={{ display: "flex", gap: "10px" }}
+                      >
                         <Button
                           className="text-18-600 wp-100 "
                           style={{
@@ -348,14 +429,29 @@ function LogicTab({ nodeData, onClose }) {
                               "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
                             border: "none",
                             padding: "10px 0px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "5px",
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
                             setShow(false);
                             setMultiChoiceSelectOption("");
                           }}
-                          disabled={isLoad}
+                          disabled={
+                            isLoad ||
+                            multipleRedirectUrl[ele.index]?.error ||
+                            (!multipleRedirectUrl[ele.index]?.value &&
+                              !multipleTargetNode[ele.index])
+                          }
                         >
-                          Done
+                          <p className="p-0 m-0">Done</p>
+                          <img
+                            src={icons.done}
+                            alt=""
+                            className="w-30 "
+                            style={{ filter: "invert(100%)" }}
+                          />
                           {isLoad && (
                             <Spinner
                               size="sm"
@@ -363,6 +459,29 @@ function LogicTab({ nodeData, onClose }) {
                               className="ms-10"
                             />
                           )}
+                        </Button>
+                        <Button
+                          className="text-18-600 wp-100 "
+                          style={{
+                            background: "#ddd",
+                            color: "black",
+                            border: "none",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "5px",
+                          }}
+                          onClick={() => {
+                            // cancelSingleTargets();
+                            resetMultipleTargets(ele.index);
+                          }}
+                        >
+                          <p className="p-0 m-0">Reset</p>
+                          <img
+                            src={icons.replace}
+                            alt=""
+                            className="w-20 image-fit"
+                          />
                         </Button>
                       </div>
                     </div>
@@ -486,6 +605,11 @@ function LogicTab({ nodeData, onClose }) {
                         const error = await validateUrl(value);
                         setRedirectUrl({ value, error });
                         setTargetNode(null);
+                        if (!value) {
+                          setTargetNode(
+                            nodeOption.find((ele) => ele._id === targetNodeId)
+                          );
+                        }
                       }}
                     />
                     {redirectUrl?.error && (
@@ -494,7 +618,10 @@ function LogicTab({ nodeData, onClose }) {
                       </div>
                     )}
                   </div>
-                  <div className="pt-20">
+                  <div
+                    className="pt-20"
+                    style={{ display: "flex", gap: "10px" }}
+                  >
                     <Button
                       className="text-18-600 wp-100 "
                       style={{
@@ -502,13 +629,28 @@ function LogicTab({ nodeData, onClose }) {
                           "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
                         border: "none",
                         padding: "10px 0px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "5px",
                       }}
-                      onClick={() => {
-                        setShow((pre) => !pre);
+                      onClick={(e) => {
+                        setShow(false);
+                        setMultiChoiceSelectOption("");
                       }}
-                      disabled={isLoad || redirectUrl?.error}
+                      disabled={
+                        isLoad ||
+                        redirectUrl?.error ||
+                        (!redirectUrl.value && !targetNode)
+                      }
                     >
-                      Done
+                      <p className="p-0 m-0">Done</p>
+                      <img
+                        src={icons.done}
+                        alt=""
+                        className="w-30 "
+                        style={{ filter: "invert(100%)" }}
+                      />
                       {isLoad && (
                         <Spinner
                           size="sm"
@@ -517,56 +659,72 @@ function LogicTab({ nodeData, onClose }) {
                         />
                       )}
                     </Button>
+                    <Button
+                      className="text-18-600 wp-100 "
+                      style={{
+                        background: "#ddd",
+                        color: "black",
+                        border: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "5px",
+                      }}
+                      onClick={() => {
+                        resetSingleTargets();
+                      }}
+                    >
+                      <p className="p-0 m-0">Reset</p>
+                      <img
+                        src={icons.replace}
+                        alt=""
+                        className="w-20 image-fit"
+                      />
+                    </Button>
                   </div>
                 </div>
               )}
             </div>
           )}
           <div className="logic-divider"></div>
-          <div className="advance-logic-container">
-            <div className="advance-logic-input">
-              <p>Advance Logic</p>
-              <Switch
-                isChecked={isAdvance}
-                onChange={() => setIsAdvance((pre) => !pre)}
-              />
-            </div>
-            <div className="pt-30">
-              <Button
-                className="text-18-600 wp-100 "
-                style={{
-                  background:
-                    "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
-                  border: "none",
-                  padding: "10px 0px",
-                }}
-                type="submit"
-                onClick={() => {
-                  if (
-                    ["multiple-choice", "nps"].includes(nodeData.answer_type)
-                  ) {
-                    console.log("ok");
+          <div className="pt-30">
+            <Button
+              className="text-18-600 wp-100 "
+              style={{
+                background: "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                border: "none",
+                padding: "10px 0px",
+              }}
+              type="submit"
+              onClick={() => {
+                if (["multiple-choice", "nps"].includes(nodeData.answer_type)) {
+                  const isValid = Object.keys(multipleRedirectUrl).every(
+                    (key) => multipleRedirectUrl[key].error === null
+                  );
+                  if (isValid) {
+                    handelSubmitLogic();
                   } else {
-                    if (!redirectUrl?.error) {
-                      handelSubmitLogic();
-                      return;
-                    } else {
-                      dispatch(throwError("Enter valid redirect url."));
-                    }
+                    dispatch(throwError("Enter valid redirect url."));
                   }
-                }}
-                disabled={isSubmit}
-              >
-                Done
-                {isSubmit && (
-                  <Spinner
-                    size="sm"
-                    style={{ color: "white" }}
-                    className="ms-10"
-                  />
-                )}
-              </Button>
-            </div>
+                } else {
+                  if (!redirectUrl?.error) {
+                    handelSubmitLogic();
+                  } else {
+                    dispatch(throwError("Enter valid redirect url."));
+                  }
+                }
+              }}
+              disabled={isSubmit}
+            >
+              Done
+              {isSubmit && (
+                <Spinner
+                  size="sm"
+                  style={{ color: "white" }}
+                  className="ms-10"
+                />
+              )}
+            </Button>
           </div>
         </div>
       )}

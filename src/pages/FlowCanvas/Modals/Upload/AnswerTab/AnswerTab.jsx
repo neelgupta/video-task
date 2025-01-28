@@ -44,22 +44,22 @@ const AnsFormate = [
     label: "Calender",
     value: "calender",
   },
-  {
-    label: "AI Chatbot",
-    value: "ai-chatbot",
-  },
-  {
-    label: "LiveCall",
-    value: "live-call",
-  },
+  // {
+  //   label: "AI Chatbot",
+  //   value: "ai-chatbot",
+  // },
+  // {
+  //   label: "LiveCall",
+  //   value: "live-call",
+  // },
   {
     label: "NPS",
     value: "nps",
   },
-  {
-    label: "Payment",
-    value: "payment",
-  },
+  // {
+  //   label: "Payment",
+  //   value: "payment",
+  // },
 ];
 
 const handelFrom = (type, data, targetedNode) => {
@@ -145,7 +145,12 @@ const handelFrom = (type, data, targetedNode) => {
     return {
       defaultValue: {
         choices: data?.choices || [
-          { index: 1, option: "", targetedNodeId: targetedNode?._id || null },
+          {
+            index: 1,
+            option: "",
+            targetedNodeId: targetedNode?._id || null,
+            redirection_url: null,
+          },
         ],
         allow_multiple: data?.allow_multiple || false,
         randomize: data?.randomize || false,
@@ -160,7 +165,8 @@ const handelFrom = (type, data, targetedNode) => {
               option: Yup.string()
                 .required("Option is required")
                 .min(1, "Option cannot be empty"),
-              targetedNodeId: Yup.string().required(),
+              targetedNodeId: Yup.string().nullable(),
+              redirection_url: Yup.string().nullable(),
             })
           )
           .test("unique-index", "Each index must be unique", (choices) => {
@@ -255,10 +261,29 @@ function AnswerTab({ onClose }) {
   const handleSubmit = async (value) => {
     setIsUpdate(true);
     try {
+      let newChoices = [];
+      if (ansFormate === "multiple-choice") {
+        const choices = value.choices;
+        newChoices = choices.map((ele, index) => {
+          return {
+            ...ele,
+            index: index + 1,
+            redirection_url: null,
+            targetedNodeId: targetedNode._id,
+          };
+        });
+      }
       const req = {
         node_id: nodeData._id,
         answer_type: ansFormate,
-        answer_format: { ...value },
+        answer_format: {
+          ...value,
+          ...(ansFormate === "multiple-choice"
+            ? {
+                choices: newChoices,
+              }
+            : {}),
+        },
       };
       const res = await api.put("interactions/update-answer-format", req);
       if (res.status === 200) {
@@ -357,126 +382,132 @@ function AnswerTab({ onClose }) {
                   initialValues={initialFormValues}
                   validationSchema={Yup.object().shape({ ...validationSchema })}
                   onSubmit={(values) => {
+                    console.log("values", values);
                     handleSubmit(values);
                   }}
                 >
-                  {({ values, setFieldValue, submitForm, errors }) => (
-                    <>
-                      {ansFormate === "open-ended" && (
-                        <OpenEndedFormate
-                          values={values}
-                          setFieldValue={setFieldValue}
-                          errors={errors}
-                        />
-                      )}
-                      {ansFormate === "button" && (
-                        <ButtonFormate
-                          values={values}
-                          setFieldValue={setFieldValue}
-                          errors={errors}
-                        />
-                      )}
-                      {ansFormate === "file-upload" && (
-                        <FileUploadFormate
-                          values={values}
-                          setFieldValue={setFieldValue}
-                          errors={errors}
-                        />
-                      )}
-                      {ansFormate === "calender" && (
-                        <CalendarFormate
-                          values={values}
-                          setFieldValue={setFieldValue}
-                          errors={errors}
-                        />
-                      )}
-                      {ansFormate === "multiple-choice" && (
-                        <MultipleChoiceFormate
-                          values={values}
-                          setFieldValue={setFieldValue}
-                          errors={errors}
-                          targetedNode={targetedNode}
-                        />
-                      )}
-                      {ansFormate === "nps" && (
-                        <NpsFormate
-                          values={values}
-                          setFieldValue={setFieldValue}
-                          errors={errors}
-                          targetedNode={targetedNode}
-                        />
-                      )}
-                      <div
-                        className="wp-100 pt-20"
-                        style={{ borderTop: "2px solid #ECECEE" }}
-                      >
+                  {({ values, setFieldValue, submitForm, errors }) => {
+                    console.log("values", values);
+                    console.log("errors", errors);
+
+                    return (
+                      <>
+                        {ansFormate === "open-ended" && (
+                          <OpenEndedFormate
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                          />
+                        )}
+                        {ansFormate === "button" && (
+                          <ButtonFormate
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                          />
+                        )}
+                        {ansFormate === "file-upload" && (
+                          <FileUploadFormate
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                          />
+                        )}
+                        {ansFormate === "calender" && (
+                          <CalendarFormate
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                          />
+                        )}
+                        {ansFormate === "multiple-choice" && (
+                          <MultipleChoiceFormate
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                            targetedNode={targetedNode}
+                          />
+                        )}
+                        {ansFormate === "nps" && (
+                          <NpsFormate
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={errors}
+                            targetedNode={targetedNode}
+                          />
+                        )}
                         <div
-                          className="wp-100"
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
+                          className="wp-100 pt-20"
+                          style={{ borderTop: "2px solid #ECECEE" }}
                         >
-                          <div className="text-22-600">Contact Form</div>
-                          <div style={{ display: "flex", gap: "10px" }}>
-                            <div
-                              onClick={() => {
-                                setFieldValue("contact_form", true);
-                              }}
-                              className={`align-btn ${
-                                values.contact_form && "active"
-                              }`}
-                            >
-                              Yes
-                            </div>
-                            <div
-                              onClick={() => {
-                                setFieldValue("contact_form", false);
-                              }}
-                              className={`align-btn ${
-                                !values.contact_form && "active"
-                              }`}
-                            >
-                              No
+                          <div
+                            className="wp-100"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div className="text-22-600">Contact Form</div>
+                            <div style={{ display: "flex", gap: "10px" }}>
+                              <div
+                                onClick={() => {
+                                  setFieldValue("contact_form", true);
+                                }}
+                                className={`align-btn ${
+                                  values.contact_form && "active"
+                                }`}
+                              >
+                                Yes
+                              </div>
+                              <div
+                                onClick={() => {
+                                  setFieldValue("contact_form", false);
+                                }}
+                                className={`align-btn ${
+                                  !values.contact_form && "active"
+                                }`}
+                              >
+                                No
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <ErrorMessage
-                          name="contact_form"
-                          component="div"
-                          className="error-message"
-                        />
-                        <div className="mb-20 " style={{ color: "#7B5AFF" }}>
-                          <span
-                            className="text-14-400 EditContactLink"
-                            onClick={() => setOpenContactForm(true)}
-                          >
-                            Edit contact Form?
-                          </span>
-                        </div>
+                          <ErrorMessage
+                            name="contact_form"
+                            component="div"
+                            className="error-message"
+                          />
+                          <div className="mb-20 " style={{ color: "#7B5AFF" }}>
+                            <span
+                              className="text-14-400 EditContactLink"
+                              onClick={() => setOpenContactForm(true)}
+                            >
+                              Edit contact Form?
+                            </span>
+                          </div>
 
-                        <div className="pt-30">
-                          <Button
-                            className="text-18-600 wp-100 "
-                            style={{
-                              background:
-                                "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
-                              border: "none",
-                              padding: "10px 0px",
-                            }}
-                            type="submit"
-                            disabled={isUpdate}
-                            onClick={submitForm}
-                          >
-                            Done
-                            {isUpdate && (
-                              <Spinner className="ms-10" size="sm" />
-                            )}
-                          </Button>
+                          <div className="pt-30">
+                            <Button
+                              className="text-18-600 wp-100 "
+                              style={{
+                                background:
+                                  "linear-gradient(90deg, #7C5BFF 0%, #B3A1FF 100%)",
+                                border: "none",
+                                padding: "10px 0px",
+                              }}
+                              type="submit"
+                              disabled={isUpdate}
+                              onClick={submitForm}
+                            >
+                              Done
+                              {isUpdate && (
+                                <Spinner className="ms-10" size="sm" />
+                              )}
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  )}
+                      </>
+                    );
+                  }}
                 </Formik>
               )}
             </div>

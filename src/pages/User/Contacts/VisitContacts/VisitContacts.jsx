@@ -25,7 +25,6 @@ const VisitContact = () => {
   const fetchContactConversation = async () => {
     try {
       const res = await api.get(`contact/contact-conversation/${id}`);
-      console.log("res", res);
       if (res.status === 200) {
         const { answersDetails, ...contact } = res.data.response;
         setAnswersDetails(answersDetails);

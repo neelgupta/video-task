@@ -118,6 +118,7 @@ import wallet from "../../assets/images/svgIcons/wallet.svg";
 import html from "../../assets/images/svgIcons/html.svg";
 import hand from "../../assets/images/svgIcons/hand.svg";
 import redirect from "../../assets/images/icons/redirect.png";
+import done from "../../assets/images/svgIcons/done.svg";
 
 export const icons = {
   logo,
@@ -239,4 +240,5 @@ export const icons = {
   html,
   hand,
   redirect,
+  done,
 };

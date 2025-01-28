@@ -4,6 +4,8 @@ import { Button } from "react-bootstrap";
 import { icons } from "../../../../../../utils/constants";
 
 function MultipleChoiceFormate({ values, setFieldValue, targetedNode }) {
+  console.log("targetedNode", targetedNode);
+
   return (
     <Form id="MultipleChoiceFormate">
       <div className={`text-12-600 mb-5`} style={{ color: "#666666" }}>
@@ -22,7 +24,9 @@ function MultipleChoiceFormate({ values, setFieldValue, targetedNode }) {
                   />
                   <Button
                     className="input-delete-btn"
-                    onClick={() => remove(index)}
+                    onClick={() => {
+                      remove(index);
+                    }}
                     disabled={(values?.choices || []).length === 1}
                   >
                     <img src={icons.close} alt="" className="fit-image" />
@@ -41,13 +45,15 @@ function MultipleChoiceFormate({ values, setFieldValue, targetedNode }) {
               style={{ justifyContent: "flex-end" }}
             >
               <Button
-                onClick={() =>
+                onClick={() => {
                   push({
-                    index: values?.choices.length + 1,
+                    index:
+                      values?.choices[values?.choices.length - 1]?.index + 1,
                     option: "",
                     targetedNodeId: targetedNode?._id || null,
-                  })
-                }
+                    redirection_url: null,
+                  });
+                }}
                 className="text-12-600"
                 style={{
                   background: "white",
