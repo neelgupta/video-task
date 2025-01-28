@@ -260,19 +260,26 @@ function AnswerTab({ onClose }) {
 
   const handleSubmit = async (value) => {
     setIsUpdate(true);
+    console.log("nodeData", nodeData);
     try {
       let newChoices = [];
       if (ansFormate === "multiple-choice") {
-        const choices = value.choices;
-        newChoices = choices.map((ele, index) => {
+        newChoices = value.choices.map((ele, index) => {
           const preValue = (nodeData?.answer_format?.choices || []).find(
-            (opt) => ele.index === opt.index + 1
+            (opt) => ele.index === opt.index
           );
+
+          if (preValue) {
+            return {
+              ...preValue,
+              option: ele.option,
+            };
+          }
           return {
             ...ele,
             index: index + 1,
-            redirection_url: preValue?.redirection_url || null,
-            targetedNodeId: preValue?.targetedNodeId || targetedNode?._id,
+            redirection_url: null,
+            targetedNodeId: targetedNode?._id || null,
           };
         });
       }
