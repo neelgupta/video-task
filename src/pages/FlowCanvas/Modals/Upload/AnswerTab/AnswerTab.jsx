@@ -265,11 +265,14 @@ function AnswerTab({ onClose }) {
       if (ansFormate === "multiple-choice") {
         const choices = value.choices;
         newChoices = choices.map((ele, index) => {
+          const preValue = (nodeData?.answer_format?.choices || []).find(
+            (opt) => ele.index === opt.index + 1
+          );
           return {
             ...ele,
             index: index + 1,
-            redirection_url: null,
-            targetedNodeId: targetedNode._id,
+            redirection_url: preValue?.redirection_url || null,
+            targetedNodeId: preValue?.targetedNodeId || targetedNode?._id,
           };
         });
       }
