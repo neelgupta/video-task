@@ -4,11 +4,10 @@ import "./RedirectCard.scss";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 function RedirectCard(props) {
-  console.log("props", props);
   const { data } = props;
   return (
-    <>
-      <div className={`redirect `}>
+    <div className="redirect-container">
+      <div className={`redirect`}>
         <div className="redirect_header">Redirect to</div>
         <div className="redirect_body">
           <img
@@ -25,7 +24,7 @@ function RedirectCard(props) {
         position={Position.Left}
         className="redirect-card-dote-Left"
       />
-    </>
+    </div>
   );
 }
 

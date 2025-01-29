@@ -32,6 +32,7 @@
     "react-color": "^2.19.3",
     "react-color-palette": "^7.3.0",
     "react-datepicker": "^7.6.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.3.5",
     "react-flow-renderer": "^10.3.17",

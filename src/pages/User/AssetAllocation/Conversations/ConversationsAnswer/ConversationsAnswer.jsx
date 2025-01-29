@@ -6,6 +6,19 @@ import { VideoPlayer } from "../../../../../components";
 import { creteImgFilter } from "../../../../../utils/helpers";
 import WaveSurfer from "wavesurfer.js";
 
+const npsColor = {
+  1: "#D30027",
+  2: "#EB0B0B",
+  3: "#F13708",
+  4: "#F87501",
+  5: "#F8B300",
+  6: "#F8DD00",
+  7: "#CCDE0E",
+  8: "#89D421",
+  9: "#44BC38",
+  10: "#12AD47",
+};
+
 function ConversationsAnswer({ selectMetingCard }) {
   const { node_answer_type, nodeDetails, answer_details } = selectMetingCard;
   const videoRef = useRef(null);
@@ -146,12 +159,13 @@ function ConversationsAnswer({ selectMetingCard }) {
             />
           </div>
           <div className="option-box">
-            {nodeDetails.answer_format.choices.length > 0 &&
-              nodeDetails.answer_format.choices.map((choice, index) => {
+            {!!nodeDetails?.answer_format?.choices?.length &&
+              nodeDetails?.answer_format?.choices.map((choice, index) => {
                 return (
                   <div
                     className={`option ${
-                      answer_details.answer.includes(choice) && "active-option"
+                      answer_details.answer.includes(choice?.option) &&
+                      "active-option"
                     }`}
                     key={index}
                   >
@@ -159,12 +173,12 @@ function ConversationsAnswer({ selectMetingCard }) {
                       className="d-flex"
                       style={{ alignItems: "center", gap: "10px" }}
                     >
-                      {answer_details.answer.includes(choice) && (
+                      {answer_details.answer.includes(choice?.option) && (
                         <div className="option-label"></div>
                       )}
-                      <div>{choice}</div>
+                      <div>{choice?.option}</div>
                     </div>
-                    {answer_details.answer.includes(choice) && (
+                    {answer_details.answer.includes(choice?.option) && (
                       <div className="w-30 h-30">
                         <img
                           src={icons.check}
@@ -211,6 +225,37 @@ function ConversationsAnswer({ selectMetingCard }) {
                 style={{ filter: creteImgFilter("#ffffff") }}
               />
             </div>
+          </div>
+          <DetailsComponent nodeDetails={nodeDetails} />
+        </div>
+      )}
+
+      {node_answer_type === "nps" && (
+        <div className="nps-answer-box">
+          <div
+            className="ConversationsAnswer-icons-box"
+            style={{ position: "absolute", top: "10px", left: "10px" }}
+          >
+            <img
+              src={icons.feedback}
+              alt=""
+              className="fit-image"
+              style={{ filter: creteImgFilter("#000000") }}
+            />
+          </div>
+          <div className="nps-button-group">
+            {(nodeDetails?.answer_format?.nps_choices || []).map((nps) => {
+              const isBtnActive = nps.index === parseInt(answer_details.answer);
+              return (
+                <div
+                  className={`nps-btn ${isBtnActive && "active-nps-btn"}`}
+                  key={nps.index}
+                  style={{ background: npsColor[nps.index] }}
+                >
+                  {nps.index}
+                </div>
+              );
+            })}
           </div>
           <DetailsComponent nodeDetails={nodeDetails} />
         </div>

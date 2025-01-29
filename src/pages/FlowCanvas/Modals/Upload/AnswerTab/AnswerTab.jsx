@@ -183,10 +183,11 @@ const handelFrom = (type, data, targetedNode) => {
       defaultValue: {
         nps_choices:
           data?.nps_choices ||
-          Array.from({ length: 11 }, (_, index) => index).map((_, index) => {
+          Array.from({ length: 10 }, (_, index) => index).map((_, index) => {
             return {
-              index: index,
+              index: index + 1,
               targetedNodeId: targetedNode?._id || null,
+              redirection_url: null,
             };
           }),
         left_label: data?.left_label || "",
@@ -260,7 +261,6 @@ function AnswerTab({ onClose }) {
 
   const handleSubmit = async (value) => {
     setIsUpdate(true);
-    console.log("nodeData", nodeData);
     try {
       let newChoices = [];
       if (ansFormate === "multiple-choice") {
@@ -392,14 +392,10 @@ function AnswerTab({ onClose }) {
                   initialValues={initialFormValues}
                   validationSchema={Yup.object().shape({ ...validationSchema })}
                   onSubmit={(values) => {
-                    console.log("values", values);
                     handleSubmit(values);
                   }}
                 >
                   {({ values, setFieldValue, submitForm, errors }) => {
-                    console.log("values", values);
-                    console.log("errors", errors);
-
                     return (
                       <>
                         {ansFormate === "open-ended" && (

@@ -46,7 +46,7 @@ function AnswerSkeleton({ answerType, interactionsStyle }) {
 
       {answerType === "nps" && (
         <div className="nps-skeleton">
-          {Array.from({ length: 11 }, (_, index) => index).map((ele) => {
+          {Array.from({ length: 10 }, (_, index) => index + 1).map((ele) => {
             return (
               <div className="nps-index" key={ele}>
                 <Skeleton
@@ -58,9 +58,9 @@ function AnswerSkeleton({ answerType, interactionsStyle }) {
                     interactionsStyle.primary_color,
                     0.95
                   )}
-                  width={20}
+                  width={25}
                   borderRadius={`${interactionsStyle.border_radius}px`}
-                  height={20}
+                  height={25}
                 />
                 <div
                   style={{

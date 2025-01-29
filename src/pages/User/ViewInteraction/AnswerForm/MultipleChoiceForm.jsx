@@ -84,6 +84,9 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
         )}
 
         {optionList.map((ele, index) => {
+          const isActive = answer_format.allow_multiple
+            ? (selectOption || []).includes(ele)
+            : selectOption?.index === ele.index;
           return (
             <div
               className={`option-box`}
@@ -96,38 +99,30 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
               }}
               style={{
                 borderRadius: `${flowStyle.border_radius}px`,
-                ...(answer_format.allow_multiple
-                  ? (selectOption || []).includes(ele) && {
+                ...(isActive
+                  ? {
                       background: addWhitenessToHex(
                         flowStyle.primary_color,
                         0.95
                       ),
                       border: `1px solid ${flowStyle.primary_color}`,
                     }
-                  : selectOption === ele && {
-                      background: addWhitenessToHex(
-                        flowStyle.primary_color,
-                        0.95
-                      ),
-                      border: `1px solid ${flowStyle.primary_color}`,
-                    }),
+                  : {}),
               }}
             >
               <div
                 className="option-teg"
                 style={{
                   borderRadius: `${flowStyle.border_radius}px`,
-                  ...(answer_format.allow_multiple
-                    ? (selectOption || []).includes(ele) && {
+                  ...(isActive
+                    ? {
                         background: flowStyle.primary_color,
                       }
-                    : selectOption === ele && {
-                        background: flowStyle.primary_color,
-                      }),
+                    : {}),
                 }}
               >
-                {(selectOption || []).includes(ele) &&
-                answer_format.allow_multiple ? (
+                {answer_format.allow_multiple &&
+                (selectOption || []).includes(ele) ? (
                   <img
                     src={icons.check}
                     alt=""
@@ -142,16 +137,14 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
                 className="option-value"
                 style={{
                   fontFamily: `${flowStyle.font}`,
-                  ...(answer_format.allow_multiple
-                    ? (selectOption || []).includes(ele) && {
+                  ...(isActive
+                    ? {
                         color: flowStyle.primary_color,
                       }
-                    : selectOption === ele && {
-                        color: flowStyle.primary_color,
-                      }),
+                    : {}),
                 }}
               >
-                {ele}
+                {ele.option}
               </div>
             </div>
           );

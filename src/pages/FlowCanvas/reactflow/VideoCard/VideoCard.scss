@@ -1,6 +1,11 @@
 .VideoCard-container {
   position: relative;
-
+  border-radius: 12px;
+  transform: scale(1);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  &:hover {
+    transform: scale(1.05);
+  }
   .question {
     width: 200px;
     height: 250px;
@@ -41,7 +46,7 @@
     }
     .img-box-content {
       width: 100%;
-      height: 113px;
+      height: 100px;
       overflow: hidden;
       background-color: black;
       img {

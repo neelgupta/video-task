@@ -215,7 +215,9 @@ function QnaFlow({ answersDetails, contact }) {
             </div>
           </div>
           <div className={styles.qnaContent}>
-            <ConversationsAnswer selectMetingCard={{ ...selectMetingCard }} />
+            {selectMetingCard && (
+              <ConversationsAnswer selectMetingCard={selectMetingCard} />
+            )}
           </div>
           <div className={styles.qnaFooter}>
             <div className={styles.metingCardBody}>

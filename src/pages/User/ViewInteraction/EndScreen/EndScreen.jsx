@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../../../services/api";
 import { useDispatch } from "react-redux";
 import { handelCatch, throwError } from "../../../../store/globalSlice";
-function EndScreen({ answerId, inEnd, flowStyle }) {
+function EndScreen({ answerId, flowStyle }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,9 +24,9 @@ function EndScreen({ answerId, inEnd, flowStyle }) {
   };
 
   useEffect(() => {
-    if (answerId && inEnd) updateAnswerStatus();
+    if (answerId) updateAnswerStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [answerId, inEnd]);
+  }, [answerId]);
 
   return (
     <div className="EndScreen-container">
