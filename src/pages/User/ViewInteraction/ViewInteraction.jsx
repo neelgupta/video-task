@@ -143,7 +143,8 @@ function ViewInteraction() {
           res.data?.response?.isMultiple,
           res.data?.response?.isRedirect,
           res.data?.response?.target,
-          ansValue
+          ansValue,
+          ansId
         );
         setIsContact(false);
       } else {
@@ -204,7 +205,8 @@ function ViewInteraction() {
           res.data?.response?.isMultiple,
           res.data?.response?.isRedirect,
           res.data?.response?.target,
-          ansData
+          ansData,
+          ansId
         );
       } else {
         dispatch(throwError(res.data.message));
@@ -217,9 +219,15 @@ function ViewInteraction() {
     }
   };
 
-  const handleNextTarget = async (isMultiple, isRedirect, target, ansData) => {
+  const handleNextTarget = async (
+    isMultiple,
+    isRedirect,
+    target,
+    ansData,
+    ansId
+  ) => {
     const handleRedirection = async (url) => {
-      if (answerId) await updateAnswerCompleted();
+      await updateAnswerCompleted(ansId);
       window.location.href = url;
     };
 
@@ -232,6 +240,7 @@ function ViewInteraction() {
     if (isMultiple) {
       const ans = Array.isArray(ansData?.ans) ? ansData.ans[0] : ansData.ans;
 
+      console.log("ans?.redirection_url", ans?.redirection_url);
       if (ans?.redirection_url) {
         await handleRedirection(ans.redirection_url);
         return;
@@ -248,10 +257,10 @@ function ViewInteraction() {
     }
   };
 
-  const updateAnswerCompleted = async () => {
+  const updateAnswerCompleted = async (ansId) => {
     try {
       const res = await api.put(`interactions/update-is-completed-answer`, {
-        answer_id: answerId,
+        answer_id: ansId,
       });
       if (res.status !== 200) {
         dispatch(throwError(res.data.message));
@@ -460,7 +469,9 @@ function ViewInteraction() {
               width: "100%",
             }}
           >
-            <EndScreen answerId={answerId} flowStyle={flowStyle} />
+            {key === endNodes?._id && (
+              <EndScreen answerId={answerId} flowStyle={flowStyle} />
+            )}
           </div>
         </Tab>
       </Tabs>
