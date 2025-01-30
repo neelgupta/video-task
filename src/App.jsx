@@ -7,6 +7,7 @@ import UserRoute from "./routes/UserRoute";
 import { useEffect } from "react";
 import { fontFamilyList } from "./pages/User/MyOrganization/pages/Overview/overviewOption";
 import AdminRoute from "./routes/AdminRoute";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
   // eslint-disable-next-line no-unused-vars

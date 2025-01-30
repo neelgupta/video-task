@@ -18,7 +18,6 @@ import {
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import ConversationsAnswer from "./ConversationsAnswer";
-import Share from "../../MyCollection/MyFolder/Share";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
 import ChatsFilter from "./ChatsFilter";
 import AddEditContactModal from "../../Contacts/AddEditContactModal";
@@ -26,6 +25,7 @@ import { Dropdown } from "react-bootstrap";
 import CreateContactModal from "../../Interactions/CreateContactModal";
 import AssignContactModal from "../../Interactions/AssignContactModal";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
+import ShareView from "../../ShareView";
 
 function Conversations({
   id,
@@ -121,11 +121,14 @@ function Conversations({
   };
   return (
     <>
-      <Share
-        show={shareUrl !== ""}
-        handleClose={() => setShareUrl("")}
-        shareUrl={shareUrl}
-      />
+      {shareUrl !== "" && (
+        <ShareView
+          show={shareUrl !== ""}
+          handleClose={() => setShareUrl("")}
+          shareUrl={shareUrl}
+        />
+      )}
+
       {showDeleteModal && (
         <DeleteModal
           show={showDeleteModal}

@@ -15,8 +15,8 @@ import CustomFileMenu from "./CustomFileMenu";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
 import MoveFolderModel from "./MoveFolderModel";
 import { creteImgFilter, encrypt } from "../../../../utils/helpers";
-import Share from "./Share";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
+import ShareView from "../../ShareView";
 function MyFolder() {
   const { id } = useParams();
   const location = useLocation();
@@ -31,6 +31,7 @@ function MyFolder() {
   const [showMoveFolderModal, setShowMoveFolderModal] = useState(false);
   const [moveFolderItem, setMoveFolderItem] = useState({});
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (id && selectedItem) {
       getFolderCollection();
@@ -127,11 +128,14 @@ function MyFolder() {
         }}
       />
 
-      <Share
-        show={shareUrl !== ""}
-        handleClose={() => setShareUrl("")}
-        shareUrl={shareUrl}
-      />
+      {shareUrl !== "" && (
+        <ShareView
+          show={shareUrl !== ""}
+          handleClose={() => setShareUrl("")}
+          shareUrl={shareUrl}
+        />
+      )}
+
       <div
         className="ms-10"
         style={{

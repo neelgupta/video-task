@@ -56,6 +56,11 @@ function ViewInteraction() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  console.log("innerWidth or innerHeight", {
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+  });
+
   const fetchInteraction = async () => {
     try {
       const res = await api.get(`interactions/get-nodes/${id}`);

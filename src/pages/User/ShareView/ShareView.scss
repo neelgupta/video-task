@@ -1,0 +1,279 @@
+.share-live-url-container {
+  margin: 0;
+  padding: 0;
+  .modal-dialog {
+    width: 100%;
+    max-width: none !important;
+    margin: 0px;
+    box-shadow: none;
+  }
+  .modal-body {
+    margin: 0;
+    padding: 0;
+  }
+  .modal-content {
+    width: min(900px, 100%) !important;
+    max-height: 80vh;
+    margin: 0;
+    padding: 0;
+    .share-live-url-header {
+      .btn-close {
+        background-color: white;
+        box-shadow: none;
+        border-radius: 50%;
+      }
+    }
+    .share-live-url-content {
+      width: 100%;
+      padding: 5px 10px;
+      .share-option-container {
+        width: 100%;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        gap: 10px;
+        .option-container {
+          width: 180px;
+          height: 190px;
+          border-radius: 10px;
+          border: 2px solid #f1f1f1;
+          padding: 10px;
+          background: #f1f1f1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          transition-duration: 0.3s;
+          transition-property: border, background;
+          cursor: pointer;
+          .option-card-container {
+            width: 100%;
+            height: 120px;
+            border-radius: 5px;
+            border: none;
+            border-bottom: 2px solid darkgray;
+            border-right: 2px solid darkgray;
+            overflow: hidden;
+            background: white;
+
+            .card-header {
+              width: 100%;
+              height: 10px;
+              background: darkgray;
+              display: flex;
+              align-items: center;
+              justify-content: end;
+              padding-right: 10px;
+              gap: 5px;
+              span {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: #fff;
+                padding: 0;
+                margin: 0;
+              }
+            }
+            .website-header {
+              width: 100%;
+              height: 40px;
+              background: lightgray;
+              display: flex;
+              align-items: center;
+              flex-direction: column;
+              gap: 0px;
+              overflow: hidden;
+            }
+            .website-body {
+              width: 100%;
+              position: relative;
+              height: 65px;
+              .embed-code-icon {
+                width: 35px;
+                height: 35px;
+                border-radius: 50px;
+                background: #8000ff;
+                position: absolute;
+                border: 2px solid #ffffff;
+                bottom: 0px;
+                right: 5px;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+            }
+          }
+          .option-icon {
+            opacity: 0;
+            transition-duration: 0.3s;
+            transition-property: opacity;
+          }
+          .label-text {
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            color: rgb(58, 58, 58);
+            margin-bottom: 5px;
+            transition-duration: 0.3s;
+            transition-property: color;
+          }
+
+          &:hover {
+            background: rgba(128, 0, 255, 0.05);
+            border: 2px solid #8000ff;
+            .label-text {
+              color: #8000ff;
+            }
+            .option-icon {
+              opacity: 1;
+            }
+          }
+        }
+      }
+      .copyInput {
+        width: 100%;
+        .InputBox {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          position: relative;
+          .share-icon {
+            height: 45px;
+            display: flex;
+            align-items: center;
+            position: absolute;
+            left: 0px;
+            padding: 10px;
+          }
+          input {
+            width: 100%;
+            border: none;
+            outline-color: #8000ff;
+            padding: 10px 10px 10px 45px;
+            border-radius: 5px;
+            color: #8000ff;
+            background-color: #f3e9fd;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden !important;
+          }
+          .copy-btn {
+            height: 45px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #8000ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            transform: scale(1);
+            transition-duration: 0.3s;
+            transition-property: transform;
+            &:active {
+              transform: scale(0.95);
+            }
+          }
+        }
+      }
+    }
+
+    .EmbedShare-container {
+      width: 100%;
+      height: 70vh;
+      padding: 10px 0px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+      .EmbedShare-view {
+        width: 65%;
+        background: #f1f1f1;
+      }
+      .EmbedShare-config {
+        width: 35%;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        .widget-container {
+          width: 100%;
+          .Widget-style-option {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            &-container {
+              width: 50px;
+              height: 50px;
+              background: #b0b0b0;
+              border-radius: 10px;
+              cursor: pointer;
+              transform: scale(0.9);
+              position: relative;
+              transition-duration: 0.3s;
+              transition-property: transform;
+              &-active {
+                background: #8000ff;
+                transform: scale(0.9);
+              }
+              &:hover {
+                transform: scale(1);
+              }
+            }
+          }
+          .Widget-position-option {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            &-container {
+              width: 50px;
+              height: 50px;
+              background: #b0b0b0;
+              border-radius: 10px;
+              cursor: pointer;
+              transform: scale(0.9);
+              position: relative;
+              transition-duration: 0.3s;
+              transition-property: transform;
+              &:hover {
+                transform: scale(1);
+              }
+              &-active {
+                background: #8000ff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .divider {
+    width: 100%;
+    height: 2px;
+    background: #ddd;
+    margin-bottom: 40px;
+    margin-top: 40px;
+  }
+}
+.my-widget-circle {
+  position: fixed;
+  // ${MY_WIDGET_CONFIG.options.position.split("-")[0]}: 20px;
+  // ${MY_WIDGET_CONFIG.options.position.split("-")[1]}: 20px;
+  z-index: 10000;
+  // background-color: ${MY_WIDGET_CONFIG.options.backgroundColor};
+  padding: 4px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+}
