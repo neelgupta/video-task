@@ -71,7 +71,7 @@ function EmbedShare({ shareUrl }) {
         },
       };
     </script>
-    <script src="adorable-custard-9de130.netlify.app/embed.js"></script>`;
+    <script src="https://adorable-custard-9de130.netlify.app/embed.js"></script>`;
       await navigator.clipboard.writeText(widget);
       dispatch(showSuccess("Copied to clipboard!"));
     } catch (error) {
