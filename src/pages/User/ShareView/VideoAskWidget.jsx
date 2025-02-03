@@ -3,9 +3,9 @@ import React, { useEffect } from "react";
 const CustomWidget = () => {
   useEffect(() => {
     // Define the widget configuration on the global object
-    window.MY_WIDGET_CONFIG = {
+    window.FLOW_WIDGET_CONFIG = {
       kind: "widget",
-      url: "http://192.168.1.26:3000/view-flow/OlYaGk6nU1wTTrT_p-HkWFDFMjgRB9p-gXl89kxeIuw",
+      url: "http://localhost:3000/view-flow/OlYaGk6nU1wTTrT_p-HkWFDFMjgRB9p-gXl89kxeIuw",
       options: {
         widgetType: "circle",
         text: "texts",

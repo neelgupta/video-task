@@ -19,6 +19,7 @@
     .iframe {
       width: 100%;
       height: 100%;
+      border:none;
     }
     .circle-widget-container {
       border-radius: 50%;

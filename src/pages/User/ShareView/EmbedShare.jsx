@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DropdownOption from "../../../components/inputs/DropdownOption/DropdownOption";
 import { Button } from "react-bootstrap";
-// import CustomWidget from "./VideoAskWidget";
+import CustomWidget from "./VideoAskWidget";
 import { Switch } from "../../../components";
 import { SketchPicker } from "react-color";
 import { icons } from "../../../utils/constants";
@@ -82,6 +82,7 @@ function EmbedShare({ shareUrl }) {
   return (
     <div className="EmbedShare-container">
       <div className="Share-view" style={{ width: "65%" }}>
+        <CustomWidget />
         <div
           className="iframe-view-container"
           style={{ width: widgetViewType === "mobile" ? "250px" : "100%" }}
