@@ -3,7 +3,14 @@ import { Button, Spinner } from "react-bootstrap";
 import "./AnswerForm.scss";
 import { t } from "i18next";
 
-function ButtonForm({ onNext, node, videoTime, isPost, flowStyle }) {
+function ButtonForm({
+  onNext,
+  node,
+  videoTime,
+  isPost,
+  flowStyle,
+  windowSize,
+}) {
   const { answer_type, answer_format } = node;
   const [isDelay, setIsDelay] = useState(null);
 
@@ -24,7 +31,11 @@ function ButtonForm({ onNext, node, videoTime, isPost, flowStyle }) {
     }
   }, [videoTime, answer_format]);
   return (
-    <div className="ButtonForm-container">
+    <div
+      className={`ButtonForm-container ${
+        windowSize.innerWidth > 1000 ? "" : "pb-100"
+      }`}
+    >
       {isDelay && answer_format.delay !== 0 && (
         <div
           className="wp-100 hp-100"

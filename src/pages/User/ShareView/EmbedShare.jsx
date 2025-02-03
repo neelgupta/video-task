@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import DropdownOption from "../../../components/inputs/DropdownOption/DropdownOption";
 import { Button } from "react-bootstrap";
-import CustomWidget from "./VideoAskWidget";
+// import CustomWidget from "./VideoAskWidget";
+import { Switch } from "../../../components";
+import { SketchPicker } from "react-color";
+import { icons } from "../../../utils/constants";
+import { creteImgFilter } from "../../../utils/helpers";
+import { useDispatch } from "react-redux";
+import { showSuccess, throwError } from "../../../store/globalSlice";
 
 const option = [
   {
@@ -13,20 +19,176 @@ const option = [
     value: "iframe",
   },
 ];
-function EmbedShare() {
+function EmbedShare({ shareUrl }) {
+  const dispatch = useDispatch();
   const [codeType, setCodeType] = useState({
     label: "Iframe",
     value: "iframe",
   });
-  const [widgetStyle, setWidgetStyle] = useState("circle");
-  const [widgetPosition, setWidgetPosition] = useState("right");
+  const [widgetViewType, setWidgetViewType] = useState("desktop");
+  const [showPicker, setShowPicker] = useState(false);
+  const [iframeForm, setIframeForm] = useState({
+    height: "500",
+  });
 
+  const [widgetForm, setWidgetForm] = useState({
+    widget_style: "circle",
+    widget_position: "left",
+    background_color: "#9013FE",
+    overlay_text: "",
+    is_dismissible: false,
+  });
+
+  const handelIframeCopy = async () => {
+    try {
+      const iframe = `
+        <iframe
+          src="${shareUrl}"
+          allow="camera *; microphone *; autoplay *; encrypted-media *; fullscreen *; display-capture *;"
+          width="100%"
+          height="${iframeForm.height}px"
+          style="border: none; border-radius: 15px"
+        ></iframe>`;
+      await navigator.clipboard.writeText(iframe);
+      dispatch(showSuccess("Copied to clipboard!"));
+    } catch (err) {
+      dispatch(throwError("Failed to copy password. Please try again."));
+    }
+  };
+
+  const handelWidgetCopy = async () => {
+    try {
+      const widget = `<script>
+      window.FLOW_WIDGET_CONFIG = {
+        kind: "widget",
+        url: "${shareUrl}",
+        options: {
+          widgetType: "${widgetForm.widget_style}",
+          text: "${widgetForm.overlay_text}",
+          backgroundColor: "${widgetForm.background_color}",
+          position: "bottom-${widgetForm.widget_position}",
+          dismissible: ${widgetForm.is_dismissible},
+        },
+      };
+    </script>
+    <script src="adorable-custard-9de130.netlify.app/embed.js"></script>`;
+      await navigator.clipboard.writeText(widget);
+      dispatch(showSuccess("Copied to clipboard!"));
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError("Failed to copy password. Please try again."));
+    }
+  };
   return (
     <div className="EmbedShare-container">
-      <div className="EmbedShare-view">
-        <CustomWidget />
+      <div className="Share-view" style={{ width: "65%" }}>
+        <div
+          className="iframe-view-container"
+          style={{ width: widgetViewType === "mobile" ? "250px" : "100%" }}
+        >
+          <div className="view-header">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          {widgetViewType !== "mobile" && (
+            <div className="body-header">
+              <span></span>
+              <span></span>
+            </div>
+          )}
+          <div
+            className="iframe-view-body"
+            style={
+              widgetViewType === "mobile"
+                ? { height: "calc(100% - 20px)" }
+                : { height: "calc(100% - 170px)" }
+            }
+          >
+            {widgetViewType !== "mobile" && (
+              <div className="left-view-body">
+                <span></span>
+                <span></span>
+              </div>
+            )}
+
+            <div
+              className="right-view-body"
+              style={
+                widgetViewType === "mobile"
+                  ? {
+                      width: "100%",
+                      height: "100%",
+                      padding: "0px",
+                      background: "#ddd",
+                      position: "relative",
+                    }
+                  : {}
+              }
+            >
+              <div className="iframe-video">
+                <iframe
+                  src={shareUrl}
+                  allow="camera *; microphone *; autoplay *; encrypted-media *; fullscreen *; display-capture *;"
+                  width="100%"
+                  height="100%"
+                  style={{
+                    border: "none",
+                    borderRadius: "15px",
+                  }}
+                ></iframe>
+                {widgetViewType === "mobile" && (
+                  <div
+                    style={{
+                      width: "100%",
+                      position: "absolute",
+                      top: "0px",
+                      height: "100%",
+                      zIndex: "100000",
+                      cursor: "pointer",
+                    }}
+                  ></div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="view-btn">
+          <div
+            onClick={() => {
+              setWidgetViewType("desktop");
+            }}
+          >
+            <img
+              src={icons.desktop}
+              alt=""
+              className="w-25 h-25 fit-image"
+              style={{
+                filter: creteImgFilter(
+                  widgetViewType === "desktop" ? "#000" : "#888"
+                ),
+              }}
+            />
+          </div>
+          <div
+            onClick={() => {
+              setWidgetViewType("mobile");
+            }}
+          >
+            <img
+              src={icons.mobile}
+              alt=""
+              className="w-25 h-25 fit-image"
+              style={{
+                filter: creteImgFilter(
+                  widgetViewType === "mobile" ? "#000" : "#888"
+                ),
+              }}
+            />
+          </div>
+        </div>
       </div>
-      <div className="EmbedShare-config">
+      <div className="EmbedShare-config" style={{ paddingLeft: "10px" }}>
         <div className="wp-100">
           <DropdownOption
             value={codeType}
@@ -42,8 +204,11 @@ function EmbedShare() {
                 Embed your flow anywhere in your website
               </p>
               <div>
-                <div className="wp-100 flow-ai-input">
-                  <div style={{}} className="text-12-600 ps-5">
+                <div className="wp-100 flow-ai-input mb-20">
+                  <div
+                    style={{ color: "#777" }}
+                    className="text-12-600 ps-5 mb-5"
+                  >
                     Width
                   </div>
                   <input
@@ -52,26 +217,51 @@ function EmbedShare() {
                     placeholder="Enter width"
                     className={`form-control`}
                     style={{ boxShadow: "none" }}
+                    value={"100%"}
+                    disabled={true}
                   />
                 </div>
                 <div className="wp-100 flow-ai-input">
-                  <div style={{}} className="text-12-600 ps-5">
-                    Height
+                  <div
+                    style={{ color: "#777" }}
+                    className="text-12-600 ps-5 mb-5"
+                  >
+                    Height (px):
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     name="height"
                     placeholder="Enter height"
                     className={`form-control`}
                     style={{ boxShadow: "none" }}
+                    value={iframeForm.height}
+                    onChange={(e) => {
+                      setIframeForm({ height: e.target.value });
+                    }}
                   />
                 </div>
               </div>
             </div>
           )}
           {codeType.value === "widget" && (
-            <div className="widget-container">
-              <p className="text-16-700 mt-10 mb-10 p-5">
+            <div className="widget-config-container">
+              <p
+                className="text-14-500 mt-10 mb-10 p-5"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    width: "5px",
+                    height: "5px",
+                    background: "#000",
+                    borderRadius: "50%",
+                    marginRight: "5px",
+                  }}
+                ></div>
                 Attract the attention of your visitors
               </p>
               <div>
@@ -86,7 +276,7 @@ function EmbedShare() {
                       "verticalSquire",
                       "toggle",
                     ].map((ele, index) => {
-                      const isActive = ele === widgetStyle;
+                      const isActive = ele === widgetForm.widget_style;
                       return (
                         <div
                           className={`Widget-style-option-container ${
@@ -96,7 +286,7 @@ function EmbedShare() {
                           }`}
                           key={index}
                           onClick={() => {
-                            setWidgetStyle(ele);
+                            setWidgetForm({ ...widgetForm, widget_style: ele });
                           }}
                         >
                           {ele === "circle" && (
@@ -178,55 +368,152 @@ function EmbedShare() {
                   </div>
                 </div>
 
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div className="mt-20">
+                    <div className="text-12-600" style={{ color: "#a1a1a1" }}>
+                      Position:
+                    </div>
+                    <div className="Widget-position-option">
+                      <div
+                        className={`Widget-position-option-container ${
+                          widgetForm.widget_position === "right"
+                            ? "Widget-position-option-container-active"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setWidgetForm({
+                            ...widgetForm,
+                            widget_position: "right",
+                          });
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "15px",
+                            height: "15px",
+                            borderRadius: "50%",
+                            background: "white",
+                            position: "absolute",
+                            bottom: "5px",
+                            right: "5px",
+                          }}
+                        ></div>
+                      </div>
+                      <div
+                        className={`Widget-position-option-container ${
+                          widgetForm.widget_position === "left"
+                            ? "Widget-position-option-container-active"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setWidgetForm({
+                            ...widgetForm,
+                            widget_position: "left",
+                          });
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "15px",
+                            height: "15px",
+                            borderRadius: "50%",
+                            background: "white",
+                            position: "absolute",
+                            bottom: "5px",
+                            left: "5px",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-20">
+                    <div className="text-12-600" style={{ color: "#a1a1a1" }}>
+                      color:
+                    </div>
+                    <div className="color-input-container mt-5">
+                      <button
+                        onClick={() => setShowPicker(true)}
+                        style={{
+                          backgroundColor:
+                            widgetForm.background_color || "#fff",
+                        }}
+                        className="color-input-container_btn"
+                      ></button>
+
+                      {showPicker && (
+                        <div className="color-input-container_picker">
+                          <CustomSketchPicker
+                            flowColor={widgetForm.background_color}
+                            setFlowColor={(val) => {
+                              setWidgetForm({
+                                ...widgetForm,
+                                background_color: val.hex,
+                              });
+                            }}
+                          />
+                          <div className="picker-btn">
+                            <button
+                              className="picker-btn_pick"
+                              onClick={() => {
+                                setShowPicker(false);
+                              }}
+                            >
+                              save
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="mt-20">
                   <div className="text-12-600" style={{ color: "#a1a1a1" }}>
-                    Position:
+                    Overlay text:
                   </div>
-                  <div className="Widget-position-option">
-                    <div
-                      className={`Widget-position-option-container ${
-                        widgetPosition === "right"
-                          ? "Widget-position-option-container-active"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        setWidgetPosition("right");
+                  <div className="flow-ai-input">
+                    <input
+                      type="text"
+                      placeholder="Enter overlay text"
+                      value={widgetForm.overlay_text}
+                      onChange={(e) => {
+                        setWidgetForm({
+                          ...widgetForm,
+                          overlay_text: e.target.value,
+                        });
                       }}
-                    >
-                      <div
-                        style={{
-                          width: "15px",
-                          height: "15px",
-                          borderRadius: "50%",
-                          background: "white",
-                          position: "absolute",
-                          bottom: "5px",
-                          right: "5px",
-                        }}
-                      ></div>
-                    </div>
-                    <div
-                      className={`Widget-position-option-container ${
-                        widgetPosition === "left"
-                          ? "Widget-position-option-container-active"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        setWidgetPosition("left");
+                    />
+                  </div>
+                </div>
+
+                <div
+                  className="mt-20"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div className="text-12-600" style={{ color: "#a1a1a1" }}>
+                    is dismissible:
+                  </div>
+                  <div className="flow-ai-input">
+                    <Switch
+                      isChecked={widgetForm.is_dismissible}
+                      onChange={() => {
+                        setWidgetForm({
+                          ...widgetForm,
+                          is_dismissible: !widgetForm.is_dismissible,
+                        });
                       }}
-                    >
-                      <div
-                        style={{
-                          width: "15px",
-                          height: "15px",
-                          borderRadius: "50%",
-                          background: "white",
-                          position: "absolute",
-                          bottom: "5px",
-                          left: "5px",
-                        }}
-                      ></div>
-                    </div>
+                    />
                   </div>
                 </div>
               </div>
@@ -234,7 +521,24 @@ function EmbedShare() {
           )}
         </div>
         <div className="wp-100">
-          <Button>ok</Button>
+          <Button
+            style={{
+              background: "#000",
+              border: "none",
+              outline: "none",
+              fontSize: "14px",
+              fontWeight: "700",
+              width: "100%",
+              letterSpacing: "1.5px",
+              padding: "15px 0px",
+            }}
+            onClick={() => {
+              if (codeType.value === "iframe") handelIframeCopy();
+              if (codeType.value === "widget") handelWidgetCopy();
+            }}
+          >
+            Copy code!
+          </Button>
         </div>
       </div>
     </div>
@@ -242,3 +546,51 @@ function EmbedShare() {
 }
 
 export default EmbedShare;
+
+const CustomSketchPicker = ({ flowColor, setFlowColor }) => {
+  const customStyles = {
+    default: {
+      picker: {
+        width: "200px",
+        boxShadow: "none",
+        borderRadius: "10px",
+      },
+      saturation: {
+        borderRadius: "10px",
+      },
+      controls: {
+        display: "flex",
+        gap: "10px",
+        alignItems: "center",
+      },
+      color: {
+        borderRadius: "10px",
+        width: "20px",
+        height: "20px",
+      },
+      fields: {
+        padding: "0px 5px",
+      },
+      input: {
+        border: "2px solid #ccc",
+        borderRadius: "5px",
+        height: "30px",
+        padding: "0 5px",
+        fontSize: "14px",
+        display: "flex",
+      },
+      label: {
+        fontSize: "12px",
+        color: "#555",
+      },
+    },
+  };
+
+  return (
+    <SketchPicker
+      color={flowColor || "#000"}
+      onChange={(color) => setFlowColor(color)}
+      styles={customStyles} // Pass custom styles
+    />
+  );
+};

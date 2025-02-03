@@ -1,48 +1,66 @@
 .VideoPlayer-container {
-  position: relative;
   height: 100%;
   margin: auto;
-
+  cursor: pointer;
   .video {
     width: 100%;
+    height: 100%;
     background: black;
     background-clip: content-box;
     background-repeat: no-repeat;
     background-size: contain;
     overflow: hidden;
   }
+
   .play-btn-center {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
-    width: 100px;
-    height: 100px;
     justify-content: center;
     align-items: center;
-    z-index: 101010;
+    z-index: 1000;
   }
   .control-box {
     position: absolute;
-    bottom: 10px;
+    top: 0;
     left: 0;
-    right: 0;
-    padding: 10px;
+    padding: 0px;
+    width: 100%;
     color: white;
-    .all-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .video-range-control {
+      width: 100%;
+      color: white;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      justify-content: center;
     }
-    .control-volume {
+    .all-control {
+      width: 100%;
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 0px;
-      .volume {
+      align-items: center;
+      .volume-control {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0px;
+        background: rgba(0, 0, 0, 0.2);
+        border: none;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        padding: 0px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         img {
-          filter: invert(100%) sepia(10%) saturate(4492%) hue-rotate(184deg)
-            brightness(122%) contrast(95%);
+          filter: invert(100%);
           transform: scale(1);
           transition-duration: 0.3s;
           transition-property: transform;
@@ -50,6 +68,42 @@
             transform: scale(1.2);
           }
         }
+      }
+      .duration-text {
+        width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 16px;
+      }
+      .speed-btn {
+        background: rgba(0, 0, 0, 0.2);
+        border: none;
+        color: white;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0px;
+        font-weight: 600;
+      }
+      .full-screen-btn {
+        background: rgba(0, 0, 0, 0.2);
+        border: none;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        padding: 0px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
     .push-play-btn {
@@ -62,49 +116,13 @@
       font-weight: 600;
       letter-spacing: 2px;
     }
-    .duration-text {
-      width: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-    }
-    .speed-btn {
-      background: rgba(0, 0, 0, 0.2);
-      border: none;
-      color: white;
-      cursor: pointer;
-      width: 30px;
-      height: 30px;
-      font-size: 12px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0px 10px;
-      padding: 0px;
-      font-weight: 600;
-    }
-    .full-screen-btn {
-      background: rgba(0, 0, 0, 0.2);
-      border: none;
-      cursor: pointer;
-      width: 30px;
-      height: 30px;
-      padding: 0px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
   }
   .overlay-text {
     position: absolute;
-    top: 120px;
-    left: 50px;
-    right: 50px;
-    bottom: 130px;
+    top: 50px;
+    left: 0px;
+    padding-left: 50px;
+    padding-right: 20px;
     overflow: auto;
     color: white;
     font-weight: 700;
@@ -112,12 +130,14 @@
     transition-duration: 0.3s;
     display: block;
     transition-property: opacity;
+    display: none;
+    user-select: none;
   }
 
-  .flow-ai-video-logo-container {
+  .flow-ai-video-logo-desktop {
     position: absolute;
-    top: 50px;
-    left: 50px;
+    bottom: 30px;
+    left: 30px;
     display: flex;
     flex-direction: column;
     gap: 7px;
@@ -133,5 +153,24 @@
     &:hover {
       transform: scale(1.08);
     }
+  }
+
+  .flow-ai-video-logo-tablet {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 0px;
+    z-index: 1000;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+    will-change: transform; /* Optimized scaling */
+    transform-origin: center;
+    cursor: pointer;
+    user-select: none;
   }
 }

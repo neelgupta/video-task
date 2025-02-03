@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../../../services/api";
 import { useDispatch } from "react-redux";
 import { handelCatch, throwError } from "../../../../store/globalSlice";
-function EndScreen({ answerId, flowStyle }) {
+function EndScreen({ answerId, flowStyle, windowSize }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,8 +37,23 @@ function EndScreen({ answerId, flowStyle }) {
         </div>
       </div>
 
-      <div className="EndScreen-content-box">
-        <div className="EndScreen-content">
+      <div
+        className="EndScreen-content-box"
+        style={{
+          transform: windowSize.innerWidth < 400 ? "scale(0.9)" : "scale(1)",
+        }}
+      >
+        <div
+          className="EndScreen-content"
+          style={{
+            width:
+              windowSize.innerWidth > 1000
+                ? "30%"
+                : windowSize.innerWidth > 600
+                ? "60%"
+                : "90%",
+          }}
+        >
           <h1>Elevate your storytelling with the perfect video tool.</h1>
           <h5>
             Create personalized video experiences, foster meaningful
@@ -48,13 +63,19 @@ function EndScreen({ answerId, flowStyle }) {
             onClick={() => {
               navigate("/");
             }}
+            style={{
+              transform:
+                windowSize.innerWidth < 400 ? "scale(0.8)" : "scale(1)",
+            }}
           >
             Try Flōw AI for free <span>✌️</span>
           </button>
         </div>
-        <div className="image-box">
-          <img src={icons.endScreen} alt="" className="fit-image" />
-        </div>
+        {windowSize.innerWidth > 1000 && (
+          <div className="image-box">
+            <img src={icons.endScreen} alt="" className="fit-image" />
+          </div>
+        )}
       </div>
     </div>
   );

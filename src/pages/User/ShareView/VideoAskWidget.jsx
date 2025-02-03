@@ -5,13 +5,13 @@ const CustomWidget = () => {
     // Define the widget configuration on the global object
     window.MY_WIDGET_CONFIG = {
       kind: "widget",
-      url: "http://192.168.1.26:3000/view-flow/v-ZI3Ffbyg-ED2hbTJ8oqCQkXQuRziR8LIwguPNnpCI",
+      url: "http://192.168.1.26:3000/view-flow/OlYaGk6nU1wTTrT_p-HkWFDFMjgRB9p-gXl89kxeIuw",
       options: {
-        widgetType: "toggle",
+        widgetType: "circle",
         text: "texts",
-        backgroundColor: "#5CD6C8",
+        backgroundColor: "gold",
         position: "bottom-left",
-        dismissible: false,
+        dismissible: true,
         videoPosition: "center center",
       },
     };

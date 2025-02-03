@@ -7,7 +7,7 @@ import "./AnswerForm.scss";
 import { Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
-function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
+function MultipleChoiceForm({ onNext, node, isPost, flowStyle, windowSize }) {
   const { t } = useTranslation();
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
@@ -70,7 +70,7 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
               className="w-15 h-15 me-10"
               style={{
                 borderRadius: "50%",
-                background: addWhitenessToHex(flowStyle.primary_color, 0.9),
+                background: addWhitenessToHex(flowStyle.primary_color, 0),
               }}
             ></div>
             {answer_format.allow_multiple
@@ -83,112 +83,147 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle }) {
           </div>
         )}
 
-        {optionList.map((ele, index) => {
-          const isActive = answer_format.allow_multiple
-            ? (selectOption || []).includes(ele)
-            : selectOption?.index === ele.index;
-          return (
-            <div
-              className={`option-box`}
-              // answer_format.allow_multiple
-              // ? (selectOption || []).includes(ele) && "active"
-              // : selectOption === ele && "active"
-              key={index}
-              onClick={() => {
-                handelOptionSelect(ele);
-              }}
-              style={{
-                borderRadius: `${flowStyle.border_radius}px`,
-                ...(isActive
-                  ? {
-                      background: addWhitenessToHex(
-                        flowStyle.primary_color,
-                        0.95
-                      ),
-                      border: `1px solid ${flowStyle.primary_color}`,
-                    }
-                  : {}),
-              }}
-            >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "20px",
+            flexDirection: windowSize.innerWidth > 1000 ? "column" : "row",
+            flexWrap: "wrap",
+          }}
+        >
+          {optionList.map((ele, index) => {
+            const isActive = answer_format.allow_multiple
+              ? (selectOption || []).includes(ele)
+              : selectOption?.index === ele.index;
+            return (
               <div
-                className="option-teg"
+                className={`option-box`}
+                // answer_format.allow_multiple
+                // ? (selectOption || []).includes(ele) && "active"
+                // : selectOption === ele && "active"
+                key={index}
+                onClick={() => {
+                  handelOptionSelect(ele);
+                }}
                 style={{
                   borderRadius: `${flowStyle.border_radius}px`,
                   ...(isActive
                     ? {
-                        background: flowStyle.primary_color,
+                        background: addWhitenessToHex(
+                          flowStyle.primary_color,
+                          0.95
+                        ),
+                        border: `1px solid ${flowStyle.primary_color}`,
                       }
                     : {}),
                 }}
               >
-                {answer_format.allow_multiple &&
-                (selectOption || []).includes(ele) ? (
-                  <img
-                    src={icons.check}
-                    alt=""
-                    className="w-15"
-                    style={{ filter: creteImgFilter("#ffffff") }}
-                  />
-                ) : (
-                  index + 1
-                )}
+                <div
+                  className="option-teg"
+                  style={{
+                    borderRadius: `${flowStyle.border_radius}px`,
+                    ...(isActive
+                      ? {
+                          background: flowStyle.primary_color,
+                        }
+                      : {}),
+                  }}
+                >
+                  {answer_format.allow_multiple &&
+                  (selectOption || []).includes(ele) ? (
+                    <img
+                      src={icons.check}
+                      alt=""
+                      className="w-15"
+                      style={{ filter: creteImgFilter("#ffffff") }}
+                    />
+                  ) : (
+                    index + 1
+                  )}
+                </div>
+                <div
+                  className="option-value"
+                  style={{
+                    fontFamily: `${flowStyle.font}`,
+                    ...(isActive
+                      ? {
+                          color: flowStyle.primary_color,
+                        }
+                      : {}),
+                  }}
+                >
+                  {ele.option}
+                </div>
               </div>
-              <div
-                className="option-value"
+            );
+          })}
+        </div>
+      </div>
+      {windowSize.innerWidth > 1000 && (
+        <div id="ans-btn-group">
+          <button
+            className="next-btn"
+            onClick={() => {
+              if (!selectOption || selectOption.length === 0) {
+                dispatch(throwError("Please enter an answer."));
+                return;
+              }
+              if (!isPost) {
+                onNext({ ans: selectOption });
+              }
+            }}
+            style={{
+              background: flowStyle.secondary_color,
+            }}
+          >
+            {isPost ? (
+              <Spinner size="lg" color="#888888" />
+            ) : (
+              <img
+                src={icons.top_right_arrow}
+                alt=""
                 style={{
-                  fontFamily: `${flowStyle.font}`,
-                  ...(isActive
-                    ? {
-                        color: flowStyle.primary_color,
-                      }
-                    : {}),
+                  transform: "rotate(45deg)",
+                  filter: creteImgFilter("#000"),
                 }}
-              >
-                {ele.option}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <div id="ans-btn-group">
-        <button
-          className="next-btn"
-          onClick={() => {
-            if (!selectOption || selectOption.length === 0) {
-              dispatch(throwError("Please enter an answer."));
-              return;
-            }
-            if (!isPost) {
-              onNext({ ans: selectOption });
-            }
-          }}
-          style={{
-            background: flowStyle.secondary_color,
-          }}
-        >
-          {isPost ? (
-            <Spinner size="lg" color="#888888" />
-          ) : (
+                className="fit-image w-30"
+              />
+            )}
+          </button>
+          <button className="cancel-btn" onClick={() => setSelectOption(null)}>
             <img
-              src={icons.top_right_arrow}
+              src={icons.closeSvg}
               alt=""
-              style={{
-                transform: "rotate(45deg)",
-                filter: creteImgFilter("#000"),
-              }}
-              className="fit-image w-30"
+              style={{ filter: creteImgFilter("#ffffff") }}
+              className="fit-image w-12 pb-5"
             />
-          )}
-        </button>
-        <button className="cancel-btn" onClick={() => setSelectOption(null)}>
-          <img
-            src={icons.closeSvg}
-            alt=""
-            style={{ filter: creteImgFilter("#ffffff") }}
-            className="fit-image w-12 pb-5"
-          />
-        </button>
-      </div>
+          </button>
+        </div>
+      )}
+
+      {windowSize.innerWidth <= 1000 && (
+        <div id="ans-btn-group-tablet">
+          <button
+            className="next-btn"
+            onClick={() => {
+              if (!selectOption || selectOption.length === 0) {
+                dispatch(throwError("Please enter an answer."));
+                return;
+              }
+              if (!isPost) {
+                onNext({ ans: selectOption });
+              }
+            }}
+            style={{
+              background: "#8000ff",
+            }}
+          >
+            {isPost ? <Spinner size="lg" color="#fff" /> : "OK"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

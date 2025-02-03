@@ -200,7 +200,7 @@ function ShareView({ show, handleClose, shareUrl }) {
             </div>
           )}
 
-          {selectedOption === "website" && <EmbedShare />}
+          {selectedOption === "website" && <EmbedShare shareUrl={shareUrl} />}
         </Modal.Body>
       </div>
     </Modal>

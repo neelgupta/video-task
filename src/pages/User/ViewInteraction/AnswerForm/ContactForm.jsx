@@ -92,11 +92,11 @@ function ContactForm({ onNext, node, isPost, flowStyle }) {
     },
   });
   return (
-    <div className="ContactForm-container">
+    <div className="ContactForm-container" style={{ background: "white" }}>
       {isLoad && (
         <>
           <div
-            className="text-20-500 mb-30 "
+            className="text-20-500 px-35"
             style={{
               color: flowStyle.primary_color,
               fontFamily: `${flowStyle.font}`,

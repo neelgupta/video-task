@@ -12,7 +12,10 @@ const VideoPlayer = ({
   videoConfigForm,
   getCurrentTime,
   flowStyle,
+  windowSizeTag = "desktop",
+  allControlsDisabled = false,
 }) => {
+  console.log("windowSizeTag", windowSizeTag);
   const { t } = useTranslation();
   const videoRef = useRef(null);
   const {
@@ -26,8 +29,8 @@ const VideoPlayer = ({
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [showCenterPlay, setShowCenterPlay] = useState(false);
   const [isMute, setIsMute] = useState(true);
+  const [isRangeHover, setIsRangeHover] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -91,6 +94,7 @@ const VideoPlayer = ({
   };
 
   const handleProgressBarChange = (e) => {
+    console.log("e.target.value", e.target.value);
     const video = videoRef.current;
     video.currentTime = e.target.value;
   };
@@ -124,170 +128,277 @@ const VideoPlayer = ({
   };
 
   return (
-    <div
-      className="VideoPlayer-container"
-      onMouseEnter={() => setShowCenterPlay(false)}
-      onMouseLeave={() => setShowCenterPlay(!isPlaying)}
-    >
+    <div className="VideoPlayer-container">
       <div
         style={{
           display: "flex",
-          alignItems:
-            !alignVideo && videoPosition && alignVideo !== undefined
-              ? videoPosition.split(" ")[0]
-              : "center",
-          justifyContent:
-            !alignVideo && videoPosition && alignVideo !== undefined
-              ? videoPosition.split(" ")[1]
-              : "center",
+          alignItems: "center",
+          justifyContent: "center",
           height: "100%",
-          margin: "auto",
+          width: "100%",
           position: "relative",
         }}
       >
-        <video
-          ref={videoRef}
-          onTimeUpdate={handleTimeUpdate}
-          // onLoadedMetadata={handleLoadedMetadata}
-          onEnded={handleVideoEnd}
-          onClick={togglePlay}
-          className="video"
-          style={{
-            ...(alignVideo && alignVideo !== undefined
-              ? { objectFit: "contain", height: "100%" }
-              : {
-                  objectFit: "cover",
-                  height: "120%",
-                }),
-          }}
-        >
-          {videoUrl && <source src={videoUrl} type="video/mp4" />}
-        </video>
         <div
-          className="flow-ai-video-logo-container"
           style={{
-            background: `rgba(${hexToRgb(flowStyle.primary_color)}, 0.6)`,
+            display: "flex",
+            alignItems:
+              !alignVideo && videoPosition && alignVideo !== undefined
+                ? videoPosition.split(" ")[0]
+                : "center",
+            justifyContent:
+              !alignVideo && videoPosition && alignVideo !== undefined
+                ? videoPosition.split(" ")[1]
+                : "center",
+            height: "100%",
+            margin: "auto",
+            position: "relative",
           }}
         >
-          <div
-            className="text-14-500"
+          <video
+            ref={videoRef}
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={handleVideoEnd}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              togglePlay();
+            }}
+            className="video"
             style={{
-              color: "white",
-              fontSize: "12",
-              fontFamily: `${flowStyle.font}`,
-              lineHeight: "1",
+              ...(alignVideo
+                ? { objectFit: "contain" }
+                : { objectFit: "cover" }),
             }}
           >
-            {t("Powered_by")}
-          </div>
-          <div
-            className="text-20-800"
-            style={{ color: "white", lineHeight: "1" }}
-          >
-            Flōw AI
-          </div>
+            {videoUrl && <source src={videoUrl} type="video/mp4" />}
+          </video>
         </div>
-      </div>
 
-      <div
-        style={{
-          display:
-            showCenterPlay ||
-            !isPlaying ||
-            parseFloat(currentTime.toFixed(0)) === duration
-              ? "flex"
-              : "none",
-        }}
-        className="play-btn-center"
-        onClick={togglePlay}
-      >
-        <img
-          src={icons.pushIcon}
-          alt=""
-          className="fir-image"
-          style={{ filter: creteImgFilter("#ffffff") }}
-        />
-      </div>
-
-      {overlayText && (
         <div
-          className="overlay-text"
           style={{
-            fontSize: textSize,
-            opacity: textReveal >= currentTime ? "1" : "0",
-            display: textReveal >= currentTime ? "block" : "none",
+            display:
+              !isPlaying || parseFloat(currentTime.toFixed(0)) === duration
+                ? "flex"
+                : "none",
+            width: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
+              ? "50px"
+              : "100px",
+            height: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
+              ? "50px"
+              : "100px",
           }}
+          className="play-btn-center"
           onClick={togglePlay}
         >
-          {overlayText}
-        </div>
-      )}
-
-      <div className="control-box">
-        <div className="control-volume">
-          <div className="w-30 h-30 f-center pointer volume">
-            <img
-              src={icons[isMute ? "volumeOff" : "volumeOn"]}
-              alt=""
-              className="fit-image w-25 h-25 "
-              onClick={handleVolume}
-            />
-          </div>
-        </div>
-        <div className="all-control">
-          <button onClick={togglePlay} className="push-play-btn">
-            {/* {currentTime === duration ? "Play" : isPlaying ? "Pause" : "Play"} */}
-            <div className="w-40 h-40 f-center pointer">
-              <img
-                src={
-                  icons[
-                    currentTime === duration
-                      ? "push"
-                      : isPlaying
-                      ? "play"
-                      : "push"
-                  ]
-                }
-                alt=""
-                className="fit-image w-40 h-40"
-                style={{ filter: creteImgFilter("#ffffff") }}
-              />
-            </div>
-          </button>
-          <input
-            type="range"
-            min="0"
-            max={duration - 1}
-            step="any" // Enable smooth scrolling with fractional steps
-            value={currentTime}
-            onInput={(e) => handleProgressBarChange(e)}
-            onMouseDown={handleDragRange}
-            onMouseUp={handleDragRange}
+          <img
+            src={icons.pushIcon}
+            alt=""
+            className="fir-image"
             style={{
-              flex: 1,
-              margin: "0 10px",
-              cursor: "pointer",
+              filter: creteImgFilter("#ffffff"),
+              width: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
+                ? "50px"
+                : "100px",
+              height: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
+                ? "50px"
+                : "100px",
+              zIndex: "100000000",
             }}
           />
-
-          <span className="duration-text">
-            {parseInt(currentTime.toFixed(0))} / {duration} sec
-          </span>
-          <button onClick={handleSpeedChange} className="speed-btn">
-            {playbackSpeed}x
-          </button>
-          <button
-            onClick={() => videoRef.current.requestFullscreen()}
-            className="full-screen-btn"
-          >
-            <img
-              src={icons.fitView}
-              alt=""
-              className="fir-image"
-              style={{ filter: creteImgFilter("#ffffff") }}
-            />
-          </button>
         </div>
+
+        {!allControlsDisabled && (
+          <>
+            <div className="control-box">
+              <div
+                className="video-range-control h-20"
+                onMouseEnter={() => setIsRangeHover(true)}
+                onMouseLeave={() => setIsRangeHover(false)}
+              >
+                {duration > 0 && (
+                  <Range
+                    step={0.1}
+                    min={0}
+                    max={duration}
+                    values={[currentTime]}
+                    onChange={(values) =>
+                      handleProgressBarChange({ target: { value: values[0] } })
+                    }
+                    renderTrack={({ props, children }) => {
+                      const percentage = (currentTime / duration) * 100;
+                      return (
+                        <div
+                          onMouseEnter={(e) => {
+                            handleDragRange(e);
+                          }}
+                          onMouseLeave={(e) => {
+                            handleDragRange(e);
+                          }}
+                          {...props}
+                          style={{
+                            ...props.style,
+                            height: isRangeHover ? "12px" : "8px",
+                            marginTop: "0px",
+                            width: "102%",
+                            borderRadius: "0px",
+                            background: `linear-gradient(90deg, #8000ff ${percentage}%, ${
+                              isRangeHover
+                                ? "rgba(0,0,0,0.8)"
+                                : "rgba(0,0,0,0.2)"
+                            } ${percentage}%)`,
+                            transitionDuration: "0.3s",
+                            transitionProperty: "height,background",
+                          }}
+                        >
+                          {children}
+                        </div>
+                      );
+                    }}
+                    renderThumb={({ props }) => (
+                      <div
+                        {...props}
+                        style={{
+                          ...props.style,
+                          display: "none",
+                        }}
+                      />
+                    )}
+                  />
+                )}
+              </div>
+
+              <div
+                className="all-control"
+                style={
+                  ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
+                    ? {
+                        gap: "0px",
+                        padding: "0px 5px",
+                      }
+                    : {
+                        gap: "10px",
+                        padding: "0px 10px",
+                      }
+                }
+              >
+                <span
+                  className="duration-text"
+                  style={{
+                    transform: ["Widget-mobile", "Widget-button"].includes(
+                      windowSizeTag
+                    )
+                      ? "scale(0.7)"
+                      : "scale(1)",
+                  }}
+                >
+                  {parseInt(currentTime.toFixed(0))} / {duration} sec
+                </span>
+                <button
+                  onClick={handleSpeedChange}
+                  className="speed-btn"
+                  style={{
+                    transform: ["Widget-mobile", "Widget-button"].includes(
+                      windowSizeTag
+                    )
+                      ? "scale(0.7)"
+                      : "scale(1)",
+                  }}
+                >
+                  {playbackSpeed}x
+                </button>
+
+                <button
+                  onClick={handleVolume}
+                  className="volume-control"
+                  style={{
+                    transform: ["Widget-mobile", "Widget-button"].includes(
+                      windowSizeTag
+                    )
+                      ? "scale(0.7)"
+                      : "scale(1)",
+                  }}
+                >
+                  <img
+                    src={icons[isMute ? "volumeOff" : "volumeOn"]}
+                    alt=""
+                    className="fit-image w-20 h-20 "
+                  />
+                </button>
+                {!["Widget-mobile", "Widget-button"].includes(
+                  windowSizeTag
+                ) && (
+                  <button
+                    onClick={() => videoRef.current.requestFullscreen()}
+                    className="full-screen-btn me-10"
+                  >
+                    <img
+                      src={icons.fitView}
+                      alt=""
+                      className="fir-image"
+                      style={{ filter: creteImgFilter("#ffffff") }}
+                    />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div
+              className={
+                windowSizeTag === "desktop"
+                  ? "flow-ai-video-logo-desktop"
+                  : "flow-ai-video-logo-tablet"
+              }
+              style={{
+                background: `rgba(${hexToRgb(flowStyle.primary_color)}, 0.6)`,
+              }}
+            >
+              <div
+                className="text-14-500"
+                style={{
+                  color: "white",
+                  fontSize: "12px",
+                  fontFamily: `${flowStyle.font}`,
+                  lineHeight: "1",
+                }}
+              >
+                {t("Powered_by")}
+              </div>
+              <div
+                className="text-20-800"
+                style={{ color: "white", lineHeight: "1" }}
+              >
+                Flōw AI
+              </div>
+            </div>
+
+            {overlayText && (
+              <div
+                className="overlay-text"
+                style={{
+                  fontSize: textSize,
+                  opacity: textReveal >= currentTime ? "1" : "0",
+                  display: textReveal >= currentTime ? "block" : "none",
+
+                  paddingLeft: ["Widget-mobile", "Widget-button"].includes(
+                    windowSizeTag
+                  )
+                    ? "10px"
+                    : "50px",
+                  paddingRight: ["Widget-mobile", "Widget-button"].includes(
+                    windowSizeTag
+                  )
+                    ? "10px"
+                    : "20px",
+                }}
+                onClick={(e) => {
+                  togglePlay();
+                }}
+              >
+                {overlayText}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

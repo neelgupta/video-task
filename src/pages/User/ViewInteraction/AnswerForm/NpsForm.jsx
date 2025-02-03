@@ -48,7 +48,7 @@ const npsOptions = [
   },
 ];
 
-function NpsForm({ onNext, node, isPost, flowStyle }) {
+function NpsForm({ onNext, node, isPost, flowStyle, windowSize }) {
   const { t } = useTranslation();
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
@@ -75,7 +75,19 @@ function NpsForm({ onNext, node, isPost, flowStyle }) {
   };
   return (
     <div className="NpsForm-container">
-      <div className="nps-option">
+      <div
+        className="nps-option"
+        style={{
+          transform:
+            windowSize.innerWidth <= 550
+              ? windowSize.innerWidth <= 400
+                ? windowSize.innerWidth <= 350
+                  ? "scale(0.55)"
+                  : "scale(0.65)"
+                : "scale(0.8)"
+              : "scale(0.9)",
+        }}
+      >
         <div className="options">
           {npsOptions.map((ele, index) => {
             const isActive = ele.index === selectedNPS;
@@ -118,37 +130,54 @@ function NpsForm({ onNext, node, isPost, flowStyle }) {
           )}
         </div>
       </div>
-      <div id="ans-btn-group" className="mb-30">
-        <button
-          className="next-btn"
-          onClick={() => {
-            handelSubmit();
-          }}
-          style={{ background: flowStyle.secondary_color }}
-        >
-          {isPost ? (
-            <Spinner size="lg" color="#000" />
-          ) : (
+
+      {windowSize.innerWidth > 1000 && (
+        <div id="ans-btn-group" className="mb-30">
+          <button
+            className="next-btn"
+            onClick={() => {
+              handelSubmit();
+            }}
+            style={{ background: flowStyle.secondary_color }}
+          >
+            {isPost ? (
+              <Spinner size="lg" color="#000" />
+            ) : (
+              <img
+                src={icons.top_right_arrow}
+                alt=""
+                style={{
+                  transform: "rotate(45deg)",
+                  filter: creteImgFilter("#000"),
+                }}
+                className="fit-image w-30"
+              />
+            )}
+          </button>
+          <button className="cancel-btn" onClick={() => {}}>
             <img
-              src={icons.top_right_arrow}
+              src={icons.closeSvg}
               alt=""
-              style={{
-                transform: "rotate(45deg)",
-                filter: creteImgFilter("#000"),
-              }}
-              className="fit-image w-30"
+              style={{ filter: creteImgFilter("#ffffff") }}
+              className="fit-image w-12 pb-5"
             />
-          )}
-        </button>
-        <button className="cancel-btn" onClick={() => {}}>
-          <img
-            src={icons.closeSvg}
-            alt=""
-            style={{ filter: creteImgFilter("#ffffff") }}
-            className="fit-image w-12 pb-5"
-          />
-        </button>
-      </div>
+          </button>
+        </div>
+      )}
+
+      {windowSize.innerWidth <= 1000 && (
+        <div id="ans-btn-group-tablet">
+          <button
+            className="next-btn"
+            onClick={() => {
+              handelSubmit();
+            }}
+            style={{}}
+          >
+            {isPost ? <Spinner size="lg" color="#fff" /> : "OK"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

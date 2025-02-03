@@ -29,7 +29,16 @@ const optionArray = [
     isPro: false,
   },
 ];
-function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
+function OpenEndedForm({
+  onNext,
+  node,
+  videoTime,
+  isPost,
+  flowStyle,
+  windowSize,
+  setOpenEndedKey,
+  widgetTag = "",
+}) {
   const { i } = useTranslation();
   const { answer_type, answer_format } = node;
   const dispatch = useDispatch();
@@ -92,6 +101,11 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
     setAnswerForm({ ...answerForm, ans: null });
   };
 
+  useEffect(() => {
+    setOpenEndedKey(answerForm.ansType);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answerForm.ansType]);
+
   return (
     <div className="OpenEndedForm-container">
       {isDelay && answer_format.delay !== 0 && (
@@ -123,27 +137,55 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent:
+              windowSize.innerWidth > 1000 ? "center" : "flex-end",
             flexDirection: "column",
+            paddingBottom: "50px",
           }}
         >
           <div
-            className="text-20-500 mb-50"
             style={{
               textAlign: "center",
               fontFamily: `${flowStyle.font}`,
               color: flowStyle?.secondary_color || "#7D8185",
+              marginBottom:
+                windowSize.innerWidth > 1000
+                  ? "50px"
+                  : windowSize.innerWidth > 400
+                  ? "20px"
+                  : "0PX",
+              fontSize:
+                windowSize.innerWidth > 1000
+                  ? "20px"
+                  : widgetTag === "Widget-mobile"
+                  ? "14px"
+                  : "16px",
+              fontWeight: "700",
+              width: "100%",
+              textWrap: "wrap",
+              padding: "0px 10px",
             }}
           >
             {t("openEndedForm.How_do_you_want_to_generate_video")} ?
           </div>
-          <div className="footer_card_box">
+          <div
+            className="footer_card_box"
+            style={{
+              ...(windowSize.innerWidth > 1000
+                ? { transform: "scale(100%)" }
+                : windowSize.innerWidth > 400
+                ? { transform: "scale(70%)" }
+                : windowSize.innerWidth > 200
+                ? { transform: "scale(60%)" }
+                : { transform: "scale(40%)" }),
+            }}
+          >
             {tabArray.map((ele, index) => {
               return (
                 <div
-                  onClick={() =>
-                    setAnswerForm({ ...answerForm, ansType: ele.value })
-                  }
+                  onClick={() => {
+                    setAnswerForm({ ...answerForm, ansType: ele.value });
+                  }}
                   className="footer_card pointer"
                   key={index}
                   style={{
@@ -153,7 +195,11 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
                   }}
                 >
                   {ele.isPro && <div className="proTeg">pro</div>}
-                  <div className="h-70 wp-100 f-center">
+                  <div
+                    className={`${
+                      windowSize.innerWidth < 1000 ? "w-70" : "wp-100"
+                    } h-70 f-center `}
+                  >
                     <img
                       src={ele.icon}
                       alt=""
@@ -176,7 +222,19 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
         </div>
       )}
       {answerForm.ansType && (
-        <div className="wp-100 hp-100">
+        <div
+          className="wp-100 hp-100 "
+          style={{
+            padding: "0px 5%",
+            ...(windowSize.innerWidth > 1000
+              ? {}
+              : {
+                  background: "#fff",
+                }),
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <div className="form-container">
             {answerForm.ansType === "text" && (
               <div className="wp-100">
@@ -248,7 +306,13 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
                 />
               </div>
             )}
-            <div id="ans-btn-group">
+            <div
+              id="ans-btn-group"
+              style={{
+                transform:
+                  widgetTag === "Widget-mobile" ? "scale(0.7)" : "scale(1)",
+              }}
+            >
               <button
                 className="next-btn"
                 onClick={() => {
@@ -260,7 +324,9 @@ function OpenEndedForm({ onNext, node, videoTime, isPost, flowStyle }) {
                     onNext({ ...answerForm });
                   }
                 }}
-                style={{ background: flowStyle.secondary_color }}
+                style={{
+                  background: flowStyle.secondary_color,
+                }}
               >
                 {isPost ? (
                   <Spinner size="lg" color="#888888" />

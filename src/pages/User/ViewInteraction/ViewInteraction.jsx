@@ -26,6 +26,9 @@ import { isMobile, isTablet, isDesktop } from "react-device-detect";
 function ViewInteraction() {
   const { token, type } = useParams();
   const id = decrypt(token);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { i18n } = useTranslation();
   const [key, setKey] = useState(0);
   const [queNodes, setQueNodes] = useState([]);
   const [endNodes, setEndNodes] = useState([]);
@@ -36,6 +39,11 @@ function ViewInteraction() {
   const [isContactCollected, setIsContactCollected] = useState(false);
   const [answerId, setAnswerId] = useState("");
   const [isPost, setIsPost] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+  });
+  const [openEndedKey, setOpenEndedKey] = useState("");
   const [flowStyle, setFlowStyle] = useState({
     primary_color: "#7B5AFF",
     secondary_color: "#B3A1FF",
@@ -45,9 +53,7 @@ function ViewInteraction() {
     font: 10,
   });
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const [widgetTag, setWidgetTag] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -56,10 +62,40 @@ function ViewInteraction() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  console.log("innerWidth or innerHeight", {
-    innerWidth: window.innerWidth,
-    innerHeight: window.innerHeight,
-  });
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+      });
+      console.log("size", {
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("windowSize", windowSize);
+    (() => {
+      if (windowSize.innerHeight < 300) {
+        setWidgetTag("Widget-button");
+        return;
+      }
+
+      if (windowSize.innerWidth < 300 && windowSize.innerHeight < 600) {
+        setWidgetTag("Widget-mobile");
+        return;
+      }
+      setWidgetTag("");
+    })();
+  }, [windowSize]);
 
   const fetchInteraction = async () => {
     try {
@@ -279,42 +315,106 @@ function ViewInteraction() {
 
   return (
     <div className="ViewInteraction-container">
-      <Tabs
-        id="controlled-tab-example"
-        activeKey={key}
-        className="mb-3"
-        style={{ border: "none" }}
-      >
-        {queNodes.length > 0 &&
-          queNodes.map((node, index) => {
-            const {
-              video_url,
-              video_align,
-              overlay_text,
-              text_size,
-              fade_reveal,
-              answer_type,
-              answer_format,
-            } = node;
-            return (
-              <Tab eventKey={node._id} key={node._id}>
-                {key === node._id && (
+      <div id="controlled-tab-example">
+        {widgetTag === "Widget-button" && (
+          <div
+            className="wp-100 d-flex"
+            style={{
+              background: "#fff",
+              position: "absolute",
+              width: "100%",
+              bottom: "0px",
+              height: "100%",
+            }}
+          >
+            <div
+              className="hp-100 m-0 p-0"
+              style={{
+                overflow: "hidden",
+                width: "100%",
+              }}
+            >
+              <div
+                className="wp-100 hp-100 f-center"
+                style={{
+                  background: "black",
+                }}
+              >
+                {queNodes?.length && (
+                  <VideoPlayer
+                    flowStyle={flowStyle}
+                    videoUrl={queNodes?.[0]?.video_url || ""}
+                    videoConfigForm={{
+                      alignVideo: queNodes?.[0]?.video_align,
+                      videoPosition: "center center",
+                      overlayText: queNodes?.[0]?.overlay_text || "",
+                      textSize: queNodes?.[0]?.text_size || "",
+                      textReveal: [parseInt(queNodes?.[0]?.fade_reveal || 0)],
+                    }}
+                    getCurrentTime={(time) => {
+                      setVideoTime(time);
+                    }}
+                    windowSizeTag={
+                      widgetTag !== ""
+                        ? widgetTag
+                        : windowSize.innerWidth > 1000
+                        ? "desktop"
+                        : "tablet"
+                    }
+                    allControlsDisabled={true}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        <div
+          className="int-display"
+          style={{
+            display: widgetTag === "Widget-button" ? "none" : "inline-block",
+          }}
+        >
+          {queNodes.length > 0 &&
+            queNodes.map((node, index) => {
+              const {
+                video_url,
+                video_align,
+                overlay_text,
+                text_size,
+                fade_reveal,
+                answer_type,
+                answer_format,
+              } = node;
+
+              // if (key === node._id) {
+              //   setKeyNode(node);
+              //   console.log("node", node);
+              // }
+              return (
+                key === node._id && (
                   <div
                     className="wp-100 d-flex"
                     style={{
                       background: "#fff",
                       position: "absolute",
-                      top: "0px",
+                      width: "100%",
                       bottom: "0px",
+                      height: "100%",
                     }}
+                    key={node._id}
                   >
                     <div
-                      className="wp-55 hp-100 m-0 p-0"
-                      style={{ overflow: "hidden" }}
+                      className="hp-100 m-0 p-0"
+                      style={{
+                        overflow: "hidden",
+                        width: windowSize.innerWidth > 1000 ? "55%" : "100%",
+                      }}
                     >
                       <div
                         className="wp-100 hp-100 f-center"
-                        style={{ background: "black" }}
+                        style={{
+                          background: "black",
+                        }}
                       >
                         {video_url && (
                           <VideoPlayer
@@ -330,16 +430,38 @@ function ViewInteraction() {
                             getCurrentTime={(time) => {
                               setVideoTime(time);
                             }}
+                            windowSizeTag={
+                              widgetTag !== ""
+                                ? widgetTag
+                                : windowSize.innerWidth > 1000
+                                ? "desktop"
+                                : "tablet"
+                            }
                           />
                         )}
                       </div>
                     </div>
                     <div
-                      className="wp-45 hp-100 f-center"
-                      style={{ background: flowStyle.background_color }}
+                      className="hp-100 f-center"
+                      style={{
+                        background:
+                          windowSize.innerWidth > 1000
+                            ? flowStyle.background_color
+                            : "transparent",
+                        ...(windowSize.innerWidth > 1000
+                          ? { width: "45%", height: "100%" }
+                          : {
+                              position: "absolute",
+                              zIndex: "1000",
+                              width: "100%",
+                              height:
+                                openEndedKey || isContact ? "100%" : "unset",
+                              bottom: "0px",
+                            }),
+                      }}
                     >
                       <div
-                        className="wp-100 hp-100 p-30 d-flex"
+                        className="wp-100 hp-100  d-flex"
                         style={{ gap: "20px" }}
                       >
                         {!isContact && answer_type === "open-ended" && (
@@ -359,6 +481,9 @@ function ViewInteraction() {
                             node={node}
                             videoTime={videoTime}
                             isPost={isPost}
+                            windowSize={windowSize}
+                            setOpenEndedKey={setOpenEndedKey}
+                            widgetTag={widgetTag}
                           />
                         )}
 
@@ -378,6 +503,7 @@ function ViewInteraction() {
                             }}
                             node={node}
                             isPost={isPost}
+                            windowSize={windowSize}
                           />
                         )}
 
@@ -398,6 +524,7 @@ function ViewInteraction() {
                             node={node}
                             videoTime={videoTime}
                             isPost={isPost}
+                            windowSize={windowSize}
                           />
                         )}
 
@@ -417,6 +544,7 @@ function ViewInteraction() {
                             }}
                             node={node}
                             isPost={isPost}
+                            windowSize={windowSize}
                           />
                         )}
 
@@ -436,6 +564,7 @@ function ViewInteraction() {
                             }}
                             node={node}
                             isPost={isPost}
+                            windowSize={windowSize}
                           />
                         )}
 
@@ -455,31 +584,36 @@ function ViewInteraction() {
                             }
                             flowStyle={flowStyle}
                             isPost={isPost}
+                            windowSize={windowSize}
                           />
                         )}
                       </div>
                     </div>
                   </div>
-                )}
-              </Tab>
-            );
-          })}
-        <Tab eventKey={endNodes?._id} className="wp-100 hp-100 p-0">
-          <div
-            style={{
-              background: "#fff",
-              position: "absolute",
-              top: "0px",
-              bottom: "0px",
-              width: "100%",
-            }}
-          >
-            {key === endNodes?._id && (
-              <EndScreen answerId={answerId} flowStyle={flowStyle} />
-            )}
-          </div>
-        </Tab>
-      </Tabs>
+                )
+              );
+            })}
+          {key === endNodes?._id && (
+            <div
+              style={{
+                background: "#fff",
+                position: "absolute",
+                top: "0px",
+                bottom: "0px",
+                width: "100%",
+              }}
+            >
+              {key === endNodes?._id && (
+                <EndScreen
+                  answerId={answerId}
+                  flowStyle={flowStyle}
+                  windowSize={windowSize}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
