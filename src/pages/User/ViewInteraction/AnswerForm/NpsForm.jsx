@@ -86,6 +86,7 @@ function NpsForm({ onNext, node, isPost, flowStyle, windowSize }) {
                   : "scale(0.65)"
                 : "scale(0.8)"
               : "scale(0.9)",
+          height: windowSize.innerWidth > 1000 ? "85%" : "calc(100% - 50px)",
         }}
       >
         <div className="options">

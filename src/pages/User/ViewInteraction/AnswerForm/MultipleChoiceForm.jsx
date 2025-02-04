@@ -47,20 +47,20 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle, windowSize }) {
   return (
     <div className="MultipleChoiceForm-container">
       <div
-        className="wp-100 hp-85"
+        className="wp-100 "
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "20px",
           flexDirection: "column",
+          height: windowSize.innerWidth > 1000 ? "85%" : "calc(100% - 50px)",
         }}
       >
         {answer_format.display_total_choices && (
           <div
-            className="text-20-500 mb-30"
+            className="text-20-700 mb-30"
             style={{
-              color: flowStyle.primary_color,
+              color: addWhitenessToHex(flowStyle.primary_color, 0.7),
               fontFamily: `${flowStyle.font}`,
               display: "flex",
               alignItems: "center",
@@ -70,7 +70,7 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle, windowSize }) {
               className="w-15 h-15 me-10"
               style={{
                 borderRadius: "50%",
-                background: addWhitenessToHex(flowStyle.primary_color, 0),
+                background: addWhitenessToHex(flowStyle.primary_color, 0.7),
               }}
             ></div>
             {answer_format.allow_multiple
@@ -87,10 +87,12 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle, windowSize }) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            gap: "20px",
-            flexDirection: windowSize.innerWidth > 1000 ? "column" : "row",
-            flexWrap: "wrap",
+            justifyContent: windowSize.innerWidth < 1000 ? "start" : "center",
+            gap: windowSize.innerWidth < 1000 ? "10px" : "20px",
+            flexDirection: "column",
+            maxHeight: "60%",
+            width: "100%",
+            overflowY: "auto",
           }}
         >
           {optionList.map((ele, index) => {
@@ -100,9 +102,6 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle, windowSize }) {
             return (
               <div
                 className={`option-box`}
-                // answer_format.allow_multiple
-                // ? (selectOption || []).includes(ele) && "active"
-                // : selectOption === ele && "active"
                 key={index}
                 onClick={() => {
                   handelOptionSelect(ele);
@@ -116,6 +115,15 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle, windowSize }) {
                           0.95
                         ),
                         border: `1px solid ${flowStyle.primary_color}`,
+                        ...(windowSize.innerWidth < 1000
+                          ? { transform: "scale(0.9)" }
+                          : {}),
+                      }
+                    : windowSize.innerWidth < 1000
+                    ? {
+                        background: "rgba(0,0,0,0.3)",
+                        border: `1px solid rgba(0,0,0,0.5)`,
+                        transform: "scale(0.8)",
                       }
                     : {}),
                 }}
@@ -150,6 +158,10 @@ function MultipleChoiceForm({ onNext, node, isPost, flowStyle, windowSize }) {
                     ...(isActive
                       ? {
                           color: flowStyle.primary_color,
+                        }
+                      : windowSize.innerWidth < 1000
+                      ? {
+                          color: "white",
                         }
                       : {}),
                   }}

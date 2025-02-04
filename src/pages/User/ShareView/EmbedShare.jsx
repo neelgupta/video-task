@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DropdownOption from "../../../components/inputs/DropdownOption/DropdownOption";
 import { Button } from "react-bootstrap";
-import CustomWidget from "./VideoAskWidget";
 import { Switch } from "../../../components";
 import { SketchPicker } from "react-color";
 import { icons } from "../../../utils/constants";
@@ -79,10 +78,33 @@ function EmbedShare({ shareUrl }) {
       dispatch(throwError("Failed to copy password. Please try again."));
     }
   };
+
+  const addWidget = () => {
+    window.FLOW_WIDGET_CONFIG = {
+      kind: "widget",
+      url: shareUrl,
+      options: {
+        widgetType: widgetForm.widget_style,
+        text: widgetForm.overlay_text,
+        backgroundColor: widgetForm.background_color,
+        position: `bottom-${widgetForm.widget_position}`,
+        dismissible: widgetForm.is_dismissible,
+      },
+    };
+
+    const script = document.createElement("script");
+    script.src = "http://192.168.1.26:3000/embed.js";
+    script.async = true;
+
+    script.onerror = () => {
+      console.error("Failed to load the widget script.");
+    };
+
+    document.body.appendChild(script);
+  };
   return (
     <div className="EmbedShare-container">
       <div className="Share-view" style={{ width: "65%" }}>
-        <CustomWidget />
         <div
           className="iframe-view-container"
           style={{ width: widgetViewType === "mobile" ? "250px" : "100%" }}

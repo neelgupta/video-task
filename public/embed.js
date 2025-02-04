@@ -12,7 +12,6 @@
     },
   };
 
-  // Create a style block for widget styling
   const style = document.createElement("style");
   style.type = "text/css";
   style.innerHTML = `
@@ -135,8 +134,8 @@
       box-shadow:0px 5px 10px rgba(0,0,0,0.2);
     }
     .mobile-view-container {
-      width: 300px;
-      height: 550px;
+      width: 340px;
+      height: 650px;
       border-radius: 10px;
       padding: 0px;
       border:4px solid ${MY_WIDGET_CONFIG.options.backgroundColor};
@@ -149,56 +148,35 @@
       height: 100%;
       overflow:hidden;
       border-radius: 10px;
-
+    }
+    .mobile-view .iframe{
+      width:332px;
+      height:650px;
     }
     .mobile-view .circle-iframe{
       border-radius: 10px;
     }
-      .mobile-view .toggle-iframe{
+    .mobile-view .toggle-iframe{
       border-radius: 10px;
       width:100%;
+    }
+    position-right{
+      right:20px
+    }
+    position-left{
+      left:20px
     }
   `;
   document.head.appendChild(style);
 
-  const widgetHTMLObject = {
-    circle: `
-    <div class="circle-widget-container widget-container">
-    <div class="widget-close-btn">-</div>
-      <div class="widget-box circle-widget-box" id="mobile_view">
-        <iframe class="circle-iframe iframe" src="${MY_WIDGET_CONFIG.url}"></iframe>;
-        <spa class="overly-text" id="widget-overly-text">${MY_WIDGET_CONFIG.options.text}</spa>
-      </div>
-      </div>
-    </div>`,
-    horizontalSquire: `
-    <div class="horizontalSquire-widget-container widget-container">
-      <div class="widget-close-btn">-</div>
-      <div class="horizontalSquire-widget-box widget-box" id="mobile_view" >
-        <iframe class="horizontalSquire-iframe iframe" src="${MY_WIDGET_CONFIG.url}"></iframe>;
-        <spa class="overly-text" id="widget-overly-text">${MY_WIDGET_CONFIG.options.text}</spa>
-      </div>
-    </div>`,
-    verticalSquire: `
-    <div class="verticalSquire-widget-container widget-container">
-      <div class="widget-close-btn">-</div>
-      <div class="widget-box verticalSquire-widget-box" id="mobile_view" >
-        <iframe class="verticalSquire-iframe iframe" src="${MY_WIDGET_CONFIG.url}"></iframe>;
-        <spa class="overly-text" id="widget-overly-text">${MY_WIDGET_CONFIG.options.text}</spa>
-      </div>
-    </div>`,
-    toggle: `
-    <div class="toggle-widget-container widget-container">
-      <div class="widget-close-btn">-</div>
-      <div class="widget-box toggle-widget-box" id="mobile_view" >
-        <iframe class="toggle-iframe iframe" src="${MY_WIDGET_CONFIG.url}"></iframe>
-        <div class="overly-text toggle-overly-text" id="widget-overly-text">${MY_WIDGET_CONFIG.options.text}</div>
-      </div>
-    </div>`,
-  };
-
   // Create the widget's HTML as a string
-  const widgetHTML = widgetHTMLObject[MY_WIDGET_CONFIG.options.widgetType];
+  const widgetHTML = `<div class="widget-container ${MY_WIDGET_CONFIG.options.widgetType}-widget-container ">
+      <div class="widget-close-btn">-</div>
+      <div class="widget-box ${MY_WIDGET_CONFIG.options.widgetType}-widget-box" id="mobile_view" >
+        <iframe class="${MY_WIDGET_CONFIG.options.widgetType}-iframe iframe" src="${MY_WIDGET_CONFIG.url}"></iframe>
+        <div class="overly-text ${MY_WIDGET_CONFIG.options.widgetType}-overly-text" id="widget-overly-text">${MY_WIDGET_CONFIG.options.text}</div>
+      </div>
+    </div>`;
 
   // Insert the widget into the DOM
   const widgetContainer = document.createElement("div");
@@ -237,6 +215,7 @@
         closeButton.style.display = "flex";
         closeButton.addEventListener("click", function () {
           widgetContainer.remove();
+          style.remove();
         });
       }
     });
@@ -247,6 +226,7 @@
     closeButton.style.display = "flex";
     closeButton.addEventListener("click", function () {
       widgetContainer.remove();
+      style.remove();
     });
   }
 })();

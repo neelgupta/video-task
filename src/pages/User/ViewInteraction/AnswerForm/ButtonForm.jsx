@@ -31,11 +31,7 @@ function ButtonForm({
     }
   }, [videoTime, answer_format]);
   return (
-    <div
-      className={`ButtonForm-container ${
-        windowSize.innerWidth > 1000 ? "" : "pb-100"
-      }`}
-    >
+    <div className={`ButtonForm-container `}>
       {isDelay && answer_format.delay !== 0 && (
         <div
           className="wp-100 hp-100"
@@ -48,13 +44,16 @@ function ButtonForm({
         >
           <div
             className="text-26-500"
-            style={{ fontFamily: `${flowStyle.font}` }}
+            style={{
+              fontFamily: `${flowStyle.font}`,
+              color: windowSize.innerWidth > 1000 ? "#000" : "#fff",
+            }}
           >
             {t("interact_in")}{" "}
             <span style={{ color: "#7b5aff" }}>
               {parseInt(answer_format.delay) -
                 parseInt(videoTime?.currentTime.toFixed(0)) || 0}
-            </span>
+            </span>{" "}
             {t("second")}...
           </div>
         </div>

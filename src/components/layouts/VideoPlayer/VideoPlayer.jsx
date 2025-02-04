@@ -15,7 +15,6 @@ const VideoPlayer = ({
   windowSizeTag = "desktop",
   allControlsDisabled = false,
 }) => {
-  console.log("windowSizeTag", windowSizeTag);
   const { t } = useTranslation();
   const videoRef = useRef(null);
   const {
@@ -25,13 +24,31 @@ const VideoPlayer = ({
     textReveal,
     videoPosition,
   } = videoConfigForm;
+
+  const dispatch = useDispatch();
+  const [aspectRatio, setAspectRatio] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMute, setIsMute] = useState(true);
   const [isRangeHover, setIsRangeHover] = useState(false);
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (windowSizeTag === "desktop") {
+      setAspectRatio(1);
+    }
+    if (windowSizeTag === "tablet") {
+      setAspectRatio(0.8);
+    }
+    if (windowSizeTag === "mobile") {
+      setAspectRatio(0.7);
+    }
+    if (windowSizeTag === "Widget-button") {
+      setAspectRatio(0.7);
+    }
+    console.log("windowSizeTag", windowSizeTag);
+  }, [windowSizeTag]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -94,7 +111,6 @@ const VideoPlayer = ({
   };
 
   const handleProgressBarChange = (e) => {
-    console.log("e.target.value", e.target.value);
     const video = videoRef.current;
     video.currentTime = e.target.value;
   };
@@ -181,12 +197,8 @@ const VideoPlayer = ({
               !isPlaying || parseFloat(currentTime.toFixed(0)) === duration
                 ? "flex"
                 : "none",
-            width: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
-              ? "50px"
-              : "100px",
-            height: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
-              ? "50px"
-              : "100px",
+            width: `${100 * aspectRatio}px`,
+            height: `${100 * aspectRatio}px`,
           }}
           className="play-btn-center"
           onClick={togglePlay}
@@ -197,12 +209,8 @@ const VideoPlayer = ({
             className="fir-image"
             style={{
               filter: creteImgFilter("#ffffff"),
-              width: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
-                ? "50px"
-                : "100px",
-              height: ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
-                ? "50px"
-                : "100px",
+              width: `${100 * aspectRatio}px`,
+              height: `${100 * aspectRatio}px`,
               zIndex: "100000000",
             }}
           />
@@ -270,26 +278,14 @@ const VideoPlayer = ({
 
               <div
                 className="all-control"
-                style={
-                  ["Widget-mobile", "Widget-button"].includes(windowSizeTag)
-                    ? {
-                        gap: "0px",
-                        padding: "0px 5px",
-                      }
-                    : {
-                        gap: "10px",
-                        padding: "0px 10px",
-                      }
-                }
+                style={{
+                  gap: `${10 * aspectRatio}px`,
+                }}
               >
                 <span
                   className="duration-text"
                   style={{
-                    transform: ["Widget-mobile", "Widget-button"].includes(
-                      windowSizeTag
-                    )
-                      ? "scale(0.7)"
-                      : "scale(1)",
+                    fontSize: `${Math.floor(18 * aspectRatio)}px`,
                   }}
                 >
                   {parseInt(currentTime.toFixed(0))} / {duration} sec
@@ -298,11 +294,7 @@ const VideoPlayer = ({
                   onClick={handleSpeedChange}
                   className="speed-btn"
                   style={{
-                    transform: ["Widget-mobile", "Widget-button"].includes(
-                      windowSizeTag
-                    )
-                      ? "scale(0.7)"
-                      : "scale(1)",
+                    transform: `scale(${100 * aspectRatio}%)`,
                   }}
                 >
                   {playbackSpeed}x
@@ -312,11 +304,7 @@ const VideoPlayer = ({
                   onClick={handleVolume}
                   className="volume-control"
                   style={{
-                    transform: ["Widget-mobile", "Widget-button"].includes(
-                      windowSizeTag
-                    )
-                      ? "scale(0.7)"
-                      : "scale(1)",
+                    transform: `scale(${100 * aspectRatio}%)`,
                   }}
                 >
                   <img
@@ -325,21 +313,21 @@ const VideoPlayer = ({
                     className="fit-image w-20 h-20 "
                   />
                 </button>
-                {!["Widget-mobile", "Widget-button"].includes(
-                  windowSizeTag
-                ) && (
-                  <button
-                    onClick={() => videoRef.current.requestFullscreen()}
-                    className="full-screen-btn me-10"
-                  >
-                    <img
-                      src={icons.fitView}
-                      alt=""
-                      className="fir-image"
-                      style={{ filter: creteImgFilter("#ffffff") }}
-                    />
-                  </button>
-                )}
+
+                <button
+                  onClick={() => videoRef.current.requestFullscreen()}
+                  className="full-screen-btn me-10"
+                  style={{
+                    transform: `scale(${100 * aspectRatio}%)`,
+                  }}
+                >
+                  <img
+                    src={icons.fitView}
+                    alt=""
+                    className="fir-image"
+                    style={{ filter: creteImgFilter("#ffffff") }}
+                  />
+                </button>
               </div>
             </div>
             <div
@@ -353,10 +341,10 @@ const VideoPlayer = ({
               }}
             >
               <div
-                className="text-14-500"
                 style={{
                   color: "white",
-                  fontSize: "12px",
+                  fontSize: windowSizeTag === "desktop" ? "14px" : "12px",
+                  fontWeight: "500",
                   fontFamily: `${flowStyle.font}`,
                   lineHeight: "1",
                 }}
@@ -364,8 +352,12 @@ const VideoPlayer = ({
                 {t("Powered_by")}
               </div>
               <div
-                className="text-20-800"
-                style={{ color: "white", lineHeight: "1" }}
+                style={{
+                  color: "white",
+                  lineHeight: "1",
+                  fontSize: windowSizeTag === "desktop" ? "20px" : "16px",
+                  fontWeight: "800",
+                }}
               >
                 Flōw AI
               </div>
@@ -378,17 +370,7 @@ const VideoPlayer = ({
                   fontSize: textSize,
                   opacity: textReveal >= currentTime ? "1" : "0",
                   display: textReveal >= currentTime ? "block" : "none",
-
-                  paddingLeft: ["Widget-mobile", "Widget-button"].includes(
-                    windowSizeTag
-                  )
-                    ? "10px"
-                    : "50px",
-                  paddingRight: ["Widget-mobile", "Widget-button"].includes(
-                    windowSizeTag
-                  )
-                    ? "10px"
-                    : "20px",
+                  padding: `10px ${Math.floor(50 * aspectRatio)}px`,
                 }}
                 onClick={(e) => {
                   togglePlay();

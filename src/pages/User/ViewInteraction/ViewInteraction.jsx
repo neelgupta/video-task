@@ -68,10 +68,6 @@ function ViewInteraction() {
         innerWidth: window.innerWidth,
         innerHeight: window.innerHeight,
       });
-      console.log("size", {
-        innerWidth: window.innerWidth,
-        innerHeight: window.innerHeight,
-      });
     };
 
     window.addEventListener("resize", handleResize);
@@ -82,18 +78,20 @@ function ViewInteraction() {
   }, []);
 
   useEffect(() => {
-    console.log("windowSize", windowSize);
     (() => {
-      if (windowSize.innerHeight < 300) {
+      if (windowSize.innerWidth < 300 || windowSize.innerHeight < 400) {
         setWidgetTag("Widget-button");
         return;
       }
-
-      if (windowSize.innerWidth < 300 && windowSize.innerHeight < 600) {
-        setWidgetTag("Widget-mobile");
+      if (windowSize.innerWidth < 450) {
+        setWidgetTag("mobile");
         return;
       }
-      setWidgetTag("");
+      if (windowSize.innerWidth < 1000) {
+        setWidgetTag("tablet");
+        return;
+      }
+      setWidgetTag("desktop");
     })();
   }, [windowSize]);
 
@@ -206,6 +204,7 @@ function ViewInteraction() {
       req.append("interaction_id", node.interaction_id);
       req.append("node_id", node._id);
       req.append("node_answer_type", node.answer_type);
+      req.append("device_name", handleDevice());
       if (node?.answer_type === "multiple-choice") {
         if (Array.isArray(ansData?.ans)) {
           ansData?.ans.map((x, ind) => {
@@ -267,6 +266,8 @@ function ViewInteraction() {
     ansData,
     ansId
   ) => {
+    setOpenEndedKey("");
+    setIsContact(false);
     const handleRedirection = async (url) => {
       await updateAnswerCompleted(ansId);
       window.location.href = url;
@@ -281,7 +282,6 @@ function ViewInteraction() {
     if (isMultiple) {
       const ans = Array.isArray(ansData?.ans) ? ansData.ans[0] : ansData.ans;
 
-      console.log("ans?.redirection_url", ans?.redirection_url);
       if (ans?.redirection_url) {
         await handleRedirection(ans.redirection_url);
         return;
@@ -361,7 +361,10 @@ function ViewInteraction() {
                         ? "desktop"
                         : "tablet"
                     }
-                    allControlsDisabled={true}
+                    allControlsDisabled={
+                      windowSize.innerHeight < 300 ||
+                      windowSize.innerHeight < 500
+                    }
                   />
                 )}
               </div>
@@ -385,11 +388,6 @@ function ViewInteraction() {
                 answer_type,
                 answer_format,
               } = node;
-
-              // if (key === node._id) {
-              //   setKeyNode(node);
-              //   console.log("node", node);
-              // }
               return (
                 key === node._id && (
                   <div
@@ -454,8 +452,8 @@ function ViewInteraction() {
                               position: "absolute",
                               zIndex: "1000",
                               width: "100%",
-                              height:
-                                openEndedKey || isContact ? "100%" : "unset",
+                              maxHeight:
+                                openEndedKey || isContact ? "100%" : "350px",
                               bottom: "0px",
                             }),
                       }}

@@ -120,13 +120,16 @@ function OpenEndedForm({
         >
           <div
             className="text-26-500"
-            style={{ fontFamily: `${flowStyle.font}` }}
+            style={{
+              fontFamily: `${flowStyle.font}`,
+              color: windowSize.innerWidth > 1000 ? "#000" : "#fff",
+            }}
           >
             {t("interact_in")}{" "}
             <span style={{ color: "#7b5aff" }}>
               {parseInt(answer_format.delay) -
                 parseInt((videoTime?.currentTime || 0).toFixed(0))}
-            </span>
+            </span>{" "}
             {t("second")}...
           </div>
         </div>
