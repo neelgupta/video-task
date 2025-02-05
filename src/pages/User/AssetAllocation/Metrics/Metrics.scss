@@ -1,0 +1,152 @@
+.Metrics-container {
+  .chart-card {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 18px 0px #00000012;
+    margin-top: 30px;
+    .chart-header {
+      margin-bottom: 30px;
+      .active {
+        border-bottom: 2px solid black;
+      }
+    }
+    .chart-card-header {
+      width: 100%;
+      gap: 30px 0px;
+    }
+  }
+  .date-btn {
+    width: 280px;
+    position: relative;
+    .custom-date-picker-input {
+      border: 1px solid rgb(231, 231, 231);
+      width: 100%;
+      font-size: 16px;
+      padding: 10px 10px 10px 40px;
+      border-radius: 5px;
+      outline: none;
+      position: relative;
+      color: rgb(139, 139, 139);
+      transition-duration: 0.3s;
+      transition-property: all;
+      &:focus {
+        border: 1px solid #8567ff;
+        color: #000;
+      }
+    }
+
+    &:focus-within {
+      .date-label {
+        filter: invert(39%) sepia(22%) saturate(7164%) hue-rotate(233deg)
+          brightness(107%) contrast(101%);
+      }
+      .react-datepicker__close-icon {
+        &::after {
+          background-color: #8567ff;
+        }
+      }
+    }
+    .date-label {
+      position: absolute;
+      z-index: 100;
+      left: 10px;
+      filter: invert(60%);
+    }
+    .react-datepicker__tab-loop {
+      position: absolute;
+    }
+    .react-datepicker__close-icon {
+      &::after {
+        background-color: rgb(139, 139, 139);
+        transition-duration: 0.3s;
+        transition-property: all;
+      }
+    }
+    .custom-calendar {
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+    }
+  }
+}
+
+.Metrics-header {
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 18px 0px #00000012;
+  display: flex;
+  gap: 50px;
+  justify-content: space-between;
+  .profile-det {
+    display: flex;
+    padding-bottom: 10px;
+    .profile-img {
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      img {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        object-fit: cover;
+        transform: scale(1);
+        transition-duration: 0.3s;
+        transition-property: transform;
+      }
+
+      .redirect-icons {
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        position: absolute;
+        bottom: 5px;
+        padding: 7px;
+        right: 5px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+        opacity: 0;
+        transition-duration: 0.3s;
+        transition-property: opacity;
+      }
+
+      &:hover {
+        img {
+          transform: scale(1.1);
+        }
+        .redirect-icons {
+          opacity: 1;
+        }
+      }
+    }
+    .det {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+  .header-menu {
+    width: 80%;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .menu {
+      border-bottom: 2px solid white;
+      cursor: pointer;
+    }
+    .active {
+      color: var(--darkColor);
+      border-color: var(--darkColor);
+    }
+  }
+}

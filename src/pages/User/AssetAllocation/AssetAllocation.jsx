@@ -116,7 +116,9 @@ function AssetAllocation() {
             }}
           />
         )}
-        {selectedTab === 3 && <Metrics />}
+        {selectedTab === 3 && (
+          <Metrics id={id} interactionDetails={interactionDetails} />
+        )}
       </div>
     </div>
   );

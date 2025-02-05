@@ -2,49 +2,37 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { useSelector } from "react-redux";
 
-const MetricsChart = () => {
+const MetricsChart = ({ metricsSet }) => {
   const reduxData = useSelector((state) => state.global);
   // eslint-disable-next-line no-unused-vars
   const { isResponsive, themeColor } = reduxData;
   const data = {
-    labels: [
-      "11 AM",
-      "12 PM",
-      "3 PM",
-      "4 PM",
-      "5 PM",
-      "6 PM",
-      "7 PM",
-      "8 PM",
-      "9 PM",
-      "10 PM",
-    ],
+    labels: metricsSet.labels,
     datasets: [
-      {
-        label: "Landed",
-        data: [40, 45, 50, 60, 65, 70, 80, 90, 100, 110],
-        borderColor: "rgba(34, 197, 94, 1)",
-        backgroundColor: "rgba(34, 197, 94, 1)",
-        fill: false,
-      },
+      // {
+      //   label: "Landed",
+      //   data: metricsSet.Landed,
+      //   borderColor: "rgba(34, 197, 94, 1)",
+      //   backgroundColor: "rgba(34, 197, 94, 1)",
+      //   fill: false,
+      // },
       {
         label: "Interactions",
-        data: [0, 90, 85, 80, 70, 100, 95, 90, 85, 80],
+        data: metricsSet.Interacted,
         borderColor: "rgba(249, 115, 22, 1)",
         backgroundColor: "rgba(249, 115, 22, 1)",
         fill: false,
       },
-
       {
         label: "Answers",
-        data: [0, 0, 0, 50, 60, 75, 90, 80, 110],
+        data: metricsSet.Answers,
         borderColor: "rgba(129, 98, 255, 1)",
         backgroundColor: "rgba(129, 98, 255, 1)",
         fill: false,
       },
       {
         label: "Completed",
-        data: [10, 20, 30, 40, 50, 60],
+        data: metricsSet.Completed,
         borderColor: "rgba(1, 126, 250, 1)",
         backgroundColor: "rgba(1, 126, 250, 1)",
         fill: false,
@@ -89,7 +77,14 @@ const MetricsChart = () => {
           text: "Value",
         },
         min: 0,
-        max: 120,
+        max:
+          Math.max(
+            ...[
+              metricsSet.Interacted,
+              metricsSet.Answers,
+              metricsSet.Completed,
+            ].flat()
+          ) + 2,
       },
     },
   };
@@ -106,10 +101,10 @@ const MetricsChart = () => {
               isResponsive ? "text-35-600" : "text-50-600"
             }`}
           >
-            1002
+            0
           </h3>
           <div style={{ color: "rgba(34, 197, 94, 1)", fontSize: "16px" }}>
-            +400
+            +0
           </div>
         </div>
         <div className="chart-det-card col-lg-3 col-sm-6 col-6">
@@ -121,10 +116,13 @@ const MetricsChart = () => {
               isResponsive ? "text-35-600" : "text-50-600"
             }`}
           >
-            40
+            {(metricsSet?.Interacted || []).reduce(
+              (acc, count) => (acc = acc + count),
+              0
+            )}
           </h3>
           <div style={{ color: "rgba(34, 197, 94, 1)", fontSize: "16px" }}>
-            +400
+            +0
           </div>
         </div>
         <div className="chart-det-card col-lg-3 col-sm-6 col-6">
@@ -136,7 +134,10 @@ const MetricsChart = () => {
               isResponsive ? "text-35-600" : "text-50-600"
             }`}
           >
-            1002
+            {(metricsSet?.Answers || []).reduce(
+              (acc, count) => (acc = acc + count),
+              0
+            )}
           </h3>
           <div style={{ color: "rgba(255, 56, 34, 1)", fontSize: "16px" }}>
             -20%
@@ -151,7 +152,10 @@ const MetricsChart = () => {
               isResponsive ? "text-35-600" : "text-50-600"
             }`}
           >
-            1002
+            {(metricsSet?.Completed || []).reduce(
+              (acc, count) => (acc = acc + count),
+              0
+            )}
           </h3>
           <div style={{ color: "rgba(34, 197, 94, 1)", fontSize: "16px" }}>
             +10s
@@ -164,3 +168,9 @@ const MetricsChart = () => {
 };
 
 export default MetricsChart;
+
+[
+  [0, 2, 4, 1],
+  [0, 1, 4, 5],
+  [0, 1, 6, 0],
+];

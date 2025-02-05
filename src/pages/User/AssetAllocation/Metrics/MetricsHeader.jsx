@@ -1,26 +1,56 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { icons } from "../../../utils/constants";
-import { creteImgFilter } from "../../../utils/helpers";
+import { icons } from "../../../../utils/constants";
+import { creteImgFilter, encrypt } from "../../../../utils/helpers";
+import { useNavigate } from "react-router-dom";
+import ShareView from "../../ShareView";
 
-function Header() {
+function MetricsHeader({ interaction }) {
   const reduxData = useSelector((state) => state.global);
   // eslint-disable-next-line no-unused-vars
+  const navigate = useNavigate();
+  const [shareUrl, setShareUrl] = useState("");
   const { isResponsive, themeColor } = reduxData;
   const [selectedTab, setSelectedTab] = useState(1);
   return (
     <div
       className="Metrics-header"
-      style={isResponsive ? { flexDirection: "column" } : {}}
+      style={
+        isResponsive ? { flexDirection: "column" } : { alignItems: "center" }
+      }
     >
+      {shareUrl !== "" && (
+        <ShareView
+          show={shareUrl !== ""}
+          handleClose={() => setShareUrl("")}
+          shareUrl={shareUrl}
+        />
+      )}
       <div className="profile-det">
-        <div className="w-89 h-79 profile-img">
-          <img src={icons.avatar7} alt="" className="fit-image" />
+        <div
+          className="w-89 h-79 profile-img"
+          onClick={() => {
+            const token = encrypt(interaction._id);
+            window.open(`/view-flow/${token}`, "_blank");
+          }}
+        >
+          <img src={interaction?.thumbnailUrl || ""} alt="" className="" />
+          <div className="redirect-icons">
+            <img
+              src={icons.top_right_arrow}
+              alt=""
+              className="fit-image "
+              style={{ filter: creteImgFilter("#ffffff") }}
+            />
+          </div>
         </div>
         <div className="det p-5 w-200 ms-10">
-          <div className="text-18-600">Asset Allocation</div>
+          <div className="text-18-600">{interaction?.title || ""}</div>
           <div className="fb-center mt-10">
-            <div className="w-18">
+            <div
+              className="w-18"
+              onClick={() => navigate(`/user/flow/${interaction._id}`)}
+            >
               <img
                 src={icons.branch}
                 alt=""
@@ -34,7 +64,14 @@ function Header() {
                 className="fit-image hover-icons-effect"
               />
             </div>
-            <div className="w-18">
+            <div
+              className="w-18"
+              onClick={() => {
+                const token = encrypt(interaction._id);
+                const url = `${window.location.origin}/view-flow/${token}`;
+                setShareUrl(url);
+              }}
+            >
               <img
                 src={icons.link}
                 alt=""
@@ -160,4 +197,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default MetricsHeader;

@@ -115,9 +115,14 @@ function Dashboard() {
   }, [selectedOrganizationId]);
 
   useEffect(() => {
-    if (selectedOrganizationId && tabIndex) {
+    if (
+      selectedOrganizationId &&
+      tabIndex &&
+      ((startDate && endDate) || (!startDate && !endDate))
+    ) {
       getInteraction();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     paginationOption.currentPage,
