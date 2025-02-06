@@ -19,6 +19,7 @@ function Metrics({ id, interactionDetails }) {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [metricsSet, setMetricsSet] = useState(null);
+  const [deviceType, setDeviceType] = useState("all");
 
   useEffect(() => {
     (() => {
@@ -45,12 +46,12 @@ function Metrics({ id, interactionDetails }) {
       getMetrics();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, start, end]);
+  }, [id, start, end, deviceType]);
 
   const getMetrics = async () => {
     try {
       const res = await api.get(
-        `interactions/get-metrics/${id}/?interval=${interval}&start=${dayjs(
+        `interactions/get-metrics/${id}/?interval=${interval}&deviceType=${deviceType}&start=${dayjs(
           start
         ).format("YYYY-MM-DD")}&end=${dayjs(end).format("YYYY-MM-DD")}`
       );
@@ -68,7 +69,11 @@ function Metrics({ id, interactionDetails }) {
 
   return (
     <div className="Metrics-container">
-      <MetricsHeader interaction={interactionDetails} />
+      <MetricsHeader
+        interaction={interactionDetails}
+        selectedTab={deviceType}
+        setSelectedTab={setDeviceType}
+      />
       <div className="chart-card">
         <div className="fb-center chart-header">
           <h6 className="text-24-700">Reports</h6>

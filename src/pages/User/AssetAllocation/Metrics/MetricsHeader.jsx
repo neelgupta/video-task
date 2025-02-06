@@ -5,13 +5,12 @@ import { creteImgFilter, encrypt } from "../../../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import ShareView from "../../ShareView";
 
-function MetricsHeader({ interaction }) {
+function MetricsHeader({ interaction, setSelectedTab, selectedTab }) {
   const reduxData = useSelector((state) => state.global);
   // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
   const [shareUrl, setShareUrl] = useState("");
   const { isResponsive, themeColor } = reduxData;
-  const [selectedTab, setSelectedTab] = useState(1);
   return (
     <div
       className="Metrics-header"
@@ -93,10 +92,10 @@ function MetricsHeader({ interaction }) {
         style={isResponsive ? { paddingTop: "20px", width: "100%" } : {}}
       >
         <div
-          className={`f-center menu ${selectedTab === 1 && "active"} ${
+          className={`f-center menu ${selectedTab === "all" && "active"} ${
             isResponsive ? "p-5" : "p-15"
           }`}
-          onClick={() => setSelectedTab(1)}
+          onClick={() => setSelectedTab("all")}
         >
           <div className="w-18 h-18">
             <img
@@ -105,7 +104,7 @@ function MetricsHeader({ interaction }) {
               className="fit-image"
               style={{
                 filter: creteImgFilter(
-                  selectedTab === 1 ? themeColor.darkColor : "#757F95"
+                  selectedTab === "all" ? themeColor.darkColor : "#757F95"
                 ),
               }}
             />
@@ -113,10 +112,10 @@ function MetricsHeader({ interaction }) {
           <div className="ms-15 text-14-500">All Devices</div>
         </div>
         <div
-          className={`f-center menu ${selectedTab === 2 && "active"} ${
+          className={`f-center menu ${selectedTab === "desktop" && "active"} ${
             isResponsive ? "p-5" : "p-15"
           }`}
-          onClick={() => setSelectedTab(2)}
+          onClick={() => setSelectedTab("desktop")}
         >
           <div className="w-18 h-18">
             <img
@@ -125,7 +124,7 @@ function MetricsHeader({ interaction }) {
               className="fit-image"
               style={{
                 filter: creteImgFilter(
-                  selectedTab === 2 ? themeColor.darkColor : "#757F95"
+                  selectedTab === "desktop" ? themeColor.darkColor : "#757F95"
                 ),
               }}
             />
@@ -133,10 +132,10 @@ function MetricsHeader({ interaction }) {
           <div className="ms-15 text-14-500">Desktop</div>
         </div>
         <div
-          className={`f-center menu ${selectedTab === 3 && "active"} ${
+          className={`f-center menu ${selectedTab === "mobile" && "active"} ${
             isResponsive ? "p-5" : "p-15"
           }`}
-          onClick={() => setSelectedTab(3)}
+          onClick={() => setSelectedTab("mobile")}
         >
           <div className="w-18 h-18">
             <img
@@ -145,7 +144,7 @@ function MetricsHeader({ interaction }) {
               className="fit-image"
               style={{
                 filter: creteImgFilter(
-                  selectedTab === 3 ? themeColor.darkColor : "#757F95"
+                  selectedTab === "mobile" ? themeColor.darkColor : "#757F95"
                 ),
               }}
             />
@@ -153,10 +152,10 @@ function MetricsHeader({ interaction }) {
           <div className="ms-15 text-14-500">Mobile</div>
         </div>
         <div
-          className={`f-center menu ${selectedTab === 4 && "active"} ${
+          className={`f-center menu ${selectedTab === "tablet" && "active"} ${
             isResponsive ? "p-5" : "p-15"
           }`}
-          onClick={() => setSelectedTab(4)}
+          onClick={() => setSelectedTab("tablet")}
         >
           <div className="w-18 h-18">
             <img
@@ -165,7 +164,7 @@ function MetricsHeader({ interaction }) {
               className="fit-image"
               style={{
                 filter: creteImgFilter(
-                  selectedTab === 4 ? themeColor.darkColor : "#757F95"
+                  selectedTab === "tablet" ? themeColor.darkColor : "#757F95"
                 ),
               }}
             />
@@ -173,10 +172,10 @@ function MetricsHeader({ interaction }) {
           <div className="ms-15 text-14-500">Tablet</div>
         </div>
         <div
-          className={`f-center menu ${selectedTab === 5 && "active"} ${
+          className={`f-center menu ${selectedTab === "others" && "active"} ${
             isResponsive ? "p-5" : "p-15"
           }`}
-          onClick={() => setSelectedTab(5)}
+          onClick={() => setSelectedTab("others")}
         >
           <div className="w-18 h-18">
             <img
@@ -185,7 +184,7 @@ function MetricsHeader({ interaction }) {
               className="fit-image"
               style={{
                 filter: creteImgFilter(
-                  selectedTab === 5 ? themeColor.darkColor : "#757F95"
+                  selectedTab === "others" ? themeColor.darkColor : "#757F95"
                 ),
               }}
             />
