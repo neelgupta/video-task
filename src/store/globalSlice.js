@@ -292,6 +292,60 @@ export const handleFetchFlowData = (payload) => async (dispatch) => {
   }
 };
 
+export const handleFetchTemplate = (payload) => async (dispatch) => {
+  const { id, setEdges, setNodes, setIsFetch } = payload;
+  setIsFetch(true);
+  try {
+    const res = await api.get(`template/get-template/${id}`);
+    if (res.status === 200) {
+      const {
+        data: {
+          response: { edges, nodes, ...int },
+        },
+      } = res;
+      dispatch(
+        setInteractionsStyle({
+          border_radius: int?.border_radius || 10,
+          background_color: int?.background_color || "",
+          primary_color: int?.primary_color || "",
+          secondary_color: int?.secondary_color || "",
+          language: int?.language || "",
+          font: int?.font || "",
+        })
+      );
+      if (nodes && edges && nodes.length > 1 && edges.length > 0) {
+        setNodes(
+          nodes.map((node, index) => ({
+            ...node,
+            id: node._id,
+            index: index + 1,
+            intId: id,
+            data: node,
+          }))
+        );
+        setEdges(
+          edges.map((edge, index) => ({
+            ...edge,
+            id: edge._id,
+            type: "button",
+            index: index + 1,
+            intId: id,
+            data: edge,
+          }))
+        );
+      } else {
+        dispatch(throwError("Nodes & edges are empty"));
+      }
+    } else {
+      dispatch(throwError(res.data.message));
+    }
+  } catch (error) {
+    console.log("error", error);
+    dispatch(throwError(error?.data?.response?.message || "Flow not found"));
+  }
+  setIsFetch(false);
+};
+
 export const handelCreateQuestion = (payload) => async (dispatch) => {
   try {
     const { req, id, setEdges, setNodes, navigate } = payload;

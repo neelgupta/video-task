@@ -22,6 +22,7 @@ import {
 } from "../store/globalSlice";
 import MyFolder from "../pages/User/MyCollection/MyFolder";
 import ViewInteraction from "../pages/User/ViewInteraction";
+import Template from "../pages/User/Template";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -120,6 +121,8 @@ const UserRoute = () => {
       })}
       <Route path="/user/flow/:id" element={<FlowCanvas />} />
       <Route path="/view-flow/:token/:type?" element={<ViewInteraction />} />
+      <Route path="/explore-Template" element={<Template />} />
+
       <Route path="*" element={<Navigate to="/user/dashboard" />} />
     </Routes>
   );

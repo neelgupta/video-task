@@ -246,6 +246,8 @@ const FlowCanvas = () => {
           className="react_flow_canvas"
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
+          // minZoom={0.01}
+          // maxZoom={100}
           panOnScroll={!isCanvasLock} // Prevent panning using scroll
           zoomOnScroll={!isCanvasLock} // Prevent zooming using scroll
           zoomOnDoubleClick={!isCanvasLock} // Prevent zooming using double-click

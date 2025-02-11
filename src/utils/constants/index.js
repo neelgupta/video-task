@@ -102,7 +102,6 @@ import volumeOff from "../../assets/images/svgIcons/volumeOff.svg";
 import play from "../../assets/images/svgIcons/play.svg";
 import push from "../../assets/images/svgIcons/push.svg";
 import closeSvg from "../../assets/images/svgIcons/closesvg.svg";
-import copy from "../../assets/images/icons/copy.png";
 import loginImage from "../../assets/images/loginI.png";
 import wavy from "../../assets/images/wavy.png";
 import contact from "../../assets/images/svgIcons/contact.svg";
@@ -119,6 +118,16 @@ import html from "../../assets/images/svgIcons/html.svg";
 import hand from "../../assets/images/svgIcons/hand.svg";
 import redirect from "../../assets/images/icons/redirect.png";
 import done from "../../assets/images/svgIcons/done.svg";
+import minus from "../../assets/images/svgIcons/minus.svg";
+import resizeout from "../../assets/images/svgIcons/resizeout.svg";
+import resizein from "../../assets/images/svgIcons/resizein.svg";
+import filter from "../../assets/images/svgIcons/filter.svg";
+import event from "../../assets/images/svgIcons/event.svg";
+import rating from "../../assets/images/svgIcons/rating.svg";
+import bug from "../../assets/images/svgIcons/bug.svg";
+import officebriefcase from "../../assets/images/svgIcons/officebriefcase.svg";
+import usersetting from "../../assets/images/svgIcons/usersetting.svg";
+import copy from "../../assets/images/svgIcons/copy.svg";
 
 export const icons = {
   logo,
@@ -241,4 +250,13 @@ export const icons = {
   hand,
   redirect,
   done,
+  minus,
+  resizeout,
+  resizein,
+  filter,
+  event,
+  rating,
+  bug,
+  officebriefcase,
+  usersetting,
 };

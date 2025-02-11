@@ -30,6 +30,8 @@ function ViewInteraction() {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const [key, setKey] = useState(0);
+  const [edges, setEdges] = useState([]);
+  const [allNode, setAllNode] = useState([]);
   const [queNodes, setQueNodes] = useState([]);
   const [endNodes, setEndNodes] = useState([]);
   const [intData, setIntData] = useState(null);
@@ -52,7 +54,6 @@ function ViewInteraction() {
     border_radius: "Arial",
     font: 10,
   });
-
   const [widgetTag, setWidgetTag] = useState("");
 
   useEffect(() => {
@@ -60,7 +61,7 @@ function ViewInteraction() {
       fetchInteraction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, type]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -97,7 +98,9 @@ function ViewInteraction() {
 
   const fetchInteraction = async () => {
     try {
-      const res = await api.get(`interactions/get-nodes/${id}`);
+      const res = await api.get(
+        `interactions/get-nodes/${id}?preview_type=${type || ""}`
+      );
       if (res.status === 200) {
         const {
           response: { nodes, edges, ...intr },
@@ -106,6 +109,8 @@ function ViewInteraction() {
         const nodeList = nodes.filter((x) => x.type === "Question");
 
         setIntData(intr);
+        setAllNode(nodes);
+        setEdges(edges);
         setFlowStyle({
           primary_color: intr?.primary_color || "#7B5AFF",
           secondary_color: intr?.secondary_color || "#B3A1FF",
@@ -130,7 +135,7 @@ function ViewInteraction() {
     } catch (error) {
       console.log("error", error);
       dispatch(handelCatch(error));
-      navigate();
+      navigate("/");
     }
   };
 
@@ -167,6 +172,9 @@ function ViewInteraction() {
       }
       if (answerId) {
         req.append("answer_id", answerId);
+      }
+      if (type) {
+        req.append("preview_type", type);
       }
 
       const res = await api.post(`interactions/add-answer`, req, {
@@ -259,6 +267,17 @@ function ViewInteraction() {
     }
   };
 
+  const handleRedirection = async (url, ansId) => {
+    if (ansId) await updateAnswerCompleted(ansId);
+    window.location.href = url;
+  };
+
+  const handleTargetNode = (nodeId) => {
+    setIsContact(false);
+    setIsPost(false);
+    setKey(nodeId);
+  };
+
   const handleNextTarget = async (
     isMultiple,
     isRedirect,
@@ -268,22 +287,12 @@ function ViewInteraction() {
   ) => {
     setOpenEndedKey("");
     setIsContact(false);
-    const handleRedirection = async (url) => {
-      await updateAnswerCompleted(ansId);
-      window.location.href = url;
-    };
-
-    const handleTargetNode = (nodeId) => {
-      setIsContact(false);
-      setIsPost(false);
-      setKey(nodeId);
-    };
 
     if (isMultiple) {
       const ans = Array.isArray(ansData?.ans) ? ansData.ans[0] : ansData.ans;
 
       if (ans?.redirection_url) {
-        await handleRedirection(ans.redirection_url);
+        await handleRedirection(ans.redirection_url, ansId);
         return;
       }
 
@@ -292,7 +301,7 @@ function ViewInteraction() {
         return;
       }
     } else if (isRedirect) {
-      await handleRedirection(target);
+      await handleRedirection(target, ansId);
     } else {
       handleTargetNode(target);
     }
@@ -310,6 +319,38 @@ function ViewInteraction() {
     } catch (error) {
       console.log("error", error);
       dispatch(handelCatch(error));
+    }
+  };
+
+  const handleNextPage = async (node, ansData) => {
+    console.log("answerData", ansData);
+    console.log("node", node);
+    if (node && ansData) {
+      if (["nps", "multiple-choice"].includes(node.answer_type)) {
+        const ans = Array.isArray(ansData?.ans) ? ansData.ans[0] : ansData.ans;
+
+        if (ans?.redirection_url) {
+          await handleRedirection(ans.redirection_url);
+          return;
+        }
+
+        if (ans?.targetedNodeId) {
+          handleTargetNode(ans.targetedNodeId);
+          return;
+        }
+      } else {
+        const nodeEdge = edges.find((edge) => edge.source === node._id);
+        if (nodeEdge) {
+          const targetNode = allNode.find((x) => x._id === nodeEdge.target);
+          if (targetNode.type === "Redirect") {
+            await handleRedirection(targetNode.redirection_url);
+          } else {
+            handleTargetNode(nodeEdge.target);
+          }
+        }
+      }
+    } else {
+      navigate("/");
     }
   };
 
@@ -474,6 +515,10 @@ function ViewInteraction() {
                                 setIsContact(true);
                                 return;
                               }
+                              if (type) {
+                                handleNextPage(node, ansValue);
+                                return;
+                              }
                               handleSubmitAns(node, ansValue);
                             }}
                             node={node}
@@ -497,6 +542,10 @@ function ViewInteraction() {
                                 setIsContact(true);
                                 return;
                               }
+                              if (type) {
+                                handleNextPage(node, ansValue);
+                                return;
+                              }
                               handleSubmitAns(node, ansValue);
                             }}
                             node={node}
@@ -515,6 +564,10 @@ function ViewInteraction() {
                               ) {
                                 setAnsData(ansValue);
                                 setIsContact(true);
+                                return;
+                              }
+                              if (type) {
+                                handleNextPage(node, ansValue);
                                 return;
                               }
                               handleSubmitAns(node, ansValue);
@@ -538,6 +591,10 @@ function ViewInteraction() {
                                 setIsContact(true);
                                 return;
                               }
+                              if (type) {
+                                handleNextPage(node, ansValue);
+                                return;
+                              }
                               handleSubmitAns(node, ansValue);
                             }}
                             node={node}
@@ -558,6 +615,10 @@ function ViewInteraction() {
                                 setIsContact(true);
                                 return;
                               }
+                              if (type) {
+                                handleNextPage(node, ansValue);
+                                return;
+                              }
                               handleSubmitAns(node, ansValue);
                             }}
                             node={node}
@@ -568,18 +629,38 @@ function ViewInteraction() {
 
                         {!isContact && answer_type === "calender" && (
                           <CalenderForm
-                            onNext={() => {}}
+                            onNext={(ansValue) => {
+                              if (
+                                answer_format?.contact_form &&
+                                !isContactCollected
+                              ) {
+                                setAnsData(ansValue);
+                                setIsContact(true);
+                                return;
+                              }
+                              if (type) {
+                                handleNextPage(node, ansValue);
+                                return;
+                              }
+                              handleSubmitAns(node, ansValue);
+                            }}
+                            flowStyle={flowStyle}
                             node={node}
                             isPost={isPost}
+                            windowSize={windowSize}
                           />
                         )}
 
                         {isContact && !isContactCollected && (
                           <ContactForm
                             node={node}
-                            onNext={(contactValue) =>
-                              handleSubmitAnsWithContact(node, contactValue)
-                            }
+                            onNext={(contactValue) => {
+                              if (type) {
+                                handleNextPage(node, ansData);
+                                return;
+                              }
+                              handleSubmitAnsWithContact(node, contactValue);
+                            }}
                             flowStyle={flowStyle}
                             isPost={isPost}
                             windowSize={windowSize}

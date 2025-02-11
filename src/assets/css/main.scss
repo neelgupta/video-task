@@ -348,7 +348,8 @@ $fonthWeights: 400, 500, 600, 700, 800;
 
   &::-webkit-scrollbar-thumb {
     border-radius: 0px;
-    background-color: #edd8fa;
+    background-color: rgba(140, 83, 247, 0.5);
+    border-radius: 5px;
   }
 }
 .text-elipses {

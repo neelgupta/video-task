@@ -200,16 +200,25 @@ function VideoCard(props) {
               }
             >
               <div
-                className="text-14-600 "
-                style={{
-                  textTransform: "capitalize",
-                  color: interactionsStyle.primary_color,
-                }}
+                className="text-14-600"
+                style={{ display: "flex", alignItems: "center" }}
               >
                 <span className="text-17-600" style={{ color: "#000" }}>
                   {data.index}.
-                </span>{" "}
-                {data.title}.
+                </span>
+                <div
+                  style={{
+                    width: "150px",
+                    textTransform: "capitalize",
+                    color: interactionsStyle.primary_color,
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    margin: "0px 0px 0px 5px",
+                  }}
+                >
+                  {data.title}
+                </div>
               </div>
               <div className="m-0 p-0 wp-100 hp-85">
                 <AnswerSkeleton

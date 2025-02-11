@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import "./NewQnAFlowModal.scss";
 import { icons } from "../../../utils/constants";
 import OutlineRadio from "./OutlineRadio";
 import Select from "react-select";
 import DropdownOption from "../../../components/inputs/DropdownOption/DropdownOption";
+import { useNavigate } from "react-router-dom";
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -46,6 +47,7 @@ const NewQnAFlowModal = ({
     selectCRM: null,
     type: null,
   });
+  const navigate = useNavigate();
   const buttonValidator = () => {
     if (qnaForm) {
       const { leadCRM, selectCRM, type } = qnaForm;
@@ -83,6 +85,17 @@ const NewQnAFlowModal = ({
       value: "FlowAI",
     },
   ];
+
+  useEffect(() => {
+    if (qnaForm.type === "Template") {
+      setQnaFlow({
+        ...qnaForm,
+        leadCRM: "no",
+        selectCRM: null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qnaForm.type]);
 
   return (
     <Modal
@@ -158,8 +171,10 @@ const NewQnAFlowModal = ({
                       className="w-24 h-24"
                       isCheck={qnaForm.leadCRM === "yes"}
                       onChange={() => {
-                        setQnaFlow({ ...qnaForm, leadCRM: "yes" });
+                        qnaForm.type !== "Template" &&
+                          setQnaFlow({ ...qnaForm, leadCRM: "yes" });
                       }}
+                      isDisabled={qnaForm.type === "Template"}
                     />
                   </div>
                   <div className="text-16-600" style={{ color: "#000000" }}>
@@ -175,8 +190,10 @@ const NewQnAFlowModal = ({
                       className="w-24 h-24"
                       isCheck={qnaForm.leadCRM === "no"}
                       onChange={() => {
-                        setQnaFlow({ ...qnaForm, leadCRM: "no" });
+                        qnaForm.type !== "Template" &&
+                          setQnaFlow({ ...qnaForm, leadCRM: "no" });
                       }}
+                      isDisabled={qnaForm.type === "Template"}
                     />
                   </div>
                   <div className="text-16-600" style={{ color: "#000000" }}>
@@ -207,6 +224,10 @@ const NewQnAFlowModal = ({
               <div className="Connect-Continue-btn">
                 <Button
                   onClick={() => {
+                    if (qnaForm.type === "Template") {
+                      navigate("/explore-Template");
+                      return;
+                    }
                     setShowCreateFlowAIModal(true);
                     setCreateFlowModalSubmitData(qnaForm);
                     handleClose();

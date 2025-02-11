@@ -1,0 +1,195 @@
+.Template {
+  width: 100%;
+  height: 100vh;
+  .Template-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    .Template-sidebar {
+      width: 400px;
+      height: 100%;
+      background: #f0f0f0;
+      .sidebar-header {
+        width: 100%;
+        height: 200px;
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        flex-direction: column;
+        padding: 15px;
+        .back_btn {
+          width: 180px;
+          padding: 5px 0px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 5px;
+          cursor: pointer;
+          color: #555;
+          transition-duration: 0.3s;
+          transition-property: all;
+          &:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: black;
+            img {
+              transform: translateX(-20px);
+            }
+            p {
+              text-decoration: underline;
+            }
+          }
+          img {
+            width: 30px;
+            height: 30px;
+            transform: translateX(0px);
+            transition-duration: 0.3s;
+            transition-property: all;
+          }
+          p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            padding: 0;
+            text-decoration: none;
+          }
+        }
+        .sidebar-title {
+          width: 100%;
+          margin-top: 20px;
+
+          h1 {
+            padding: 0;
+            margin: 5px 0px;
+            font-size: 20px;
+            font-weight: 900;
+          }
+        }
+      }
+      .sidebar-menu {
+        width: 100%;
+        height: calc(100% - 200px);
+        overflow: auto;
+        padding: 15px;
+
+        .menu-title {
+          width: 100%;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          div {
+            font-size: 14px;
+            font-weight: 500;
+            color: #727272;
+            width: 100%;
+            text-wrap: nowrap;
+            padding: 0px 5px;
+          }
+          span {
+            width: 100%;
+            height: 1px;
+            background: #c4c4c4;
+          }
+        }
+        .Template-menu-card {
+          width: 100%;
+          height: 70px;
+          background: transparent;
+          padding: 0px 15px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 15px;
+          transition-duration: 0.3s;
+          transition-property: all;
+          &:hover {
+            background: rgba(0, 0, 0, 0.1);
+          }
+
+          &-icon {
+            width: 45px;
+            height: 45px;
+            background: rgb(255, 255, 255);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          &-text {
+            font-size: 16px;
+            font-weight: 900;
+          }
+        }
+
+        .active {
+          background-color: white;
+          box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+          &:hover {
+            background-color: white;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+          }
+          &-icon {
+            background: #f0f0f0;
+          }
+        }
+      }
+    }
+    .Template-content {
+      width: calc(100% - 400px);
+      height: 100%;
+      background: rgb(255, 255, 255);
+      &-header {
+        width: 100%;
+        height: 100px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0px 20px;
+        h1 {
+          font-size: 20px;
+          font-weight: 900;
+        }
+        div {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            transform: scale(1);
+            transition-duration: 0.3s;
+            transition-property: all;
+            &:hover {
+              transform: scale(1.05);
+            }
+            &:nth-child(1) {
+              background: black;
+              color: white;
+              img {
+                filter: invert(100%);
+              }
+            }
+            div {
+              font-size: 14px;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+      &-info {
+        width: 100%;
+        height: calc(100% - 110px);
+        overflow-y: auto;
+        margin-top: 10px;
+      }
+    }
+  }
+}
