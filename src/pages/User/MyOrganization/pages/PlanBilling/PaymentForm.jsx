@@ -12,6 +12,7 @@ import {
 } from "../../../../../store/globalSlice";
 import { api } from "../../../../../services/api";
 import dayjs from "dayjs";
+import { CreditCard } from "lucide-react";
 function PaymentForm({
   onHide,
   show,
@@ -248,29 +249,34 @@ function PaymentForm({
               >
                 Card Expiry Date:
               </div>
-              <div>
+
+              <div className="mt-2 payment-card-datepicker">
                 <input
-                  className="input wp-100"
-                  type="date"
+                  className="payment-card-datepicker-input"
+                  type="month"
                   name="ExpiryDate"
                   id="ExpiryDate"
-                  placeholder="Card Expiry Date"
+                  min={new Date().toISOString().slice(0, 7)}
                   value={formik.values.ExpiryDate}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.ExpiryDate && formik.errors.ExpiryDate ? (
-                  <div
-                    style={{
-                      color: "red",
-                      fontSize: "12px",
-                      marginLeft: "5px",
-                    }}
-                  >
-                    {formik.errors.ExpiryDate}
-                  </div>
-                ) : null}
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                  <CreditCard size={18} color="#4d20ff" />
+                </span>
               </div>
+
+              {formik.touched.ExpiryDate && formik.errors.ExpiryDate && (
+                <div
+                  style={{
+                    color: "red",
+                    fontSize: "12px",
+                    marginLeft: "5px",
+                  }}
+                >
+                  {formik.errors.ExpiryDate}
+                </div>
+              )}
             </div>
 
             <div className="mt-20">

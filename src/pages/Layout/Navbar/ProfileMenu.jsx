@@ -63,11 +63,17 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
       {show && (
         <div className="profile-popover" ref={profileRef}>
           <div className="d-flex flex-column gap-2 px-16 py-13 pointer">
-            <div className="text-14-400">
-              Hi, <span style={{ color: "#7B5AFF" }}>{userData.user_name}</span>
-            </div>
-
-            <div className="text-14-400" style={{ color: "#8C8E90" }}>
+            <div className="text-14-400 p-0 m-0">Hi, </div>
+            <div
+              className="text-14-400 p-0 m-0"
+              style={{
+                color: "#7f5fff",
+                width: "100%",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
               {userData.email}
             </div>
             <div

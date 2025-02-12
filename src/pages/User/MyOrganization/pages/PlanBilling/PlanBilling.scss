@@ -101,6 +101,20 @@
     border: 1px solid #cccccc;
     outline: none;
   }
+  .payment-card-datepicker {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0px 10px 0px 0px;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    &-input {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      box-shadow: none;
+    }
+  }
   .error-message {
     color: red;
     font-size: 12px; /* Adjust size as needed */

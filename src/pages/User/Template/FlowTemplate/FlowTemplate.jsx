@@ -10,10 +10,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useDispatch } from "react-redux";
-import {
-  handleFetchFlowData,
-  handleFetchTemplate,
-} from "../../../../store/globalSlice";
+import { handleFetchTemplate } from "../../../../store/globalSlice";
 import { useNavigate } from "react-router-dom";
 import StartNode from "../../../FlowCanvas/reactflow/StartNode/StartNode";
 import EndNode from "../../../FlowCanvas/reactflow/EndNode/EndNode";
@@ -21,8 +18,39 @@ import VideoCard from "../../../FlowCanvas/reactflow/VideoCard";
 import RedirectCard from "../../../FlowCanvas/reactflow/RedirectCard";
 import ButtonEdge from "../../../FlowCanvas/reactflow/ButtonEdge/ButtonEdge";
 import { icons } from "../../../../utils/constants";
-import { Spinner } from "react-bootstrap";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
+import parse from "html-react-parser";
+
+const about_template = `<div>
+              <h1 class="text-20-700 py-5">About this template</h1>
+              <p class="text-16-500 py-5">
+                Using VideoAsk to capture contact details adds a personal touch
+                and a human element that's all too often missing from
+                run-of-the-mill contact forms.
+              </p>
+              <ul>
+                <li class="text-16-500 py-5">
+                  The first step in this videoask asks respondents what they
+                  need help with. They can choose from four multiple-choice
+                  options.
+                </li>
+                <li class="text-16-500 py-5">
+                  The second (and final) step that respondents see depends on
+                  the answer they choose in the first step. In most cases,
+                  they’re asked to provide more information or give feedback via
+                  video, audio, or text. They're then taken to a contact form
+                  that asks them to leave their name and email address, as well
+                  as consenting to some data processing terms and conditions.
+                </li>
+                <li class="text-16-500 py-5">
+                  The exception is if they choose the first option in step one
+                  (“I want to know more about you”). In this case, they’re taken
+                  to a second step where they’re given some more information
+                  about the company before being redirected to a webpage with
+                  further information.
+                </li>
+              </ul>
+            </div>`;
 
 const nodeTypes = {
   Start: StartNode,
@@ -128,35 +156,7 @@ function FlowContent({ templateId }) {
               </div>
             </div>
           </div>
-          <div className="template-description">
-            <h1 className="text-20-700 py-5">About this template</h1>
-            <p className="text-16-500 py-5">
-              Using VideoAsk to capture contact details adds a personal touch
-              and a human element that`s all too often missing from
-              run-of-the-mill contact forms.
-            </p>
-            <ul>
-              <li className="text-16-500 py-5">
-                The first step in this videoask asks respondents what they need
-                help with. They can choose from four multiple-choice options.
-              </li>
-              <li className="text-16-500 py-5">
-                The second (and final) step that respondents see depends on the
-                answer they choose in the first step. In most cases, they’re
-                asked to provide more information or give feedback via video,
-                audio, or text. They`re then taken to a contact form that asks
-                them to leave their name and email address, as well as
-                consenting to some data processing terms and conditions.
-              </li>
-              <li className="text-16-500 py-5">
-                The exception is if they choose the first option in step one (“I
-                want to know more about you”). In this case, they’re taken to a
-                second step where they’re given some more information about the
-                company before being redirected to a webpage with further
-                information.
-              </li>
-            </ul>
-          </div>
+          <div className="template-description">{parse(about_template)}</div>
         </>
       )}
     </div>

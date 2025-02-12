@@ -72,7 +72,7 @@ const CreateFolderModal = ({
     }
 
     // Check for invalid characters
-    const invalidChars = /[^a-zA-Z0-9-_]/;
+    const invalidChars = /[^a-zA-Z0-9-_ ]/;
     if (invalidChars.test(name)) {
       return "Folder name can only contain letters, numbers, '-', and '_'.";
     }

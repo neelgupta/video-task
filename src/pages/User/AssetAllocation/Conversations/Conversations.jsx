@@ -26,6 +26,7 @@ import CreateContactModal from "../../Interactions/CreateContactModal";
 import AssignContactModal from "../../Interactions/AssignContactModal";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
 import ShareView from "../../ShareView";
+import Tooltip from "../../../../components/layouts/Tooltip";
 
 function Conversations({
   id,
@@ -261,11 +262,36 @@ function Conversations({
                   className="w-18"
                   onClick={() => navigate(`/user/flow/${id}`)}
                 >
-                  <img
-                    src={icons.branch}
-                    alt=""
-                    className="fit-image hover-icons-effect"
-                  />
+                  <Tooltip
+                    content={
+                      <div
+                        style={{
+                          color: "#fff",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <div className="w-18 h-18 f-center">
+                          <img
+                            src={icons.edit}
+                            alt=""
+                            style={{ filter: creteImgFilter("#ffffff") }}
+                          />
+                        </div>
+                        <div>Edit Flow</div>
+                      </div>
+                    }
+                  >
+                    <img
+                      src={icons.branch}
+                      alt=""
+                      className="fit-image hover-icons-effect"
+                    />
+                  </Tooltip>
                 </div>
                 <div className="w-18">
                   <img
@@ -282,11 +308,36 @@ function Conversations({
                     setShareUrl(url);
                   }}
                 >
-                  <img
-                    src={icons.link}
-                    alt=""
-                    className="fit-image hover-icons-effect"
-                  />
+                  <Tooltip
+                    content={
+                      <div
+                        style={{
+                          color: "#fff",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <div className="w-18 h-18 f-center">
+                          <img
+                            src={icons.link}
+                            alt=""
+                            style={{ filter: creteImgFilter("#ffffff") }}
+                          />
+                        </div>
+                        <div>Share Flow</div>
+                      </div>
+                    }
+                  >
+                    <img
+                      src={icons.link}
+                      alt=""
+                      className="fit-image hover-icons-effect"
+                    />
+                  </Tooltip>
                 </div>
                 <div className="w-18">
                   <img

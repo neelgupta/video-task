@@ -115,7 +115,7 @@ function MyFolder() {
         }}
         isDelete={isDelete}
         title="Are you sure you want to proceed?"
-        text="Once deleted, they cannot be recovered."
+        text="Once deleted, they can be recovered in trash. 🗑️"
       />
 
       <MoveFolderModel
