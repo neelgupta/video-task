@@ -17,17 +17,17 @@ import {
 
 import styles from "./Tooltip.module.scss";
 
-function Tooltip({ children, content }) {
+function Tooltip({ children, content, placement, offsetNumber }) {
   const [isOpen, setIsOpen] = useState(false);
   const arrowRef = useRef(null);
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
-    placement: "bottom",
+    placement: placement || "bottom",
     whileElementsMounted: autoUpdate,
     middleware: [
-      offset(25),
+      offset(offsetNumber || 25),
       flip({
         fallbackAxisSideDirection: "start",
       }),

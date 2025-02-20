@@ -77,7 +77,7 @@ function MyFolder() {
   };
 
   const handleView = (ele) => {
-    const token = encrypt(ele._id);
+    const token = encrypt({ id: ele._id, type: "" });
     window.open(`/view-flow/${token}`, "_blank");
   };
 
@@ -101,7 +101,7 @@ function MyFolder() {
   };
 
   const handleShare = (id) => {
-    const token = encrypt(id);
+    const token = encrypt({ id, type: "" });
     const url = `${window.location.origin}/view-flow/${token}`;
     setShareUrl(url);
   };

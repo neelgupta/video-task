@@ -76,7 +76,7 @@ function SubscriptionForm({ onHide, getSubscriptionList, isEdit, editData }) {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
     setIsLoad(false);
   };

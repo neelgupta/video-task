@@ -25,13 +25,16 @@ import { isMobile, isTablet, isDesktop } from "react-device-detect";
 // profileData;
 function ViewInteraction() {
   const { token, type } = useParams();
-  const id = decrypt(token);
+  const { id, type: tokenType } = decrypt(token);
+  console.log("id", id);
+  console.log("tokenType", tokenType);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const [key, setKey] = useState(0);
   const [edges, setEdges] = useState([]);
   const [allNode, setAllNode] = useState([]);
+  const [replyNode, setReplyNode] = useState([]);
   const [queNodes, setQueNodes] = useState([]);
   const [endNodes, setEndNodes] = useState([]);
   const [intData, setIntData] = useState(null);
@@ -61,7 +64,7 @@ function ViewInteraction() {
       fetchInteraction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, type]);
+  }, [id, tokenType]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -99,17 +102,18 @@ function ViewInteraction() {
   const fetchInteraction = async () => {
     try {
       const res = await api.get(
-        `interactions/get-nodes/${id}?preview_type=${type || ""}`
+        `interactions/get-nodes/${id}?preview_type=${tokenType || ""}`
       );
       if (res.status === 200) {
         const {
-          response: { nodes, edges, ...intr },
+          response: { nodes, edges, replyNode, ...intr },
         } = res.data;
+        console.log("res.data", res.data);
 
         const nodeList = nodes.filter((x) => x.type === "Question");
 
         setIntData(intr);
-        setAllNode(nodes);
+        setAllNode([...nodes, ...(replyNode || [])]);
         setEdges(edges);
         setFlowStyle({
           primary_color: intr?.primary_color || "#7B5AFF",
@@ -119,6 +123,7 @@ function ViewInteraction() {
           border_radius: intr?.border_radius || "Arial",
           font: intr?.font || 10,
         });
+        setReplyNode(replyNode);
         i18n.changeLanguage(
           languageOptions.find((ele) => ele.value === intr?.language)?.key ||
             "en"
@@ -129,7 +134,15 @@ function ViewInteraction() {
             ? nodeList.find((ele) => ele.index === 1)?._id || ""
             : "End"
         );
-        setQueNodes(nodeList);
+        if (["reply", "direct-message", "reply-message"].includes(tokenType)) {
+          setKey(replyNode[0]?._id || "");
+        }
+
+        setQueNodes([
+          ...(["reply", "direct-message", "reply-message"].includes(tokenType)
+            ? replyNode
+            : nodeList),
+        ]);
         setEndNodes(nodes.find((x) => x.type === "End"));
       }
     } catch (error) {
@@ -144,6 +157,69 @@ function ViewInteraction() {
     if (isDesktop) return "desktop";
     if (isTablet) return "tablet";
     return "other";
+  };
+
+  const handleDirectMessageSubmitAns = async (node, ansValue) => {
+    setIsPost(true);
+    try {
+      const req = new FormData();
+      req.append("message_id", intData._id);
+      req.append("node_id", node._id);
+      req.append("node_answer_type", node.answer_type);
+      req.append("device_name", handleDevice());
+      req.append("contact_id", node.contact_id);
+      if (node.answer_type === "multiple-choice") {
+        if (Array.isArray(ansValue?.ans)) {
+          ansValue?.ans.map((x, ind) => {
+            req.append(`answer[${ind}]`, x.option);
+          });
+        } else {
+          req.append(`answer[0]`, ansValue.ans.option);
+        }
+      } else {
+        req.append(`answer`, ansValue.ans);
+      }
+      if (node.answer_type === "open-ended") {
+        req.append("type", ansValue.ansType);
+      }
+      if (tokenType) {
+        req.append("preview_type", tokenType);
+      }
+
+      if (tokenType === "reply-message") {
+        req.append("reply_id", node.reply_id);
+      }
+
+      const res = await api.post(
+        `interactions/add-direct-message-answer`,
+        req,
+        {
+          "Content-Type": "multipart/form-data",
+        }
+      );
+      if (res.status === 201) {
+        const ansId = res.data?.response?.answerId;
+        if (!answerId) {
+          setAnswerId(ansId);
+        }
+        dispatch(showSuccess(res.data.message));
+        handleNextTarget(
+          res.data?.response?.isMultiple,
+          res.data?.response?.isRedirect,
+          res.data?.response?.target,
+          ansValue,
+          ansId
+        );
+        setIsContact(false);
+      } else {
+        dispatch(throwError(res.data.message));
+        setIsPost(false);
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(handelCatch(error));
+      setIsPost(false);
+    }
   };
 
   const handleSubmitAns = async (node, ansValue) => {
@@ -173,8 +249,12 @@ function ViewInteraction() {
       if (answerId) {
         req.append("answer_id", answerId);
       }
-      if (type) {
-        req.append("preview_type", type);
+      if (tokenType) {
+        req.append("preview_type", tokenType);
+      }
+
+      if (tokenType === "reply") {
+        req.append("answer_id", node.answer_id);
       }
 
       const res = await api.post(`interactions/add-answer`, req, {
@@ -206,6 +286,7 @@ function ViewInteraction() {
   };
 
   const handleSubmitAnsWithContact = async (node, contactValue) => {
+    console.log("node", node);
     setIsPost(true);
     try {
       const req = new FormData();
@@ -231,6 +312,9 @@ function ViewInteraction() {
       }
       if (answerId) {
         req.append("answer_id", answerId);
+      }
+      if (tokenType) {
+        req.append("preview_type", tokenType);
       }
 
       Object.keys(contactValue).forEach((key) => {
@@ -354,6 +438,27 @@ function ViewInteraction() {
     }
   };
 
+  const handelOnNext = (ansValue, node) => {
+    if (
+      node.answer_format?.contact_form &&
+      !isContactCollected &&
+      !["reply", "direct-message", "reply-message"].includes(tokenType)
+    ) {
+      setAnsData(ansValue);
+      setIsContact(true);
+      return;
+    }
+    if (type || tokenType === "template") {
+      handleNextPage(node, ansValue);
+      return;
+    }
+    if (tokenType === "direct-message" || tokenType === "reply-message") {
+      handleDirectMessageSubmitAns(node, ansValue);
+      return;
+    }
+    handleSubmitAns(node, ansValue);
+  };
+
   return (
     <div className="ViewInteraction-container">
       <div id="controlled-tab-example">
@@ -429,6 +534,7 @@ function ViewInteraction() {
                 answer_type,
                 answer_format,
               } = node;
+              console.log("node", node);
               return (
                 key === node._id && (
                   <div
@@ -507,19 +613,7 @@ function ViewInteraction() {
                           <OpenEndedForm
                             flowStyle={flowStyle}
                             onNext={(ansValue) => {
-                              if (
-                                answer_format?.contact_form &&
-                                !isContactCollected
-                              ) {
-                                setAnsData(ansValue);
-                                setIsContact(true);
-                                return;
-                              }
-                              if (type) {
-                                handleNextPage(node, ansValue);
-                                return;
-                              }
-                              handleSubmitAns(node, ansValue);
+                              handelOnNext(ansValue, node);
                             }}
                             node={node}
                             videoTime={videoTime}
@@ -534,19 +628,7 @@ function ViewInteraction() {
                           <MultipleChoiceForm
                             flowStyle={flowStyle}
                             onNext={(ansValue) => {
-                              if (
-                                answer_format?.contact_form &&
-                                !isContactCollected
-                              ) {
-                                setAnsData(ansValue);
-                                setIsContact(true);
-                                return;
-                              }
-                              if (type) {
-                                handleNextPage(node, ansValue);
-                                return;
-                              }
-                              handleSubmitAns(node, ansValue);
+                              handelOnNext(ansValue, node);
                             }}
                             node={node}
                             isPost={isPost}
@@ -558,19 +640,7 @@ function ViewInteraction() {
                           <ButtonForm
                             flowStyle={flowStyle}
                             onNext={(ansValue) => {
-                              if (
-                                answer_format?.contact_form &&
-                                !isContactCollected
-                              ) {
-                                setAnsData(ansValue);
-                                setIsContact(true);
-                                return;
-                              }
-                              if (type) {
-                                handleNextPage(node, ansValue);
-                                return;
-                              }
-                              handleSubmitAns(node, ansValue);
+                              handelOnNext(ansValue, node);
                             }}
                             node={node}
                             videoTime={videoTime}
@@ -583,19 +653,7 @@ function ViewInteraction() {
                           <FileUploadForm
                             flowStyle={flowStyle}
                             onNext={(ansValue) => {
-                              if (
-                                answer_format?.contact_form &&
-                                !isContactCollected
-                              ) {
-                                setAnsData(ansValue);
-                                setIsContact(true);
-                                return;
-                              }
-                              if (type) {
-                                handleNextPage(node, ansValue);
-                                return;
-                              }
-                              handleSubmitAns(node, ansValue);
+                              handelOnNext(ansValue, node);
                             }}
                             node={node}
                             isPost={isPost}
@@ -607,19 +665,7 @@ function ViewInteraction() {
                           <NpsForm
                             flowStyle={flowStyle}
                             onNext={(ansValue) => {
-                              if (
-                                answer_format?.contact_form &&
-                                !isContactCollected
-                              ) {
-                                setAnsData(ansValue);
-                                setIsContact(true);
-                                return;
-                              }
-                              if (type) {
-                                handleNextPage(node, ansValue);
-                                return;
-                              }
-                              handleSubmitAns(node, ansValue);
+                              handelOnNext(ansValue, node);
                             }}
                             node={node}
                             isPost={isPost}
@@ -630,19 +676,7 @@ function ViewInteraction() {
                         {!isContact && answer_type === "calender" && (
                           <CalenderForm
                             onNext={(ansValue) => {
-                              if (
-                                answer_format?.contact_form &&
-                                !isContactCollected
-                              ) {
-                                setAnsData(ansValue);
-                                setIsContact(true);
-                                return;
-                              }
-                              if (type) {
-                                handleNextPage(node, ansValue);
-                                return;
-                              }
-                              handleSubmitAns(node, ansValue);
+                              handelOnNext(ansValue, node);
                             }}
                             flowStyle={flowStyle}
                             node={node}

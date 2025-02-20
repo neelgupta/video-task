@@ -281,7 +281,7 @@ function Upload({ show, handleClose }) {
                 </div>
               </div>
             </div>
-            <div className="content-body auri-scroll">
+            <div className="content-body flow">
               {headerTab === "video" && (
                 <div className="video">
                   <div className="modal-title">

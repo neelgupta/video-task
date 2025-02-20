@@ -2,7 +2,11 @@ import { icons } from "../../../utils/constants";
 import { creteImgFilter, encrypt } from "../../../utils/helpers";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { handelCatch, setAuthData } from "../../../store/globalSlice";
+import {
+  handelCatch,
+  setAuthData,
+  throwError,
+} from "../../../store/globalSlice";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = ({ themeColor, isResponsive }) => {
@@ -41,7 +45,7 @@ const ProfileMenu = ({ themeColor, isResponsive }) => {
       dispatch(setAuthData(data));
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
   };
 

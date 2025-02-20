@@ -114,7 +114,7 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
           <Offcanvas.Title>Offcanvas</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="sidebar-card">
-          <div id="user-sidebar-container" className="auri-scroll">
+          <div id="user-sidebar-container" className="flow">
             <div
               className="py-10 px-20 f-center"
               style={{
@@ -160,7 +160,7 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                   />
                 </div>
 
-                <div className="organizationMenu auri-scroll">
+                <div className="organizationMenu flow">
                   <div
                     className="text-14-500 mb-10"
                     style={{ color: "#989BA1" }}
@@ -213,7 +213,7 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
               </div>
             </div>
             <div
-              className="side-option-container auri-scroll"
+              className="side-option-container flow"
               style={{
                 maxHeight:
                   role === "admin"

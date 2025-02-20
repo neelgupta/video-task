@@ -128,6 +128,7 @@ import bug from "../../assets/images/svgIcons/bug.svg";
 import officebriefcase from "../../assets/images/svgIcons/officebriefcase.svg";
 import usersetting from "../../assets/images/svgIcons/usersetting.svg";
 import copy from "../../assets/images/svgIcons/copy.svg";
+import reply from "../../assets/images/svgIcons/reply.svg";
 
 export const icons = {
   logo,
@@ -259,4 +260,5 @@ export const icons = {
   bug,
   officebriefcase,
   usersetting,
+  reply,
 };

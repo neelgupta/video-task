@@ -375,6 +375,13 @@ const AudioPlayer = ({ audioUrl }) => {
     waveSurfer.setVolume(newVolume);
   };
 
+  const handelOnVolumeClick = () => {
+    const newVolume = volume === 0 ? 1 : 0;
+    setVolume(newVolume);
+    const waveSurfer = waveSurferRef.current;
+    waveSurfer.setVolume(newVolume);
+  };
+
   return (
     <div className="audio-player-container">
       <div
@@ -434,7 +441,13 @@ const AudioPlayer = ({ audioUrl }) => {
             border: "2px solid white",
           }}
         >
-          <label htmlFor="volume-slider w-25">
+          <label
+            htmlFor="volume-slider w-25 "
+            className="pointer"
+            onClick={() => {
+              handelOnVolumeClick();
+            }}
+          >
             <img
               src={icons.volumeOn}
               alt=""

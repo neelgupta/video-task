@@ -142,7 +142,7 @@ const NotificationMenu = ({ themeColor, isResponsive }) => {
         </span>
       </div>
       {show && (
-        <div className="notification-popover auri-scroll" ref={notificationRef}>
+        <div className="notification-popover flow" ref={notificationRef}>
           {notificationList.length > 0 ? (
             notificationList.map((ele, index) => {
               const { notification_type } = ele;

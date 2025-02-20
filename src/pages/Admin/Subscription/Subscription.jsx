@@ -72,7 +72,7 @@ function Subscription() {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
     setIsLoad(false);
   };
@@ -110,7 +110,7 @@ function Subscription() {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
   };
 

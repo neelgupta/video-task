@@ -32,6 +32,13 @@ const initialState = {
   },
   queModalData: {},
   newQueModalData: {},
+  replyModalData: {
+    isShow: false,
+    interactionId: "",
+    contactId: "",
+    answerId: "",
+    type: "",
+  },
 };
 
 const globalSlice = createSlice({
@@ -81,6 +88,9 @@ const globalSlice = createSlice({
         ...state.webcamModelConfig,
         ...action.payload,
       };
+    },
+    setReplyModalData(state, action) {
+      state.replyModalData = { ...state.replyModalData, ...action.payload };
     },
 
     setQueModalData(state, action) {
@@ -408,6 +418,7 @@ export const {
   setOrganizationData,
   setInteractionsStyle,
   setMyOrganization,
+  setReplyModalData,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

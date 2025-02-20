@@ -46,7 +46,7 @@ const AdminSidebar = ({ show, setShow }) => {
           <Offcanvas.Title>Offcanvas</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="sidebar-card">
-          <div id="admin-sidebar-container" className="auri-scroll">
+          <div id="admin-sidebar-container" className="flow">
             <div
               className="py-10 px-20 f-center"
               style={{
@@ -64,7 +64,7 @@ const AdminSidebar = ({ show, setShow }) => {
             </div>
 
             <div
-              className="side-option-container auri-scroll"
+              className="side-option-container flow"
               style={{
                 maxHeight:
                   role === "admin"

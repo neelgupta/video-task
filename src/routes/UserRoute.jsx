@@ -14,20 +14,28 @@ import VisitContacts from "../pages/User/Contacts/VisitContacts";
 import FlowCanvas from "../pages/FlowCanvas";
 import MyOrganization from "../pages/User/MyOrganization";
 import { api } from "../services/api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   handleProfileStore,
   setProfileData,
+  setQueModelConfig,
+  setReplyModalData,
   setSelectedOrganization,
+  setWebcamModelConfig,
 } from "../store/globalSlice";
 import MyFolder from "../pages/User/MyCollection/MyFolder";
 import ViewInteraction from "../pages/User/ViewInteraction";
 import Template from "../pages/User/Template";
+import WebcamRecorder from "../pages/FlowCanvas/Modals/WebcamRecorder/WebcamRecorder";
+import Reply from "../pages/User/Reply";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { queModelConfig, replyModalData, webcamModelConfig } = useSelector(
+    (state) => state.global
+  );
 
   // Fetch profile
   const getProfile = async () => {
@@ -104,6 +112,33 @@ const UserRoute = () => {
       pageTitle: "Explore Your Organization",
     },
   ];
+
+  const handelResetModel = () => {
+    dispatch(
+      setWebcamModelConfig({
+        isShow: false,
+        blobFile: null,
+        blobUrl: "",
+      })
+    );
+    dispatch(
+      setQueModelConfig({
+        modalType: "",
+        nodeData: null,
+        isEdit: false,
+        isShow: false,
+      })
+    );
+    dispatch(
+      setReplyModalData({
+        isShow: false,
+        interactionId: "",
+        contactId: "",
+        answerId: "",
+        type: "",
+      })
+    );
+  };
   return (
     <Routes>
       {routeList?.map((elm, index) => {
@@ -113,6 +148,27 @@ const UserRoute = () => {
             path={elm.path}
             element={
               <Layout pageTitle={elm.pageTitle} onBack={elm.onBack}>
+                {replyModalData.isShow && (
+                  <Reply
+                    show={replyModalData.isShow}
+                    handleClose={handelResetModel}
+                  />
+                )}
+                {webcamModelConfig.isShow && (
+                  <WebcamRecorder
+                    show={webcamModelConfig.isShow}
+                    recorderConfig={{
+                      audio: true,
+                      ...(queModelConfig.modalType
+                        ? queModelConfig.modalType === "Webcam"
+                          ? { video: true }
+                          : { screen: true }
+                        : { video: true }),
+                    }}
+                    modalType={queModelConfig.modalType}
+                    handleClose={handelResetModel}
+                  />
+                )}
                 {elm.component}
               </Layout>
             }

@@ -40,9 +40,7 @@ const AdminLayout = ({ children, pageTitle, onBack }) => {
       </div>
       <div className="right-body-content">
         <AdminNavbar setShow={setShow} pageTitle={pageTitle} onBack={onBack} />
-        <div className="body-block video-ask-scroll auri-scroll">
-          {children}
-        </div>
+        <div className="body-block video-ask-scroll flow">{children}</div>
       </div>
     </div>
   );

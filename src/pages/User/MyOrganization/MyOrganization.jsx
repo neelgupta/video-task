@@ -17,7 +17,7 @@ function MyOrganization() {
   return (
     <div className="MyOrganization-container">
       <OrganizationHeader type={type} />
-      <div className="organization-content auri-scroll">
+      <div className="organization-content flow">
         {type === "overview" && <Overview />}
         {type === "plan-billing" && <PlanBilling />}
         {type === "referrals" && <Referrals />}

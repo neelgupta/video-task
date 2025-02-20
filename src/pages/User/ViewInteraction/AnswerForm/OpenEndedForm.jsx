@@ -32,18 +32,19 @@ const optionArray = [
 function OpenEndedForm({
   onNext,
   node,
-  videoTime,
+  videoTime = 0,
   isPost,
   flowStyle,
   windowSize,
   setOpenEndedKey,
   widgetTag = "",
+  scaleCount,
 }) {
   const { i } = useTranslation();
-  const { answer_type, answer_format } = node;
+  const { answer_format } = node;
   const dispatch = useDispatch();
   const [tabArray, setTabArray] = useState(optionArray);
-  const [isDelay, setIsDelay] = useState(null);
+  const [isDelay, setIsDelay] = useState(false);
 
   const [answerForm, setAnswerForm] = useState({
     ans: null,
@@ -69,14 +70,14 @@ function OpenEndedForm({
 
   useEffect(() => {
     (() => {
-      if (!answer_type && !answer_format) return;
+      if (!answer_format) return;
       setTabArray(
         optionArray.filter((x) =>
           (answer_format?.options || []).includes(x.text)
         )
       );
     })();
-  }, [answer_type, answer_format]);
+  }, [answer_format]);
 
   const handleVideoLength = (file) => {
     if (file) {
@@ -270,7 +271,7 @@ function OpenEndedForm({
             {answerForm.ansType === "video" && (
               <div className="wp-100">
                 <div
-                  className="text-20-500 mb-20 mt-20"
+                  className="text-20-500 mb-20 mt-0"
                   style={{
                     color: flowStyle?.secondary_color || "#7D8185",
                     fontFamily: `${flowStyle.font}`,
@@ -312,8 +313,14 @@ function OpenEndedForm({
             <div
               id="ans-btn-group"
               style={{
-                transform:
-                  widgetTag === "Widget-mobile" ? "scale(0.7)" : "scale(1)",
+                ...(scaleCount
+                  ? { transform: `scale(${scaleCount})` }
+                  : {
+                      transform:
+                        widgetTag === "Widget-mobile"
+                          ? "scale(0.7)"
+                          : "scale(1)",
+                    }),
               }}
             >
               <button

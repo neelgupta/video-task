@@ -29,7 +29,7 @@ function MetricsHeader({ interaction, setSelectedTab, selectedTab }) {
         <div
           className="w-89 h-79 profile-img"
           onClick={() => {
-            const token = encrypt(interaction._id);
+            const token = encrypt({ id: interaction._id, type: "" });
             window.open(`/view-flow/${token}`, "_blank");
           }}
         >
@@ -66,7 +66,7 @@ function MetricsHeader({ interaction, setSelectedTab, selectedTab }) {
             <div
               className="w-18"
               onClick={() => {
-                const token = encrypt(interaction._id);
+                const token = encrypt({ id: interaction._id, type: "" });
                 const url = `${window.location.origin}/view-flow/${token}`;
                 setShareUrl(url);
               }}

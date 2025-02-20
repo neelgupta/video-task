@@ -13,9 +13,10 @@ const Trash = () => {
   const reduxData = useSelector((state) => state.global);
   const { selectedOrganizationId } = reduxData;
   useEffect(() => {
-    fetchTrash();
+    if (selectedOrganizationId) fetchTrash();
+    console.log("selectedOrganizationId", selectedOrganizationId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedOrganizationId]);
 
   const fetchTrash = async () => {
     setIsLoad(false);

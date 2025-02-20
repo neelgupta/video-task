@@ -27,19 +27,19 @@
   --darkColor: #7c5bff;
   --lightColor: #b3a1ff;
   --darkText: "#1B2559";
-  --9f9f: #A59F9F;
-  --cccc: #CCCCCC;
+  --9f9f: #a59f9f;
+  --cccc: #cccccc;
   --6666: #666666;
-  --b6b7: #B6B6B7;
-  --6fff: #8B6FFF;
-  --2559: #1B2559;
+  --b6b7: #b6b6b7;
+  --6fff: #8b6fff;
+  --2559: #1b2559;
 }
 
 $colors: (
   "9f9f": var(--9f9f),
-  "2559":var(--2559),
-  "6fff":var(--6fff),
-  "b6b7":var(--b6b7),
+  "2559": var(--2559),
+  "6fff": var(--6fff),
+  "b6b7": var(--b6b7),
   "6666": var(--6666),
   "cccc": var(--cccc),
   "1923": var(--1923),
@@ -102,4 +102,14 @@ $colors: (
 }
 .img-ffff {
   filter: invert(1);
+}
+
+.img-pColor {
+  filter: invert(50%) sepia(29%) saturate(957%) hue-rotate(97deg)
+    brightness(96%) contrast(89%);
+}
+
+.img-8000ff {
+  filter: invert(50%) sepia(29%) saturate(957%) hue-rotate(97deg)
+    brightness(96%) contrast(89%);
 }

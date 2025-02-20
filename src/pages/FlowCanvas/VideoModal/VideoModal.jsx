@@ -85,7 +85,7 @@ const VideoModal = ({ show, handleClose }) => {
             </div>
           )}
         </div>
-        <div className="wp-45 body_right auri-scroll">
+        <div className="wp-45 body_right flow">
           {selectedHeaderTab === "video" && (
             <div>
               {modalType === "upload" && (

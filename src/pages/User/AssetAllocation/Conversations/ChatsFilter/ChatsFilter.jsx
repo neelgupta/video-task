@@ -23,7 +23,7 @@ function ChatsFilter({ show, onHide }) {
           >
             Filter conversations
           </h2>
-          <div className="filter-form auri-scroll">
+          <div className="filter-form flow">
             <div className="filter-title">Tags</div>
             <div className="filter-option">
               <div className="input-label">

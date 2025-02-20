@@ -12,7 +12,7 @@ function ButtonForm({
   windowSize,
 }) {
   const { answer_type, answer_format } = node;
-  const [isDelay, setIsDelay] = useState(null);
+  const [isDelay, setIsDelay] = useState(false);
 
   useEffect(() => {
     if (videoTime.duration && videoTime.currentTime) {

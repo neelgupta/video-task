@@ -81,7 +81,7 @@ const MenuBar = React.forwardRef(({ className, ...props }) => {
         <Button
           className={`${styles.previewBtn} `}
           onClick={() => {
-            const token = encrypt(id);
+            const token = encrypt({ id, type: "" });
             window.open(`/view-flow/${token}/preview`, "_blank");
           }}
         >

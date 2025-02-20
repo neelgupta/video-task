@@ -246,7 +246,7 @@ function Referrals() {
         </div>
       </div>
       <div
-        className="p-20 invited auri-scroll"
+        className="p-20 invited flow"
         style={{
           ...{
             border: "1px solid #D9D9D9",

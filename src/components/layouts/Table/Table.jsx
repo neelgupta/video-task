@@ -20,7 +20,7 @@ const Table = ({
   };
   return (
     <div id="table-container">
-      <div className="table-body auri-scroll">
+      <div className="table-body flow">
         <div className="header-row" style={{ minWidth: min || "1000px" }}>
           {header?.map((elm, index) => {
             const { title, className, isSort } = elm;
@@ -40,7 +40,7 @@ const Table = ({
           })}
         </div>
         <div
-          className="body-container auri-scroll"
+          className="body-container flow"
           style={{ minWidth: min || "1000px" }}
         >
           {!loader ? (

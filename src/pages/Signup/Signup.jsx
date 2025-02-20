@@ -107,7 +107,7 @@ function Signup() {
   return (
     <>
       <div id="signUp-container">
-        <div className="leftBlock p-49 auri-scroll">
+        <div className="leftBlock p-49 flow">
           <div className="fa-center justify-content-end mb-60">
             <Button
               className="w-120 h-51 text-18-500 scale-btn pointer"

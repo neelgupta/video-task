@@ -125,7 +125,7 @@ function LogicTab({ nodeData, onClose }) {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
     setIsLoad(false);
   };
@@ -161,7 +161,7 @@ function LogicTab({ nodeData, onClose }) {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
     setIsSubmit(false);
   };
@@ -306,7 +306,7 @@ function LogicTab({ nodeData, onClose }) {
                         Choose your next stop
                       </p>
                       <div className="divider"></div>
-                      <div className="node-option-group auri-scroll px-10">
+                      <div className="node-option-group flow px-10">
                         {nodeOption.map((option, index) => {
                           const active =
                             multipleTargetNode[ele.index]?._id === option._id;
@@ -538,7 +538,7 @@ function LogicTab({ nodeData, onClose }) {
                     Choose your next stop
                   </p>
                   <div className="divider"></div>
-                  <div className="node-option-group auri-scroll">
+                  <div className="node-option-group flow">
                     {nodeOption.map((ele, index) => {
                       const active = targetNode?._id === ele._id;
                       return ele.type !== "End" ? (

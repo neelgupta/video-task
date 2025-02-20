@@ -5,10 +5,11 @@ import { useReactMediaRecorder } from "react-media-recorder";
 import "./WebcamRecorder.scss";
 import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   handelCatch,
   setQueModelConfig,
+  setReplyModalData,
   setWebcamModelConfig,
   throwError,
 } from "../../../../store/globalSlice";
@@ -16,6 +17,9 @@ import NotFoundErrorPage from "./NotFoundErrorPage";
 import LoaderCircle from "../../../../components/layouts/LoaderCircle/LoaderCircle";
 
 function WebcamRecorder({ show, handleClose, recorderConfig, modalType }) {
+  const { queModelConfig, replyModalData, webcamModelConfig } = useSelector(
+    (state) => state.global
+  );
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
@@ -99,7 +103,7 @@ function WebcamRecorder({ show, handleClose, recorderConfig, modalType }) {
     if (error) {
       setDeviceError(`Recording Error:`);
       setPermissionsGranted(false);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
   }, [error]);
 
@@ -186,7 +190,9 @@ function WebcamRecorder({ show, handleClose, recorderConfig, modalType }) {
           blobUrl: mediaUrl,
         })
       );
-      dispatch(setQueModelConfig({ isShow: true }));
+      if (queModelConfig.modalType)
+        dispatch(setQueModelConfig({ isShow: true }));
+      if (replyModalData.type) dispatch(setReplyModalData({ isShow: true }));
     } catch (err) {
       console.error("Error during file submission:", err);
       dispatch(handelCatch(err));
@@ -195,13 +201,10 @@ function WebcamRecorder({ show, handleClose, recorderConfig, modalType }) {
   };
 
   const handleRestartWebcam = () => {
-    dispatch(
-      setWebcamModelConfig({
-        isShow: false,
-        blobFile: null,
-        blobUrl: "",
-      })
-    );
+    startRecording();
+    stopRecording();
+    setIsPaused(true);
+    setTimeLeft(300);
   };
 
   return (
@@ -381,8 +384,6 @@ const LivePreview = ({
   );
 };
 
-LivePreview.displayName = "LivePreview";
-
 const VideoPreview = ({ stream }) => {
   const videoRef = useRef(null);
   const isStreamAssigned = useRef(false);
@@ -413,5 +414,3 @@ const VideoPreview = ({ stream }) => {
     />
   );
 };
-
-VideoPreview.displayName = "VideoPreview";

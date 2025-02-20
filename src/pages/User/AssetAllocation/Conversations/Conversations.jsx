@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./Conversations.scss";
 import { icons } from "../../../../utils/constants";
 import {
+  addWhitenessToHex,
   creteImgFilter,
   encrypt,
   getColorFromLetter,
@@ -12,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { api } from "../../../../services/api";
 import {
   handelCatch,
+  setReplyModalData,
+  setWebcamModelConfig,
   showSuccess,
   throwError,
 } from "../../../../store/globalSlice";
@@ -27,6 +30,7 @@ import AssignContactModal from "../../Interactions/AssignContactModal";
 import DeleteModal from "../../../../components/layouts/DeleteModal";
 import ShareView from "../../ShareView";
 import Tooltip from "../../../../components/layouts/Tooltip";
+import { ReplyIcon } from "lucide-react";
 
 function Conversations({
   id,
@@ -55,6 +59,7 @@ function Conversations({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
+  const [answersList, setAnswersList] = useState([]);
   useEffect(() => {
     if (selectedType) {
       if (
@@ -119,6 +124,51 @@ function Conversations({
       dispatch(handelCatch(error));
     }
     setIsDelete(false);
+  };
+
+  useEffect(() => {
+    if (
+      selectChatDetails?.answers?.length > 0 &&
+      selectedType === "Conversations"
+    ) {
+      console.log("selectChatDetails?.answers", selectChatDetails?.answers);
+      const newArray = groupByNodeId(selectChatDetails?.answers);
+      console.log("newArray", newArray);
+      setAnswersList(newArray);
+    }
+  }, [selectChatDetails?.answers, selectedType]);
+
+  const groupByNodeId = (data) => {
+    return Object.values(
+      data.reduce((acc, item) => {
+        const {
+          node_id,
+          answer_details,
+          createdAt,
+          _id,
+          nodeDetails,
+          node_answer_type,
+        } = item;
+
+        if (!acc[node_id]) {
+          acc[node_id] = {
+            node_id,
+            node_type: item.node_type,
+            nodeDetails,
+            answers: [],
+          };
+        }
+
+        acc[node_id].answers.push({
+          _id,
+          answer_details,
+          createdAt,
+          node_answer_type,
+        });
+
+        return acc;
+      }, {})
+    );
   };
   return (
     <>
@@ -235,7 +285,7 @@ function Conversations({
             <div
               className="w-89 h-79 profile-img"
               onClick={() => {
-                const token = encrypt(id);
+                const token = encrypt({ id, type: "" });
                 window.open(`/view-flow/${token}`, "_blank");
               }}
             >
@@ -303,7 +353,7 @@ function Conversations({
                 <div
                   className="w-18"
                   onClick={() => {
-                    const token = encrypt(id);
+                    const token = encrypt({ id, type: "" });
                     const url = `${window.location.origin}/view-flow/${token}`;
                     setShareUrl(url);
                   }}
@@ -382,7 +432,7 @@ function Conversations({
             </div>
 
             <div
-              className="p-5 pt-20  auri-scroll list"
+              className="p-5 pt-20  flow list"
               style={
                 isResponsive
                   ? { height: "400px" }
@@ -399,7 +449,17 @@ function Conversations({
                       ? [
                           {
                             label: "Send a Video reply",
-                            onClick: () => {},
+                            onClick: () => {
+                              dispatch(setWebcamModelConfig({ isShow: true }));
+                              dispatch(
+                                setReplyModalData({
+                                  interactionId: ele.interaction_id,
+                                  type: "reply",
+                                  contactId: ele.contact_id,
+                                  answerId: ele._id,
+                                })
+                              );
+                            },
                             isDisabled: false,
                           },
                           {
@@ -664,6 +724,66 @@ function Conversations({
               )}
             </div>
             <div className="icon-group">
+              {selectChatDetails?.contact_id && (
+                <Tooltip
+                  placement="left"
+                  content={
+                    <div
+                      style={{
+                        color: "#fff",
+                        fontSize: "12px",
+                        fontWeight: "500",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 "
+                        style={{
+                          background: "yellow",
+                          borderRadius: "50px",
+                        }}
+                      ></div>
+                      <div>
+                        {`Reply to `}
+                        <span
+                          style={{
+                            color: "yellow",
+                            fontWeight: "600",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          {selectChatDetails?.contact_details?.contact_email}
+                        </span>
+                      </div>
+                    </div>
+                  }
+                >
+                  <div
+                    className="replay-btn"
+                    onClick={() => {
+                      dispatch(setWebcamModelConfig({ isShow: true }));
+                      dispatch(
+                        setReplyModalData({
+                          interactionId: selectChatDetails.interaction_id,
+                          type: "reply",
+                          contactId: selectChatDetails.contact_id,
+                          answerId: selectChatDetails._id,
+                        })
+                      );
+                    }}
+                  >
+                    <img
+                      src={icons.reply}
+                      alt=""
+                      className="w-25 h-25 fit-image"
+                    />
+                    <div>reply</div>
+                  </div>
+                </Tooltip>
+              )}
               <div className="w-20 h-20">
                 <img
                   src={icons.teg_svg}
@@ -695,79 +815,241 @@ function Conversations({
               />
             )}
           </div>
-          <div className="Conversations-footer auri-scroll">
+          <div className="Conversations-footer flow">
             <div className="meting-card-body">
-              {selectChatDetails?.answers?.length > 0 &&
-                selectChatDetails.answers.map((ele, index) => {
-                  const isActive = selectMetingCard._id === ele._id;
-                  const { nodeDetails, answer_details, node_answer_type } = ele;
-                  return (
-                    <div
-                      className="meting-card"
-                      key={index}
-                      onClick={() => setSelectMetingCard(ele)}
-                      style={
-                        isActive
-                          ? {
-                              borderBottom: "3px solid #b19eff",
-                            }
-                          : {}
-                      }
-                    >
-                      {selectedType === "Conversations" ? (
-                        <div className="node-thumbnail-box">
-                          <img
-                            src={nodeDetails?.video_thumbnail}
-                            alt=""
-                            className=""
-                          />
-                          <div className="img-btn wp-100">
+              {selectedType === "Conversations"
+                ? answersList?.length > 0 &&
+                  answersList.map((answerGroup, index) => {
+                    const { nodeDetails, answers, node_type } = answerGroup;
+                    return (
+                      <div key={index} style={{ display: "flex" }}>
+                        {node_type === "reply_node" && (
+                          <div className="reply_section">
+                            <div className="reply_section_line"></div>
+                            <div className="reply_section_circle">
+                              <Tooltip
+                                placement="top"
+                                offsetNumber={65}
+                                content={
+                                  <div>
+                                    <div
+                                      style={{
+                                        color: "white",
+                                        fontSize: "12px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                      }}
+                                    >
+                                      <div
+                                        style={{
+                                          width: "8px",
+                                          height: "8px",
+                                          background: "yellow",
+                                          borderRadius: "50px",
+                                          marginRight: "10px",
+                                        }}
+                                      ></div>
+                                      Reply to
+                                      <span
+                                        style={{
+                                          color: "yellow",
+                                          fontWeight: "900",
+                                          margin: "0px 5px",
+                                        }}
+                                      >
+                                        {interactionDetails?.title}
+                                      </span>
+                                      interaction answer.
+                                    </div>
+                                    <div
+                                      style={{
+                                        color: "white",
+                                        fontSize: "12px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        margin: "5px 0px",
+                                        justifyContent: "flex-start",
+                                      }}
+                                    >
+                                      <span
+                                        style={{
+                                          fontWeight: "900",
+                                          fontSize: "10px",
+                                          color: "#00ffff",
+                                          textDecoration: "underline",
+                                        }}
+                                      >
+                                        {dayjs(nodeDetails?.createdAt).format(
+                                          "DD MMM YYYY | HH:mm"
+                                        )}
+                                      </span>
+                                    </div>
+                                  </div>
+                                }
+                              >
+                                <div>
+                                  <ReplyIcon size={18} />
+                                </div>
+                              </Tooltip>
+                            </div>
+                          </div>
+                        )}
+                        {answers.map((ele, index) => {
+                          const isActive = selectMetingCard._id === ele._id;
+                          return (
                             <div
-                              className="text-12-600"
-                              style={{ textTransform: "capitalize" }}
+                              key={ele._id}
+                              className="meting-card"
+                              onClick={() =>
+                                setSelectMetingCard({ ...ele, nodeDetails })
+                              }
+                              style={
+                                isActive
+                                  ? {
+                                      borderBottom: "3px solid #8000ff",
+                                    }
+                                  : {}
+                              }
                             >
-                              {nodeDetails?.title || ""}
+                              {selectedType === "Conversations" ? (
+                                <div
+                                  className="node-thumbnail-box"
+                                  style={
+                                    isActive
+                                      ? {
+                                          boxSizing: "border-box",
+                                          border: "2px solid gold",
+                                        }
+                                      : {}
+                                  }
+                                >
+                                  <img
+                                    src={nodeDetails?.video_thumbnail}
+                                    alt=""
+                                    className=""
+                                  />
+                                  <div className="img-btn wp-100">
+                                    <div className="text-10-600">
+                                      {nodeDetails?.title || ""}
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div
+                                  className="node-thumbnail-box"
+                                  style={{
+                                    width: "100px",
+                                    border: "2px solid #b19eff",
+                                  }}
+                                >
+                                  <div className="w-50">
+                                    <img
+                                      src={icons.userAnswerProfile}
+                                      alt=""
+                                      className="fit-image"
+                                      style={{
+                                        filter: creteImgFilter("#888888"),
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                              {isActive && (
+                                <>
+                                  {selectedType === "Conversations" ? (
+                                    <div className="text-11-500 color-darkText m-0 p-0 mt-5">
+                                      {dayjs(nodeDetails?.createdAt).format(
+                                        "DD MMM YYYY | HH:mm"
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div className="text-11-500 color-darkText m-0 p-0 mt-5">
+                                      {dayjs(ele?.createdAt).format(
+                                        "DD MMM YYYY | HH:mm"
+                                      )}
+                                    </div>
+                                  )}
+                                </>
+                              )}
                             </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div
-                          className="node-thumbnail-box"
-                          style={{
-                            width: "100px",
-                            border: "2px solid #b19eff",
-                          }}
-                        >
-                          <div className="w-50">
+                          );
+                        })}
+                      </div>
+                    );
+                  })
+                : selectChatDetails?.answers?.length > 0 &&
+                  selectChatDetails.answers.map((ele, index) => {
+                    const isActive = selectMetingCard._id === ele._id;
+                    const { nodeDetails, answer_details, node_answer_type } =
+                      ele;
+                    return (
+                      <div
+                        className="meting-card"
+                        key={index}
+                        onClick={() => setSelectMetingCard(ele)}
+                        style={
+                          isActive
+                            ? {
+                                borderBottom: "3px solid #b19eff",
+                              }
+                            : {}
+                        }
+                      >
+                        {selectedType === "Conversations" ? (
+                          <div className="node-thumbnail-box">
                             <img
-                              src={icons.userAnswerProfile}
+                              src={nodeDetails?.video_thumbnail}
                               alt=""
-                              className="fit-image"
-                              style={{ filter: creteImgFilter("#888888") }}
+                              className=""
                             />
+                            <div className="img-btn wp-100">
+                              <div
+                                className="text-12-600"
+                                style={{ textTransform: "capitalize" }}
+                              >
+                                {nodeDetails?.title || ""}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {isActive && (
-                        <>
-                          {selectedType === "Conversations" ? (
-                            <div className="text-11-500 color-darkText m-0 p-0 mt-5">
-                              {dayjs(nodeDetails.createdAt).format(
-                                "DD MMM YYYY | HH:mm"
-                              )}
+                        ) : (
+                          <div
+                            className="node-thumbnail-box"
+                            style={{
+                              width: "100px",
+                              border: "2px solid #b19eff",
+                            }}
+                          >
+                            <div className="w-50">
+                              <img
+                                src={icons.userAnswerProfile}
+                                alt=""
+                                className="fit-image"
+                                style={{ filter: creteImgFilter("#888888") }}
+                              />
                             </div>
-                          ) : (
-                            <div className="text-11-500 color-darkText m-0 p-0 mt-5">
-                              {dayjs(ele.createdAt).format(
-                                "DD MMM YYYY | HH:mm"
-                              )}
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
+                          </div>
+                        )}
+                        {isActive && (
+                          <>
+                            {selectedType === "Conversations" ? (
+                              <div className="text-11-500 color-darkText m-0 p-0 mt-5">
+                                {dayjs(nodeDetails.createdAt).format(
+                                  "DD MMM YYYY | HH:mm"
+                                )}
+                              </div>
+                            ) : (
+                              <div className="text-11-500 color-darkText m-0 p-0 mt-5">
+                                {dayjs(ele.createdAt).format(
+                                  "DD MMM YYYY | HH:mm"
+                                )}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
             </div>
           </div>
         </div>

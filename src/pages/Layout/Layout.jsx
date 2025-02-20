@@ -46,7 +46,7 @@ const Layout = ({ children, pageTitle, onBack }) => {
       </div>
       <div className="right-body-content">
         <Navbar setShow={setShow} pageTitle={pageTitle} onBack={onBack} />
-        <div className="body-block video-ask-scroll auri-scroll">
+        <div className="body-block video-ask-scroll flow">
           {children}
           {showCreateFlowModal && (
             <NewQnAFlowModal

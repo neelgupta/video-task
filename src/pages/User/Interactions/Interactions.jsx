@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import "./Interactions.scss";
 import { icons } from "../../../utils/constants";
 import { creteImgFilter, getColorFromLetter } from "../../../utils/helpers";
-import { interactionsData } from "./constants";
 import { Button, Dropdown } from "react-bootstrap";
 import DeleteModal from "../../../components/layouts/DeleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   handelCatch,
+  setReplyModalData,
+  setWebcamModelConfig,
   showSuccess,
   throwError,
 } from "../../../store/globalSlice";
@@ -21,13 +22,15 @@ import LoaderCircle from "../../../components/layouts/LoaderCircle/LoaderCircle"
 import InteractionFilter from "./InteractionFilter";
 import CreateContactModal from "./CreateContactModal";
 import AssignContactModal from "./AssignContactModal";
+import { ReplyIcon } from "lucide-react";
+import Tooltip from "../../../components/layouts/Tooltip";
 
 function Interactions() {
   const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.global);
   // eslint-disable-next-line no-unused-vars
   const { isResponsive, themeColor, selectedOrganizationId } = reduxData;
-  const [interactions, setInteractions] = useState(interactionsData);
+  const [interactions, setInteractions] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
@@ -38,7 +41,7 @@ function Interactions() {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [showCreateContact, setShowCreateContact] = useState(false);
   const [showAssignContact, setShowAssignContact] = useState(false);
-
+  const [answersList, setAnswersList] = useState([]);
   const selectedFilterTitleList = {
     all: ["This week", "Previous week"],
     thisWeek: ["This Week"],
@@ -73,6 +76,7 @@ function Interactions() {
           return { ...ele, isCurrentWeek: isDateInCurrentWeek(createdAt) };
         });
         setInteractions(data);
+        console.log("data", data);
         setSelectedContact(data[0]);
       } else {
         dispatch(throwError(res.data.message));
@@ -117,6 +121,52 @@ function Interactions() {
       setSelectMetingCard(selectedContact?.answers?.[0]);
     }
   }, [selectedContact]);
+
+  useEffect(() => {
+    if (selectedContact?.answers) {
+      console.log("selectMetingCard", selectedContact?.answers);
+    }
+  }, [selectedContact?.answers]);
+
+  useEffect(() => {
+    if (selectedContact?.answers?.length > 0) {
+      const newArray = groupByNodeId(selectedContact?.answers);
+      setAnswersList(newArray);
+    }
+  }, [selectedContact?.answers]);
+
+  const groupByNodeId = (data) => {
+    return Object.values(
+      data.reduce((acc, item) => {
+        const {
+          node_id,
+          answer_details,
+          createdAt,
+          _id,
+          nodeDetails,
+          node_answer_type,
+        } = item;
+
+        if (!acc[node_id]) {
+          acc[node_id] = {
+            node_id,
+            node_type: item.node_type,
+            nodeDetails,
+            answers: [],
+          };
+        }
+
+        acc[node_id].answers.push({
+          _id,
+          answer_details,
+          createdAt,
+          node_answer_type,
+        });
+
+        return acc;
+      }, {})
+    );
+  };
 
   return (
     <>
@@ -199,7 +249,7 @@ function Interactions() {
             </div>
 
             <div
-              className="p-5 pt-20  auri-scroll list"
+              className="p-5 pt-20  flow list"
               style={{ height: isResponsive ? "400px" : "calc(100vh - 200px)" }}
             >
               {interactions.length > 0 || !isLoad ? (
@@ -376,6 +426,73 @@ function Interactions() {
                       </div>
                     </div>
                     <div className="icon-group">
+                      {selectedContact?.contact_id && (
+                        <Tooltip
+                          placement="left"
+                          content={
+                            <div
+                              style={{
+                                color: "#fff",
+                                fontSize: "12px",
+                                fontWeight: "500",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <div
+                                className="w-10 h-10 "
+                                style={{
+                                  background: "yellow",
+                                  borderRadius: "50px",
+                                }}
+                              ></div>
+                              <div>
+                                {`Reply to `}
+                                <span
+                                  style={{
+                                    color: "yellow",
+                                    fontWeight: "600",
+                                    textDecoration: "underline",
+                                  }}
+                                >
+                                  {
+                                    selectedContact?.contact_details
+                                      ?.contact_email
+                                  }
+                                </span>
+                              </div>
+                            </div>
+                          }
+                        >
+                          <div
+                            className="replay-btn"
+                            onClick={() => {
+                              console.log("selectChatDetails", selectedContact);
+                              // dispatch(
+                              //   setWebcamModelConfig({ isShow: true })
+                              // );
+                              // dispatch(
+                              //   setReplyModalData({
+                              //     interactionId:
+                              //       selectedContact.interaction_id,
+                              //     type: "reply",
+                              //     contactId: selectedContact.contact_id,
+                              //     answerId: selectedContact._id,
+                              //   })
+                              // );
+                            }}
+                          >
+                            <img
+                              src={icons.reply}
+                              alt=""
+                              className="w-25 h-25 fit-image"
+                            />
+                            <div>reply</div>
+                          </div>
+                        </Tooltip>
+                      )}
                       <div className="w-20 h-20">
                         <img
                           src={icons.teg_svg}
@@ -412,50 +529,141 @@ function Interactions() {
                   </div>
                 )}
               </div>
-              <div className="Interactions-footer auri-scroll">
+              <div className="Interactions-footer flow">
                 <div className="meting-card-body">
-                  {selectedContact?.answers?.length > 0 &&
-                    selectedContact?.answers.map((ele, index) => {
-                      const isActive = selectMetingCard?._id === ele?._id;
-                      const { nodeDetails } = ele;
+                  {answersList?.length > 0 &&
+                    answersList.map((answerGroup, index) => {
+                      // const isActive = selectMetingCard?._id === ele?._id;
+                      const { nodeDetails, answers, node_type } = answerGroup;
                       return (
-                        <div
-                          className="meting-card"
-                          key={index}
-                          onClick={() => setSelectMetingCard(ele)}
-                          style={
-                            isActive
-                              ? {
-                                  borderBottom: "3px solid #b19eff",
-                                }
-                              : {}
-                          }
-                        >
-                          <div className="node-thumbnail-box">
-                            <img
-                              src={nodeDetails?.video_thumbnail}
-                              alt=""
-                              className=""
-                            />
-                            <div className="img-btn wp-100">
-                              <div
-                                className="text-12-600"
-                                style={{ textTransform: "capitalize" }}
-                              >
-                                {nodeDetails?.title || ""}
+                        <div key={index} style={{ display: "flex" }}>
+                          {node_type === "reply_node" && (
+                            <div className="reply_section">
+                              <div className="reply_section_line"></div>
+                              <div className="reply_section_circle">
+                                <Tooltip
+                                  placement="top"
+                                  offsetNumber={65}
+                                  content={
+                                    <div>
+                                      <div
+                                        style={{
+                                          color: "white",
+                                          fontSize: "12px",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                        }}
+                                      >
+                                        <div
+                                          style={{
+                                            width: "8px",
+                                            height: "8px",
+                                            background: "yellow",
+                                            borderRadius: "50px",
+                                            marginRight: "10px",
+                                          }}
+                                        ></div>
+                                        Reply to
+                                        <span
+                                          style={{
+                                            color: "yellow",
+                                            fontWeight: "900",
+                                            margin: "0px 5px",
+                                          }}
+                                        >
+                                          {
+                                            selectedContact.interactionDetails
+                                              ?.title
+                                          }
+                                        </span>
+                                        interaction answer.
+                                      </div>
+                                      <div
+                                        style={{
+                                          color: "white",
+                                          fontSize: "12px",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          margin: "5px 0px",
+                                          justifyContent: "flex-start",
+                                        }}
+                                      >
+                                        <span
+                                          style={{
+                                            fontWeight: "900",
+                                            fontSize: "10px",
+                                            color: "#00ffff",
+                                            textDecoration: "underline",
+                                          }}
+                                        >
+                                          {dayjs(nodeDetails?.createdAt).format(
+                                            "DD MMM YYYY | HH:mm"
+                                          )}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  }
+                                >
+                                  <div>
+                                    <ReplyIcon size={18} />
+                                  </div>
+                                </Tooltip>
                               </div>
                             </div>
-                          </div>
+                          )}
+                          {answers.map((ele, index) => {
+                            const isActive = selectMetingCard._id === ele._id;
+                            return (
+                              <div
+                                key={ele._id}
+                                className="meting-card"
+                                onClick={() =>
+                                  setSelectMetingCard({ ...ele, nodeDetails })
+                                }
+                                style={
+                                  isActive
+                                    ? {
+                                        borderBottom: "3px solid #8000ff",
+                                      }
+                                    : {}
+                                }
+                              >
+                                <div
+                                  className="node-thumbnail-box"
+                                  style={
+                                    isActive
+                                      ? {
+                                          boxSizing: "border-box",
+                                          border: "2px solid gold",
+                                        }
+                                      : {}
+                                  }
+                                >
+                                  <img
+                                    src={nodeDetails?.video_thumbnail}
+                                    alt=""
+                                    className=""
+                                  />
+                                  <div className="img-btn wp-100">
+                                    <div className="text-10-600">
+                                      {nodeDetails?.title || ""}
+                                    </div>
+                                  </div>
+                                </div>
 
-                          {isActive && (
-                            <>
-                              <div className="text-11-500 color-darkText m-0 p-0 mt-5">
-                                {dayjs(nodeDetails.createdAt).format(
-                                  "DD MMM YYYY | HH:mm"
+                                {isActive && (
+                                  <>
+                                    <div className="text-11-500 color-darkText m-0 p-0 mt-5">
+                                      {dayjs(nodeDetails?.createdAt).format(
+                                        "DD MMM YYYY | HH:mm"
+                                      )}
+                                    </div>
+                                  </>
                                 )}
                               </div>
-                            </>
-                          )}
+                            );
+                          })}
                         </div>
                       );
                     })}

@@ -15,7 +15,7 @@ const DataTable = ({
 
   return (
     <div id="datatable-container">
-      <div className="table-wrapper auri-scroll">
+      <div className="table-wrapper flow">
         <div className="table-header">
           {columns?.map((column, index) => (
             <div key={index} className="table-cell header-cell text-12-700">
@@ -23,7 +23,7 @@ const DataTable = ({
             </div>
           ))}
         </div>
-        <div className="table-body auri-scroll">
+        <div className="table-body flow">
           {rows?.map((row, rowIndex) => (
             <div key={rowIndex} className="table-row">
               {columns?.map((column, colIndex) => (

@@ -50,7 +50,7 @@ function ContactForm({ handleClose, show }) {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
     setIsUpdate(false);
   };
@@ -66,7 +66,7 @@ function ContactForm({ handleClose, show }) {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
     }
   };
 

@@ -4,7 +4,7 @@ import { creteImgFilter, hexToRgb } from "../../../utils/helpers";
 import "./VideoPlayer.scss";
 import { getTrackBackground, Range } from "react-range";
 import { useDispatch } from "react-redux";
-import { handelCatch } from "../../../store/globalSlice";
+import { handelCatch, throwError } from "../../../store/globalSlice";
 import { processVideoMetadata } from "../../../pages/FlowCanvas/flowControl";
 import { useTranslation } from "react-i18next";
 const VideoPlayer = ({
@@ -14,6 +14,7 @@ const VideoPlayer = ({
   flowStyle,
   windowSizeTag = "desktop",
   allControlsDisabled = false,
+  scaleCount,
 }) => {
   const { t } = useTranslation();
   const videoRef = useRef(null);
@@ -67,7 +68,7 @@ const VideoPlayer = ({
           setIsPlaying(true); // Update state to indicate the video is playing
         })
         .catch((error) => {
-          dispatch(handelCatch(error)); // Handle autoplay issues
+          dispatch(throwError(error.response.data.message)); // Handle autoplay issues
           console.warn("Autoplay blocked or interrupted:", error);
           setIsPlaying(false); // Update state to indicate autoplay failed
         });
@@ -209,8 +210,8 @@ const VideoPlayer = ({
             className="fir-image"
             style={{
               filter: creteImgFilter("#ffffff"),
-              width: `${100 * aspectRatio}px`,
-              height: `${100 * aspectRatio}px`,
+              width: `${80 * aspectRatio}px`,
+              height: `${80 * aspectRatio}px`,
               zIndex: "100000000",
             }}
           />
@@ -286,6 +287,11 @@ const VideoPlayer = ({
                   className="duration-text"
                   style={{
                     fontSize: `${Math.floor(18 * aspectRatio)}px`,
+                    ...(scaleCount
+                      ? {
+                          transform: `scale(${scaleCount})`,
+                        }
+                      : {}),
                   }}
                 >
                   {parseInt(currentTime.toFixed(0))} / {duration} sec
@@ -294,7 +300,11 @@ const VideoPlayer = ({
                   onClick={handleSpeedChange}
                   className="speed-btn"
                   style={{
-                    transform: `scale(${100 * aspectRatio}%)`,
+                    ...(scaleCount
+                      ? {
+                          transform: `scale(${scaleCount})`,
+                        }
+                      : { transform: `scale(${100 * aspectRatio}%)` }),
                   }}
                 >
                   {playbackSpeed}x
@@ -304,7 +314,11 @@ const VideoPlayer = ({
                   onClick={handleVolume}
                   className="volume-control"
                   style={{
-                    transform: `scale(${100 * aspectRatio}%)`,
+                    ...(scaleCount
+                      ? {
+                          transform: `scale(${scaleCount})`,
+                        }
+                      : { transform: `scale(${100 * aspectRatio}%)` }),
                   }}
                 >
                   <img
@@ -318,7 +332,11 @@ const VideoPlayer = ({
                   onClick={() => videoRef.current.requestFullscreen()}
                   className="full-screen-btn me-10"
                   style={{
-                    transform: `scale(${100 * aspectRatio}%)`,
+                    ...(scaleCount
+                      ? {
+                          transform: `scale(${scaleCount})`,
+                        }
+                      : { transform: `scale(${100 * aspectRatio}%)` }),
                   }}
                 >
                   <img
@@ -337,6 +355,7 @@ const VideoPlayer = ({
                   : "flow-ai-video-logo-tablet"
               }
               style={{
+                ...(scaleCount ? { transform: `scale(${scaleCount})` } : {}),
                 background: `rgba(${hexToRgb(flowStyle.primary_color)}, 0.6)`,
               }}
             >
@@ -370,7 +389,9 @@ const VideoPlayer = ({
                   fontSize: textSize,
                   opacity: textReveal >= currentTime ? "1" : "0",
                   display: textReveal >= currentTime ? "block" : "none",
-                  padding: `10px ${Math.floor(50 * aspectRatio)}px`,
+                  padding: `10px ${Math.floor(
+                    50 * aspectRatio * ((scaleCount || 2) / 2)
+                  )}px`,
                 }}
                 onClick={(e) => {
                   togglePlay();

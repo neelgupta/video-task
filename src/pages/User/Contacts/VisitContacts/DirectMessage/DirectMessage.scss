@@ -1,21 +1,26 @@
-.qnaContainer {
-  display: flex;
-  gap: 0px 10px;
+.direct-message-container {
+  width: 100%;
   height: 100%;
-  .qnaSidebar {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0px 4px 18px 0px #00000012;
+  display: flex;
+  justify-content: space-between;
+  gap: 0px 10px;
+  .direct-message-sidebar {
     width: 400px;
     height: 100%;
-    .profileDet {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 18px 0px #00000012;
+    .direct-message-sidebar-header {
       display: flex;
       padding: 10px;
+      gap: 10px;
       box-shadow: 0px 4px 10px 0px #0000001a;
-      .profileImg {
+      &-profile-img {
         border-radius: 10px;
         overflow: hidden;
         display: flex;
+        height: 100px;
+        width: 85px;
         align-items: center;
         justify-content: center;
         background: rgba(0, 0, 0, 0.15);
@@ -24,12 +29,12 @@
             brightness(116%) contrast(100%);
         }
       }
-      .det {
+      &-det {
+        padding: 5px 5px 0px 5px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: 100%;
-        padding: 5px 5px 0px 5px;
+        width: calc(100% - 105px - 10px);
         .contact_btn_group {
           display: flex;
           align-items: center;
@@ -68,19 +73,7 @@
           }
         }
       }
-      .email {
-        cursor: pointer;
-        color: #868686;
-        font-size: 14px;
-        font-weight: 500;
-        text-decoration: underline;
-        display: inline-block;
-        &:hover {
-          color: #8000ff;
-        }
-      }
     }
-
     .videoCallBtn {
       display: flex;
       align-items: center;
@@ -125,16 +118,12 @@
         font-weight: 800;
       }
     }
-    .recentChats {
+    &-reply-cheat {
       padding: 0px 5px;
-
-      .titleContainer {
-        border-bottom: 2px solid #ececee;
-        color: #8c8e90;
-      }
       .list {
         overflow-y: auto;
-        height: calc(100% - 370px);
+        height: calc(100vh - 350px);
+        margin: 10px 0px;
       }
       .chatCard {
         display: flex;
@@ -144,27 +133,70 @@
         padding: 5px;
         border-radius: 10px;
         color: white;
+        position: relative;
+        .chatCard-img-box {
+          height: 55px;
+          width: 55px;
+          display: flex;
+          overflow: hidden;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          img {
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            background-size: cover;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1);
+            transition-duration: 0.3s;
+            transition-property: transform;
+          }
+          &:hover {
+            img {
+              transform: scale(1.15);
+            }
+          }
+        }
+        &-date {
+          position: absolute;
+          bottom: 5px;
+          right: 10px;
+          color: #8c8e90;
+          font-size: 12px;
+        }
       }
     }
   }
-  .qnaBody {
+  .direct-message-content {
+    width: calc(100% - 400px - 10px);
+    height: 100%;
     box-shadow: 0px 4px 10px 0px #0000001a;
-    width: calc(100% - 410px);
     border-radius: 10px;
-
-    .qnaHeader {
-      border-bottom: 2px solid #ececee;
-      padding: 0px 30px;
+    overflow: hidden;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .direct-message-content-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      box-sizing: border-box;
-      height: 120px;
-      .iconGroup {
+      justify-content: space-between;
+      padding: 10px;
+      font-size: 22px;
+      font-weight: 600;
+      height: 70px;
+      box-shadow: 0px 4px 4px #0000001a;
+      padding: 0px 20px;
+      letter-spacing: 1px;
+      text-transform: capitalize;
+      &-btn-group {
         display: flex;
         align-items: center;
         gap: 0px 20px;
-        .replayBtn {
+        .replay-btn {
           display: flex;
           align-content: center;
           justify-content: center;
@@ -194,18 +226,23 @@
         }
       }
     }
-    .qnaContent {
-      height: calc(100% - 120px - 150px);
-    }
-    .qnaFooter {
-      box-sizing: border-box;
-      height: 150px;
-      border-top: 2px solid #ececee;
+    .direct-message-content-body {
       display: flex;
-      justify-content: space-between;
-      .metingCardBody {
+      flex-direction: column;
+      height: calc(100% - 80px);
+      .direct-message-content-body-message {
+        height: calc(100% - 150px);
+        width: 100%;
+        background: #fff;
+      }
+      .direct-message-content-body-list {
+        width: 100%;
+        height: 150px;
+        box-sizing: border-box;
+        border-top: 2px solid #ececee;
         display: flex;
-        .replySection {
+        justify-content: start;
+        .reply-section {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -213,13 +250,13 @@
           margin: 0px 15px;
           position: relative;
           width: 30px;
-          .replySectionLine {
+          .reply-section-line {
             width: 2px;
             height: 100%;
             margin: 10px 0px;
             background-color: #8000ff;
           }
-          .replySectionCircle {
+          .reply-section-circle {
             cursor: pointer;
             width: 25px;
             height: 25px;
@@ -241,7 +278,7 @@
             }
           }
         }
-        .metingCard {
+        .meeting-card {
           height: 140px;
           display: flex;
           align-items: center;
@@ -250,7 +287,7 @@
           cursor: pointer;
           margin: 0px 10px;
           margin-bottom: 5px;
-          .nodeThumbnailBox {
+          .node-thumbnail-box {
             height: 100px;
             width: 100px;
             position: relative;
@@ -273,7 +310,7 @@
                 transform: scale(1.15);
               }
             }
-            .imgBtn {
+            .img-btn {
               position: absolute;
               bottom: 0px;
               height: 40%;
@@ -302,9 +339,5 @@
         }
       }
     }
-  }
-  .ImageWhite {
-    filter: invert(100%) sepia(1%) saturate(1352%) hue-rotate(96deg)
-      brightness(116%) contrast(100%);
   }
 }

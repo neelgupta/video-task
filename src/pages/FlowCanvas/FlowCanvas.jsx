@@ -129,7 +129,7 @@ const FlowCanvas = () => {
       }
     } catch (error) {
       console.log("error", error);
-      dispatch(handelCatch(error));
+      dispatch(throwError(error.response.data.message));
       fetchFlowData();
     }
     seyIsCanvasLock(false);
@@ -161,7 +161,7 @@ const FlowCanvas = () => {
           }}
         />
       )}
-      {webcamModelConfig.isShow && (
+      {/* {webcamModelConfig.isShow && (
         <WebcamRecorder
           show={webcamModelConfig.isShow}
           recorderConfig={{
@@ -189,7 +189,7 @@ const FlowCanvas = () => {
             );
           }}
         />
-      )}
+      )} */}
 
       <div
         id="react_flow_canvas_body"

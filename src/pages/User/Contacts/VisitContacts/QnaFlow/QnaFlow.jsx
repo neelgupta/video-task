@@ -5,16 +5,51 @@ import CustomMenu from "./CustomMenu";
 import Tooltip from "../../../../../components/layouts/Tooltip";
 import dayjs from "dayjs";
 import ConversationsAnswer from "../../../AssetAllocation/Conversations/ConversationsAnswer";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handelCatch,
+  setReplyModalData,
+  setWebcamModelConfig,
+  throwError,
+} from "../../../../../store/globalSlice";
+import { api } from "../../../../../services/api";
+import { Edit, ReplyIcon, Trash2Icon, VideoIcon } from "lucide-react";
+import AddEditContactModal from "../../AddEditContactModal";
 
-function QnaFlow({ answersDetails, contact }) {
+function QnaFlow() {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { selectedOrganizationId } = useSelector((state) => state.global);
+  const [interactionAnswers, setInteractionAnswers] = useState([]);
+  const [contact, setContact] = useState({});
   const [selectChat, setSelectChat] = useState(null);
+  const [answersList, setAnswersList] = useState([]);
   const [selectMetingCard, setSelectMetingCard] = useState({});
-
+  const [isShowAddEditModal, setIsShowAddEditModal] = useState(false);
   useEffect(() => {
-    if (answersDetails.length > 0) {
-      setSelectChat(answersDetails?.[0]);
+    if (id) {
+      fetchContactConversation();
     }
-  }, [answersDetails]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const fetchContactConversation = async () => {
+    try {
+      const res = await api.get(`contact/contact-conversation/${id}`);
+      if (res.status === 200) {
+        const { answersDetails, ...contact } = res.data.response;
+        setInteractionAnswers(answersDetails);
+        setSelectChat(answersDetails?.[0]);
+        setContact(contact);
+      } else {
+        dispatch(throwError(res.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    }
+  };
 
   useEffect(() => {
     if (selectChat) {
@@ -24,8 +59,63 @@ function QnaFlow({ answersDetails, contact }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectChat]);
+
+  useEffect(() => {
+    if (selectChat?.answers?.length > 0) {
+      const newArray = groupByNodeId(selectChat?.answers);
+      setAnswersList(newArray);
+    }
+  }, [selectChat?.answers]);
+
+  const groupByNodeId = (data) => {
+    return Object.values(
+      data.reduce((acc, item) => {
+        const {
+          node_id,
+          answer_details,
+          createdAt,
+          _id,
+          nodeDetails,
+          node_answer_type,
+        } = item;
+
+        if (!acc[node_id]) {
+          acc[node_id] = {
+            node_id,
+            node_type: item.node_type,
+            nodeDetails,
+            answers: [],
+          };
+        }
+        acc[node_id].answers.push({
+          _id,
+          answer_details,
+          createdAt,
+          node_answer_type,
+        });
+
+        return acc;
+      }, {})
+    );
+  };
+
+  const openMailClient = (email) => {
+    window.location.href = `mailto:${email}`;
+  };
   return (
     <>
+      {isShowAddEditModal && (
+        <AddEditContactModal
+          show={isShowAddEditModal}
+          handleClose={() => {
+            setIsShowAddEditModal(false);
+          }}
+          selectedOrganizationId={selectedOrganizationId}
+          isEdit={true}
+          editContact={contact}
+          fetchContact={fetchContactConversation}
+        />
+      )}
       <div className={styles.qnaContainer}>
         <div className={styles.qnaSidebar}>
           <div className={styles.profileDet}>
@@ -36,7 +126,7 @@ function QnaFlow({ answersDetails, contact }) {
                 className="fit-image w-60 h-60"
               />
             </div>
-            <div className={`p-5 w-200 ms-10 ${styles.det}`}>
+            <div className={`p-0 wp-100 ms-10 ${styles.det}`}>
               <div>
                 <div
                   className="text-20-600"
@@ -44,43 +134,65 @@ function QnaFlow({ answersDetails, contact }) {
                 >
                   {contact?.contact_name || ""}
                 </div>
-                <div className="text-12-500">
-                  {contact?.contact_email || ""}
-                </div>
-                <div style={{ color: "#4D4AEA" }}>
+                <Tooltip
+                  content={<div style={{ color: "yellow" }}>Open mail box</div>}
+                  placement="right"
+                  offsetNumber={-120}
+                >
+                  <div
+                    className={styles.email}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => openMailClient(contact?.contact_email)}
+                  >
+                    {contact?.contact_email}
+                  </div>
+                </Tooltip>
+                {/* <div style={{ color: "#4D4AEA" }}>
                   {contact?.phone_number || ""}
-                </div>
+                </div> */}
               </div>
-              <div className="d-flex gap-3 align-self-end align-items-center mt-10">
-                <div className="w-18">
-                  <img
-                    src={icons.videoIcon}
-                    alt=""
-                    className="fit-image hover-icons-effect"
-                  />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0px 15px",
+                }}
+              >
+                <div
+                  className={styles.contact_btn_group}
+                  onClick={() => setIsShowAddEditModal(true)}
+                >
+                  <Edit size={20} className={styles.contact_btn} />
                 </div>
-                <div className="w-17">
-                  <img
-                    src={icons.editIcon}
-                    alt=""
-                    className="fit-image hover-icons-effect"
-                  />
+                <div className={styles.contact_btn_group}>
+                  <Trash2Icon size={20} className={styles.contact_btn} />
                 </div>
-                <div className="w-14">
-                  <img
-                    src={icons.deleteIcon}
-                    alt=""
-                    className="fit-image hover-icons-effect"
-                  />
+                <div className={styles.videoCallBtnContainer}>
+                  <button
+                    className={styles.videoCallBtn}
+                    onClick={() => {
+                      dispatch(setWebcamModelConfig({ isShow: true }));
+                      dispatch(
+                        setReplyModalData({
+                          type: "direct-message",
+                          contactId: id,
+                        })
+                      );
+                    }}
+                  >
+                    <VideoIcon className={styles.VideoIcon} />
+                    <div>Video reply</div>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
+
           <div className={styles.recentChats}>
-            <div className={`p-5 pt-20 hp-100 auri-scroll ${styles.list}`}>
-              {answersDetails.length === 0
+            <div className={`p-5 pt-20 hp-100 flow ${styles.list}`}>
+              {interactionAnswers.length === 0
                 ? ""
-                : answersDetails.map((ele, index) => {
+                : interactionAnswers.map((ele, index) => {
                     const isSelected = ele._id === selectChat?._id;
                     return (
                       <div
@@ -152,7 +264,7 @@ function QnaFlow({ answersDetails, contact }) {
           </div>
         </div>
         <div className={styles.qnaBody}>
-          <div className={`h-90 ${styles.qnaHeader}`}>
+          <div className={`${styles.qnaHeader}`}>
             <div className="f-center">
               <div
                 className="w-75 h-75 profile-img"
@@ -179,6 +291,64 @@ function QnaFlow({ answersDetails, contact }) {
               </div>
             </div>
             <div className={styles.iconGroup}>
+              <Tooltip
+                placement="left"
+                content={
+                  <div
+                    style={{
+                      color: "#fff",
+                      fontSize: "12px",
+                      fontWeight: "500",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <div
+                      className="w-10 h-10 "
+                      style={{
+                        background: "yellow",
+                        borderRadius: "50px",
+                      }}
+                    ></div>
+                    <div>
+                      {`Reply to `}
+                      <span
+                        style={{
+                          color: "yellow",
+                          fontWeight: "600",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        {contact?.contact_email}
+                      </span>
+                    </div>
+                  </div>
+                }
+              >
+                <div
+                  className={styles.replayBtn}
+                  onClick={() => {
+                    dispatch(setWebcamModelConfig({ isShow: true }));
+                    dispatch(
+                      setReplyModalData({
+                        interactionId: selectChat.interactionDetails._id,
+                        type: "reply",
+                        contactId: contact._id,
+                        answerId: selectMetingCard._id,
+                      })
+                    );
+                  }}
+                >
+                  <img
+                    src={icons.reply}
+                    alt=""
+                    className="w-25 h-25 fit-image"
+                  />
+                  <div>reply</div>
+                </div>
+              </Tooltip>
               <div className="w-20 h-20">
                 <img
                   src={icons.edit}
@@ -221,48 +391,135 @@ function QnaFlow({ answersDetails, contact }) {
           </div>
           <div className={styles.qnaFooter}>
             <div className={styles.metingCardBody}>
-              {selectChat?.answers?.length > 0
-                ? selectChat.answers.map((answer, index) => {
-                    const isActive = selectMetingCard === answer;
-                    return (
-                      <div
-                        className={styles.metingCard}
-                        key={index}
-                        onClick={() => setSelectMetingCard(answer)}
-                        style={
-                          isActive
-                            ? {
-                                borderBottom: "3px solid blue",
+              {answersList?.length > 0 &&
+                answersList.map((answerGroup, index) => {
+                  // const isActive = selectMetingCard?._id === ele?._id;
+                  const { nodeDetails, answers, node_type } = answerGroup;
+                  return (
+                    <div key={index} style={{ display: "flex" }}>
+                      {node_type === "reply_node" && (
+                        <div className={styles.replySection}>
+                          <div className={styles.replySectionLine}></div>
+                          <div className={styles.replySectionCircle}>
+                            <Tooltip
+                              placement="top"
+                              offsetNumber={65}
+                              content={
+                                <div>
+                                  <div
+                                    style={{
+                                      color: "white",
+                                      fontSize: "12px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        width: "8px",
+                                        height: "8px",
+                                        background: "yellow",
+                                        borderRadius: "50px",
+                                        marginRight: "10px",
+                                      }}
+                                    ></div>
+                                    Reply to
+                                    <span
+                                      style={{
+                                        color: "yellow",
+                                        fontWeight: "900",
+                                        margin: "0px 5px",
+                                      }}
+                                    >
+                                      {selectChat.interactionDetails?.title}
+                                    </span>
+                                    interaction answer.
+                                  </div>
+                                  <div
+                                    style={{
+                                      color: "white",
+                                      fontSize: "12px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      margin: "5px 0px",
+                                      justifyContent: "flex-start",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        fontWeight: "900",
+                                        fontSize: "10px",
+                                        color: "#00ffff",
+                                        textDecoration: "underline",
+                                      }}
+                                    >
+                                      {dayjs(nodeDetails?.createdAt).format(
+                                        "DD MMM YYYY | HH:mm"
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
                               }
-                            : {}
-                        }
-                      >
-                        <div
-                          className="w-100 h-110"
-                          style={{
-                            position: "relative",
-                            borderRadius: "10px",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <img
-                            src={answer.nodeDetails.video_thumbnail}
-                            alt=""
-                            className={`fit-image ${styles.nodeImage}`}
-                          />
-                          <div className={`w-100 ${styles.imgBtn}`}>
-                            <div className="text-12-500">Jacob</div>
+                            >
+                              <div>
+                                <ReplyIcon size={18} />
+                              </div>
+                            </Tooltip>
                           </div>
                         </div>
-                        {isActive && (
-                          <div className="text-11-500 color-darkText m-0 p-0 mt-10">
-                            29 OCT 24 | 09:36
+                      )}
+                      {answers.map((ele, index) => {
+                        const isActive = selectMetingCard._id === ele._id;
+                        return (
+                          <div
+                            key={ele._id}
+                            className={styles.metingCard}
+                            onClick={() =>
+                              setSelectMetingCard({ ...ele, nodeDetails })
+                            }
+                            style={
+                              isActive
+                                ? {
+                                    borderBottom: "3px solid #8000ff",
+                                  }
+                                : {}
+                            }
+                          >
+                            <div
+                              className={styles.nodeThumbnailBox}
+                              style={
+                                isActive
+                                  ? {
+                                      boxSizing: "border-box",
+                                      border: "2px solid gold",
+                                    }
+                                  : {}
+                              }
+                            >
+                              <img src={nodeDetails?.video_thumbnail} alt="" />
+                              <div className={styles.imgBtn + " wp-100"}>
+                                <div className="text-10-600">
+                                  {nodeDetails?.title || ""}
+                                </div>
+                              </div>
+                            </div>
+
+                            {isActive && (
+                              <>
+                                <div className="text-11-500 color-darkText m-0 p-0 mt-5">
+                                  {dayjs(nodeDetails?.createdAt).format(
+                                    "DD MMM YYYY | HH:mm"
+                                  )}
+                                </div>
+                              </>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })
-                : ""}
+                        );
+                      })}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>

@@ -217,7 +217,7 @@ function Template() {
               </h1>
             </div>
           </div>
-          <div className="sidebar-menu auri-scroll">
+          <div className="sidebar-menu flow">
             {templateCategory.map((menu) => {
               return (
                 <>
@@ -299,7 +299,10 @@ function Template() {
               <button
                 disabled={!selectTemplates?.template_id}
                 onClick={() => {
-                  const token = encrypt(selectTemplates.template_id);
+                  const token = encrypt({
+                    id: selectTemplates.template_id,
+                    type: "template",
+                  });
                   window.open(`/view-flow/${token}/template`, "_blank");
                 }}
               >
@@ -308,7 +311,7 @@ function Template() {
               </button>
             </div>
           </div>
-          <div className="Template-content-info auri-scroll">
+          <div className="Template-content-info flow">
             {selectTemplates.template_id ? (
               <FlowTemplate templateId={selectTemplates.template_id} />
             ) : (

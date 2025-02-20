@@ -402,7 +402,7 @@ function Dashboard() {
       <div className="pt-60">
         <h6 className="text-24-700 mb-30">Recent Contacts</h6>
         <div className="user-card-body">
-          <div className="card-body auri-scroll ">
+          <div className="card-body flow ">
             {isContactLoad ? (
               <div
                 style={{
