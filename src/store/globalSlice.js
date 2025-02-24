@@ -30,6 +30,12 @@ const initialState = {
     blobFile: null,
     blobUrl: "",
   },
+  libraryModelConfig: {
+    isShow: false,
+    uploadType: "video",
+    videoUrl: null,
+    libraryData: {},
+  },
   queModalData: {},
   newQueModalData: {},
   replyModalData: {
@@ -105,6 +111,12 @@ const globalSlice = createSlice({
 
     setMyOrganization(state, action) {
       state.myOrganization = action.payload;
+    },
+    setLibraryModelConfig(state, action) {
+      state.libraryModelConfig = {
+        ...state.libraryModelConfig,
+        ...action.payload,
+      };
     },
   },
 });
@@ -419,6 +431,7 @@ export const {
   setInteractionsStyle,
   setMyOrganization,
   setReplyModalData,
+  setLibraryModelConfig,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

@@ -495,7 +495,7 @@ function Dashboard() {
         </div>
       </div>
       <div className="pt-60">
-        <h6 className="text-24-700 mb-30">Your Recent QnAFlow</h6>
+        <h6 className="text-24-700 mb-30">Your Recent Flōw AI</h6>
         <div className="table-card">
           <div className="fb-center">
             <div className="table-header">

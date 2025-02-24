@@ -372,7 +372,7 @@ const Sidebar = ({ show, setShow, setShowCreateFlowModal }) => {
                   </div>
                   <h2>Go Boundless with PRO!</h2>
                   <p>
-                    Level Up with QnAFlow PRO-Premium AI Video Questions for
+                    Level Up with Flōw-AI PRO-Premium AI Video Questions for
                     Next-Level Engagement!
                   </p>
                   <button className="try-now-button" style={{ color: "white" }}>

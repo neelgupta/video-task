@@ -5,6 +5,7 @@ import { icons } from "../../../../utils/constants";
 import { creteImgFilter } from "../../../../utils/helpers";
 import { useDispatch } from "react-redux";
 import {
+  setLibraryModelConfig,
   setQueModelConfig,
   setWebcamModelConfig,
 } from "../../../../store/globalSlice";
@@ -71,7 +72,18 @@ const CreateFlowOptionsModal = ({ show, handleClose }) => {
       title: "Library",
       isPro: false,
       value: "Library",
-      onClick: () => {},
+      onClick: () => {
+        dispatch(setLibraryModelConfig({ isShow: true }));
+        dispatch(
+          setQueModelConfig({
+            nodeData: null,
+            isEdit: false,
+            modalType: "Library",
+            isShow: false,
+          })
+        );
+        handleClose();
+      },
     },
     {
       icon: icons.doubleStar,

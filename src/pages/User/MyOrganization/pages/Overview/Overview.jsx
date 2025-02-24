@@ -141,7 +141,7 @@ function Overview() {
           Reply-to Email
         </div>
         <div className="text-14-400 mt-10" style={{ color: "#8C8E90" }}>
-          By default, when you or members of your team reply on QnAFlow, the
+          By default, when you or members of your team reply on Flōw AI, the
           reply-to email address will use the individual team member’s account
           email.
         </div>
@@ -178,10 +178,10 @@ function Overview() {
       </div>
       <div className="overview-box mt-20">
         <div className="text-16-600" style={{ color: "#000000" }}>
-          Default settings for all new QnAFlow
+          Default settings for all new Flōw AI
         </div>
         <div className="text-14-400 mt-10" style={{ color: "#8C8E90" }}>
-          Set the default settings for all QnAFlow created in this organization.
+          Set the default settings for all Flōw AI created in this organization.
         </div>
         <div className="mt-20 mb-30">
           <div

@@ -119,43 +119,47 @@ function QnaFlow() {
       <div className={styles.qnaContainer}>
         <div className={styles.qnaSidebar}>
           <div className={styles.profileDet}>
-            <div className={`w-85 h-100 ${styles.profileImg}`}>
+            <div className={`${styles.profileImg}`}>
               <img
                 src={icons.videoUser}
                 alt=""
                 className="fit-image w-60 h-60"
               />
             </div>
-            <div className={`p-0 wp-100 ms-10 ${styles.det}`}>
-              <div>
+            <div className={`p-0 wp-100 ${styles.det}`}>
+              <div className="h-70 ps-8">
                 <div
                   className="text-20-600"
                   style={{ textTransform: "capitalize" }}
                 >
                   {contact?.contact_name || ""}
                 </div>
-                <Tooltip
-                  content={<div style={{ color: "yellow" }}>Open mail box</div>}
-                  placement="right"
-                  offsetNumber={-120}
+
+                <div
+                  className={styles.email}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => openMailClient(contact?.contact_email)}
                 >
-                  <div
-                    className={styles.email}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => openMailClient(contact?.contact_email)}
+                  <Tooltip
+                    content={
+                      <div style={{ color: "yellow" }}>Open mail box</div>
+                    }
+                    placement="right"
+                    offsetNumber={20}
                   >
-                    {contact?.contact_email}
-                  </div>
-                </Tooltip>
-                {/* <div style={{ color: "#4D4AEA" }}>
+                    <div>{contact?.contact_email}</div>
+                  </Tooltip>
+                </div>
+                <div style={{ color: "darkblue" }} className="text-14-500">
                   {contact?.phone_number || ""}
-                </div> */}
+                </div>
               </div>
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
                   gap: "0px 15px",
+                  height: "50px",
                 }}
               >
                 <div
@@ -180,6 +184,7 @@ function QnaFlow() {
                       );
                     }}
                   >
+                    <div className={styles.btnBg}></div>
                     <VideoIcon className={styles.VideoIcon} />
                     <div>Video reply</div>
                   </button>

@@ -17,6 +17,7 @@ import { api } from "../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import {
   handleProfileStore,
+  setLibraryModelConfig,
   setProfileData,
   setQueModelConfig,
   setReplyModalData,
@@ -28,14 +29,18 @@ import ViewInteraction from "../pages/User/ViewInteraction";
 import Template from "../pages/User/Template";
 import WebcamRecorder from "../pages/FlowCanvas/Modals/WebcamRecorder/WebcamRecorder";
 import Reply from "../pages/User/Reply";
+import LibraryUpload from "../pages/FlowCanvas/Modals/LibraryUpload/LibraryUpload";
 
 const UserRoute = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { queModelConfig, replyModalData, webcamModelConfig } = useSelector(
-    (state) => state.global
-  );
+  const {
+    queModelConfig,
+    replyModalData,
+    webcamModelConfig,
+    libraryModelConfig,
+  } = useSelector((state) => state.global);
 
   // Fetch profile
   const getProfile = async () => {
@@ -138,49 +143,67 @@ const UserRoute = () => {
         type: "",
       })
     );
+    dispatch(
+      setLibraryModelConfig({
+        isShow: false,
+        uploadType: "video",
+        videoUrl: null,
+      })
+    );
   };
   return (
-    <Routes>
-      {routeList?.map((elm, index) => {
-        return (
-          <Route
-            key={index}
-            path={elm.path}
-            element={
-              <Layout pageTitle={elm.pageTitle} onBack={elm.onBack}>
-                {replyModalData.isShow && (
-                  <Reply
-                    show={replyModalData.isShow}
-                    handleClose={handelResetModel}
-                  />
-                )}
-                {webcamModelConfig.isShow && (
-                  <WebcamRecorder
-                    show={webcamModelConfig.isShow}
-                    recorderConfig={{
-                      audio: true,
-                      ...(queModelConfig.modalType
-                        ? queModelConfig.modalType === "Webcam"
-                          ? { video: true }
-                          : { screen: true }
-                        : { video: true }),
-                    }}
-                    modalType={queModelConfig.modalType}
-                    handleClose={handelResetModel}
-                  />
-                )}
-                {elm.component}
-              </Layout>
-            }
-          />
-        );
-      })}
-      <Route path="/user/flow/:id" element={<FlowCanvas />} />
-      <Route path="/view-flow/:token/:type?" element={<ViewInteraction />} />
-      <Route path="/explore-Template" element={<Template />} />
+    <>
+      {webcamModelConfig.isShow && (
+        <WebcamRecorder
+          show={webcamModelConfig.isShow}
+          recorderConfig={{
+            audio: true,
+            ...(queModelConfig.modalType
+              ? queModelConfig.modalType === "Webcam"
+                ? { video: true }
+                : { screen: true }
+              : { video: true }),
+          }}
+          modalType={queModelConfig.modalType}
+          handleClose={handelResetModel}
+        />
+      )}
 
-      <Route path="*" element={<Navigate to="/user/dashboard" />} />
-    </Routes>
+      {libraryModelConfig.isShow && (
+        <LibraryUpload
+          show={libraryModelConfig.isShow}
+          handleClose={handelResetModel}
+        />
+      )}
+
+      <Routes>
+        {routeList?.map((elm, index) => {
+          return (
+            <Route
+              key={index}
+              path={elm.path}
+              element={
+                <Layout pageTitle={elm.pageTitle} onBack={elm.onBack}>
+                  {replyModalData.isShow && (
+                    <Reply
+                      show={replyModalData.isShow}
+                      handleClose={handelResetModel}
+                    />
+                  )}
+
+                  {elm.component}
+                </Layout>
+              }
+            />
+          );
+        })}
+        <Route path="/user/flow/:id" element={<FlowCanvas />} />
+        <Route path="/view-flow/:token/:type?" element={<ViewInteraction />} />
+        <Route path="/explore-Template" element={<Template />} />
+
+        <Route path="*" element={<Navigate to="/user/dashboard" />} />
+      </Routes>
+    </>
   );
 };
 

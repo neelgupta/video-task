@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "./MediaLibrary.scss";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import { icons } from "../../../../../utils/constants";
 import { VideoUpload } from "../../../../../components";
-import { useDispatch } from "react-redux";
-import { throwError } from "../../../../../store/globalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { showSuccess, throwError } from "../../../../../store/globalSlice";
+import { api } from "../../../../../services/api";
 
-function UploadMedia({ onHide, show, isEdit }) {
-  const [videoFile, setVideoFile] = useState(null);
+function UploadMedia({ onHide, show, fetchMediaList }) {
   const dispatch = useDispatch();
+  const { selectedOrganizationId } = useSelector((state) => state.global);
   const [form, setForm] = useState({
     file: null,
     title: "",
     descriptions: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+
   const isFormValid = (value) => {
     if (!value.file) {
       dispatch(throwError("file required"));
@@ -23,15 +26,42 @@ function UploadMedia({ onHide, show, isEdit }) {
       dispatch(throwError("title required"));
       return false;
     }
-    if (!value.descriptions) {
-      dispatch(throwError("Descriptions required"));
-      return false;
-    }
+
     return true;
   };
-  const onSubmit = () => {
-    if (!isFormValid) {
+  const onSubmit = async () => {
+    if (!isFormValid(form)) {
       return;
+    }
+    try {
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("media", form.file);
+      formData.append("title", form.title);
+      formData.append("description", form.descriptions);
+      formData.append("organization_id", selectedOrganizationId);
+      formData.append("media_type", "library");
+      formData.append("is_link", false);
+      const response = await api.post("user/upload-media", formData, {
+        "Content-Type": "multipart/form-data",
+      });
+      if (response.status === 201) {
+        dispatch(showSuccess("Media uploaded successfully"));
+        setForm({
+          file: null,
+          title: "",
+          descriptions: "",
+        });
+        onHide();
+        fetchMediaList();
+      } else {
+        dispatch(throwError(response.data.message));
+      }
+    } catch (error) {
+      console.log("error", error);
+      dispatch(throwError(error.response.data.message));
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -135,11 +165,17 @@ function UploadMedia({ onHide, show, isEdit }) {
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
               onClick={onSubmit}
               className="text-14-500 w-150 p-10 ms-10"
             >
-              {isEdit ? "Update" : "Create"}
+              Upload
+              {isLoading && (
+                <Spinner animation="grow" size="sm" className="ms-10" />
+              )}
             </Button>
           </div>
         </div>

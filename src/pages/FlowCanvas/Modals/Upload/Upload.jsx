@@ -25,8 +25,10 @@ function Upload({ show, handleClose }) {
     newQueModalData,
     queModelConfig: { nodeData, isEdit, modalType },
     webcamModelConfig: { blobFile, blobUrl },
+    libraryModelConfig: { libraryData },
     interactionsStyle,
   } = useSelector((state) => state.global);
+  console.log("libraryData", libraryData);
   const [MAX, setMAX] = useState(1);
   const [currentKey, setCurrentKey] = useState(1);
   const [videoSrc, setVideoSrc] = useState("");
@@ -44,7 +46,7 @@ function Upload({ show, handleClose }) {
   });
 
   useEffect(() => {
-    if (["Webcam", "Screen"].includes(modalType)) {
+    if (["Webcam", "Screen", "Library"].includes(modalType)) {
       setCurrentKey(2);
     }
   }, [modalType]);
@@ -106,6 +108,13 @@ function Upload({ show, handleClose }) {
         req.append("video", blobFile);
       }
 
+      if (modalType === "Library" && !isEdit) {
+        req.append("library_id", libraryData._id);
+      }
+      if (modalType === "Library" && isEdit) {
+        req.append("library_id", nodeData.library_id);
+      }
+
       const res = await api[isEdit ? "put" : "post"](
         `${isEdit ? "interactions/update-node" : "interactions/create-node"}`,
         req,
@@ -141,8 +150,7 @@ function Upload({ show, handleClose }) {
         dispatch(throwError(res.data.message));
       }
     } catch (error) {
-      console.log("error", error);
-      dispatch(handelCatch(error.message || error));
+      dispatch(throwError(error.response.data.message));
     }
     setIsCreate(false);
   };
@@ -151,7 +159,8 @@ function Upload({ show, handleClose }) {
     const handleVideoSetup = async () => {
       if (
         (!videoFile && !isEdit && modalType === "Upload") ||
-        (!blobFile && !isEdit && ["Webcam", "Screen"].includes(modalType))
+        (!blobFile && !isEdit && ["Webcam", "Screen"].includes(modalType)) ||
+        (!libraryData && !isEdit && modalType === "Library")
       ) {
         setVideoSrc("");
         return;
@@ -179,10 +188,7 @@ function Upload({ show, handleClose }) {
         const duration = await processVideoMetadata(videoSrc);
         setMAX(duration);
         if (!isEdit) {
-          setVideoConfigForm({
-            ...videoConfigForm,
-            textReveal: [duration],
-          });
+          setVideoConfigForm((prev) => ({ ...prev, textReveal: [duration] }));
         }
       } else if (["Webcam", "Screen"].includes(modalType)) {
         if (isEdit && nodeData && !blobFile) {
@@ -193,11 +199,17 @@ function Upload({ show, handleClose }) {
           setVideoSrc(blobUrl);
           const duration = await processVideoMetadata(blobUrl);
           setMAX(duration);
-          setVideoConfigForm({
-            ...videoConfigForm,
-            textReveal: [duration],
-          });
+          setVideoConfigForm((prev) => ({ ...prev, textReveal: [duration] }));
         }
+      } else if (modalType === "Library") {
+        if (isEdit && nodeData && !libraryData) {
+          setVideoSrc(nodeData.video_url);
+        } else if (libraryData) {
+          setVideoSrc(libraryData.media_url);
+        }
+        const duration = await processVideoMetadata(videoSrc);
+        setMAX(duration);
+        setVideoConfigForm((prev) => ({ ...prev, textReveal: [duration] }));
       }
     };
 
@@ -251,8 +263,6 @@ function Upload({ show, handleClose }) {
                 <VideoPlayer
                   flowStyle={interactionsStyle}
                   videoUrl={videoSrc}
-                  videoBlob={blobFile}
-                  isBlob={blobFile ? true : false}
                   videoConfigForm={videoConfigForm}
                 />
               )}

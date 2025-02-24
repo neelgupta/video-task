@@ -36,7 +36,7 @@ const CustomFolderMenu = ({
 
       <Dropdown.Menu>
         <Dropdown.Item onClick={() => {}} className="text-14-500">
-          New QnAFlow
+          New Flōw AI
         </Dropdown.Item>
 
         <Dropdown.Divider

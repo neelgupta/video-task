@@ -6,7 +6,11 @@ import "./VideoConfiguration.scss";
 import { TextArea } from "../../../../../components";
 import { useDispatch, useSelector } from "react-redux";
 import DropdownOption from "../../../../../components/inputs/DropdownOption/DropdownOption";
-import { setWebcamModelConfig } from "../../../../../store/globalSlice";
+import {
+  setLibraryModelConfig,
+  setQueModelConfig,
+  setWebcamModelConfig,
+} from "../../../../../store/globalSlice";
 import { icons } from "../../../../../utils/constants";
 
 function VideoConfiguration({
@@ -109,6 +113,14 @@ function VideoConfiguration({
                       blobUrl: "",
                     })
                   );
+                }
+                if (modalType === "Library") {
+                  dispatch(
+                    setLibraryModelConfig({
+                      isShow: true,
+                    })
+                  );
+                  dispatch(setQueModelConfig({ isShow: false }));
                 }
                 if (modalType === "Upload") {
                   setCurrentKey(1);

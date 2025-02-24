@@ -14,7 +14,6 @@ function MediaLibrary() {
   const [isFetch, setIsFetch] = useState(false);
   const [mediaList, setMediaList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,9 +24,9 @@ function MediaLibrary() {
   }, [selectedOrganizationId]);
 
   useEffect(() => {
-    fetchMediaList();
+    if (selectedOrganizationId) fetchMediaList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
+  }, [searchValue, selectedOrganizationId]);
 
   const fetchMediaList = async () => {
     setIsFetch(true);
@@ -50,14 +49,20 @@ function MediaLibrary() {
 
   return (
     <>
-      <UploadMedia show={isUpload} onHide={() => setIsUpload(false)} />
+      {isUpload && (
+        <UploadMedia
+          show={isUpload}
+          onHide={() => setIsUpload(false)}
+          fetchMediaList={fetchMediaList}
+        />
+      )}
       <div className="MediaLibrary">
         <div>
           <div className="text-24-600" style={{ color: "#1B2559" }}>
             Media
           </div>
           <div className="text-12-500 mt-5" style={{ color: "#696F8C" }}>
-            You can find your videos used in replies and creation of QnAFlow.
+            You can find your videos used in replies and creation of Flōw AI.
           </div>
           <div
             className="mt-20"
@@ -132,39 +137,18 @@ function MediaLibrary() {
             <>
               {mediaList.length > 0 &&
                 mediaList.map((ele, index) => {
+                  console.log("ele", ele);
                   return (
                     <div className="Media_card" key={index}>
-                      <img
-                        src={ele.video_thumbnail}
-                        alt=""
-                        className="media_img"
+                      <video
+                        src={ele.media_url}
+                        controls={false}
+                        autoPlay={false}
+                        muted
+                        style={{ width: "auto", height: "100%" }}
                       />
                       <div className="hover_card">
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "end",
-                            padding: "10px",
-                            width: "100%",
-                          }}
-                        >
-                          {/* <img
-                      src={icons.single_arrow}
-                      alt=""
-                      className="fit-image icon_img_double_arrow"
-                      /> */}
-                        </div>
-                        <div
-                          style={{
-                            background: "rgba(0,0,0,0.2)",
-                            padding: "5px 10px",
-                            color: "white",
-                            width: "100%",
-                          }}
-                          className="text-14-400"
-                        >
-                          {ele.title}
-                        </div>
+                        <div className="text-14-400">{ele.title}</div>
                       </div>
                     </div>
                   );

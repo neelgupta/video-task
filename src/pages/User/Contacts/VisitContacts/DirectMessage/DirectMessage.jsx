@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./DirectMessage.scss";
 import { icons } from "../../../../../utils/constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setReplyModalData,
   setWebcamModelConfig,
@@ -13,14 +13,18 @@ import dayjs from "dayjs";
 import { Edit, ReplyIcon, Trash2Icon, VideoIcon } from "lucide-react";
 import ConversationsAnswer from "../../../AssetAllocation/Conversations/ConversationsAnswer";
 import Tooltip from "../../../../../components/layouts/Tooltip";
+import AddEditContactModal from "../../AddEditContactModal";
 const DirectMessage = () => {
   const { id } = useParams();
+  const { selectedOrganizationId } = useSelector((state) => state.global);
   const dispatch = useDispatch();
   const [contact, setContact] = useState({});
   const [selectChat, setSelectChat] = useState({});
   const [messageList, setMessageList] = useState([]);
   const [answerList, setAnswerList] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState({});
+  const [isShowAddEditModal, setIsShowAddEditModal] = useState(false);
+
   useEffect(() => {
     if (id) getDirectMessage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,23 +75,52 @@ const DirectMessage = () => {
     }, {});
     return Object.values(newObject);
   };
+
+  const openMailClient = (email) => {
+    window.open(`mailto:${email}`, "_blank");
+  };
   return (
     <div className="direct-message-container">
+      {isShowAddEditModal && (
+        <AddEditContactModal
+          show={isShowAddEditModal}
+          handleClose={() => {
+            setIsShowAddEditModal(false);
+          }}
+          selectedOrganizationId={selectedOrganizationId}
+          isEdit={true}
+          editContact={contact}
+          fetchContact={getDirectMessage}
+        />
+      )}
       <div className="direct-message-sidebar">
         <div className="direct-message-sidebar-header">
           <div className="direct-message-sidebar-header-profile-img">
             <img src={icons.videoUser} alt="" className="fit-image w-60 h-60" />
           </div>
           <div className="direct-message-sidebar-header-det">
-            <div>
+            <div className="h-70 ps-8">
               <div
                 className="text-20-600"
                 style={{ textTransform: "capitalize" }}
               >
                 {contact?.contact_name || ""}
               </div>
-              <div className="text-12-500">{contact?.contact_email || ""}</div>
-              <div style={{ color: "#4D4AEA" }}>
+
+              <div
+                className={`email`}
+                style={{ cursor: "pointer" }}
+                onClick={() => openMailClient(contact?.contact_email)}
+              >
+                <Tooltip
+                  content={<div style={{ color: "yellow" }}>Open mail box</div>}
+                  placement="right"
+                  offsetNumber={20}
+                >
+                  <div>{contact?.contact_email}</div>
+                </Tooltip>
+              </div>
+              <div style={{ color: "darkblue" }} className="text-14-500">
                 {contact?.phone_number || ""}
               </div>
             </div>
@@ -95,14 +128,18 @@ const DirectMessage = () => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
+                gap: "15px",
+                height: "50px",
               }}
             >
-              <div className="contact_btn_group">
-                <Edit size={20} className="contact_btn" />
+              <div
+                className={`contact_btn_group`}
+                onClick={() => setIsShowAddEditModal(true)}
+              >
+                <Edit size={20} className={`contact_btn`} />
               </div>
-              <div className="contact_btn_group">
-                <Trash2Icon size={20} className="contact_btn" />
+              <div className={`contact_btn_group`}>
+                <Trash2Icon size={20} className={`contact_btn`} />
               </div>
               <div className={"videoCallBtnContainer"}>
                 <button
@@ -117,7 +154,8 @@ const DirectMessage = () => {
                     );
                   }}
                 >
-                  <VideoIcon className="VideoIcon" />
+                  <div className={`btnBg`}></div>
+                  <VideoIcon className={`VideoIcon`} />
                   <div>Video reply</div>
                 </button>
               </div>

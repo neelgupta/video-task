@@ -15,7 +15,7 @@ const VisitContact = () => {
           }}
           className={`${selectedTab === 1 ? styles.active : ""} text-14-500`}
         >
-          QnAFlow
+          Flōw AI
         </div>
         <div
           onClick={() => {

@@ -13,14 +13,16 @@
     .direct-message-sidebar-header {
       display: flex;
       padding: 10px;
-      gap: 10px;
       box-shadow: 0px 4px 10px 0px #0000001a;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
       &-profile-img {
+        height: 120px;
+        width: 100px;
         border-radius: 10px;
         overflow: hidden;
         display: flex;
-        height: 100px;
-        width: 85px;
         align-items: center;
         justify-content: center;
         background: rgba(0, 0, 0, 0.15);
@@ -30,11 +32,11 @@
         }
       }
       &-det {
-        padding: 5px 5px 0px 5px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: calc(100% - 105px - 10px);
+        width: calc(100% - 95px);
+        // padding: 5px 5px 0px 5px;
         .contact_btn_group {
           display: flex;
           align-items: center;
@@ -45,7 +47,7 @@
           width: 35px;
           height: 35px;
           background-color: transparent;
-          box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+          // box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
           border-radius: 50%;
           .contact_btn {
             color: #8000ff;
@@ -62,6 +64,13 @@
             border-radius: 50%;
             transition: all 0.3s ease;
           }
+          span {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #8000ff;
+            border-radius: 50%;
+          }
           &:hover {
             .contact_btn {
               color: #fff;
@@ -73,7 +82,19 @@
           }
         }
       }
+      .email {
+        cursor: pointer;
+        color: #868686;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: underline;
+        display: inline-block;
+        &:hover {
+          color: #8000ff;
+        }
+      }
     }
+
     .videoCallBtn {
       display: flex;
       align-items: center;
@@ -81,7 +102,6 @@
       padding: 5px 10px;
       border-radius: 0px;
       margin: 5px 0px;
-      box-shadow: 0px 4px 18px 0px #0000002d;
       border-radius: 0px 0px 0px 0px;
       border: none;
       cursor: pointer;
@@ -92,8 +112,10 @@
       height: 35px;
       background: transparent;
       border-radius: 50px;
+      position: relative;
+      overflow: hidden;
       &:hover {
-        background: #8000ff;
+        // background: #8000ff;
         .VideoIcon {
           color: white;
           font-size: 22px;
@@ -101,6 +123,21 @@
         div {
           color: white;
         }
+        .btnBg {
+          width: 100%;
+          height: 100%;
+          background: #8000ff;
+        }
+      }
+      .btnBg {
+        position: absolute;
+        width: 0%;
+        height: 0%;
+        background: transparent;
+        border-radius: 50px;
+        z-index: 1;
+        transition-duration: 0.3s;
+        transition-property: all;
       }
 
       .VideoIcon {
@@ -108,6 +145,7 @@
         font-size: 20px;
         transition-duration: 0.3s;
         transition-property: all;
+        z-index: 2;
       }
       div {
         transition-duration: 0.3s;
@@ -116,6 +154,7 @@
         font-size: 14px;
         letter-spacing: 1px;
         font-weight: 800;
+        z-index: 2;
       }
     }
     &-reply-cheat {
