@@ -26,6 +26,7 @@ import {
   handelCatch,
   handelNodePosition,
   handleFetchFlowData,
+  setLibraryModelConfig,
   setNewQueModalData,
   setQueModelConfig,
   setShowCreateFlowModal,
@@ -135,6 +136,33 @@ const FlowCanvas = () => {
     seyIsCanvasLock(false);
   };
 
+  const handelUploadClose = () => {
+    // clear all the model config and reset the state
+    dispatch(
+      setQueModelConfig({
+        modalType: "",
+        nodeData: null,
+        isEdit: false,
+        isShow: false,
+      })
+    );
+    dispatch(
+      setWebcamModelConfig({
+        isShow: false,
+        blobFile: null,
+        blobUrl: "",
+      })
+    );
+    dispatch(
+      setLibraryModelConfig({
+        isShow: false,
+        uploadType: "video",
+        videoUrl: null,
+        libraryData: {},
+      })
+    );
+  };
+
   return (
     <>
       <CreateFlowOptionsModal
@@ -148,48 +176,11 @@ const FlowCanvas = () => {
         <Upload
           show={queModelConfig.isShow}
           handleClose={() => {
-            dispatch(
-              setQueModelConfig({
-                modalType: "",
-                nodeData: null,
-                isEdit: false,
-                isShow: false,
-              })
-            );
-
+            handelUploadClose();
             fetchFlowData();
           }}
         />
       )}
-      {/* {webcamModelConfig.isShow && (
-        <WebcamRecorder
-          show={webcamModelConfig.isShow}
-          recorderConfig={{
-            audio: true,
-            ...(queModelConfig.modalType === "Webcam"
-              ? { video: true }
-              : { screen: true }),
-          }}
-          modalType={queModelConfig.modalType}
-          handleClose={() => {
-            dispatch(
-              setWebcamModelConfig({
-                isShow: false,
-                blobFile: null,
-                blobUrl: "",
-              })
-            );
-            dispatch(
-              setQueModelConfig({
-                modalType: "",
-                nodeData: null,
-                isEdit: false,
-                isShow: false,
-              })
-            );
-          }}
-        />
-      )} */}
 
       <div
         id="react_flow_canvas_body"

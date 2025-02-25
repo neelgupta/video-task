@@ -108,13 +108,9 @@ function Upload({ show, handleClose }) {
         req.append("video", blobFile);
       }
 
-      if (modalType === "Library" && !isEdit) {
+      if (modalType === "Library") {
         req.append("library_id", libraryData._id);
       }
-      if (modalType === "Library" && isEdit) {
-        req.append("library_id", nodeData.library_id);
-      }
-
       const res = await api[isEdit ? "put" : "post"](
         `${isEdit ? "interactions/update-node" : "interactions/create-node"}`,
         req,
@@ -202,9 +198,9 @@ function Upload({ show, handleClose }) {
           setVideoConfigForm((prev) => ({ ...prev, textReveal: [duration] }));
         }
       } else if (modalType === "Library") {
-        if (isEdit && nodeData && !libraryData) {
+        if (isEdit && nodeData && !libraryData?.media_url) {
           setVideoSrc(nodeData.video_url);
-        } else if (libraryData) {
+        } else if (libraryData?.media_url) {
           setVideoSrc(libraryData.media_url);
         }
         const duration = await processVideoMetadata(videoSrc);
@@ -216,6 +212,7 @@ function Upload({ show, handleClose }) {
     handleVideoSetup();
 
     return () => {
+      console.log("libraryData?.media_url", libraryData?.media_url);
       if (
         ["Webcam", "Screen"].includes(modalType) &&
         isEdit &&
@@ -228,7 +225,15 @@ function Upload({ show, handleClose }) {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoFile, isEdit, nodeData, blobFile, modalType, blobUrl]);
+  }, [
+    videoFile,
+    isEdit,
+    nodeData,
+    blobFile,
+    modalType,
+    blobUrl,
+    libraryData?.media_url,
+  ]);
 
   return (
     <Modal

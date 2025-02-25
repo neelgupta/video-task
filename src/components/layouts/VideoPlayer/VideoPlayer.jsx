@@ -68,7 +68,13 @@ const VideoPlayer = ({
           setIsPlaying(true); // Update state to indicate the video is playing
         })
         .catch((error) => {
-          dispatch(throwError(error.response.data.message)); // Handle autoplay issues
+          dispatch(
+            throwError(
+              error.response?.data?.message ||
+                error?.message ||
+                "Autoplay blocked or interrupted"
+            )
+          ); // Handle autoplay issues
           console.warn("Autoplay blocked or interrupted:", error);
           setIsPlaying(false); // Update state to indicate autoplay failed
         });

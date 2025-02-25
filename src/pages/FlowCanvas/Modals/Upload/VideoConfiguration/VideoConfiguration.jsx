@@ -120,7 +120,6 @@ function VideoConfiguration({
                       isShow: true,
                     })
                   );
-                  dispatch(setQueModelConfig({ isShow: false }));
                 }
                 if (modalType === "Upload") {
                   setCurrentKey(1);
